@@ -16,6 +16,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import ru.adept.core.api.WorldFlags;
 import ru.adept.core.api.WorldProgress;
+import ru.adept.core.camp.ExtractionManager;
+import ru.adept.core.camp.WaveSpawner;
 import ru.adept.core.config.BalanceConfig;
 import ru.adept.core.data.ArtifactProgress;
 import ru.adept.core.node.NodeGrid;
@@ -23,6 +25,7 @@ import ru.adept.core.node.NodePlacement;
 import ru.adept.core.node.NodeRecord;
 import ru.adept.core.node.NodeRegistry;
 import ru.adept.core.node.NodeSearch;
+import ru.adept.core.registry.ModEntities;
 import ru.adept.core.registry.ModRegistries;
 
 /**
@@ -42,7 +45,10 @@ public final class AdeptCommands {
                 .then(tier())
                 .then(threat())
                 .then(artifact())
-                .then(node()));
+                .then(node())
+                .then(wave())
+                .then(guardian())
+                .then(extraction()));
     }
 
     // /adept flag get|set|remove <key> [value]
@@ -151,6 +157,40 @@ public final class AdeptCommands {
                             NodeRegistry.get(src.getServer()).add(new NodeRecord(pos, level, biome, NodeRecord.State.DORMANT), null);
                             return reply(ctx, "Узел уровня " + level + " поставлен: " + pos.toShortString());
                         })));
+    }
+
+    // /adept wave — начать следующую волну; wave clear — засчитать текущую отбитой
+    private static LiteralArgumentBuilder<CommandSourceStack> wave() {
+        return Commands.literal("wave")
+                .executes(ctx -> ExtractionManager.startNextWave(ctx.getSource().getServer())
+                        ? reply(ctx, "Волна начата") : reply(ctx, "Нет выкачки или волна уже идёт"))
+                .then(Commands.literal("clear").executes(ctx -> ExtractionManager.forceClearWave(ctx.getSource().getServer())
+                        ? reply(ctx, "Волна убрана, засчитается на следующем тике") : reply(ctx, "Волна не идёт")));
+    }
+
+    // /adept guardian — поставить стража узла рядом (вне выкачки, для проверки)
+    private static LiteralArgumentBuilder<CommandSourceStack> guardian() {
+        return Commands.literal("guardian").executes(ctx -> {
+            CommandSourceStack src = ctx.getSource();
+            BlockPos pos = BlockPos.containing(src.getPosition()).offset(4, 0, 0);
+            WaveSpawner.add(src.getLevel(), ModEntities.HORNED_LEADER.get().create(src.getLevel()), pos,
+                    BalanceConfig.GUARDIAN_HEALTH.get(), BalanceConfig.GUARDIAN_DAMAGE.get(), src.getPlayer(), null);
+            return reply(ctx, "Рогатый вожак поставлен");
+        });
+    }
+
+    // /adept extraction — состояние; extraction set <проценты>
+    private static LiteralArgumentBuilder<CommandSourceStack> extraction() {
+        return Commands.literal("extraction")
+                .executes(ctx -> ExtractionManager.session(ctx.getSource().getServer())
+                        .map(s -> reply(ctx, "Выкачка ур. " + s.level + ": " + s.percent() + "%, волн отбито " + s.wavesCleared
+                                + "/" + s.waves + (s.waveActive ? ", идёт волна (" + s.waveMobs.size() + " мобов)" : "")
+                                + ", установка " + s.extractorHealth + (s.done ? ", узел зачищен" : "")))
+                        .orElseGet(() -> reply(ctx, "Лагерь не развёрнут")))
+                .then(Commands.literal("set").then(Commands.argument("percent", IntegerArgumentType.integer(0, 100))
+                        .executes(ctx -> ExtractionManager.setProgress(ctx.getSource().getServer(),
+                                IntegerArgumentType.getInteger(ctx, "percent"))
+                                ? reply(ctx, "Прогресс задан") : reply(ctx, "Нет активной выкачки"))));
     }
 
     private static ArtifactProgress progress(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
