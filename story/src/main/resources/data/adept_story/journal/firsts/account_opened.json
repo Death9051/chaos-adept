@@ -1,0 +1,13 @@
+{
+  "trigger": {
+    "type": "trader_account_opened"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.firsts.account_opened.public"
+    ],
+    "streamer": [
+      "adept_story.journal.firsts.account_opened.streamer"
+    ]
+  }
+}

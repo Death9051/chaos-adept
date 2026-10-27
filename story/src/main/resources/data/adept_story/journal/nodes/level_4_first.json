@@ -1,0 +1,15 @@
+{
+  "trigger": {
+    "type": "node_absorbed",
+    "level": 4,
+    "first": "level"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.nodes.level_4_first.public"
+    ],
+    "streamer": [
+      "adept_story.journal.nodes.level_4_first.streamer"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "trigger": {
+    "type": "artifact_segment_apex"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.firsts.first_apex.public"
+    ],
+    "streamer": [
+      "adept_story.journal.firsts.first_apex.streamer"
+    ]
+  }
+}

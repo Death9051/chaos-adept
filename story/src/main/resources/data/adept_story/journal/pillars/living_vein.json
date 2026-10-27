@@ -1,0 +1,15 @@
+{
+  "trigger": {
+    "type": "pillar_defeated",
+    "pillar": "living_vein",
+    "first": "kind"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.pillars.living_vein.public"
+    ],
+    "streamer": [
+      "adept_story.journal.pillars.living_vein.streamer"
+    ]
+  }
+}

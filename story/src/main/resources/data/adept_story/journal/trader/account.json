@@ -1,0 +1,11 @@
+{
+  "trigger": {
+    "type": "trader_account_opened"
+  },
+  "page": "trader",
+  "text": {
+    "common": [
+      "adept_story.trader.account"
+    ]
+  }
+}

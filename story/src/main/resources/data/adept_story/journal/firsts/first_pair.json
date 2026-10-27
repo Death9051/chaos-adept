@@ -1,0 +1,13 @@
+{
+  "trigger": {
+    "type": "artifact_pair_chosen"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.firsts.first_pair.public"
+    ],
+    "streamer": [
+      "adept_story.journal.firsts.first_pair.streamer"
+    ]
+  }
+}

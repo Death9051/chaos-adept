@@ -1,0 +1,20 @@
+{
+  "trigger": {
+    "type": "node_absorbed",
+    "level": 4,
+    "first": "none"
+  },
+  "repeat": "pool",
+  "text": {
+    "public": [
+      "adept_story.journal.nodes.level_4_repeat.public.1",
+      "adept_story.journal.nodes.level_4_repeat.public.2",
+      "adept_story.journal.nodes.level_4_repeat.public.3"
+    ],
+    "streamer": [
+      "adept_story.journal.nodes.level_4_repeat.streamer.1",
+      "adept_story.journal.nodes.level_4_repeat.streamer.2",
+      "adept_story.journal.nodes.level_4_repeat.streamer.3"
+    ]
+  }
+}

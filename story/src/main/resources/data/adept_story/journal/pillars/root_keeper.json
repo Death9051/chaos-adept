@@ -1,0 +1,15 @@
+{
+  "trigger": {
+    "type": "pillar_defeated",
+    "pillar": "root_keeper",
+    "first": "kind"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.pillars.root_keeper.public"
+    ],
+    "streamer": [
+      "adept_story.journal.pillars.root_keeper.streamer"
+    ]
+  }
+}

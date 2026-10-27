@@ -1,0 +1,13 @@
+{
+  "trigger": {
+    "type": "node_wave_cleared"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.firsts.first_wave.public"
+    ],
+    "streamer": [
+      "adept_story.journal.firsts.first_wave.streamer"
+    ]
+  }
+}

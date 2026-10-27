@@ -1,0 +1,13 @@
+{
+  "trigger": {
+    "type": "node_level_reached",
+    "level": 4
+  },
+  "page": "trader",
+  "popup": true,
+  "text": {
+    "common": [
+      "adept_story.trader.level_4"
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "trigger": {
+    "type": "node_level_reached",
+    "level": 5
+  },
+  "page": "trader",
+  "popup": true,
+  "text": {
+    "public": [
+      "adept_story.trader.level_5"
+    ],
+    "streamer": [
+      "adept_story.trader.level_5",
+      "adept_story.trader.level_5.lord"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "trigger": {
+    "type": "artifact_table_built"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.prologue.artifact_table.public"
+    ],
+    "streamer": [
+      "adept_story.journal.prologue.artifact_table.streamer"
+    ]
+  }
+}

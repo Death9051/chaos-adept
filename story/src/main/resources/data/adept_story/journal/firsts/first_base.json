@@ -1,0 +1,13 @@
+{
+  "trigger": {
+    "type": "base_entered"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.firsts.first_base.public"
+    ],
+    "streamer": [
+      "adept_story.journal.firsts.first_base.streamer"
+    ]
+  }
+}

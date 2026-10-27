@@ -1,0 +1,13 @@
+{
+  "trigger": {
+    "type": "artifact_prototype_crafted"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.firsts.first_prototype.public"
+    ],
+    "streamer": [
+      "adept_story.journal.firsts.first_prototype.streamer"
+    ]
+  }
+}

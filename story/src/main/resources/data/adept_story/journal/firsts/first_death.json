@@ -1,0 +1,13 @@
+{
+  "trigger": {
+    "type": "node_player_died"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.firsts.first_death.public"
+    ],
+    "streamer": [
+      "adept_story.journal.firsts.first_death.streamer"
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "trigger": {
+    "type": "final_outcome",
+    "outcome": "a"
+  },
+  "page": "epilogue",
+  "text": {
+    "public": [
+      "adept_story.journal.epilogue.outcome_a.public"
+    ],
+    "streamer": [
+      "adept_story.journal.epilogue.outcome_a.streamer"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "trigger": {
+    "type": "first_dawn"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.prologue.first_night.public"
+    ],
+    "streamer": [
+      "adept_story.journal.prologue.first_night.streamer"
+    ]
+  }
+}

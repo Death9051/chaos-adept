@@ -1,0 +1,14 @@
+{
+  "trigger": {
+    "type": "node_absorbed",
+    "first": "game"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.nodes.first.public"
+    ],
+    "streamer": [
+      "adept_story.journal.nodes.first.streamer"
+    ]
+  }
+}
