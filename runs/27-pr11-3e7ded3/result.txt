@@ -1,0 +1,2 @@
+build=success servertest=success clienttest=success
+branch=core/clienttest-scenes-absorb-level pr=11 sha=3e7ded37ce55bd9d5b9a1dc55643fadffade1b6a run=27
