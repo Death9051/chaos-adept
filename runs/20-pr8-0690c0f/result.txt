@@ -1,0 +1,2 @@
+build=success servertest=success clienttest=failure
+branch=build/slice1-ci-screenshots pr=8 sha=0690c0f55eafa2b72f40055e8a44d9ddff888583 run=20
