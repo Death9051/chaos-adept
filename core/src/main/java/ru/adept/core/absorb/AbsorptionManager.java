@@ -26,6 +26,7 @@ import net.neoforged.neoforge.event.level.ChunkEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import ru.adept.core.AdeptCore;
+import ru.adept.core.api.WorldProgress;
 import ru.adept.core.api.event.AdeptEvents;
 import ru.adept.core.api.event.BiomeAbsorbedEvent;
 import ru.adept.core.api.event.NodeEvent;
@@ -66,13 +67,15 @@ public final class AbsorptionManager {
         ItemEntity drop = new ItemEntity(level, node.getX() + 0.5, node.getY() + 0.5, node.getZ() + 0.5, cluster);
         drop.setUnlimitedLifetime();
         level.addFreshEntity(drop);
-        start(server, node);
+        start(server, node, event.getLevel());
     }
 
-    /** Поставить поглощение области биома вокруг точки в очередь. */
-    public static void start(MinecraftServer server, BlockPos origin) {
+    /** Поставить поглощение области биома вокруг точки в очередь; {@code nodeLevel} — уровень узла для события. */
+    public static void start(MinecraftServer server, BlockPos origin, int nodeLevel) {
         AbsorptionData data = AbsorptionData.get(server);
-        data.pendingRegions.add(origin.immutable());
+        BlockPos pos = origin.immutable();
+        data.pendingRegions.add(pos);
+        data.regionLevels.put(pos, nodeLevel);
         data.setDirty();
     }
 
@@ -91,6 +94,11 @@ public final class AbsorptionManager {
                 Map<Long, Integer> chunks = search.chunks();
                 data.addCells(chunks);
                 data.pendingRegions.remove(search.origin());
+                int nodeLevel = data.regionLevels.getOrDefault(search.origin(), 0);
+                data.regionLevels.remove(search.origin());
+                if (nodeLevel <= 0) {
+                    nodeLevel = WorldProgress.get(server).nodeTier();
+                }
                 data.setDirty();
                 for (long key : chunks.keySet()) {
                     ChunkPos pos = new ChunkPos(key);
@@ -99,7 +107,7 @@ public final class AbsorptionManager {
                     }
                 }
                 String biome = search.biome().unwrapKey().map(k -> k.location().toString()).orElse("unknown");
-                AdeptEvents.post(new BiomeAbsorbedEvent(server, search.origin(), biome, chunks.size()));
+                AdeptEvents.post(new BiomeAbsorbedEvent(server, search.origin(), nodeLevel, biome, chunks.size()));
                 AdeptCore.LOG.info("Поглощение биома {}: {} ячеек, {} чанков", biome, search.includedCells(), chunks.size());
                 search = null;
             }

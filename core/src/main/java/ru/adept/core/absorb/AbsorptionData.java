@@ -26,6 +26,8 @@ public final class AbsorptionData extends SavedData {
 
     final Map<Long, Integer> pendingChunks = new HashMap<>();
     final List<BlockPos> pendingRegions = new ArrayList<>();
+    /** Уровень узла каждой области (0 — неизвестен, для старых сохранений). */
+    final Map<BlockPos, Integer> regionLevels = new HashMap<>();
 
     private AbsorptionData() {
     }
@@ -54,10 +56,20 @@ public final class AbsorptionData extends SavedData {
         for (int i = 0; i < Math.min(keys.length, masks.length); i++) {
             data.pendingChunks.put(keys[i], masks[i]);
         }
-        ListTag regions = tag.getList("regions", Tag.TAG_INT_ARRAY);
+        ListTag regions = tag.getList("regionsV2", Tag.TAG_COMPOUND);
         for (int i = 0; i < regions.size(); i++) {
+            CompoundTag region = regions.getCompound(i);
+            int level = region.getInt("level");
+            NbtUtils.readBlockPos(region, "pos").ifPresent(pos -> {
+                data.pendingRegions.add(pos);
+                data.regionLevels.put(pos, level);
+            });
+        }
+        // Старый формат (до уровня узла): только позиции.
+        ListTag old = tag.getList("regions", Tag.TAG_INT_ARRAY);
+        for (int i = 0; i < old.size(); i++) {
             CompoundTag wrapper = new CompoundTag();
-            wrapper.put("p", regions.get(i));
+            wrapper.put("p", old.get(i));
             NbtUtils.readBlockPos(wrapper, "p").ifPresent(data.pendingRegions::add);
         }
         return data;
@@ -75,8 +87,13 @@ public final class AbsorptionData extends SavedData {
         tag.putLongArray("chunks", keys);
         tag.putIntArray("masks", masks);
         ListTag regions = new ListTag();
-        pendingRegions.forEach(p -> regions.add(NbtUtils.writeBlockPos(p)));
-        tag.put("regions", regions);
+        for (BlockPos p : pendingRegions) {
+            CompoundTag region = new CompoundTag();
+            region.put("pos", NbtUtils.writeBlockPos(p));
+            region.putInt("level", regionLevels.getOrDefault(p, 0));
+            regions.add(region);
+        }
+        tag.put("regionsV2", regions);
         return tag;
     }
 }
