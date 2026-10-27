@@ -39,6 +39,21 @@ public final class BalanceConfig {
     public static final ModConfigSpec.IntValue ABSORB_SAMPLES_PER_TICK;
     public static final ModConfigSpec.IntValue ABSORB_CHUNKS_PER_TICK;
 
+    // База
+    public static final ModConfigSpec.IntValue BASE_ENERGY_CAPACITY;
+    public static final ModConfigSpec.IntValue KEY_COOLDOWN_TICKS;
+    public static final ModConfigSpec.IntValue NODE_SHARDS_PER_LEVEL;
+    public static final ModConfigSpec.IntValue GENERATOR_BURN_TICKS;
+    public static final ModConfigSpec.IntValue GENERATOR_ELECTRICITY_PER_TICK;
+    public static final ModConfigSpec.IntValue GENERATOR_MANA_PER_TICK;
+    public static final ModConfigSpec.IntValue CRUSHER_TICKS;
+    public static final ModConfigSpec.IntValue CRUSHER_ELECTRICITY_PER_TICK;
+    public static final ModConfigSpec.IntValue SMELTER_TICKS;
+    public static final ModConfigSpec.IntValue SMELTER_MANA_PER_TICK;
+    public static final ModConfigSpec.IntValue SMELTER_TANK_MB;
+    public static final ModConfigSpec.IntValue SMELTER_MB_PER_DUST;
+    public static final ModConfigSpec.IntValue SMELTER_MB_PER_INGOT;
+
     // Волны
     public static final ModConfigSpec.IntValue WAVE_POSSESSED_BASE;
     public static final ModConfigSpec.IntValue WAVE_POSSESSED_PER_WAVE;
@@ -87,6 +102,7 @@ public final class BalanceConfig {
     public static final ModConfigSpec.ConfigValue<String> TABLE_CRUDE_MANA_CIRCUIT;
     public static final ModConfigSpec.ConfigValue<String> TABLE_RESONATOR;
     public static final ModConfigSpec.ConfigValue<String> TABLE_CAMP;
+    public static final ModConfigSpec.ConfigValue<String> TABLE_KEY;
     public static final ModConfigSpec.ConfigValue<String> TABLE_BLADE_PROTOTYPE;
     public static final ModConfigSpec.ConfigValue<String> TABLE_BLADE_EDGE_1;
 
@@ -144,6 +160,30 @@ public final class BalanceConfig {
                 .defineInRange("samplesPerTick", 1500, 10, 100_000);
         ABSORB_CHUNKS_PER_TICK = b.comment("Сколько чанков превращать в пустошь за тик")
                 .defineInRange("chunksPerTick", 2, 1, 64);
+        b.pop();
+
+        b.comment("База, ключ и машины").push("base");
+        BASE_ENERGY_CAPACITY = b.comment("Запас базы: электричество и мана, каждого (не больше 30000)")
+                .defineInRange("energyCapacity", 20_000, 100, 30_000);
+        KEY_COOLDOWN_TICKS = b.comment("Перезарядка ключа, тики")
+                .defineInRange("keyCooldownTicks", 100, 0, 12_000);
+        NODE_SHARDS_PER_LEVEL = b.comment("Кристаллов узла (топливо генератора) за зачищенный узел, на уровень узла")
+                .defineInRange("nodeShardsPerLevel", 8, 0, 640);
+        GENERATOR_BURN_TICKS = b.comment("Генератор: сколько тиков горит один кристалл")
+                .defineInRange("generatorBurnTicks", 400, 1, 72_000);
+        GENERATOR_ELECTRICITY_PER_TICK = b.defineInRange("generatorElectricityPerTick", 10, 0, 10_000);
+        GENERATOR_MANA_PER_TICK = b.defineInRange("generatorManaPerTick", 10, 0, 10_000);
+        CRUSHER_TICKS = b.comment("Переработка руды: тиков на один кусок")
+                .defineInRange("crusherTicks", 100, 1, 12_000);
+        CRUSHER_ELECTRICITY_PER_TICK = b.defineInRange("crusherElectricityPerTick", 5, 0, 10_000);
+        SMELTER_TICKS = b.comment("Плавильня: тиков на одну пыль")
+                .defineInRange("smelterTicks", 80, 1, 12_000);
+        SMELTER_MANA_PER_TICK = b.defineInRange("smelterManaPerTick", 5, 0, 10_000);
+        SMELTER_TANK_MB = b.comment("Плавильня: объём внутреннего бака, мВ")
+                .defineInRange("smelterTankMb", 1000, 100, 30_000);
+        SMELTER_MB_PER_DUST = b.defineInRange("smelterMbPerDust", 100, 1, 10_000);
+        SMELTER_MB_PER_INGOT = b.comment("Плавильня: расплава на один слиток, мВ")
+                .defineInRange("smelterMbPerIngot", 100, 1, 10_000);
         b.pop();
 
         b.comment("Волны защитников").push("waves");
@@ -235,6 +275,8 @@ public final class BalanceConfig {
                 .define("resonator", "adept_core:crude_coil*2;adept_core:crude_wiring;minecraft:compass");
         TABLE_CAMP = b.comment("Лагерь (установка выкачки и стационарный переход)")
                 .define("camp", "adept_core:crude_coil*2;adept_core:crude_emitter;adept_core:crude_mana_circuit;minecraft:iron_block");
+        TABLE_KEY = b.comment("Ключ к базе")
+                .define("key", "adept_core:crude_emitter*2;adept_core:crude_mana_circuit*2;minecraft:gold_ingot*2");
         TABLE_BLADE_PROTOTYPE = b.comment("Прототип энергоклинка")
                 .define("bladePrototype", "adept_core:crude_emitter;adept_core:crude_coil;adept_core:crude_mana_circuit;adept_core:crude_wiring*2");
         TABLE_BLADE_EDGE_1 = b.comment("Клинок, эмиттер, путь «Кромка», ступень I")

@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-    "adept_core:artifact_table"
+    "adept_core:artifact_table",
+    "adept_core:crusher",
+    "adept_core:smelter"
   ]
 }

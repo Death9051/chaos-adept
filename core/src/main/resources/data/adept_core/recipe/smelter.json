@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BEB",
+    "WFW",
+    "BBB"
+  ],
+  "key": {
+    "B": {
+      "item": "minecraft:bricks"
+    },
+    "E": {
+      "item": "adept_core:crude_mana_circuit"
+    },
+    "W": {
+      "item": "adept_core:crude_wiring"
+    },
+    "F": {
+      "item": "minecraft:furnace"
+    }
+  },
+  "result": {
+    "id": "adept_core:smelter",
+    "count": 1
+  }
+}

@@ -20,6 +20,7 @@ public class ArtifactTableMenu extends AbstractContainerMenu {
     public static final int BTN_CRUDE_FIRST = 10;
     public static final int BTN_RESONATOR = 15;
     public static final int BTN_CAMP = 16;
+    public static final int BTN_KEY = 17;
     public static final int BTN_BLADE_PROTOTYPE = 20;
     public static final int BTN_BLADE_EDGE = 30;
 
@@ -72,6 +73,8 @@ public class ArtifactTableMenu extends AbstractContainerMenu {
             result = TableActions.craftResonator(player);
         } else if (id == BTN_CAMP) {
             result = TableActions.craftCamp(player);
+        } else if (id == BTN_KEY) {
+            result = TableActions.craftKey(player);
         } else if (id == BTN_BLADE_PROTOTYPE) {
             result = TableActions.craftBladePrototype(player);
         } else if (id == BTN_BLADE_EDGE) {

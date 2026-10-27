@@ -6,6 +6,7 @@ import net.minecraft.world.level.material.MapColor;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.PushReaction;
+import ru.adept.core.base.MachineBlock;
 import ru.adept.core.camp.ExtractorBlock;
 import ru.adept.core.camp.TransitionBlock;
 import ru.adept.core.table.ArtifactTableBlock;
@@ -56,9 +57,23 @@ public final class ModBlocks {
                     .strength(0.5f)
                     .sound(SoundType.SAND)));
 
+    /** Генератор базы: стоит на базе с начала, не ломается. */
+    public static final DeferredBlock<MachineBlock.Generator> GENERATOR = BLOCKS.register("generator",
+            () -> new MachineBlock.Generator(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.METAL).strength(-1.0f, 3_600_000.0f).sound(SoundType.METAL).lightLevel(s -> 9)));
+    public static final DeferredBlock<MachineBlock.Crusher> CRUSHER = BLOCKS.register("crusher",
+            () -> new MachineBlock.Crusher(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.METAL).strength(3.0f).sound(SoundType.METAL)));
+    public static final DeferredBlock<MachineBlock.Smelter> SMELTER = BLOCKS.register("smelter",
+            () -> new MachineBlock.Smelter(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_ORANGE).strength(3.0f).sound(SoundType.METAL).lightLevel(s -> 6)));
+
     static {
         ITEMS.registerSimpleBlockItem(NODE_CRYSTAL);
         ITEMS.registerSimpleBlockItem(ASH);
+        ITEMS.registerSimpleBlockItem(GENERATOR);
+        ITEMS.registerSimpleBlockItem(CRUSHER);
+        ITEMS.registerSimpleBlockItem(SMELTER);
         ITEMS.registerSimpleBlockItem(ARTIFACT_TABLE);
     }
 

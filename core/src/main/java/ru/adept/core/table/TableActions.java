@@ -96,6 +96,18 @@ public final class TableActions {
         return Result.OK;
     }
 
+    /** Ключ к базе — делается на столе ещё в обычном мире. */
+    public static Result craftKey(Player player) {
+        CostList cost = CostList.parse(BalanceConfig.TABLE_KEY.get());
+        if (!cost.canPay(player)) {
+            return Result.NOT_ENOUGH;
+        }
+        cost.pay(player);
+        give(player, new ItemStack(ModItems.KEY.get()));
+        post(player, new ArtifactEvent.PrototypeCrafted(player, "key", player.getInventory().countItem(ModItems.KEY.get()) == 1));
+        return Result.OK;
+    }
+
     /** Сборка прототипа клинка. Прототип можно пересобрать, если потерян. */
     public static Result craftBladePrototype(Player player) {
         ArtifactProgress p = progress(player);
