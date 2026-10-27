@@ -57,6 +57,7 @@ public final class ModRegistries {
         ModBlocks.init();
         ModItems.init();
         ModMenus.init();
+        ModEntities.init();
         BLOCKS.register(modBus);
         ITEMS.register(modBus);
         BLOCK_ENTITIES.register(modBus);

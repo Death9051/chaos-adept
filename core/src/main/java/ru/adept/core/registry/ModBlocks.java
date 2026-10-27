@@ -6,6 +6,8 @@ import net.minecraft.world.level.material.MapColor;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.PushReaction;
+import ru.adept.core.camp.ExtractorBlock;
+import ru.adept.core.camp.TransitionBlock;
 import ru.adept.core.table.ArtifactTableBlock;
 
 import static ru.adept.core.registry.ModRegistries.BLOCKS;
@@ -26,6 +28,25 @@ public final class ModBlocks {
                     .noLootTable()
                     .lightLevel(state -> 12)
                     .sound(SoundType.AMETHYST)
+                    .pushReaction(PushReaction.BLOCK)));
+
+    /** Установка выкачки: ставится лагерем, убирается сворачиванием (руками не ломается). */
+    public static final DeferredBlock<ExtractorBlock> EXTRACTOR = BLOCKS.register("extractor",
+            () -> new ExtractorBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.METAL)
+                    .strength(-1.0f, 3_600_000.0f)
+                    .noLootTable()
+                    .lightLevel(state -> 7)
+                    .sound(SoundType.METAL)
+                    .pushReaction(PushReaction.BLOCK)));
+    /** Стационарный переход лагеря: проход на базу и вызов торговца. */
+    public static final DeferredBlock<TransitionBlock> TRANSITION = BLOCKS.register("transition",
+            () -> new TransitionBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_ORANGE)
+                    .strength(-1.0f, 3_600_000.0f)
+                    .noLootTable()
+                    .lightLevel(state -> 10)
+                    .sound(SoundType.METAL)
                     .pushReaction(PushReaction.BLOCK)));
 
     static {

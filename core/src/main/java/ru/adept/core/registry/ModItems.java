@@ -3,6 +3,7 @@ package ru.adept.core.registry;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredItem;
 import ru.adept.core.artifact.EnergyBladeItem;
+import ru.adept.core.camp.CampItem;
 import ru.adept.core.node.ResonatorItem;
 
 import static ru.adept.core.registry.ModRegistries.ITEMS;
@@ -17,6 +18,8 @@ public final class ModItems {
     // Артефакты
     public static final DeferredItem<EnergyBladeItem> ENERGY_BLADE = ITEMS.register("energy_blade",
             () -> new EnergyBladeItem(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<CampItem> CAMP = ITEMS.register("camp",
+            () -> new CampItem(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<ResonatorItem> RESONATOR = ITEMS.register("resonator",
             () -> new ResonatorItem(new Item.Properties().stacksTo(1)));
 

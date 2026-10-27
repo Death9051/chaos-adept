@@ -27,7 +27,40 @@ public final class BalanceConfig {
     public static final ModConfigSpec.IntValue EXTRACTION_DEATH_ROLLBACK_PERCENT;
     public static final ModConfigSpec.IntValue EXTRACTION_PAUSE_DISTANCE;
 
+    public static final ModConfigSpec.IntValue CAMP_RADIUS;
+    public static final ModConfigSpec.DoubleValue EXTRACTION_WAVE_SPEED;
+    public static final ModConfigSpec.IntValue EXTRACTOR_HEALTH;
+    public static final ModConfigSpec.ConfigValue<String> EXTRACTOR_REPAIR_ITEM;
+    public static final ModConfigSpec.IntValue EXTRACTOR_REPAIR_AMOUNT;
+
     // Волны
+    public static final ModConfigSpec.IntValue WAVE_POSSESSED_BASE;
+    public static final ModConfigSpec.IntValue WAVE_POSSESSED_PER_WAVE;
+    public static final ModConfigSpec.IntValue WAVE_HORNETS_FROM;
+    public static final ModConfigSpec.IntValue WAVE_HORNETS_COUNT;
+    public static final ModConfigSpec.IntValue WAVE_WISPS_FROM;
+    public static final ModConfigSpec.IntValue WAVE_WISPS_COUNT;
+    public static final ModConfigSpec.IntValue WAVE_SPIRITS_FROM;
+    public static final ModConfigSpec.IntValue WAVE_SPIRITS_COUNT;
+    public static final ModConfigSpec.IntValue WAVE_SPAWN_MIN_RADIUS;
+    public static final ModConfigSpec.IntValue WAVE_SPAWN_MAX_RADIUS;
+
+    // Мобы
+    public static final ModConfigSpec.DoubleValue POSSESSED_HEALTH_MULTIPLIER;
+    public static final ModConfigSpec.DoubleValue POSSESSED_DAMAGE;
+    public static final ModConfigSpec.DoubleValue POSSESSED_SPEED_MULTIPLIER;
+    public static final ModConfigSpec.DoubleValue HORNET_HEALTH;
+    public static final ModConfigSpec.DoubleValue HORNET_DAMAGE;
+    public static final ModConfigSpec.IntValue HORNET_POISON_TICKS;
+    public static final ModConfigSpec.DoubleValue WISP_HEALTH;
+    public static final ModConfigSpec.DoubleValue WISP_EXPLOSION;
+    public static final ModConfigSpec.DoubleValue SPIRIT_HEALTH;
+    public static final ModConfigSpec.IntValue SPIRIT_EXTRACTOR_DAMAGE;
+    public static final ModConfigSpec.DoubleValue GUARDIAN_HEALTH;
+    public static final ModConfigSpec.DoubleValue GUARDIAN_DAMAGE;
+    public static final ModConfigSpec.IntValue GUARDIAN_VINES_INTERVAL;
+    public static final ModConfigSpec.IntValue GUARDIAN_CALL_INTERVAL;
+    public static final ModConfigSpec.IntValue GUARDIAN_CALL_COUNT;
     public static final ModConfigSpec.IntValue WAVES_BASE;
     public static final ModConfigSpec.IntValue WAVES_MAX;
     public static final ModConfigSpec.IntValue WAVES_BREAK_MIN_SECONDS;
@@ -47,6 +80,7 @@ public final class BalanceConfig {
     public static final ModConfigSpec.ConfigValue<String> TABLE_CRUDE_EMITTER;
     public static final ModConfigSpec.ConfigValue<String> TABLE_CRUDE_MANA_CIRCUIT;
     public static final ModConfigSpec.ConfigValue<String> TABLE_RESONATOR;
+    public static final ModConfigSpec.ConfigValue<String> TABLE_CAMP;
     public static final ModConfigSpec.ConfigValue<String> TABLE_BLADE_PROTOTYPE;
     public static final ModConfigSpec.ConfigValue<String> TABLE_BLADE_EDGE_1;
 
@@ -83,6 +117,16 @@ public final class BalanceConfig {
                 .defineInRange("deathRollbackPercent", 10, 0, 100);
         EXTRACTION_PAUSE_DISTANCE = b.comment("Дальше этого расстояния от узла выкачка и волны на паузе, блоки")
                 .defineInRange("pauseDistance", 48, 8, 512);
+        CAMP_RADIUS = b.comment("Лагерь разворачивается не дальше стольких блоков от кристалла узла")
+                .defineInRange("campRadius", 12, 2, 64);
+        EXTRACTION_WAVE_SPEED = b.comment("Скорость выкачки, пока волна не отбита (1.0 — полная)")
+                .defineInRange("waveSpeed", 0.25, 0.0, 1.0);
+        EXTRACTOR_HEALTH = b.comment("Прочность установки выкачки")
+                .defineInRange("extractorHealth", 100, 1, 10_000);
+        EXTRACTOR_REPAIR_ITEM = b.comment("Предмет для ремонта установки (ПКМ по установке)")
+                .define("extractorRepairItem", "minecraft:iron_ingot");
+        EXTRACTOR_REPAIR_AMOUNT = b.comment("Сколько прочности чинит один предмет")
+                .defineInRange("extractorRepairAmount", 25, 1, 10_000);
         b.pop();
 
         b.comment("Волны защитников").push("waves");
@@ -94,6 +138,55 @@ public final class BalanceConfig {
                 .defineInRange("breakMinSeconds", 60, 0, 600);
         WAVES_BREAK_MAX_SECONDS = b.comment("Передышка между волнами, максимум, секунды")
                 .defineInRange("breakMaxSeconds", 120, 0, 600);
+        WAVE_POSSESSED_BASE = b.comment("Одержимых зверей в первой волне")
+                .defineInRange("possessedBase", 4, 0, 50);
+        WAVE_POSSESSED_PER_WAVE = b.comment("Прибавка одержимых с каждой следующей волной")
+                .defineInRange("possessedPerWave", 1, 0, 20);
+        WAVE_HORNETS_FROM = b.comment("С какой волны приходят шершни (номер с 1)")
+                .defineInRange("hornetsFromWave", 1, 1, 20);
+        WAVE_HORNETS_COUNT = b.comment("Шершней в стае")
+                .defineInRange("hornetsCount", 3, 0, 30);
+        WAVE_WISPS_FROM = b.comment("С какой волны приходят блуждающие огоньки")
+                .defineInRange("wispsFromWave", 2, 1, 20);
+        WAVE_WISPS_COUNT = b.comment("Блуждающих огоньков в волне")
+                .defineInRange("wispsCount", 2, 0, 30);
+        WAVE_SPIRITS_FROM = b.comment("С какой волны приходят тлеющие духи (диверсанты)")
+                .defineInRange("spiritsFromWave", 2, 1, 20);
+        WAVE_SPIRITS_COUNT = b.comment("Тлеющих духов в волне")
+                .defineInRange("spiritsCount", 1, 0, 30);
+        WAVE_SPAWN_MIN_RADIUS = b.comment("Волна появляется не ближе стольких блоков от узла")
+                .defineInRange("spawnMinRadius", 16, 4, 128);
+        WAVE_SPAWN_MAX_RADIUS = b.comment("и не дальше стольких")
+                .defineInRange("spawnMaxRadius", 24, 4, 128);
+        b.pop();
+
+        b.comment("Противники на узле").push("mobs");
+        POSSESSED_HEALTH_MULTIPLIER = b.comment("Множитель здоровья одержимых зверей")
+                .defineInRange("possessedHealthMultiplier", 1.5, 0.1, 20.0);
+        POSSESSED_DAMAGE = b.comment("Урон одержимого зверя")
+                .defineInRange("possessedDamage", 3.0, 0.0, 100.0);
+        POSSESSED_SPEED_MULTIPLIER = b.comment("Множитель скорости одержимых зверей")
+                .defineInRange("possessedSpeedMultiplier", 1.25, 0.1, 5.0);
+        HORNET_HEALTH = b.defineInRange("hornetHealth", 6.0, 1.0, 1000.0);
+        HORNET_DAMAGE = b.defineInRange("hornetDamage", 2.0, 0.0, 100.0);
+        HORNET_POISON_TICKS = b.comment("Длительность яда от шершня, тики")
+                .defineInRange("hornetPoisonTicks", 60, 0, 1200);
+        WISP_HEALTH = b.defineInRange("wispHealth", 8.0, 1.0, 1000.0);
+        WISP_EXPLOSION = b.comment("Сила взрыва огонька (блоки не ломает)")
+                .defineInRange("wispExplosion", 1.5, 0.1, 10.0);
+        SPIRIT_HEALTH = b.defineInRange("spiritHealth", 12.0, 1.0, 1000.0);
+        SPIRIT_EXTRACTOR_DAMAGE = b.comment("Урон тлеющего духа по установке выкачки")
+                .defineInRange("spiritExtractorDamage", 25, 0, 10_000);
+        GUARDIAN_HEALTH = b.comment("Рогатый вожак: здоровье")
+                .defineInRange("guardianHealth", 120.0, 1.0, 10_000.0);
+        GUARDIAN_DAMAGE = b.comment("Рогатый вожак: урон")
+                .defineInRange("guardianDamage", 8.0, 0.0, 1000.0);
+        GUARDIAN_VINES_INTERVAL = b.comment("Рогатый вожак: лозы (замедление рядом), раз в столько тиков")
+                .defineInRange("guardianVinesInterval", 200, 20, 6000);
+        GUARDIAN_CALL_INTERVAL = b.comment("Рогатый вожак: зов зверей, раз в столько тиков")
+                .defineInRange("guardianCallInterval", 400, 20, 6000);
+        GUARDIAN_CALL_COUNT = b.comment("Рогатый вожак: сколько зверей приходит на зов")
+                .defineInRange("guardianCallCount", 2, 0, 20);
         b.pop();
 
         b.comment("Торговец Альянса").push("trader");
@@ -123,6 +216,8 @@ public final class BalanceConfig {
                 .define("crudeManaCircuit", "minecraft:gold_ingot*2;minecraft:lapis_lazuli*3");
         TABLE_RESONATOR = b.comment("Резонатор")
                 .define("resonator", "adept_core:crude_coil*2;adept_core:crude_wiring;minecraft:compass");
+        TABLE_CAMP = b.comment("Лагерь (установка выкачки и стационарный переход)")
+                .define("camp", "adept_core:crude_coil*2;adept_core:crude_emitter;adept_core:crude_mana_circuit;minecraft:iron_block");
         TABLE_BLADE_PROTOTYPE = b.comment("Прототип энергоклинка")
                 .define("bladePrototype", "adept_core:crude_emitter;adept_core:crude_coil;adept_core:crude_mana_circuit;adept_core:crude_wiring*2");
         TABLE_BLADE_EDGE_1 = b.comment("Клинок, эмиттер, путь «Кромка», ступень I")
