@@ -209,7 +209,8 @@ public final class AdeptCommands {
                     return reply(ctx, "Ждут поглощения: областей " + data.pendingRegionCount() + ", чанков " + data.pendingChunkCount());
                 })
                 .then(Commands.literal("here").executes(ctx -> {
-                    AbsorptionManager.start(ctx.getSource().getServer(), BlockPos.containing(ctx.getSource().getPosition()));
+                    AbsorptionManager.start(ctx.getSource().getServer(), BlockPos.containing(ctx.getSource().getPosition()),
+                            WorldProgress.get(ctx.getSource().getServer()).nodeTier());
                     return reply(ctx, "Поглощение биома поставлено в очередь");
                 }));
     }
