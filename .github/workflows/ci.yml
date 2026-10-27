@@ -32,7 +32,17 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
       - uses: gradle/actions/setup-gradle@v4
       - name: Сборка обоих модов
-        run: ./gradlew build --stacktrace
+        run: |
+          mkdir -p ci-out
+          # Полный вывод сборки (с ошибками компиляции) уходит в ci-logs.
+          ./gradlew build --stacktrace 2>&1 | tee ci-out/build.log
+      - name: Лог сборки
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs-build
+          path: ci-out/
+          retention-days: 14
       - name: Готовые jar
         uses: actions/upload-artifact@v4
         with:
@@ -83,40 +93,29 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           cache-read-only: true
-      - name: Виртуальный экран и программный OpenGL
+      - name: Виртуальный экран, программный OpenGL, снимки экрана
         run: |
           sudo apt-get update -q
-          sudo apt-get install -y -q xvfb libgl1-mesa-dri mesa-utils
+          sudo apt-get install -y -q xvfb libgl1-mesa-dri mesa-utils imagemagick xdotool
       - name: Настройки клиента для автотеста
         run: |
           mkdir -p story/run/clienttest
-          # Без окна «Специальные возможности» при первом запуске, без звука и с малой дальностью.
+          # Без окна «Специальные возможности» при первом запуске, без звука, дальность для скриншотов.
           cat > story/run/clienttest/options.txt <<'EOF'
           onboardAccessibility:false
           narrator:0
           soundCategory_master:0.0
-          renderDistance:4
+          renderDistance:6
           simulationDistance:5
           maxFps:30
+          guiScale:2
           tutorialStep:none
           EOF
-      - name: Клиент создаёт мир и закрывается
+      - name: Клиент создаёт мир, скриншоты по ходу
         env:
           LIBGL_ALWAYS_SOFTWARE: '1'
-        run: |
-          timeout 20m xvfb-run -a -s "-screen 0 1280x720x24" \
-            ./gradlew :story:runClientTest --stacktrace || echo "клиент завершился с кодом $?"
-      - name: Проверка маркера
-        run: |
-          LOG=story/run/clienttest/logs/latest.log
-          if grep -q "ADEPT_CLIENTTEST_OK" "$LOG"; then
-            echo "Клиентский тест пройден"
-          else
-            echo "::error::Маркер ADEPT_CLIENTTEST_OK не найден в $LOG"
-            tail -n 80 "$LOG" || true
-            exit 1
-          fi
-      - name: Логи
+        run: bash .github/scripts/clienttest.sh
+      - name: Логи и скриншоты
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -124,19 +123,26 @@ jobs:
           path: |
             story/run/clienttest/logs/
             story/run/clienttest/crash-reports/
+            story/run/clienttest/ci-screenshots/
           if-no-files-found: ignore
           retention-days: 14
 
-  # Логи каждого прогона кладутся в ветку ci-logs: их удобно читать по прямой ссылке,
-  # в том числе Claude (raw.githubusercontent.com), без входа в GitHub.
+  # Логи, вывод сборки и скриншоты каждого прогона кладутся в ветку ci-logs:
+  # их можно читать по прямой ссылке (raw.githubusercontent.com) без входа в GitHub.
+  # Пишутся прогоны main, ручные и pull request из веток этого же репозитория.
   logs:
     name: logs → ci-logs
     needs: [build, servertest, clienttest]
-    if: always() && github.event_name != 'pull_request'
+    if: >-
+      always() && (github.event_name != 'pull_request'
+      || github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
       contents: write
+    concurrency:
+      group: ci-logs-push
+      cancel-in-progress: false
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -145,9 +151,13 @@ jobs:
       - name: Запись в ветку ci-logs
         env:
           GH_REPO_URL: https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-          RUN_DIR: runs/${{ github.run_number }}-${{ github.sha }}
+          BRANCH: ${{ github.head_ref || github.ref_name }}
+          SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          PR: ${{ github.event.pull_request.number }}
+          RUN: ${{ github.run_number }}
           RESULT: build=${{ needs.build.result }} servertest=${{ needs.servertest.result }} clienttest=${{ needs.clienttest.result }}
         run: |
+          set -e
           git config --global user.name "ci-logs"
           git config --global user.email "ci-logs@users.noreply.github.com"
           if git clone --depth 1 --branch ci-logs "$GH_REPO_URL" logs-repo 2>/dev/null; then
@@ -157,12 +167,28 @@ jobs:
             git init -q -b ci-logs
             git remote add origin "$GH_REPO_URL"
           fi
+          LABEL=$([ -n "$PR" ] && echo "pr$PR" || echo "$BRANCH" | tr '/' '_')
+          RUN_DIR="runs/${RUN}-${LABEL}-${SHA:0:7}"
           mkdir -p "$RUN_DIR"
           if [ -d ../incoming ]; then cp -r ../incoming/. "$RUN_DIR"/; fi
-          echo "$RESULT" > "$RUN_DIR/result.txt"
+          {
+            echo "$RESULT"
+            echo "branch=$BRANCH pr=${PR:-} sha=$SHA run=$RUN"
+          } > "$RUN_DIR/result.txt"
+          # Последний прогон: общий и по каждой ветке отдельно.
+          mkdir -p latest
           echo "$RUN_DIR" > latest.txt
-          # Храним последние 30 прогонов.
-          ls -1d runs/*/ 2>/dev/null | sort -t/ -k2 -n | head -n -30 | xargs -r rm -rf
+          echo "$RUN_DIR" > "latest/$(echo "$BRANCH" | tr '/' '_').txt"
+          # Храним последние 40 прогонов (номер прогона в начале имени папки).
+          ls -1d runs/*/ 2>/dev/null | sed 's#runs/##; s#/$##' | sort -t- -k1,1n | head -n -40 \
+            | sed 's#^#runs/#' | xargs -r rm -rf
           git add -A
-          git commit -q -m "Логи прогона ${{ github.run_number }}: $RESULT"
-          git push -q origin ci-logs
+          git commit -q -m "Логи прогона $RUN ($LABEL): $RESULT"
+          # Несколько прогонов могут писать одновременно: при отказе подтягиваем и повторяем.
+          for i in 1 2 3 4 5; do
+            if git push -q origin ci-logs; then exit 0; fi
+            git pull -q --rebase origin ci-logs || true
+            sleep $((i * 3))
+          done
+          echo "::error::Не удалось записать логи в ci-logs"
+          exit 1

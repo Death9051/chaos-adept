@@ -13,6 +13,24 @@ repositories {
             includeGroup 'com.zigythebird.playeranim'
         }
     }
+    // Моды с Modrinth (тестовая сборка).
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'Modrinth'
+                url = 'https://api.modrinth.com/maven'
+            }
+        }
+        filter {
+            includeGroup 'maven.modrinth'
+        }
+    }
+}
+
+// Тестовая сборка: сторонние моды, которые нужны в запусках (клиент, сервер, CI),
+// но не становятся зависимостями наших модов.
+configurations {
+    runtimeClasspath.extendsFrom localRuntime
 }
 
 dependencies {
@@ -22,6 +40,11 @@ dependencies {
     implementation("com.zigythebird.playeranim:PlayerAnimationLibNeo:${player_anim_version}") {
         transitive = false
     }
+
+    // Срез 1: одержимая фауна из Naturalist (2.0.x работает без GeckoLib).
+    // Внимание: у части модов на Modrinth номер версии общий для Fabric и NeoForge, и Maven
+    // отдаёт Fabric-файл. Тогда версию берём по id сборки NeoForge, а не по номеру.
+    localRuntime "maven.modrinth:naturalist:${naturalist_version}"
 }
 
 neoForge {
@@ -49,6 +72,8 @@ neoForge {
             client()
             gameDirectory = project.file('run/clienttest')
             systemProperty 'adept.clienttest', 'true'
+            // Окно под размер виртуального экрана CI, чтобы скриншоты были полными.
+            programArguments.addAll '--width', '1280', '--height', '720'
         }
     }
 
