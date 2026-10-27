@@ -1,0 +1,63 @@
+// «Сюжет» использует sourceSet «Ядра», поэтому ядро должно быть настроено первым.
+evaluationDependsOn(':core')
+
+base {
+    archivesName = 'adept_story'
+}
+
+repositories {
+    maven {
+        name = 'Redlance'
+        url = 'https://repo.redlance.org/public'
+        content {
+            includeGroup 'com.zigythebird.playeranim'
+        }
+    }
+}
+
+dependencies {
+    implementation project(':core')
+
+    // Анимация тела игрока для катсцен. Её зависимости (molang и javassist) лежат внутри jar.
+    implementation("com.zigythebird.playeranim:PlayerAnimationLibNeo:${player_anim_version}") {
+        transitive = false
+    }
+}
+
+neoForge {
+    runs {
+        // Обычные запуски для разработки: оба мода вместе.
+        client {
+            client()
+            gameDirectory = project.file('run/client')
+        }
+        server {
+            server()
+            programArgument '--nogui'
+            gameDirectory = project.file('run/server')
+        }
+
+        // CI, servertest: сервер прогоняет все геймтесты обоих модов и выходит.
+        gameTestServer {
+            type = 'gameTestServer'
+            gameDirectory = project.file('run/gametest')
+            systemProperty 'neoforge.enabledGameTestNamespaces', 'adept_core,adept_story'
+        }
+
+        // CI, clienttest: клиент сам создаёт мир, ждёт в нём и закрывается (см. ClientSmokeTest в ядре).
+        clientTest {
+            client()
+            gameDirectory = project.file('run/clienttest')
+            systemProperty 'adept.clienttest', 'true'
+        }
+    }
+
+    mods {
+        adept_core {
+            sourceSet project(':core').sourceSets.main
+        }
+        adept_story {
+            sourceSet sourceSets.main
+        }
+    }
+}

@@ -1,0 +1,15 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+    }
+}
+
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
+}
+
+rootProject.name = 'chaos-adept'
+
+// «Ядро» — все механики. «Сюжет» — история, катсцены; зависит от ядра.
+include 'core'
+include 'story'

@@ -1,0 +1,17 @@
+# Gradle
+.gradle/
+build/
+**/build/
+out/
+# Запуски игры
+**/run/
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+bin/
+# Система
+.DS_Store
+Thumbs.db

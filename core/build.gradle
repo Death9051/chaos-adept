@@ -1,0 +1,24 @@
+base {
+    archivesName = 'adept_core'
+}
+
+neoForge {
+    runs {
+        // Отдельные запуски одного «Ядра», без «Сюжета».
+        client {
+            client()
+            gameDirectory = project.file('run/client')
+        }
+        gameTestServer {
+            type = 'gameTestServer'
+            gameDirectory = project.file('run/gametest')
+            systemProperty 'neoforge.enabledGameTestNamespaces', 'adept_core'
+        }
+    }
+
+    mods {
+        adept_core {
+            sourceSet sourceSets.main
+        }
+    }
+}

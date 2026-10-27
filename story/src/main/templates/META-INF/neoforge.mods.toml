@@ -1,0 +1,41 @@
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+
+[[mods]]
+modId="adept_story"
+version="${mod_version}"
+displayName="Сюжет"
+description='''
+История сборки: ветки, тексты, катсцены.
+'''
+
+[[dependencies.adept_story]]
+    modId="neoforge"
+    type="required"
+    versionRange="[${neo_version},)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.adept_story]]
+    modId="minecraft"
+    type="required"
+    versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
+# «Ядро» той же версии: оба мода выходят вместе.
+[[dependencies.adept_story]]
+    modId="adept_core"
+    type="required"
+    versionRange="[${mod_version}]"
+    ordering="AFTER"
+    side="BOTH"
+
+# Анимация тела игрока во вступительной катсцене.
+[[dependencies.adept_story]]
+    modId="player_animation_library"
+    type="required"
+    versionRange="[1.1,)"
+    ordering="AFTER"
+    side="CLIENT"

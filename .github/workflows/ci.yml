@@ -1,0 +1,168 @@
+name: CI
+
+# Схема «Осколка»: build → servertest и clienttest параллельно → логи в ветку ci-logs.
+# fullpack (прогон со всем модпаком) добавим, когда соберём список модов в сборку.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  JAVA_VERSION: '21'
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Сборка обоих модов
+        run: ./gradlew build --stacktrace
+      - name: Готовые jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: jars
+          path: |
+            core/build/libs/*.jar
+            story/build/libs/*.jar
+          retention-days: 14
+
+  servertest:
+    name: servertest
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: true
+      - name: Геймтесты на сервере (ядро + сюжет)
+        run: ./gradlew :story:runGameTestServer --stacktrace
+      - name: Логи
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs-servertest
+          path: |
+            story/run/gametest/logs/
+            story/run/gametest/crash-reports/
+          if-no-files-found: ignore
+          retention-days: 14
+
+  clienttest:
+    name: clienttest
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: true
+      - name: Виртуальный экран и программный OpenGL
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q xvfb libgl1-mesa-dri mesa-utils
+      - name: Настройки клиента для автотеста
+        run: |
+          mkdir -p story/run/clienttest
+          # Без окна «Специальные возможности» при первом запуске, без звука и с малой дальностью.
+          cat > story/run/clienttest/options.txt <<'EOF'
+          onboardAccessibility:false
+          narrator:0
+          soundCategory_master:0.0
+          renderDistance:4
+          simulationDistance:5
+          maxFps:30
+          tutorialStep:none
+          EOF
+      - name: Клиент создаёт мир и закрывается
+        env:
+          LIBGL_ALWAYS_SOFTWARE: '1'
+        run: |
+          timeout 20m xvfb-run -a -s "-screen 0 1280x720x24" \
+            ./gradlew :story:runClientTest --stacktrace || echo "клиент завершился с кодом $?"
+      - name: Проверка маркера
+        run: |
+          LOG=story/run/clienttest/logs/latest.log
+          if grep -q "ADEPT_CLIENTTEST_OK" "$LOG"; then
+            echo "Клиентский тест пройден"
+          else
+            echo "::error::Маркер ADEPT_CLIENTTEST_OK не найден в $LOG"
+            tail -n 80 "$LOG" || true
+            exit 1
+          fi
+      - name: Логи
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs-clienttest
+          path: |
+            story/run/clienttest/logs/
+            story/run/clienttest/crash-reports/
+          if-no-files-found: ignore
+          retention-days: 14
+
+  # Логи каждого прогона кладутся в ветку ci-logs: их удобно читать по прямой ссылке,
+  # в том числе Claude (raw.githubusercontent.com), без входа в GitHub.
+  logs:
+    name: logs → ci-logs
+    needs: [build, servertest, clienttest]
+    if: always() && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: logs-*
+          path: incoming
+      - name: Запись в ветку ci-logs
+        env:
+          GH_REPO_URL: https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          RUN_DIR: runs/${{ github.run_number }}-${{ github.sha }}
+          RESULT: build=${{ needs.build.result }} servertest=${{ needs.servertest.result }} clienttest=${{ needs.clienttest.result }}
+        run: |
+          git config --global user.name "ci-logs"
+          git config --global user.email "ci-logs@users.noreply.github.com"
+          if git clone --depth 1 --branch ci-logs "$GH_REPO_URL" logs-repo 2>/dev/null; then
+            cd logs-repo
+          else
+            mkdir logs-repo && cd logs-repo
+            git init -q -b ci-logs
+            git remote add origin "$GH_REPO_URL"
+          fi
+          mkdir -p "$RUN_DIR"
+          if [ -d ../incoming ]; then cp -r ../incoming/. "$RUN_DIR"/; fi
+          echo "$RESULT" > "$RUN_DIR/result.txt"
+          echo "$RUN_DIR" > latest.txt
+          # Храним последние 30 прогонов.
+          ls -1d runs/*/ 2>/dev/null | sort -t/ -k2 -n | head -n -30 | xargs -r rm -rf
+          git add -A
+          git commit -q -m "Логи прогона ${{ github.run_number }}: $RESULT"
+          git push -q origin ci-logs
