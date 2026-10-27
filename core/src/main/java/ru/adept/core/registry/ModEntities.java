@@ -11,6 +11,7 @@ import ru.adept.core.mob.EmberSpiritEntity;
 import ru.adept.core.mob.HornedLeaderEntity;
 import ru.adept.core.mob.HornetEntity;
 import ru.adept.core.mob.WispEntity;
+import ru.adept.core.trader.TraderEntity;
 
 import static ru.adept.core.registry.ModRegistries.ENTITIES;
 
@@ -26,6 +27,9 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<HornedLeaderEntity>> HORNED_LEADER = ENTITIES.register("horned_leader",
             () -> EntityType.Builder.of(HornedLeaderEntity::new, MobCategory.MONSTER).sized(1.4f, 2.4f).clientTrackingRange(10).build("horned_leader"));
 
+    public static final DeferredHolder<EntityType<?>, EntityType<TraderEntity>> TRADER = ENTITIES.register("trader",
+            () -> EntityType.Builder.of(TraderEntity::new, MobCategory.MISC).sized(0.6f, 1.95f).clientTrackingRange(10).build("trader"));
+
     private ModEntities() {
     }
 
@@ -38,5 +42,6 @@ public final class ModEntities {
         event.put(WISP.get(), WispEntity.attributes().build());
         event.put(EMBER_SPIRIT.get(), EmberSpiritEntity.attributes().build());
         event.put(HORNED_LEADER.get(), HornedLeaderEntity.attributes().build());
+        event.put(TRADER.get(), TraderEntity.attributes().build());
     }
 }
