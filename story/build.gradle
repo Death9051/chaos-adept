@@ -49,6 +49,8 @@ neoForge {
             client()
             gameDirectory = project.file('run/clienttest')
             systemProperty 'adept.clienttest', 'true'
+            // Окно под размер виртуального экрана CI, чтобы скриншоты были полными.
+            programArguments.addAll '--width', '1280', '--height', '720'
         }
     }
 
