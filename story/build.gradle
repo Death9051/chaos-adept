@@ -41,9 +41,10 @@ dependencies {
         transitive = false
     }
 
-    // Срез 1: одержимая фауна из Naturalist. GeckoLib — общая библиотека моделей сборки.
+    // Срез 1: одержимая фауна из Naturalist (2.0.x работает без GeckoLib).
+    // Внимание: у части модов на Modrinth номер версии общий для Fabric и NeoForge, и Maven
+    // отдаёт Fabric-файл. Тогда версию берём по id сборки NeoForge, а не по номеру.
     localRuntime "maven.modrinth:naturalist:${naturalist_version}"
-    localRuntime "maven.modrinth:geckolib:${geckolib_version}"
 }
 
 neoForge {

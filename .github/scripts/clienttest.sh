@@ -15,6 +15,8 @@ SHOT_EVERY=3
 TICK_EVERY=15
 MAX_SHOTS=24
 TIMEOUT=20m
+# Если меню не открылось за это время — игра застряла (экран ошибки модов и т. п.).
+TITLE_DEADLINE=360
 
 mkdir -p "$SHOTS" "$RUN_DIR/logs"
 rm -f "$LOG"
@@ -46,6 +48,7 @@ timeout "$TIMEOUT" ./gradlew :story:runClientTest --stacktrace &
 GAME_PID=$!
 
 state=wait_title
+started=$(date +%s)
 last_world=0
 last_tick=$(date +%s)
 while kill -0 "$GAME_PID" 2>/dev/null; do
@@ -55,6 +58,12 @@ while kill -0 "$GAME_PID" 2>/dev/null; do
       # Меню сразу сменяется созданием мира, поэтому отдельного снимка меню нет.
       if grep -q "главное меню открыто" "$LOG" 2>/dev/null; then
         state=wait_world
+      elif [ $((now - started)) -ge "$TITLE_DEADLINE" ]; then
+        echo "::error::Главное меню не открылось за $TITLE_DEADLINE с — см. скриншоты tick"
+        shot stuck
+        pkill -f 'runClientTest|net.neoforged' 2>/dev/null || true
+        kill "$GAME_PID" 2>/dev/null || true
+        break
       fi ;;
     wait_world)
       if grep -q "игрок в мире" "$LOG" 2>/dev/null; then
