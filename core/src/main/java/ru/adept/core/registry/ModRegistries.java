@@ -3,6 +3,7 @@ package ru.adept.core.registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -28,6 +29,8 @@ public final class ModRegistries {
             DeferredRegister.create(Registries.ENTITY_TYPE, AdeptCore.MOD_ID);
     public static final DeferredRegister<CreativeModeTab> TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, AdeptCore.MOD_ID);
+    public static final DeferredRegister<MenuType<?>> MENUS =
+            DeferredRegister.create(Registries.MENU, AdeptCore.MOD_ID);
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENTS =
             DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, AdeptCore.MOD_ID);
 
@@ -50,11 +53,16 @@ public final class ModRegistries {
     }
 
     public static void register(IEventBus modBus) {
+        // Классы с объектами загружаются здесь, до регистрации.
+        ModBlocks.init();
+        ModItems.init();
+        ModMenus.init();
         BLOCKS.register(modBus);
         ITEMS.register(modBus);
         BLOCK_ENTITIES.register(modBus);
         ENTITIES.register(modBus);
         TABS.register(modBus);
+        MENUS.register(modBus);
         ATTACHMENTS.register(modBus);
     }
 }
