@@ -37,5 +37,10 @@ IntelliJ IDEA: открыть папку как проект Gradle, запус�
 ## Что где
 
 - Флаги мира (общие для модов): `ru.adept.core.api.WorldFlags`.
+- Прогресс мира (уровень узлов, угроза): `ru.adept.core.api.WorldProgress`.
+- События ядра: `ru.adept.core.api.event`, публикуются на `NeoForge.EVENT_BUS` на сервере.
+- Числа баланса: `config/adept_core-common.toml` (`ru.adept.core.config.BalanceConfig`), правятся без пересборки.
+- Отладочные команды: `/adept ...` (права 2): `flag`, `tier`, `threat`, `artifact`; части среза добавляют свои ветки.
+- Заглушки текстур до готовых моделей: `assets/adept_core/textures/{block,item,entity}/stub.png`.
 - Ветка сюжета: `config/adept_story-common.toml`, параметр `branch` (`PUBLIC` по умолчанию). Записывается в мир при первом запуске.
 - Анимации тела игрока для катсцен: `story/src/main/resources/assets/adept_story/player_animations/*.json`, экспорт из Blockbench в формате GeckoLib. Библиотека — Player Animation Library.
