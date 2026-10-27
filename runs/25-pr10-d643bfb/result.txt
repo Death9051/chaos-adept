@@ -1,0 +1,2 @@
+build=success servertest=success clienttest=success
+branch=story/slice1-journal pr=10 sha=d643bfbe6dcdc656741fc2b9f91255667cffb502 run=25
