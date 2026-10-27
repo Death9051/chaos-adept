@@ -30,8 +30,12 @@ IntelliJ IDEA: открыть папку как проект Gradle, запус�
 
 - **build** — сборка обоих модов, jar выкладываются в артефакты прогона.
 - **servertest** — сервер NeoForge прогоняет геймтесты (`@GameTestHolder` в пакетах `test`).
-- **clienttest** — клиент под виртуальным экраном создаёт мир, 200 тиков в нём и закрывается. Тест пройден, если в логе есть `ADEPT_CLIENTTEST_OK`.
-- **logs** — логи servertest и clienttest каждого прогона в ветке `ci-logs`, папка `runs/<номер>-<коммит>/`, итог в `result.txt`. Последний прогон указан в `latest.txt`. Хранятся 30 прогонов.
+- **clienttest** — клиент под виртуальным экраном создаёт мир, 200 тиков в нём и закрывается, по ходу снимает скриншоты окна игры. Тест пройден, если в логе есть `ADEPT_CLIENTTEST_OK`. Если меню не открылось за 6 минут, тест сразу падает (экран ошибки модов и т. п. виден на скриншотах).
+- **logs** — всё по прогону в ветке `ci-logs`: прогоны `main`, ручные и pull request из веток этого репозитория.
+  - Папка прогона: `runs/<номер>-<ветка или prN>-<коммит>/`, итог — `result.txt`.
+  - Внутри: `logs-build/build.log` (полный вывод сборки, ошибки компиляции), `logs-servertest/`, `logs-clienttest/logs/`, `logs-clienttest/ci-screenshots/*.jpg`.
+  - Последний прогон: `latest.txt` (общий) и `latest/<ветка, / заменён на _>.txt`.
+  - Хранятся 40 прогонов. Читать по прямой ссылке: `https://raw.githubusercontent.com/Death9051/chaos-adept/ci-logs/<путь>` (кэш до 5 минут; свежий список — через GitHub API).
 - **fullpack** — прогон со всем модпаком, добавим вместе со сборкой модпака.
 
 ## Что где
@@ -42,5 +46,6 @@ IntelliJ IDEA: открыть папку как проект Gradle, запус�
 - Числа баланса: `config/adept_core-common.toml` (`ru.adept.core.config.BalanceConfig`), правятся без пересборки.
 - Отладочные команды: `/adept ...` (права 2): `flag`, `tier`, `threat`, `artifact`; части среза добавляют свои ветки.
 - Заглушки текстур до готовых моделей: `assets/adept_core/textures/{block,item,entity}/stub.png`.
+- Тестовая сборка (сторонние моды только в запусках, не зависимости наших модов): `localRuntime` в `story/build.gradle`, версии в `gradle.properties`. Сейчас: Naturalist.
 - Ветка сюжета: `config/adept_story-common.toml`, параметр `branch` (`PUBLIC` по умолчанию). Записывается в мир при первом запуске.
 - Анимации тела игрока для катсцен: `story/src/main/resources/assets/adept_story/player_animations/*.json`, экспорт из Blockbench в формате GeckoLib. Библиотека — Player Animation Library.
