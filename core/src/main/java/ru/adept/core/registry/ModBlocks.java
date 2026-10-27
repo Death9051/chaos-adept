@@ -49,8 +49,16 @@ public final class ModBlocks {
                     .sound(SoundType.METAL)
                     .pushReaction(PushReaction.BLOCK)));
 
+    /** Пепел — поверхность пустоши. */
+    public static final DeferredBlock<Block> ASH = BLOCKS.register("ash",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_GRAY)
+                    .strength(0.5f)
+                    .sound(SoundType.SAND)));
+
     static {
         ITEMS.registerSimpleBlockItem(NODE_CRYSTAL);
+        ITEMS.registerSimpleBlockItem(ASH);
         ITEMS.registerSimpleBlockItem(ARTIFACT_TABLE);
     }
 

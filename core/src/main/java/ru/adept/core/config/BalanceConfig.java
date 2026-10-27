@@ -33,6 +33,12 @@ public final class BalanceConfig {
     public static final ModConfigSpec.ConfigValue<String> EXTRACTOR_REPAIR_ITEM;
     public static final ModConfigSpec.IntValue EXTRACTOR_REPAIR_AMOUNT;
 
+    // Поглощение биома
+    public static final ModConfigSpec.IntValue ABSORB_MAX_RADIUS;
+    public static final ModConfigSpec.IntValue ABSORB_MAX_CELLS;
+    public static final ModConfigSpec.IntValue ABSORB_SAMPLES_PER_TICK;
+    public static final ModConfigSpec.IntValue ABSORB_CHUNKS_PER_TICK;
+
     // Волны
     public static final ModConfigSpec.IntValue WAVE_POSSESSED_BASE;
     public static final ModConfigSpec.IntValue WAVE_POSSESSED_PER_WAVE;
@@ -127,6 +133,17 @@ public final class BalanceConfig {
                 .define("extractorRepairItem", "minecraft:iron_ingot");
         EXTRACTOR_REPAIR_AMOUNT = b.comment("Сколько прочности чинит один предмет")
                 .defineInRange("extractorRepairAmount", 25, 1, 10_000);
+        b.pop();
+
+        b.comment("Поглощение биома после зачистки узла").push("absorb");
+        ABSORB_MAX_RADIUS = b.comment("Дальше стольких блоков от узла биом не поглощается (защита от огромных биомов)")
+                .defineInRange("maxRadius", 768, 32, 4096);
+        ABSORB_MAX_CELLS = b.comment("Предел ячеек 8×8 в одной области поглощения")
+                .defineInRange("maxCells", 40_000, 100, 1_000_000);
+        ABSORB_SAMPLES_PER_TICK = b.comment("Сколько ячеек проверять за тик при поиске границ биома")
+                .defineInRange("samplesPerTick", 1500, 10, 100_000);
+        ABSORB_CHUNKS_PER_TICK = b.comment("Сколько чанков превращать в пустошь за тик")
+                .defineInRange("chunksPerTick", 2, 1, 64);
         b.pop();
 
         b.comment("Волны защитников").push("waves");
