@@ -4,6 +4,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredItem;
 import ru.adept.core.artifact.EnergyBladeItem;
+import ru.adept.core.base.KeyItem;
 import ru.adept.core.camp.CampItem;
 import ru.adept.core.node.ResonatorItem;
 
@@ -24,8 +25,17 @@ public final class ModItems {
             () -> new EnergyBladeItem(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<CampItem> CAMP = ITEMS.register("camp",
             () -> new CampItem(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<KeyItem> KEY = ITEMS.register("key",
+            () -> new KeyItem(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<ResonatorItem> RESONATOR = ITEMS.register("resonator",
             () -> new ResonatorItem(new Item.Properties().stacksTo(1)));
+
+    // Ресурсы узла и переработки
+    /** Кристалл узла — топливо генератора базы. */
+    public static final DeferredItem<Item> NODE_SHARD = ITEMS.registerSimpleItem("node_shard");
+    public static final DeferredItem<Item> IRON_DUST = ITEMS.registerSimpleItem("iron_dust");
+    public static final DeferredItem<Item> COPPER_DUST = ITEMS.registerSimpleItem("copper_dust");
+    public static final DeferredItem<Item> GOLD_DUST = ITEMS.registerSimpleItem("gold_dust");
 
     /** Сгустки узлов по уровням 1–5: валюта Альянса и ключевой материал (вершины, транспорт, врата). */
     public static final List<DeferredItem<Item>> NODE_CLUSTERS = IntStream.rangeClosed(1, 5)

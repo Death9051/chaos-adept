@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IPI",
+    "WCW",
+    "III"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "P": {
+      "item": "minecraft:piston"
+    },
+    "W": {
+      "item": "adept_core:crude_wiring"
+    },
+    "C": {
+      "item": "adept_core:crude_coil"
+    }
+  },
+  "result": {
+    "id": "adept_core:crusher",
+    "count": 1
+  }
+}

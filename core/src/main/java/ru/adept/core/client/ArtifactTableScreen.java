@@ -75,11 +75,15 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
         }
         addRenderableWidget(Button.builder(Component.translatable("item.adept_core.resonator"),
                         b -> press(ArtifactTableMenu.BTN_RESONATOR))
-                .bounds(x, y + 56, 108, 18)
+                .bounds(x, y + 56, 72, 18)
                 .tooltip(Tooltip.create(costText(CostList.parse(BalanceConfig.TABLE_RESONATOR.get())))).build());
+        addRenderableWidget(Button.builder(Component.translatable("item.adept_core.key"),
+                        b -> press(ArtifactTableMenu.BTN_KEY))
+                .bounds(x + 148, y + 56, 72, 18)
+                .tooltip(Tooltip.create(costText(CostList.parse(BalanceConfig.TABLE_KEY.get())))).build());
         addRenderableWidget(Button.builder(Component.translatable("item.adept_core.camp"),
                         b -> press(ArtifactTableMenu.BTN_CAMP))
-                .bounds(x + 112, y + 56, 108, 18)
+                .bounds(x + 74, y + 56, 72, 18)
                 .tooltip(Tooltip.create(costText(CostList.parse(BalanceConfig.TABLE_CAMP.get())))).build());
         if (shownChoice == 1) {
             addRenderableWidget(Button.builder(Component.translatable(shownBuilt > 0

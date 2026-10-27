@@ -18,6 +18,8 @@ import ru.adept.core.api.WorldFlags;
 import ru.adept.core.api.WorldProgress;
 import ru.adept.core.absorb.AbsorptionData;
 import ru.adept.core.absorb.AbsorptionManager;
+import ru.adept.core.base.BaseData;
+import ru.adept.core.base.BaseTravel;
 import ru.adept.core.camp.ExtractionManager;
 import ru.adept.core.camp.WaveSpawner;
 import ru.adept.core.config.BalanceConfig;
@@ -51,7 +53,8 @@ public final class AdeptCommands {
                 .then(wave())
                 .then(guardian())
                 .then(extraction())
-                .then(absorb()));
+                .then(absorb())
+                .then(base()));
     }
 
     // /adept flag get|set|remove <key> [value]
@@ -207,6 +210,26 @@ public final class AdeptCommands {
                     AbsorptionManager.start(ctx.getSource().getServer(), BlockPos.containing(ctx.getSource().getPosition()));
                     return reply(ctx, "Поглощение биома поставлено в очередь");
                 }));
+    }
+
+    // /adept base — на базу и обратно; base energy <электричество> <мана>
+    private static LiteralArgumentBuilder<CommandSourceStack> base() {
+        return Commands.literal("base")
+                .executes(ctx -> {
+                    ServerPlayer player = ctx.getSource().getPlayerOrException();
+                    if (BaseTravel.isBase(player.level())) {
+                        BaseTravel.leave(player);
+                    } else {
+                        BaseTravel.enter(player, player.position(), player.getYRot());
+                    }
+                    return 1;
+                })
+                .then(Commands.literal("energy").then(Commands.argument("electricity", IntegerArgumentType.integer(0, 30_000))
+                        .then(Commands.argument("mana", IntegerArgumentType.integer(0, 30_000)).executes(ctx -> {
+                            BaseData data = BaseData.get(ctx.getSource().getServer());
+                            data.set(IntegerArgumentType.getInteger(ctx, "electricity"), IntegerArgumentType.getInteger(ctx, "mana"));
+                            return reply(ctx, "Запас базы: электричество " + data.electricity() + ", мана " + data.mana());
+                        }))));
     }
 
     private static ArtifactProgress progress(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {

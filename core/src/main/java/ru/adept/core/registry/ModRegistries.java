@@ -14,6 +14,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import ru.adept.core.AdeptCore;
+import ru.adept.core.base.ReturnPoint;
 import ru.adept.core.data.ArtifactProgress;
 
 /**
@@ -41,6 +42,13 @@ public final class ModRegistries {
                     .copyOnDeath()
                     .build());
 
+    /** Точка возврата с базы (куда вернёт ключ). */
+    public static final DeferredHolder<AttachmentType<?>, AttachmentType<ReturnPoint>> RETURN_POINT =
+            ATTACHMENTS.register("return_point", () -> AttachmentType.builder(() -> ReturnPoint.NONE)
+                    .serialize(ReturnPoint.CODEC)
+                    .copyOnDeath()
+                    .build());
+
     /** Вкладка творческого режима: всё, что зарегистрировано в ITEMS. */
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TAB = TABS.register("main",
             () -> CreativeModeTab.builder()
@@ -58,6 +66,7 @@ public final class ModRegistries {
         ModItems.init();
         ModMenus.init();
         ModEntities.init();
+        ModBlockEntities.init();
         BLOCKS.register(modBus);
         ITEMS.register(modBus);
         BLOCK_ENTITIES.register(modBus);

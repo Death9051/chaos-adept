@@ -19,6 +19,9 @@ public final class CoreClient {
     @SubscribeEvent
     public static void registerScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenus.ARTIFACT_TABLE.get(), ArtifactTableScreen::new);
+        event.register(ModMenus.GENERATOR.get(), MachineScreen::new);
+        event.register(ModMenus.CRUSHER.get(), MachineScreen::new);
+        event.register(ModMenus.SMELTER.get(), MachineScreen::new);
     }
 
     /** Заглушки до моделей из «Моделей и анимаций»: мобы рисуются цветными блоками своего размера. */

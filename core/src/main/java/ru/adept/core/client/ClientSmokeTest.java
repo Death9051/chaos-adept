@@ -61,6 +61,9 @@ public final class ClientSmokeTest {
             }
             case IN_WORLD -> {
                 if (++ticks >= TICKS_IN_WORLD) {
+                    var server = mc.getSingleplayerServer();
+                    AdeptCore.LOG.info("[clienttest] измерение базы: {}", server != null
+                            && server.getLevel(ru.adept.core.base.BaseTravel.BASE) != null ? "ADEPT_BASE_DIM_OK" : "нет");
                     AdeptCore.LOG.info("[clienttest] {}", MARKER);
                     stage = Stage.DONE;
                     mc.stop();
