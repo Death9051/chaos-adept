@@ -26,5 +26,17 @@
   "adept_core.table.result.not_chosen": "Choose the pair and build the prototype first",
   "adept_core.table.result.not_enough": "Not enough materials",
   "adept_core.table.result.already_done": "Already unlocked",
-  "adept_core.table.result.not_available": "Unavailable"
+  "adept_core.table.result.not_available": "Unavailable",
+  "block.adept_core.node_crystal": "Node Crystal",
+  "item.adept_core.resonator": "Resonator",
+  "adept_core.resonator.found": "Level %s node: %s blocks, %s",
+  "adept_core.resonator.none": "The resonator is silent: no nodes in range",
+  "adept_core.direction.north": "north",
+  "adept_core.direction.northeast": "northeast",
+  "adept_core.direction.east": "east",
+  "adept_core.direction.southeast": "southeast",
+  "adept_core.direction.south": "south",
+  "adept_core.direction.southwest": "southwest",
+  "adept_core.direction.west": "west",
+  "adept_core.direction.northwest": "northwest"
 }

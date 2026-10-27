@@ -7,6 +7,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.core.BlockPos;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
@@ -15,7 +16,13 @@ import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import ru.adept.core.api.WorldFlags;
 import ru.adept.core.api.WorldProgress;
+import ru.adept.core.config.BalanceConfig;
 import ru.adept.core.data.ArtifactProgress;
+import ru.adept.core.node.NodeGrid;
+import ru.adept.core.node.NodePlacement;
+import ru.adept.core.node.NodeRecord;
+import ru.adept.core.node.NodeRegistry;
+import ru.adept.core.node.NodeSearch;
 import ru.adept.core.registry.ModRegistries;
 
 /**
@@ -34,7 +41,8 @@ public final class AdeptCommands {
                 .then(flag())
                 .then(tier())
                 .then(threat())
-                .then(artifact()));
+                .then(artifact())
+                .then(node()));
     }
 
     // /adept flag get|set|remove <key> [value]
@@ -113,6 +121,35 @@ public final class AdeptCommands {
                         .executes(ctx -> {
                             setProgress(ctx, ArtifactProgress.EMPTY);
                             return reply(ctx, "Прогресс артефактов сброшен");
+                        })));
+    }
+
+    // /adept node — ближайший узел; node spawn <уровень> — поставить узел рядом; node list — сколько поставлено
+    private static LiteralArgumentBuilder<CommandSourceStack> node() {
+        return Commands.literal("node")
+                .executes(ctx -> {
+                    CommandSourceStack src = ctx.getSource();
+                    BlockPos from = BlockPos.containing(src.getPosition());
+                    return NodeSearch.nearest(src.getLevel(), from, BalanceConfig.RESONATOR_RANGE.get() * 4)
+                            .map(f -> reply(ctx, "Ближайший узел: уровень " + f.level() + ", " + f.column().toShortString()
+                                    + (f.placed() ? " (поставлен)" : " (ещё не загружен)")))
+                            .orElseGet(() -> reply(ctx, "Узлов поблизости нет"));
+                })
+                .then(Commands.literal("list").executes(ctx -> {
+                    NodeRegistry registry = NodeRegistry.get(ctx.getSource().getServer());
+                    long cleansed = registry.all().stream().filter(n -> n.state() == NodeRecord.State.CLEANSED).count();
+                    return reply(ctx, "Узлов поставлено: " + registry.all().size() + ", зачищено: " + cleansed);
+                }))
+                .then(Commands.literal("spawn").then(Commands.argument("level", IntegerArgumentType.integer(1, 10))
+                        .executes(ctx -> {
+                            CommandSourceStack src = ctx.getSource();
+                            BlockPos column = BlockPos.containing(src.getPosition()).offset(3, 0, 0);
+                            BlockPos pos = NodePlacement.place(src.getLevel(), column);
+                            int level = IntegerArgumentType.getInteger(ctx, "level");
+                            String biome = NodeGrid.biomeAt(src.getLevel(), pos.getX(), pos.getZ()).unwrapKey()
+                                    .map(k -> k.location().toString()).orElse("unknown");
+                            NodeRegistry.get(src.getServer()).add(new NodeRecord(pos, level, biome, NodeRecord.State.DORMANT), null);
+                            return reply(ctx, "Узел уровня " + level + " поставлен: " + pos.toShortString());
                         })));
     }
 

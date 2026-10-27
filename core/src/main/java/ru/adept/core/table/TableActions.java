@@ -72,6 +72,18 @@ public final class TableActions {
         return Result.OK;
     }
 
+    /** Резонатор — одиночный артефакт, можно собрать заново, если потерян. */
+    public static Result craftResonator(Player player) {
+        CostList cost = CostList.parse(BalanceConfig.TABLE_RESONATOR.get());
+        if (!cost.canPay(player)) {
+            return Result.NOT_ENOUGH;
+        }
+        cost.pay(player);
+        give(player, new ItemStack(ModItems.RESONATOR.get()));
+        post(player, new ArtifactEvent.PrototypeCrafted(player, "resonator", player.getInventory().countItem(ModItems.RESONATOR.get()) == 1));
+        return Result.OK;
+    }
+
     /** Сборка прототипа клинка. Прототип можно пересобрать, если потерян. */
     public static Result craftBladePrototype(Player player) {
         ArtifactProgress p = progress(player);
