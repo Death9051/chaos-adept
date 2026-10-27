@@ -30,6 +30,7 @@ import ru.adept.core.node.NodeRecord;
 import ru.adept.core.node.NodeRegistry;
 import ru.adept.core.node.NodeSearch;
 import ru.adept.core.registry.ModEntities;
+import ru.adept.core.trader.TraderManager;
 import ru.adept.core.registry.ModRegistries;
 
 /**
@@ -54,7 +55,8 @@ public final class AdeptCommands {
                 .then(guardian())
                 .then(extraction())
                 .then(absorb())
-                .then(base()));
+                .then(base())
+                .then(trader()));
     }
 
     // /adept flag get|set|remove <key> [value]
@@ -230,6 +232,15 @@ public final class AdeptCommands {
                             data.set(IntegerArgumentType.getInteger(ctx, "electricity"), IntegerArgumentType.getInteger(ctx, "mana"));
                             return reply(ctx, "Запас базы: электричество " + data.electricity() + ", мана " + data.mana());
                         }))));
+    }
+
+    // /adept trader — ритуал вызова у игрока (без условий, для проверки)
+    private static LiteralArgumentBuilder<CommandSourceStack> trader() {
+        return Commands.literal("trader").executes(ctx -> {
+            ServerPlayer player = ctx.getSource().getPlayerOrException();
+            TraderManager.startRitual(player, player.blockPosition().relative(player.getDirection(), 3));
+            return reply(ctx, "Ритуал начат");
+        });
     }
 
     private static ArtifactProgress progress(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {

@@ -94,6 +94,10 @@ public final class BalanceConfig {
     public static final ModConfigSpec.IntValue TRADER_OFFERS_MAX;
     public static final ModConfigSpec.IntValue TRADER_STAY_SECONDS;
     public static final ModConfigSpec.IntValue TRADER_ACCOUNT_AFTER_NODES;
+    public static final ModConfigSpec.ConfigValue<String> TRADER_FIXED_OFFERS;
+    public static final ModConfigSpec.ConfigValue<String> TRADER_OFFER_POOL;
+    public static final ModConfigSpec.IntValue TRADER_MAX_USES;
+    public static final ModConfigSpec.IntValue TRADER_ARRIVAL_TICKS;
 
     // Стол артефактов: рецепты в формате «id*кол-во;id*кол-во»
     public static final ModConfigSpec.ConfigValue<String> TABLE_CRUDE_WIRING;
@@ -259,6 +263,15 @@ public final class BalanceConfig {
                 .defineInRange("staySeconds", 120, 10, 1200);
         TRADER_ACCOUNT_AFTER_NODES = b.comment("После скольких зачищенных узлов открывается счёт")
                 .defineInRange("accountAfterNodes", 3, 1, 50);
+        TRADER_FIXED_OFFERS = b.comment("Постоянный ассортимент: «товар*кол-во=цена» через «;», цена — в сгустках узла I")
+                .define("fixedOffers", "minecraft:netherite_ingot*1=4");
+        TRADER_OFFER_POOL = b.comment("Набор случайных позиций (формат тот же); на вызов выбирается randomOffersMin…Max")
+                .define("offerPool", "minecraft:diamond*2=2;minecraft:emerald*6=1;minecraft:ender_pearl*4=2;minecraft:blaze_rod*4=2;"
+                        + "minecraft:quartz*16=1;minecraft:glowstone_dust*16=1;minecraft:amethyst_shard*8=1;minecraft:experience_bottle*8=2");
+        TRADER_MAX_USES = b.comment("Сколько раз можно купить позицию за вызов, максимум (случайно от 1)")
+                .defineInRange("maxUses", 3, 1, 64);
+        TRADER_ARRIVAL_TICKS = b.comment("Сколько тиков раскрывается разрыв до появления торговца")
+                .defineInRange("arrivalTicks", 60, 0, 600);
         b.pop();
 
         b.comment("Стол артефактов. Рецепт: список «id*кол-во» через точку с запятой, без *кол-во — 1 штука")

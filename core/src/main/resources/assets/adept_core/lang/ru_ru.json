@@ -79,5 +79,10 @@
   "item.adept_core.gold_dust": "Золотая пыль",
   "adept_core.machine.electricity": "Электричество базы: %s / %s",
   "adept_core.machine.mana": "Мана базы: %s / %s",
-  "adept_core.machine.tank": "Расплав: %s / %s мВ"
+  "adept_core.machine.tank": "Расплав: %s / %s мВ",
+  "entity.adept_core.trader": "Торговец Альянса",
+  "adept_core.transition.base": "На базу",
+  "adept_core.transition.call": "Вызов Альянса",
+  "adept_core.trader.not_cleansed": "Торговца можно вызвать только с зачищенного узла",
+  "adept_core.trader.already": "С этого узла торговца уже вызывали"
 }

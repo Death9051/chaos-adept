@@ -79,5 +79,10 @@
   "item.adept_core.gold_dust": "Gold Dust",
   "adept_core.machine.electricity": "Base electricity: %s / %s",
   "adept_core.machine.mana": "Base mana: %s / %s",
-  "adept_core.machine.tank": "Molten: %s / %s mB"
+  "adept_core.machine.tank": "Molten: %s / %s mB",
+  "entity.adept_core.trader": "Alliance Trader",
+  "adept_core.transition.base": "To the base",
+  "adept_core.transition.call": "Call the Alliance",
+  "adept_core.trader.not_cleansed": "The trader can only be called from a cleansed node",
+  "adept_core.trader.already": "The trader was already called from this node"
 }

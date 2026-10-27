@@ -22,6 +22,7 @@ public final class CoreClient {
         event.register(ModMenus.GENERATOR.get(), MachineScreen::new);
         event.register(ModMenus.CRUSHER.get(), MachineScreen::new);
         event.register(ModMenus.SMELTER.get(), MachineScreen::new);
+        event.register(ModMenus.TRANSITION.get(), TransitionScreen::new);
     }
 
     /** Заглушки до моделей из «Моделей и анимаций»: мобы рисуются цветными блоками своего размера. */
@@ -31,5 +32,6 @@ public final class CoreClient {
         event.registerEntityRenderer(ModEntities.WISP.get(), ctx -> new StubEntityRenderer<>(ctx, Blocks.SHROOMLIGHT.defaultBlockState()));
         event.registerEntityRenderer(ModEntities.EMBER_SPIRIT.get(), ctx -> new StubEntityRenderer<>(ctx, Blocks.MAGMA_BLOCK.defaultBlockState()));
         event.registerEntityRenderer(ModEntities.HORNED_LEADER.get(), ctx -> new StubEntityRenderer<>(ctx, Blocks.MOSS_BLOCK.defaultBlockState()));
+        event.registerEntityRenderer(ModEntities.TRADER.get(), ctx -> new StubEntityRenderer<>(ctx, Blocks.CRYING_OBSIDIAN.defaultBlockState()));
     }
 }
