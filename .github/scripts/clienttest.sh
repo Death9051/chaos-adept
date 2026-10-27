@@ -2,9 +2,8 @@
 # Клиентский тест CI: клиент на виртуальном экране + скриншоты по ходу прогона.
 #
 # Скриншоты пишутся в story/run/clienttest/ci-screenshots/ и уходят в ветку ci-logs:
-#   NN-title.jpg      — главное меню (ресурсы и модели загрузились)
 #   NN-world-*.jpg    — мир: сразу после входа и дальше раз в SHOT_EVERY секунд
-#   NN-tick-*.jpg     — фоновые снимки раз в TICK_EVERY секунд (загрузка, ошибки, зависания)
+#   NN-tick.jpg       — фоновые снимки раз в TICK_EVERY секунд до входа в мир (загрузка, ошибки, зависания)
 # Тест пройден, если в логе есть маркер ADEPT_CLIENTTEST_OK.
 set -uo pipefail
 
@@ -27,18 +26,19 @@ sleep 2
 
 shot_count=0
 shot() {
-  # $1 — имя снимка без номера. Снимаем окно игры; если окна нет, весь экран.
+  # $1 — имя снимка без номера. Снимаем только окно игры.
   [ "$shot_count" -ge "$MAX_SHOTS" ] && return
   shot_count=$((shot_count + 1))
   local file
   file=$(printf '%s/%02d-%s.jpg' "$SHOTS" "$shot_count" "$1")
   local win
   win=$(xdotool search --name 'Minecraft' 2>/dev/null | head -n1 || true)
-  if [ -n "$win" ]; then
-    import -window "$win" -quality 85 "$file" 2>/dev/null || import -window root -quality 85 "$file" 2>/dev/null
-  else
-    import -window root -quality 85 "$file" 2>/dev/null
+  if [ -z "$win" ]; then
+    # Окна игры ещё нет — снимать нечего (был бы чёрный кадр).
+    shot_count=$((shot_count - 1))
+    return
   fi
+  import -window "$win" -quality 85 "$file" 2>/dev/null || import -window root -quality 85 "$file" 2>/dev/null
   echo "скриншот: $file"
 }
 
@@ -52,8 +52,9 @@ while kill -0 "$GAME_PID" 2>/dev/null; do
   now=$(date +%s)
   case "$state" in
     wait_title)
+      # Меню сразу сменяется созданием мира, поэтому отдельного снимка меню нет.
       if grep -q "главное меню открыто" "$LOG" 2>/dev/null; then
-        sleep 1; shot title; state=wait_world
+        state=wait_world
       fi ;;
     wait_world)
       if grep -q "игрок в мире" "$LOG" 2>/dev/null; then

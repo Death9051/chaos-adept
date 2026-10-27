@@ -36,14 +36,6 @@ jobs:
           mkdir -p ci-out
           # Полный вывод сборки (с ошибками компиляции) уходит в ci-logs.
           ./gradlew build --stacktrace 2>&1 | tee ci-out/build.log
-      - name: Версии внешних модов на Modrinth (NeoForge 1.21.1)
-        if: always()
-        run: |
-          for p in naturalist geckolib; do
-            echo "== $p"
-            curl -sf "https://api.modrinth.com/v2/project/$p/version?loaders=%5B%22neoforge%22%5D&game_versions=%5B%221.21.1%22%5D" \
-              | jq -r '.[] | "\(.version_number)\t\(.id)\t\(.date_published)\tdeps: \([.dependencies[] | "\(.project_id):\(.version_id // "-"):\(.dependency_type)"] | join(", "))"' | head -n 8
-          done | tee ci-out/modrinth-versions.txt
       - name: Лог сборки
         if: always()
         uses: actions/upload-artifact@v4
