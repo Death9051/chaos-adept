@@ -1,0 +1,14 @@
+{
+  "trigger": {
+    "type": "pillar_materials_collected",
+    "all": true
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.pillars.all_materials.public"
+    ],
+    "streamer": [
+      "adept_story.journal.pillars.all_materials.streamer"
+    ]
+  }
+}

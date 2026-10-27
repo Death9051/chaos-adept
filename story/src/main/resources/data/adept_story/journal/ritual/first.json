@@ -1,0 +1,14 @@
+{
+  "trigger": {
+    "type": "ritual_done",
+    "first": "game"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.ritual.first.public"
+    ],
+    "streamer": [
+      "adept_story.journal.ritual.first.streamer"
+    ]
+  }
+}

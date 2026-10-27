@@ -1,0 +1,14 @@
+{
+  "trigger": {
+    "type": "item_obtained",
+    "item": "minecraft:gold_ingot"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.prologue.first_gold.public"
+    ],
+    "streamer": [
+      "adept_story.journal.prologue.first_gold.streamer"
+    ]
+  }
+}

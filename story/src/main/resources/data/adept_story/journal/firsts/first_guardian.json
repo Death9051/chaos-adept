@@ -1,0 +1,13 @@
+{
+  "trigger": {
+    "type": "node_cleansed"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.firsts.first_guardian.public"
+    ],
+    "streamer": [
+      "adept_story.journal.firsts.first_guardian.streamer"
+    ]
+  }
+}

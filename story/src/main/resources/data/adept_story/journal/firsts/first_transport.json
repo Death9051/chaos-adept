@@ -1,0 +1,13 @@
+{
+  "trigger": {
+    "type": "transport_built"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.firsts.first_transport.public"
+    ],
+    "streamer": [
+      "adept_story.journal.firsts.first_transport.streamer"
+    ]
+  }
+}

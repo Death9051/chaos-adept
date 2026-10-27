@@ -1,0 +1,13 @@
+{
+  "trigger": {
+    "type": "raid_won"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.firsts.first_heroes.public"
+    ],
+    "streamer": [
+      "adept_story.journal.firsts.first_heroes.streamer"
+    ]
+  }
+}

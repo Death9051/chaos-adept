@@ -1,0 +1,14 @@
+{
+  "trigger": {
+    "type": "biome_entered",
+    "biome_tag": "adept_story:scorched_lands"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.firsts.first_scorched.public"
+    ],
+    "streamer": [
+      "adept_story.journal.firsts.first_scorched.streamer"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "trigger": {
+    "type": "village_ruins_entered"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.firsts.first_ruins.public"
+    ],
+    "streamer": [
+      "adept_story.journal.firsts.first_ruins.streamer"
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "trigger": {
+    "type": "pillar_defeated",
+    "pillar": "mirage_mistress",
+    "first": "kind"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.pillars.mirage_mistress.public"
+    ],
+    "streamer": [
+      "adept_story.journal.pillars.mirage_mistress.streamer"
+    ]
+  }
+}

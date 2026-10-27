@@ -1,0 +1,15 @@
+{
+  "trigger": {
+    "type": "pillar_defeated",
+    "pillar": "volcano_heart",
+    "first": "kind"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.pillars.volcano_heart.public"
+    ],
+    "streamer": [
+      "adept_story.journal.pillars.volcano_heart.streamer"
+    ]
+  }
+}

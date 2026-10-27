@@ -1,0 +1,14 @@
+{
+  "trigger": {
+    "type": "npc_met",
+    "npc": "refugee"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.firsts.first_refugee.public"
+    ],
+    "streamer": [
+      "adept_story.journal.firsts.first_refugee.streamer"
+    ]
+  }
+}

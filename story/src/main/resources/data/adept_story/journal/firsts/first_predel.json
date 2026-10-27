@@ -1,0 +1,14 @@
+{
+  "trigger": {
+    "type": "biome_entered",
+    "biome_tag": "adept_story:predel"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.firsts.first_predel.public"
+    ],
+    "streamer": [
+      "adept_story.journal.firsts.first_predel.streamer"
+    ]
+  }
+}

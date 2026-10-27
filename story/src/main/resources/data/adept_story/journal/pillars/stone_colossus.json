@@ -1,0 +1,15 @@
+{
+  "trigger": {
+    "type": "pillar_defeated",
+    "pillar": "stone_colossus",
+    "first": "kind"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.pillars.stone_colossus.public"
+    ],
+    "streamer": [
+      "adept_story.journal.pillars.stone_colossus.streamer"
+    ]
+  }
+}
