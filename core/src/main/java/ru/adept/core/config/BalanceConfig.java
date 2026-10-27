@@ -16,6 +16,10 @@ public final class BalanceConfig {
     // Узлы
     public static final ModConfigSpec.IntValue NODE_MAX_LEVEL;
     public static final ModConfigSpec.IntValue NODE_BLOCKS_PER_LEVEL;
+    public static final ModConfigSpec.IntValue NODE_CELL_SIZE;
+    public static final ModConfigSpec.IntValue NODE_MIN_SPAWN_DISTANCE;
+    public static final ModConfigSpec.IntValue RESONATOR_RANGE;
+    public static final ModConfigSpec.IntValue RESONATOR_COOLDOWN_TICKS;
 
     // Выкачка
     public static final ModConfigSpec.IntValue EXTRACTION_MINUTES_MIN;
@@ -42,6 +46,7 @@ public final class BalanceConfig {
     public static final ModConfigSpec.ConfigValue<String> TABLE_CRUDE_COIL;
     public static final ModConfigSpec.ConfigValue<String> TABLE_CRUDE_EMITTER;
     public static final ModConfigSpec.ConfigValue<String> TABLE_CRUDE_MANA_CIRCUIT;
+    public static final ModConfigSpec.ConfigValue<String> TABLE_RESONATOR;
     public static final ModConfigSpec.ConfigValue<String> TABLE_BLADE_PROTOTYPE;
     public static final ModConfigSpec.ConfigValue<String> TABLE_BLADE_EDGE_1;
 
@@ -58,6 +63,15 @@ public final class BalanceConfig {
                 .defineInRange("maxLevel", 5, 1, 10);
         NODE_BLOCKS_PER_LEVEL = b.comment("Через сколько блоков от точки появления уровень узлов растёт на 1")
                 .defineInRange("blocksPerLevel", 1500, 100, 100_000);
+        NODE_CELL_SIZE = b.comment("Размер ячейки сетки узлов, блоки (кратно 16). В ячейке не больше одного узла;",
+                        "соседние ячейки с тем же биомом уступают одной — так узлов не больше одного на биом")
+                .defineInRange("cellSize", 384, 64, 4096);
+        NODE_MIN_SPAWN_DISTANCE = b.comment("Ближе этого к точке появления узлов нет, блоки")
+                .defineInRange("minSpawnDistance", 160, 0, 10_000);
+        RESONATOR_RANGE = b.comment("Дальность поиска резонатора, блоки")
+                .defineInRange("resonatorRange", 1200, 64, 10_000);
+        RESONATOR_COOLDOWN_TICKS = b.comment("Перезарядка резонатора, тики")
+                .defineInRange("resonatorCooldownTicks", 40, 0, 6000);
         b.pop();
 
         b.comment("Выкачка узла").push("extraction");
@@ -107,6 +121,8 @@ public final class BalanceConfig {
                 .define("crudeEmitter", "minecraft:copper_ingot*2;minecraft:iron_ingot;minecraft:redstone*2");
         TABLE_CRUDE_MANA_CIRCUIT = b.comment("Грубый контур маны")
                 .define("crudeManaCircuit", "minecraft:gold_ingot*2;minecraft:lapis_lazuli*3");
+        TABLE_RESONATOR = b.comment("Резонатор")
+                .define("resonator", "adept_core:crude_coil*2;adept_core:crude_wiring;minecraft:compass");
         TABLE_BLADE_PROTOTYPE = b.comment("Прототип энергоклинка")
                 .define("bladePrototype", "adept_core:crude_emitter;adept_core:crude_coil;adept_core:crude_mana_circuit;adept_core:crude_wiring*2");
         TABLE_BLADE_EDGE_1 = b.comment("Клинок, эмиттер, путь «Кромка», ступень I")

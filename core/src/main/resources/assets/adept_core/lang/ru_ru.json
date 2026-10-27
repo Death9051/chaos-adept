@@ -26,5 +26,17 @@
   "adept_core.table.result.not_chosen": "Сначала выберите пару и соберите прототип",
   "adept_core.table.result.not_enough": "Не хватает материалов",
   "adept_core.table.result.already_done": "Ступень уже открыта",
-  "adept_core.table.result.not_available": "Недоступно"
+  "adept_core.table.result.not_available": "Недоступно",
+  "block.adept_core.node_crystal": "Кристалл узла",
+  "item.adept_core.resonator": "Резонатор",
+  "adept_core.resonator.found": "Узел уровня %s: %s блоков, %s",
+  "adept_core.resonator.none": "Резонатор молчит: узлов в пределах досягаемости нет",
+  "adept_core.direction.north": "север",
+  "adept_core.direction.northeast": "северо-восток",
+  "adept_core.direction.east": "восток",
+  "adept_core.direction.southeast": "юго-восток",
+  "adept_core.direction.south": "юг",
+  "adept_core.direction.southwest": "юго-запад",
+  "adept_core.direction.west": "запад",
+  "adept_core.direction.northwest": "северо-запад"
 }
