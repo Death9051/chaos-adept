@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "adept_core:block/artifact_table"
+    }
+  }
+}

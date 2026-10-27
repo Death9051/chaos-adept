@@ -37,6 +37,19 @@ public final class BalanceConfig {
     public static final ModConfigSpec.IntValue TRADER_STAY_SECONDS;
     public static final ModConfigSpec.IntValue TRADER_ACCOUNT_AFTER_NODES;
 
+    // Стол артефактов: рецепты в формате «id*кол-во;id*кол-во»
+    public static final ModConfigSpec.ConfigValue<String> TABLE_CRUDE_WIRING;
+    public static final ModConfigSpec.ConfigValue<String> TABLE_CRUDE_COIL;
+    public static final ModConfigSpec.ConfigValue<String> TABLE_CRUDE_EMITTER;
+    public static final ModConfigSpec.ConfigValue<String> TABLE_CRUDE_MANA_CIRCUIT;
+    public static final ModConfigSpec.ConfigValue<String> TABLE_BLADE_PROTOTYPE;
+    public static final ModConfigSpec.ConfigValue<String> TABLE_BLADE_EDGE_1;
+
+    // Энергоклинок
+    public static final ModConfigSpec.DoubleValue BLADE_BASE_DAMAGE;
+    public static final ModConfigSpec.DoubleValue BLADE_ATTACK_SPEED;
+    public static final ModConfigSpec.DoubleValue BLADE_EDGE_DAMAGE_PER_STEP;
+
     static {
         ModConfigSpec.Builder b = new ModConfigSpec.Builder();
 
@@ -82,6 +95,31 @@ public final class BalanceConfig {
                 .defineInRange("staySeconds", 120, 10, 1200);
         TRADER_ACCOUNT_AFTER_NODES = b.comment("После скольких зачищенных узлов открывается счёт")
                 .defineInRange("accountAfterNodes", 3, 1, 50);
+        b.pop();
+
+        b.comment("Стол артефактов. Рецепт: список «id*кол-во» через точку с запятой, без *кол-во — 1 штука")
+                .push("table");
+        TABLE_CRUDE_WIRING = b.comment("Грубая проводка")
+                .define("crudeWiring", "minecraft:copper_ingot*2");
+        TABLE_CRUDE_COIL = b.comment("Грубая катушка")
+                .define("crudeCoil", "minecraft:copper_ingot*3;minecraft:iron_ingot");
+        TABLE_CRUDE_EMITTER = b.comment("Грубый эмиттер")
+                .define("crudeEmitter", "minecraft:copper_ingot*2;minecraft:iron_ingot;minecraft:redstone*2");
+        TABLE_CRUDE_MANA_CIRCUIT = b.comment("Грубый контур маны")
+                .define("crudeManaCircuit", "minecraft:gold_ingot*2;minecraft:lapis_lazuli*3");
+        TABLE_BLADE_PROTOTYPE = b.comment("Прототип энергоклинка")
+                .define("bladePrototype", "adept_core:crude_emitter;adept_core:crude_coil;adept_core:crude_mana_circuit;adept_core:crude_wiring*2");
+        TABLE_BLADE_EDGE_1 = b.comment("Клинок, эмиттер, путь «Кромка», ступень I")
+                .define("bladeEdge1", "adept_core:crude_emitter*2;adept_core:crude_coil");
+        b.pop();
+
+        b.comment("Энергоклинок").push("blade");
+        BLADE_BASE_DAMAGE = b.comment("Урон прототипа (как у меча: полный урон удара)")
+                .defineInRange("baseDamage", 6.0, 1.0, 100.0);
+        BLADE_ATTACK_SPEED = b.comment("Скорость атаки (ударов в секунду)")
+                .defineInRange("attackSpeed", 1.8, 0.1, 10.0);
+        BLADE_EDGE_DAMAGE_PER_STEP = b.comment("Прибавка урона за каждую ступень пути «Кромка»")
+                .defineInRange("edgeDamagePerStep", 1.5, 0.0, 50.0);
         b.pop();
 
         SPEC = b.build();
