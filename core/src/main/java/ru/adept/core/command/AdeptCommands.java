@@ -16,6 +16,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import ru.adept.core.api.WorldFlags;
 import ru.adept.core.api.WorldProgress;
+import ru.adept.core.absorb.AbsorptionData;
+import ru.adept.core.absorb.AbsorptionManager;
 import ru.adept.core.camp.ExtractionManager;
 import ru.adept.core.camp.WaveSpawner;
 import ru.adept.core.config.BalanceConfig;
@@ -48,7 +50,8 @@ public final class AdeptCommands {
                 .then(node())
                 .then(wave())
                 .then(guardian())
-                .then(extraction()));
+                .then(extraction())
+                .then(absorb()));
     }
 
     // /adept flag get|set|remove <key> [value]
@@ -191,6 +194,19 @@ public final class AdeptCommands {
                         .executes(ctx -> ExtractionManager.setProgress(ctx.getSource().getServer(),
                                 IntegerArgumentType.getInteger(ctx, "percent"))
                                 ? reply(ctx, "Прогресс задан") : reply(ctx, "Нет активной выкачки"))));
+    }
+
+    // /adept absorb — состояние; absorb here — поглотить биом в точке игрока
+    private static LiteralArgumentBuilder<CommandSourceStack> absorb() {
+        return Commands.literal("absorb")
+                .executes(ctx -> {
+                    AbsorptionData data = AbsorptionData.get(ctx.getSource().getServer());
+                    return reply(ctx, "Ждут поглощения: областей " + data.pendingRegionCount() + ", чанков " + data.pendingChunkCount());
+                })
+                .then(Commands.literal("here").executes(ctx -> {
+                    AbsorptionManager.start(ctx.getSource().getServer(), BlockPos.containing(ctx.getSource().getPosition()));
+                    return reply(ctx, "Поглощение биома поставлено в очередь");
+                }));
     }
 
     private static ArtifactProgress progress(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {

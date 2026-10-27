@@ -62,5 +62,12 @@
   "adept_core.bar.extracting": "Выкачка узла ур. %s: %s%% · волна %s/%s",
   "adept_core.bar.paused": "Выкачка на паузе ур. %s: %s%% · волна %s/%s",
   "adept_core.bar.broken": "Установка сломана ур. %s: %s%% · волна %s/%s",
-  "adept_core.transition.idle": "Переход ещё не настроен: база и вызов торговца появятся позже"
+  "adept_core.transition.idle": "Переход ещё не настроен: база и вызов торговца появятся позже",
+  "block.adept_core.ash": "Пепел",
+  "biome.adept_core.wasteland": "Пустошь",
+  "item.adept_core.node_cluster_1": "Сгусток узла (I)",
+  "item.adept_core.node_cluster_2": "Сгусток узла (II)",
+  "item.adept_core.node_cluster_3": "Сгусток узла (III)",
+  "item.adept_core.node_cluster_4": "Сгусток узла (IV)",
+  "item.adept_core.node_cluster_5": "Сгусток узла (V)"
 }

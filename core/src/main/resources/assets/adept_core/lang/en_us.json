@@ -62,5 +62,12 @@
   "adept_core.bar.extracting": "Extracting level %s node: %s%% · wave %s/%s",
   "adept_core.bar.paused": "Extraction paused, level %s: %s%% · wave %s/%s",
   "adept_core.bar.broken": "Rig broken, level %s: %s%% · wave %s/%s",
-  "adept_core.transition.idle": "The gateway is not attuned yet: the base and trader calls come later"
+  "adept_core.transition.idle": "The gateway is not attuned yet: the base and trader calls come later",
+  "block.adept_core.ash": "Ash",
+  "biome.adept_core.wasteland": "Wasteland",
+  "item.adept_core.node_cluster_1": "Node Cluster (I)",
+  "item.adept_core.node_cluster_2": "Node Cluster (II)",
+  "item.adept_core.node_cluster_3": "Node Cluster (III)",
+  "item.adept_core.node_cluster_4": "Node Cluster (IV)",
+  "item.adept_core.node_cluster_5": "Node Cluster (V)"
 }
