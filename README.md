@@ -36,7 +36,8 @@ IntelliJ IDEA: открыть папку как проект Gradle, запус�
   - Внутри: `logs-build/build.log` (полный вывод сборки, ошибки компиляции), `logs-servertest/`, `logs-clienttest/logs/`, `logs-clienttest/ci-screenshots/*.jpg`.
   - Последний прогон: `latest.txt` (общий) и `latest/<ветка, / заменён на _>.txt`.
   - Хранятся 40 прогонов. Читать по прямой ссылке: `https://raw.githubusercontent.com/Death9051/chaos-adept/ci-logs/<путь>` (кэш до 5 минут; свежий список — через GitHub API).
-- **fullpack** — прогон со всем модпаком, добавим вместе со сборкой модпака.
+- **fullpack** — наши моды со всем составом сборки (`pack/mods.txt`, версии и хеши — `pack/modrinth.lock.json`, см. `pack/README.md`). По очереди: сервер геймтестов, клиент со сценами и снимками, пробный клиент с шейдерпаком MakeUp. Провалы геймтестов и шейдерного прогона не валят CI, а пишутся в `result.txt` строками `fullpack: …`; задание падает, если клиент со сборкой не дошёл до мира. Логи и снимки — `logs-fullpack/`.
+- Снимки по сценам: на каждую строку `ADEPT_SCENE <имя>` в логе — `NN-scene-<имя>.jpg` (clienttest и fullpack).
 
 ## Что где
 
@@ -46,6 +47,6 @@ IntelliJ IDEA: открыть папку как проект Gradle, запус�
 - Числа баланса: `config/adept_core-common.toml` (`ru.adept.core.config.BalanceConfig`), правятся без пересборки.
 - Отладочные команды: `/adept ...` (права 2): `flag`, `tier`, `threat`, `artifact`; части среза добавляют свои ветки.
 - Заглушки текстур до готовых моделей: `assets/adept_core/textures/{block,item,entity}/stub.png`.
-- Тестовая сборка (сторонние моды только в запусках, не зависимости наших модов): `localRuntime` в `story/build.gradle`, версии в `gradle.properties`. Сейчас: Naturalist.
+- Тестовая сборка (сторонние моды только в запусках, не зависимости наших модов): `localRuntime` в `story/build.gradle`, версии в `gradle.properties`. Сейчас: Naturalist. Полный состав сборки — `pack/`.
 - Ветка сюжета: `config/adept_story-common.toml`, параметр `branch` (`PUBLIC` по умолчанию). Записывается в мир при первом запуске.
 - Анимации тела игрока для катсцен: `story/src/main/resources/assets/adept_story/player_animations/*.json`, экспорт из Blockbench в формате GeckoLib. Библиотека — Player Animation Library.
