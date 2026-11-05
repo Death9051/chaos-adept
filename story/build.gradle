@@ -75,6 +75,23 @@ neoForge {
             // Окно под размер виртуального экрана CI, чтобы скриншоты были полными.
             programArguments.addAll '--width', '1280', '--height', '720'
         }
+
+        // CI, fullpack: те же проверки со всем составом сборки (pack/mods.txt).
+        // Моды сборки лежат в папке mods каждого запуска; их кладёт .github/scripts/pack.py fetch.
+        // Обычные запуски их не видят.
+        fullpackGameTest {
+            type = 'gameTestServer'
+            gameDirectory = project.file('run/fullpack-server')
+            systemProperty 'neoforge.enabledGameTestNamespaces', 'adept_core,adept_story'
+        }
+        fullpackClient {
+            client()
+            gameDirectory = project.file('run/fullpack-client')
+            systemProperty 'adept.clienttest', 'true'
+            // Дольше в мире после сцен: снимки рельефа и построек генерации.
+            systemProperty 'adept.clienttest.ticks', '600'
+            programArguments.addAll '--width', '1280', '--height', '720'
+        }
     }
 
     mods {

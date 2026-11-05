@@ -1,0 +1,58 @@
+# Состав сборки: сторонние моды и шейдерпаки с Modrinth (NeoForge, Minecraft 1.21.1).
+# Источник правды по составу — «Список модов» на Диске; этот файл — его машинная копия.
+#
+# Строка: <вид> <slug на Modrinth> [версия] [флаги]
+#   вид     mod | shader
+#   версия  номер версии или id версии на Modrinth; без неё — последняя релизная под NeoForge 1.21.1
+#   флаги   dev — мод уже подключён в обычных запусках Gradle (localRuntime), в папку mods
+#           прогона fullpack не кладётся, но в сборку входит
+# Обязательные зависимости подтягиваются сами. После правки — обновить lock (см. pack/README.md).
+
+## Генерация мира
+mod tectonic
+mod terralith
+mod yungs-api
+mod yungs-better-mineshafts
+mod yungs-better-dungeons
+mod yungs-better-desert-temples
+mod yungs-better-jungle-temples
+mod yungs-better-witch-huts
+mod yungs-better-ocean-monuments
+mod yungs-better-strongholds
+mod yungs-better-nether-fortresses
+mod adorabuild-structures
+
+## Защитники и мини-боссы
+mod naturalist 2.0.7+1.21.1-neoforge dev
+mod mowzies-mobs
+mod bosses-of-mass-destruction-forge
+mod borninchaos
+mod improved-mobs
+
+## Библиотеки
+mod geckolib
+mod curios
+
+## Удобства
+mod emi
+mod jade
+mod xaeros-minimap
+mod xaeros-world-map
+mod mouse-tweaks
+mod inventory-profiles-next
+mod appleskin
+mod controlling
+
+## Оптимизация и рендер
+mod sodium
+mod iris
+mod modernfix
+mod ferrite-core
+mod lithium
+mod immediatelyfast
+mod entityculling
+mod spark
+
+## Шейдерпаки (лежат в shaderpacks, по умолчанию выключены)
+shader complementary-reimagined
+shader makeup-ultra-fast-shaders
