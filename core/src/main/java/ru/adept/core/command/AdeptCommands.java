@@ -9,6 +9,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.commands.Commands;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.network.chat.Component;
@@ -23,6 +24,7 @@ import ru.adept.core.base.BaseTravel;
 import ru.adept.core.camp.ExtractionManager;
 import ru.adept.core.camp.WaveSpawner;
 import ru.adept.core.config.BalanceConfig;
+import ru.adept.core.threat.ThreatManager;
 import ru.adept.core.data.ArtifactProgress;
 import ru.adept.core.node.NodeGrid;
 import ru.adept.core.node.NodePlacement;
@@ -107,16 +109,28 @@ public final class AdeptCommands {
                         })));
     }
 
-    // /adept threat [set <0-100>]
+    // /adept threat [set <0-100> | add <±n>] — угроза мира и её ступень
     private static LiteralArgumentBuilder<CommandSourceStack> threat() {
         return Commands.literal("threat")
-                .executes(ctx -> reply(ctx, "Угроза: " + WorldProgress.get(ctx.getSource().getServer()).threat()))
+                .executes(ctx -> threatReply(ctx))
                 .then(Commands.literal("set").then(Commands.argument("value", IntegerArgumentType.integer(0, 100))
                         .executes(ctx -> {
-                            WorldProgress progress = WorldProgress.get(ctx.getSource().getServer());
-                            progress.setThreat(ctx.getSource().getServer(), IntegerArgumentType.getInteger(ctx, "value"));
-                            return reply(ctx, "Угроза: " + progress.threat());
+                            MinecraftServer server = ctx.getSource().getServer();
+                            ThreatManager.add(server, IntegerArgumentType.getInteger(ctx, "value") - ThreatManager.threat(server),
+                                    ThreatManager.Reason.COMMAND);
+                            return threatReply(ctx);
+                        })))
+                .then(Commands.literal("add").then(Commands.argument("delta", IntegerArgumentType.integer(-100, 100))
+                        .executes(ctx -> {
+                            ThreatManager.add(ctx.getSource().getServer(), IntegerArgumentType.getInteger(ctx, "delta"),
+                                    ThreatManager.Reason.COMMAND);
+                            return threatReply(ctx);
                         })));
+    }
+
+    private static int threatReply(com.mojang.brigadier.context.CommandContext<CommandSourceStack> ctx) {
+        MinecraftServer server = ctx.getSource().getServer();
+        return reply(ctx, "Угроза: " + ThreatManager.threat(server) + " (" + ThreatManager.level(server).id() + ")");
     }
 
     // /adept artifact show|choose|step|reset <player> ...

@@ -92,5 +92,10 @@
   "entity.adept_core.boar_leader": "Boar Leader",
   "entity.adept_core.armadillo": "Shellback",
   "entity.adept_core.sporeling": "Sporeling",
-  "entity.adept_core.sporeling_small": "Small Sporeling"
+  "entity.adept_core.sporeling_small": "Small Sporeling",
+  "adept_core.bar.threat": "Threat: %s — %s",
+  "adept_core.threat.calm": "calm",
+  "adept_core.threat.scouts": "scouts",
+  "adept_core.threat.squads": "squads",
+  "adept_core.threat.warbands": "warbands"
 }
