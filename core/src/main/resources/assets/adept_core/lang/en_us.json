@@ -97,5 +97,7 @@
   "adept_core.threat.calm": "calm",
   "adept_core.threat.scouts": "scouts",
   "adept_core.threat.squads": "squads",
-  "adept_core.threat.warbands": "warbands"
+  "adept_core.threat.warbands": "warbands",
+  "entity.adept_core.resident": "Villager",
+  "entity.adept_core.elder": "Elder"
 }

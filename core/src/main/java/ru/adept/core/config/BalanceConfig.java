@@ -145,6 +145,16 @@ public final class BalanceConfig {
     public static final ModConfigSpec.IntValue THREAT_DECAY_AMOUNT;
     public static final ModConfigSpec.IntValue THREAT_DECAY_TICKS;
 
+    // Деревни
+    public static final ModConfigSpec.BooleanValue VILLAGE_REPLACE_VANILLA;
+    public static final ModConfigSpec.IntValue VILLAGE_NOTICE_RANGE;
+    public static final ModConfigSpec.IntValue VILLAGE_NOTICE_COOLDOWN_TICKS;
+    public static final ModConfigSpec.IntValue VILLAGE_HIDE_AT;
+    public static final ModConfigSpec.IntValue VILLAGE_TRADE_REFUSE_AT;
+    public static final ModConfigSpec.IntValue VILLAGE_ELDER_RAID_DELAY_TICKS;
+    public static final ModConfigSpec.DoubleValue RUIN_WOOD_CHANCE;
+    public static final ModConfigSpec.DoubleValue RUIN_MOSS_CHANCE;
+
     // Уровни узлов (вехи)
     public static final ModConfigSpec.IntValue TIER_NODES_TO_ADVANCE;
     public static final ModConfigSpec.BooleanValue TIER_LEVEL_FLOOR;
@@ -389,6 +399,19 @@ public final class BalanceConfig {
         THREAT_RAID_WAITED = b.comment("Рост, если отряд прождал у точки выхода с базы и ушёл").defineInRange("raidWaited", 3, 0, 100);
         THREAT_DECAY_AMOUNT = b.comment("Спад со временем: на сколько").defineInRange("decayAmount", 1, 0, 100);
         THREAT_DECAY_TICKS = b.comment("и раз в сколько тиков (0 — без спада)").defineInRange("decayTicks", 6000, 0, 1_000_000);
+        b.pop();
+
+        b.comment("Деревни и руины («Мобы», «Жители деревень»)").push("villages");
+        VILLAGE_REPLACE_VANILLA = b.comment("Заменять ванильных жителей своими").define("replaceVanilla", true);
+        VILLAGE_NOTICE_RANGE = b.comment("С какого расстояния житель замечает игрока, блоки").defineInRange("noticeRange", 16, 2, 64);
+        VILLAGE_NOTICE_COOLDOWN_TICKS = b.comment("Событие «NPC заметил игрока» от одного NPC не чаще, тики")
+                .defineInRange("noticeCooldownTicks", 600, 20, 72_000);
+        VILLAGE_HIDE_AT = b.comment("С этой угрозы жители при виде игрока прячутся по домам").defineInRange("hideAt", 50, 0, 101);
+        VILLAGE_TRADE_REFUSE_AT = b.comment("С этой угрозы жители не торгуют").defineInRange("tradeRefuseAt", 50, 0, 101);
+        VILLAGE_ELDER_RAID_DELAY_TICKS = b.comment("Насколько смерть старейшины откладывает набег в этой местности, тики")
+                .defineInRange("elderRaidDelayTicks", 24_000, 0, 1_000_000);
+        RUIN_WOOD_CHANCE = b.comment("Руины: доля деревянных блоков, которые выгорают").defineInRange("ruinWoodChance", 0.4, 0.0, 1.0);
+        RUIN_MOSS_CHANCE = b.comment("Руины: доля камня, который зарастает мхом или трескается").defineInRange("ruinMossChance", 0.25, 0.0, 1.0);
         b.pop();
 
         b.comment("Уровни узлов: вехи и рост сложности").push("tiers");

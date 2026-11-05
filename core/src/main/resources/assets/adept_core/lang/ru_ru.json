@@ -97,5 +97,7 @@
   "adept_core.threat.calm": "спокойно",
   "adept_core.threat.scouts": "разведка",
   "adept_core.threat.squads": "отряды",
-  "adept_core.threat.warbands": "крупные отряды"
+  "adept_core.threat.warbands": "крупные отряды",
+  "entity.adept_core.resident": "Житель",
+  "entity.adept_core.elder": "Старейшина"
 }
