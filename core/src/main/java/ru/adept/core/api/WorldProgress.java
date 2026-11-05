@@ -22,6 +22,8 @@ public final class WorldProgress extends SavedData {
 
     private int nodeTier = 1;
     private int threat;
+    /** Зачищено узлов уровня не ниже текущего с момента перехода на этот уровень. */
+    private int cleansedAtTier;
 
     private WorldProgress() {
     }
@@ -40,6 +42,26 @@ public final class WorldProgress extends SavedData {
         return threat;
     }
 
+    /** Сколько узлов текущего уровня (или выше) уже зачищено на пути к следующей вехе. */
+    public int cleansedAtTier() {
+        return cleansedAtTier;
+    }
+
+    /**
+     * Учесть зачищенный узел. Узел ниже текущего уровня веху не двигает.
+     * Когда набрано {@code tiers.nodesToAdvance}, мир переходит на следующий уровень.
+     */
+    public void recordCleansed(MinecraftServer server, int nodeLevel) {
+        if (nodeLevel < nodeTier) {
+            return;
+        }
+        cleansedAtTier++;
+        setDirty();
+        if (cleansedAtTier >= BalanceConfig.TIER_NODES_TO_ADVANCE.get() && nodeTier < BalanceConfig.NODE_MAX_LEVEL.get()) {
+            setNodeTier(server, nodeTier + 1);
+        }
+    }
+
     public void setNodeTier(MinecraftServer server, int value) {
         int clamped = Mth.clamp(value, 1, BalanceConfig.NODE_MAX_LEVEL.get());
         if (clamped == nodeTier) {
@@ -47,6 +69,7 @@ public final class WorldProgress extends SavedData {
         }
         int old = nodeTier;
         nodeTier = clamped;
+        cleansedAtTier = 0;
         setDirty();
         AdeptEvents.post(new WorldProgressEvent.NodeTierChanged(server, old, clamped));
     }
@@ -66,6 +89,7 @@ public final class WorldProgress extends SavedData {
         WorldProgress data = new WorldProgress();
         data.nodeTier = Math.max(1, tag.getInt("node_tier"));
         data.threat = tag.getInt("threat");
+        data.cleansedAtTier = tag.getInt("cleansed_at_tier");
         return data;
     }
 
@@ -73,6 +97,7 @@ public final class WorldProgress extends SavedData {
     public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
         tag.putInt("node_tier", nodeTier);
         tag.putInt("threat", threat);
+        tag.putInt("cleansed_at_tier", cleansedAtTier);
         return tag;
     }
 }

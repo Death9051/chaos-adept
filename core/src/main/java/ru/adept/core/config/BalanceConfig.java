@@ -110,6 +110,13 @@ public final class BalanceConfig {
     public static final ModConfigSpec.ConfigValue<String> TABLE_BLADE_PROTOTYPE;
     public static final ModConfigSpec.ConfigValue<String> TABLE_BLADE_EDGE_1;
 
+    // Уровни узлов (вехи)
+    public static final ModConfigSpec.IntValue TIER_NODES_TO_ADVANCE;
+    public static final ModConfigSpec.BooleanValue TIER_LEVEL_FLOOR;
+    public static final ModConfigSpec.ConfigValue<String> CLUSTERS_BY_LEVEL;
+    public static final ModConfigSpec.ConfigValue<String> IMPROVED_MOBS_COMMAND;
+    public static final ModConfigSpec.IntValue IMPROVED_MOBS_PER_TIER;
+
     // Энергоклинок
     public static final ModConfigSpec.DoubleValue BLADE_BASE_DAMAGE;
     public static final ModConfigSpec.DoubleValue BLADE_ATTACK_SPEED;
@@ -298,11 +305,25 @@ public final class BalanceConfig {
 
         b.comment("Энергоклинок").push("blade");
         BLADE_BASE_DAMAGE = b.comment("Урон прототипа (как у меча: полный урон удара)")
-                .defineInRange("baseDamage", 6.0, 1.0, 100.0);
+                .defineInRange("baseDamage", 7.0, 1.0, 100.0);
         BLADE_ATTACK_SPEED = b.comment("Скорость атаки (ударов в секунду)")
                 .defineInRange("attackSpeed", 1.8, 0.1, 10.0);
         BLADE_EDGE_DAMAGE_PER_STEP = b.comment("Прибавка урона за каждую ступень пути «Кромка»")
-                .defineInRange("edgeDamagePerStep", 1.5, 0.0, 50.0);
+                .defineInRange("edgeDamagePerStep", 2.0, 0.0, 50.0);
+        b.pop();
+
+        b.comment("Уровни узлов: вехи и рост сложности").push("tiers");
+        TIER_NODES_TO_ADVANCE = b.comment("Сколько узлов текущего уровня (или выше) зачистить, чтобы мир перешёл на следующий уровень")
+                .defineInRange("nodesToAdvance", 5, 1, 100);
+        TIER_LEVEL_FLOOR = b.comment("Новые узлы (в ещё не открытых чанках) не ниже текущего уровня узлов мира")
+                .define("levelFloor", true);
+        CLUSTERS_BY_LEVEL = b.comment("Сгустков за зачищенный узел по уровням 1–5, через запятую")
+                .define("clustersByLevel", "1,1,2,3,4");
+        IMPROVED_MOBS_COMMAND = b.comment("Команда Improved Mobs при смене уровня узлов (%d — сложность). Пусто — не вызывать.",
+                        "Выполняется, только если Improved Mobs загружен")
+                .define("improvedMobsCommand", "improvedmobs difficulty set %d");
+        IMPROVED_MOBS_PER_TIER = b.comment("Сложность Improved Mobs = (уровень узлов − 1) × это число")
+                .defineInRange("improvedMobsPerTier", 50, 0, 10_000);
         b.pop();
 
         SPEC = b.build();
@@ -317,6 +338,18 @@ public final class BalanceConfig {
         double t = max <= 1 ? 0 : (double) (Math.max(1, Math.min(level, max)) - 1) / (max - 1);
         double minutes = EXTRACTION_MINUTES_MIN.get() + t * (EXTRACTION_MINUTES_MAX.get() - EXTRACTION_MINUTES_MIN.get());
         return (int) Math.round(minutes * 60 * 20);
+    }
+
+    /** Сколько сгустков даёт зачищенный узел данного уровня. */
+    public static int clustersFor(int level) {
+        String[] parts = CLUSTERS_BY_LEVEL.get().split(",");
+        int index = Math.max(1, level) - 1;
+        String raw = parts.length == 0 ? "1" : parts[Math.min(index, parts.length - 1)].trim();
+        try {
+            return Math.max(0, Integer.parseInt(raw));
+        } catch (NumberFormatException e) {
+            return 1;
+        }
     }
 
     /** Число волн на узле данного уровня. */
