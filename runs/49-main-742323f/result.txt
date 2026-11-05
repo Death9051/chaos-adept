@@ -1,0 +1,8 @@
+build=success servertest=success clienttest=success fullpack=success
+branch=main pr= sha=742323f5456bbddd77bbb7f5d09b298fd6eedd02 run=49
+fullpack: lock=ok
+fullpack: gametest=failure
+fullpack: client=success
+fullpack: shaders=success
+fullpack: armadilloblocksfrontandcurls failed at -10217364, -60, -3725928! Свёрнутый хитбокс не 0,9
+fullpack: 1 required tests failed :(
