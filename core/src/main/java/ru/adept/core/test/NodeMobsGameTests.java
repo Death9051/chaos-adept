@@ -50,7 +50,10 @@ public final class NodeMobsGameTests {
         armadillo.hurt(armadillo.damageSources().mobAttack(back), 4.0f);
         helper.assertTrue(armadillo.getHealth() < health, "Удар в спину не прошёл");
         helper.assertTrue(armadillo.isCurled(), "Броненосец не свернулся");
-        helper.assertTrue(Math.abs(armadillo.getBbHeight() - 0.9f) < 1e-3, "Свёрнутый хитбокс не 0,9");
+        // Высота считается с масштабом сущности: моды сборки (Improved Mobs) могут менять атрибут масштаба.
+        float scale = armadillo.getScale();
+        helper.assertTrue(Math.abs(armadillo.getBbHeight() - 0.9f * scale) < 1e-3 && Math.abs(armadillo.getBbWidth() - 0.9f * scale) < 1e-3,
+                "Свёрнутый хитбокс не 0,9 × 0,9: " + armadillo.getBbWidth() + " × " + armadillo.getBbHeight() + ", масштаб " + scale);
         helper.succeed();
     }
 
