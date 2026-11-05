@@ -28,6 +28,16 @@ public abstract class WorldProgressEvent extends AdeptEvent {
         }
     }
 
+    /**
+     * Ступень угрозы изменилась (0 — спокойно, 1 — разведка, 2 — отряды, 3 — крупные отряды).
+     * Значения — порядковые номера {@code ru.adept.core.threat.ThreatLevel}.
+     */
+    public static final class ThreatLevelChanged extends WorldProgressEvent {
+        public ThreatLevelChanged(MinecraftServer server, int oldLevel, int newLevel) {
+            super(server, oldLevel, newLevel);
+        }
+    }
+
     /** Угроза мира изменилась. */
     public static final class ThreatChanged extends WorldProgressEvent {
         public ThreatChanged(MinecraftServer server, int oldThreat, int newThreat) {

@@ -92,5 +92,10 @@
   "entity.adept_core.boar_leader": "Кабан-вожак",
   "entity.adept_core.armadillo": "Броненосец",
   "entity.adept_core.sporeling": "Споровик",
-  "entity.adept_core.sporeling_small": "Маленький споровик"
+  "entity.adept_core.sporeling_small": "Маленький споровик",
+  "adept_core.bar.threat": "Угроза: %s — %s",
+  "adept_core.threat.calm": "спокойно",
+  "adept_core.threat.scouts": "разведка",
+  "adept_core.threat.squads": "отряды",
+  "adept_core.threat.warbands": "крупные отряды"
 }

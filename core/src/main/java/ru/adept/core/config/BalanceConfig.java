@@ -132,6 +132,19 @@ public final class BalanceConfig {
     public static final ModConfigSpec.ConfigValue<String> TABLE_BLADE_PROTOTYPE;
     public static final ModConfigSpec.ConfigValue<String> TABLE_BLADE_EDGE_1;
 
+    // Угроза
+    public static final ModConfigSpec.IntValue THREAT_SCOUTS_AT;
+    public static final ModConfigSpec.IntValue THREAT_SQUADS_AT;
+    public static final ModConfigSpec.IntValue THREAT_WARBANDS_AT;
+    public static final ModConfigSpec.IntValue THREAT_BIOME_ABSORBED;
+    public static final ModConfigSpec.IntValue THREAT_VILLAGE_DESTROYED;
+    public static final ModConfigSpec.IntValue THREAT_ELDER_KILLED;
+    public static final ModConfigSpec.IntValue THREAT_VILLAGER_KILLED;
+    public static final ModConfigSpec.IntValue THREAT_RAID_DEFEATED;
+    public static final ModConfigSpec.IntValue THREAT_RAID_WAITED;
+    public static final ModConfigSpec.IntValue THREAT_DECAY_AMOUNT;
+    public static final ModConfigSpec.IntValue THREAT_DECAY_TICKS;
+
     // Уровни узлов (вехи)
     public static final ModConfigSpec.IntValue TIER_NODES_TO_ADVANCE;
     public static final ModConfigSpec.BooleanValue TIER_LEVEL_FLOOR;
@@ -362,6 +375,20 @@ public final class BalanceConfig {
                 .defineInRange("armadilloCurlCooldownTicks", 120, 0, 2400);
         SPORELING_SPLIT_COUNT = b.comment("Споровик: сколько маленьких выпускает при смерти")
                 .defineInRange("sporelingSplitCount", 2, 0, 8);
+        b.pop();
+
+        b.comment("Угроза мира 0–100 («Мобы», «Герои и набеги»)").push("threat");
+        THREAT_SCOUTS_AT = b.comment("С этой угрозы — разведка (одиночные следопыты или пары)").defineInRange("scoutsAt", 25, 0, 100);
+        THREAT_SQUADS_AT = b.comment("С этой — отряды из 3–5 героев").defineInRange("squadsAt", 50, 0, 100);
+        THREAT_WARBANDS_AT = b.comment("С этой — крупные отряды с командиром").defineInRange("warbandsAt", 75, 0, 100);
+        THREAT_BIOME_ABSORBED = b.comment("Рост за поглощённый биом (сильно)").defineInRange("biomeAbsorbed", 15, 0, 100);
+        THREAT_VILLAGE_DESTROYED = b.comment("Рост за разрушенную деревню (заметно)").defineInRange("villageDestroyed", 8, 0, 100);
+        THREAT_ELDER_KILLED = b.comment("Рост за убитого старейшину (заметно)").defineInRange("elderKilled", 10, 0, 100);
+        THREAT_VILLAGER_KILLED = b.comment("Рост за убитого жителя (понемногу)").defineInRange("villagerKilled", 2, 0, 100);
+        THREAT_RAID_DEFEATED = b.comment("Спад после разгромленного набега (заметно)").defineInRange("raidDefeated", 10, 0, 100);
+        THREAT_RAID_WAITED = b.comment("Рост, если отряд прождал у точки выхода с базы и ушёл").defineInRange("raidWaited", 3, 0, 100);
+        THREAT_DECAY_AMOUNT = b.comment("Спад со временем: на сколько").defineInRange("decayAmount", 1, 0, 100);
+        THREAT_DECAY_TICKS = b.comment("и раз в сколько тиков (0 — без спада)").defineInRange("decayTicks", 6000, 0, 1_000_000);
         b.pop();
 
         b.comment("Уровни узлов: вехи и рост сложности").push("tiers");
