@@ -1,0 +1,170 @@
+Downloading https://services.gradle.org/distributions/gradle-9.2.1-bin.zip
+............10%.............20%.............30%.............40%.............50%.............60%.............70%.............80%.............90%.............100%
+
+Welcome to Gradle 9.2.1!
+
+Here are the highlights of this release:
+ - Windows ARM support
+ - Improved publishing APIs
+ - Better guidance for dependency verification failures
+
+For more details see https://docs.gradle.org/9.2.1/release-notes.html
+
+Starting a Gradle Daemon (subsequent builds will be faster)
+
+> Configure project :
+Creating Minecraft artifacts without recompilation.
+Creating Minecraft artifacts without recompilation.
+
+> Task :story:createMinecraftArtifacts
+Loaded 131 artifacts from /home/runner/work/chaos-adept/chaos-adept/story/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties
+[1m*** Started working on [4mdownloadJson[23;0m[23;0m
+  ↓ https://piston-meta.mojang.com/mc/game/version_manifest_v2.json
+  ↓ https://piston-meta.mojang.com/v1/packages/82ba6501da174a665c1787775f946487422f2432/1.21.1.json
+ [1m[92m✓[23;0m Completed [4mdownloadJson[23;0m in 0.44s
+[1m*** Started working on [4mdownloadServer[23;0m[23;0m
+[1m*** Started working on [4mdownloadClient[23;0m[23;0m
+[1m*** Started working on [4mdownloadClientMappings[23;0m[23;0m
+  ↓ https://piston-data.mojang.com/v1/objects/2244b6f072256667bcd9a73df124d6c58de77992/client.txt
+  ↓ https://piston-data.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa98dc05c/server.jar
+  ↓ https://piston-data.mojang.com/v1/objects/30c73b1c5da787909b2f73340419fdf13b9def88/client.jar
+ [1m[92m✓[23;0m Completed [4mdownloadClientMappings[23;0m in 0.50s
+[1m*** Started working on [4mmergeMappings[23;0m[23;0m
+ ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar
+ [1m[92m✓[23;0m Completed [4mdownloadClient[23;0m in 1.03s
+[1m*** Started working on [4mstripClient[23;0m[23;0m
+ [1m[92m✓[23;0m Completed [4mdownloadServer[23;0m in 1.46s
+[1m*** Started working on [4mextractServer[23;0m[23;0m
+ ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar
+ [1m[92m✓[23;0m Completed [4mextractServer[23;0m in 0.85s
+[1m*** Started working on [4mstripServer[23;0m[23;0m
+ [1m[92m✓[23;0m Completed [4mstripServer[23;0m in 2.24s
+ [1m[92m✓[23;0m Completed [4mmergeMappings[23;0m in 4.28s
+ [1m[92m✓[23;0m Completed [4mstripClient[23;0m in 3.95s
+[1m*** Started working on [4mmerge[23;0m[23;0m
+ ↳ Running external tool net.neoforged:mergetool:2.0.3:fatjar
+ [1m[92m✓[23;0m Completed [4mmerge[23;0m in 3.06s
+[1m*** Started working on [4mrename[23;0m[23;0m
+ ↳ Running external tool net.neoforged:AutoRenamingTool:2.0.3:all
+ [1m[92m✓[23;0m Completed [4mrename[23;0m in 6.69s
+[1m*** Started working on [4mbinaryPatch[23;0m[23;0m
+  [33mWARNING: [23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest
+  ↓ https://maven.neoforged.net/releases/net/neoforged/installertools/binarypatcher/2.1.2/binarypatcher-2.1.2-fatjar.jar
+ ↳ Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar
+
+> Task :core:createMinecraftArtifacts
+Loaded 131 artifacts from /home/runner/work/chaos-adept/chaos-adept/core/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties
+[1m*** Started working on [4mdownloadJson[23;0m[23;0m
+Waiting for lock on downloadJson_271487b88a13cbe35ef8f66d7fe7972b4b9fd6be. [1m[92m✓[23;0m Completed [4mdownloadJson[23;0m in 1.06s
+[1m*** Started working on [4mdownloadServer[23;0m[23;0m
+Waiting for lock on downloadServer_1e521d66c35462ee239836ce3c2668dfd299bfe4.[1m*** Started working on [4mdownloadClientMappings[23;0m[23;0m
+
+[1m*** Started working on [4mdownloadClient[23;0m[23;0m
+Waiting for lock on downloadClient_660d4b1ea508edfe1d19a2ddb52d0b8e52345941.
+ [1m[92m✓[23;0m Completed [4mdownloadClientMappings[23;0m in 0.14s
+[1m*** Started working on [4mmergeMappings[23;0m[23;0m
+Waiting for lock on mergeMappings_2100ae7c755bb34ac4545c9eeec4a90c42ad48c4.
+ [1m[92m✓[23;0m Completed [4mdownloadClient[23;0m in 1.00s
+ [1m[92m✓[23;0m Completed [4mdownloadServer[23;0m in 1.01s
+[1m*** Started working on [4mstripClient[23;0m[23;0m
+Waiting for lock on stripClient_2d7e78755d8b28f5d42c07f6d2b44b7f333acb44.
+[1m*** Started working on [4mextractServer[23;0m[23;0m
+Waiting for lock on extractServer_3708c41639d60b56739a2bf9df29858932d3099a..... [1m[92m♻[23;0m Used cache of [4mextractServer[23;0m in 1.01s
+...[1m*** Started working on [4mstripServer[23;0m[23;0m
+Waiting for lock on stripServer_8bb3d3745bd6f4ac9d34d27c8a1809cf14c56fdd......
+ [1m[92m♻[23;0m Used cache of [4mmergeMappings[23;0m in 4.01s
+ [1m[92m♻[23;0m Used cache of [4mstripServer[23;0m in 2.01s
+ [1m[92m♻[23;0m Used cache of [4mstripClient[23;0m in 4.01s
+[1m*** Started working on [4mmerge[23;0m[23;0m
+Waiting for lock on merge_8503fda02cff83cf4896f8b254e4fde2d657ec61...... [1m[92m♻[23;0m Used cache of [4mmerge[23;0m in 3.01s
+[1m*** Started working on [4mrename[23;0m[23;0m
+Waiting for lock on rename_3ae1457ad10a070b0c702da8b8a7a5f78a382265......... [1m[92m♻[23;0m Used cache of [4mrename[23;0m in 6.01s
+[1m*** Started working on [4mbinaryPatch[23;0m[23;0m
+Waiting for lock on binaryPatch_3fe86e0d49394bdbcba0101e572650f88818aa64......... [1m[92m♻[23;0m Used cache of [4mbinaryPatch[23;0m in 6.00s
+[1m*** Started working on [4mcopyUnpatchedClasses[23;0m[23;0m
+Waiting for lock on copyUnpatchedClasses_bfaf805f08689bdeaac39126905c3ea0c249732e. [1m[92m♻[23;0m Used cache of [4mcopyUnpatchedClasses[23;0m in 1.00s
+[1m*** Started working on [4mapplyDevTransforms[23;0m[23;0m
+Waiting for lock on applyDevTransforms_8313e57625fc83dd40b16089ed2651f775702d6b...... [1m[92m♻[23;0m Used cache of [4mapplyDevTransforms[23;0m in 3.01s
+[1m*** Started working on [4mbinaryWithNeoForge[23;0m[23;0m
+Waiting for lock on binaryWithNeoForge_dac446bd5e2b32b96e4f39db9c7eea9c5b565d28.......
+> Task :story:createMinecraftArtifacts
+ [1m[92m✓[23;0m Completed [4mbinaryPatch[23;0m in 5.32s
+[1m*** Started working on [4mcopyUnpatchedClasses[23;0m[23;0m
+ [1m[92m✓[23;0m Completed [4mcopyUnpatchedClasses[23;0m in 1.66s
+[1m*** Started working on [4mapplyDevTransforms[23;0m[23;0m
+ ↳ Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar
+ [1m[92m✓[23;0m Completed [4mapplyDevTransforms[23;0m in 2.30s
+[1m*** Started working on [4mbinaryWithNeoForge[23;0m[23;0m
+ [1m[92m✓[23;0m Completed [4mbinaryWithNeoForge[23;0m in 5.52s
+Total runtime: 31.06s
+
+
+> Task :story:generateModMetadata
+> Task :story:processResources
+> Task :story:jarJar NO-SOURCE
+> Task :story:processTestResources NO-SOURCE
+
+> Task :core:createMinecraftArtifacts
+ [1m[92m♻[23;0m Used cache of [4mbinaryWithNeoForge[23;0m in 5.00s
+Total runtime: 31.60s
+
+
+> Task :core:compileJava
+/home/runner/work/chaos-adept/chaos-adept/core/src/main/java/ru/adept/core/client/CoreClient.java:14: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = AdeptCore.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                              ^
+/home/runner/work/chaos-adept/chaos-adept/core/src/main/java/ru/adept/core/client/CoreClient.java:14: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = AdeptCore.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                                                      ^
+/home/runner/work/chaos-adept/chaos-adept/core/src/main/java/ru/adept/core/registry/ModEntities.java:22: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = AdeptCore.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+                                              ^
+/home/runner/work/chaos-adept/chaos-adept/core/src/main/java/ru/adept/core/registry/ModEntities.java:22: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = AdeptCore.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+                                                                      ^
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+4 warnings
+
+> Task :core:generateModMetadata
+> Task :core:processResources
+> Task :core:classes
+> Task :core:jarJar NO-SOURCE
+> Task :core:jar
+> Task :core:assemble
+> Task :core:compileTestJava NO-SOURCE
+> Task :core:processTestResources NO-SOURCE
+> Task :core:testClasses UP-TO-DATE
+> Task :core:test NO-SOURCE
+> Task :core:check UP-TO-DATE
+> Task :core:build
+
+> Task :story:compileJava
+/home/runner/work/chaos-adept/chaos-adept/story/src/main/java/ru/adept/story/net/StoryNetwork.java:21: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = AdeptStory.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+                                               ^
+/home/runner/work/chaos-adept/chaos-adept/story/src/main/java/ru/adept/story/net/StoryNetwork.java:21: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = AdeptStory.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+                                                                       ^
+/home/runner/work/chaos-adept/chaos-adept/story/src/main/java/ru/adept/story/client/StoryClient.java:33: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+    @EventBusSubscriber(modid = AdeptStory.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                                   ^
+/home/runner/work/chaos-adept/chaos-adept/story/src/main/java/ru/adept/story/client/StoryClient.java:33: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+    @EventBusSubscriber(modid = AdeptStory.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                                                           ^
+4 warnings
+
+> Task :story:classes
+> Task :story:jar
+> Task :story:assemble
+> Task :story:compileTestJava NO-SOURCE
+> Task :story:testClasses UP-TO-DATE
+> Task :story:test NO-SOURCE
+> Task :story:check UP-TO-DATE
+> Task :story:build
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run-1793859717738.json
+
+[Incubating] Problems report is available at: file:///home/runner/work/chaos-adept/chaos-adept/build/reports/problems/problems-report.html
+
+BUILD SUCCESSFUL in 1m 12s
+10 actionable tasks: 10 executed

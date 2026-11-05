@@ -1,0 +1,2 @@
+build=success servertest=success clienttest=success
+branch=core/slice2-node-mobs pr=13 sha=d1d621d48ec3fdf418ef8a782db7931b5387ff20 run=31
