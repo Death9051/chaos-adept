@@ -14,6 +14,7 @@ import ru.adept.core.mob.SporelingEntity;
 import ru.adept.core.mob.HornedLeaderEntity;
 import ru.adept.core.mob.HornetEntity;
 import ru.adept.core.mob.WispEntity;
+import ru.adept.core.hero.HeroEntity;
 import ru.adept.core.trader.TraderEntity;
 import ru.adept.core.village.ElderEntity;
 import ru.adept.core.village.ResidentEntity;
@@ -50,6 +51,11 @@ public final class ModEntities {
             () -> EntityType.Builder.<ElderEntity>of(ElderEntity::new, MobCategory.MISC).sized(0.6f, 1.95f).eyeHeight(1.62f)
                     .clientTrackingRange(10).build("elder"));
 
+    // Герои (облик — модель игрока). 0,6 × 1,8.
+    public static final DeferredHolder<EntityType<?>, EntityType<HeroEntity>> HERO = ENTITIES.register("hero",
+            () -> EntityType.Builder.of(HeroEntity::new, MobCategory.MONSTER).sized(0.6f, 1.8f).eyeHeight(1.62f)
+                    .clientTrackingRange(10).build("hero"));
+
     public static final DeferredHolder<EntityType<?>, EntityType<TraderEntity>> TRADER = ENTITIES.register("trader",
             () -> EntityType.Builder.of(TraderEntity::new, MobCategory.MISC).sized(0.6f, 1.95f).clientTrackingRange(10).build("trader"));
 
@@ -71,6 +77,7 @@ public final class ModEntities {
         event.put(SPORELING_SMALL.get(), SporelingEntity.smallAttributes().build());
         event.put(RESIDENT.get(), net.minecraft.world.entity.npc.Villager.createAttributes().build());
         event.put(ELDER.get(), net.minecraft.world.entity.npc.Villager.createAttributes().build());
+        event.put(HERO.get(), HeroEntity.attributes().build());
         event.put(TRADER.get(), TraderEntity.attributes().build());
     }
 }

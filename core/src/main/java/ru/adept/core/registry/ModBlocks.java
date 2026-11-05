@@ -57,6 +57,11 @@ public final class ModBlocks {
                     .strength(0.5f)
                     .sound(SoundType.SAND)));
 
+    /** Капкан следопыта (ставят герои, предмета нет). */
+    public static final DeferredBlock<ru.adept.core.hero.HeroTrapBlock> HERO_TRAP = BLOCKS.register("hero_trap",
+            () -> new ru.adept.core.hero.HeroTrapBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.METAL).strength(0.3f).noOcclusion().sound(SoundType.CHAIN)));
+
     /** Генератор базы: стоит на базе с начала, не ломается. */
     public static final DeferredBlock<MachineBlock.Generator> GENERATOR = BLOCKS.register("generator",
             () -> new MachineBlock.Generator(BlockBehaviour.Properties.of()
