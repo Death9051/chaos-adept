@@ -251,7 +251,10 @@ def fetch(args):
                 old.unlink()
     count = 0
     for e in lock["files"]:
-        if e["env"][args.side] == "unsupported":
+        # Сборка только для одиночной игры: клиенту нужны и серверные моды (они работают
+        # во встроенном сервере), поэтому на клиенте пропускать нечего. Отдельному серверу
+        # не нужны чисто клиентские моды.
+        if args.side == "server" and e["env"]["server"] == "unsupported":
             continue
         if args.skip_dev and "dev" in e["flags"]:
             continue
