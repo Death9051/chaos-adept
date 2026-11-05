@@ -57,6 +57,23 @@ public class SmelterBlockEntity extends MachineBlockEntity {
     }
 
     private void pour() {
+        // Срез 2: если рядом резервуар — расплав сливается туда, иначе отливаются слитки (как в срезе 1).
+        if (tank > 0 && !tankIngot.isEmpty() && level != null) {
+            var molten = Molten.ofIngot(tankIngot);
+            if (molten.isPresent()) {
+                int moved = ReservoirBlockEntity.put(level, worldPosition, molten.get().id(),
+                        Math.min(tank, BalanceConfig.SMELTER_POUR_MB_PER_TICK.get()));
+                if (moved > 0) {
+                    tank -= moved;
+                    if (tank <= 0) {
+                        tank = 0;
+                        tankIngot = ItemStack.EMPTY;
+                    }
+                    setChanged();
+                    return;
+                }
+            }
+        }
         int perIngot = BalanceConfig.SMELTER_MB_PER_INGOT.get();
         if (tank >= perIngot && !tankIngot.isEmpty() && output(1, tankIngot.copyWithCount(1))) {
             tank -= perIngot;

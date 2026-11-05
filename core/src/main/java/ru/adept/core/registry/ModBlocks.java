@@ -73,12 +73,28 @@ public final class ModBlocks {
             () -> new MachineBlock.Smelter(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_ORANGE).strength(3.0f).sound(SoundType.METAL).lightLevel(s -> 6)));
 
+    /** Простой резервуар расплава (первый уровень объёма). */
+    public static final DeferredBlock<ru.adept.core.base.ReservoirBlock> RESERVOIR = BLOCKS.register("reservoir",
+            () -> new ru.adept.core.base.ReservoirBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.METAL).strength(3.0f).sound(SoundType.METAL)));
+    /** Сплавщик (нулевой уровень). */
+    public static final DeferredBlock<MachineBlock.Alloyer> ALLOYER = BLOCKS.register("alloyer",
+            () -> new MachineBlock.Alloyer(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_ORANGE).strength(3.0f).sound(SoundType.METAL).lightLevel(s -> 4)));
+    /** Литейная (нулевой уровень). */
+    public static final DeferredBlock<MachineBlock.Caster> CASTER = BLOCKS.register("caster",
+            () -> new MachineBlock.Caster(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.METAL).strength(3.0f).sound(SoundType.METAL)));
+
     static {
         ITEMS.registerSimpleBlockItem(NODE_CRYSTAL);
         ITEMS.registerSimpleBlockItem(ASH);
         ITEMS.registerSimpleBlockItem(GENERATOR);
         ITEMS.registerSimpleBlockItem(CRUSHER);
         ITEMS.registerSimpleBlockItem(SMELTER);
+        ITEMS.registerSimpleBlockItem(RESERVOIR);
+        ITEMS.registerSimpleBlockItem(ALLOYER);
+        ITEMS.registerSimpleBlockItem(CASTER);
         ITEMS.registerSimpleBlockItem(ARTIFACT_TABLE);
     }
 

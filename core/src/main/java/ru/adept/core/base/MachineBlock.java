@@ -90,6 +90,32 @@ public abstract class MachineBlock extends BaseEntityBlock {
         }
     }
 
+    public static final class Alloyer extends MachineBlock {
+        public static final MapCodec<Alloyer> CODEC = simpleCodec(Alloyer::new);
+
+        public Alloyer(Properties properties) {
+            super(properties, ModBlockEntities.ALLOYER, AlloyerBlockEntity::new);
+        }
+
+        @Override
+        protected MapCodec<? extends BaseEntityBlock> codec() {
+            return CODEC;
+        }
+    }
+
+    public static final class Caster extends MachineBlock {
+        public static final MapCodec<Caster> CODEC = simpleCodec(Caster::new);
+
+        public Caster(Properties properties) {
+            super(properties, ModBlockEntities.CASTER, CasterBlockEntity::new);
+        }
+
+        @Override
+        protected MapCodec<? extends BaseEntityBlock> codec() {
+            return CODEC;
+        }
+    }
+
     public static final class Smelter extends MachineBlock {
         public static final MapCodec<Smelter> CODEC = simpleCodec(Smelter::new);
 

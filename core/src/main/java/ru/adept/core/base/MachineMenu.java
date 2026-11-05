@@ -18,12 +18,15 @@ import ru.adept.core.registry.ModMenus;
  * сервер синхронизирует слоты и {@link ContainerData}. Слот 0 — вход, слот 1 (если есть) — выход.
  */
 public class MachineMenu extends AbstractContainerMenu {
-    public enum Kind { GENERATOR, CRUSHER, SMELTER }
+    public enum Kind { GENERATOR, CRUSHER, SMELTER, ALLOYER, CASTER }
 
     public final Kind kind;
     private final Container container;
     private final ContainerData data;
     private final int machineSlots;
+    /** Кнопки экрана (рецепт сплавщика, форма литейной) — только на сервере. */
+    private java.util.function.IntConsumer buttons = i -> {
+    };
 
     public MachineMenu(MenuType<?> type, Kind kind, int id, Inventory inventory, Container container, ContainerData data) {
         super(type, id);
@@ -39,7 +42,12 @@ public class MachineMenu extends AbstractContainerMenu {
                 }
             });
         } else {
-            addSlot(new Slot(container, 0, 56, 35));
+            addSlot(new Slot(container, 0, 56, 35) {
+                @Override
+                public boolean mayPlace(ItemStack stack) {
+                    return kind == Kind.ALLOYER ? AlloyerBlockEntity.isAdditive(stack) : kind != Kind.CASTER;
+                }
+            });
             addSlot(new Slot(container, 1, 116, 35) {
                 @Override
                 public boolean mayPlace(ItemStack stack) {
@@ -80,6 +88,32 @@ public class MachineMenu extends AbstractContainerMenu {
 
     public static MachineMenu smelter(int id, Inventory inventory, Container c, ContainerData d, ContainerLevelAccess access) {
         return new MachineMenu(ModMenus.SMELTER.get(), Kind.SMELTER, id, inventory, c, d);
+    }
+
+    public static MachineMenu alloyer(int id, Inventory inventory) {
+        return new MachineMenu(ModMenus.ALLOYER.get(), Kind.ALLOYER, id, inventory, new SimpleContainer(2), new SimpleContainerData(MachineBlockEntity.DATA_SIZE));
+    }
+
+    public static MachineMenu alloyer(int id, Inventory inventory, Container c, ContainerData d, ContainerLevelAccess access, java.util.function.IntConsumer buttons) {
+        MachineMenu menu = new MachineMenu(ModMenus.ALLOYER.get(), Kind.ALLOYER, id, inventory, c, d);
+        menu.buttons = buttons;
+        return menu;
+    }
+
+    public static MachineMenu caster(int id, Inventory inventory) {
+        return new MachineMenu(ModMenus.CASTER.get(), Kind.CASTER, id, inventory, new SimpleContainer(2), new SimpleContainerData(MachineBlockEntity.DATA_SIZE));
+    }
+
+    public static MachineMenu caster(int id, Inventory inventory, Container c, ContainerData d, ContainerLevelAccess access, java.util.function.IntConsumer buttons) {
+        MachineMenu menu = new MachineMenu(ModMenus.CASTER.get(), Kind.CASTER, id, inventory, c, d);
+        menu.buttons = buttons;
+        return menu;
+    }
+
+    @Override
+    public boolean clickMenuButton(Player player, int id) {
+        buttons.accept(id);
+        return true;
     }
 
     public int data(int index) {
