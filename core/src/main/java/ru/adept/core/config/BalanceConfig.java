@@ -155,6 +155,37 @@ public final class BalanceConfig {
     public static final ModConfigSpec.DoubleValue RUIN_WOOD_CHANCE;
     public static final ModConfigSpec.DoubleValue RUIN_MOSS_CHANCE;
 
+    // Герои
+    public static final ModConfigSpec.DoubleValue HERO_WARRIOR_HEALTH;
+    public static final ModConfigSpec.DoubleValue HERO_ARCHER_HEALTH;
+    public static final ModConfigSpec.DoubleValue HERO_TRACKER_HEALTH;
+    public static final ModConfigSpec.DoubleValue HERO_COMMANDER_HEALTH;
+    public static final ModConfigSpec.DoubleValue HERO_WARRIOR_DAMAGE;
+    public static final ModConfigSpec.DoubleValue HERO_ARCHER_DAMAGE;
+    public static final ModConfigSpec.DoubleValue HERO_TRACKER_DAMAGE;
+    public static final ModConfigSpec.DoubleValue HERO_COMMANDER_DAMAGE;
+    public static final ModConfigSpec.DoubleValue HERO_VETERAN_MULTIPLIER;
+    public static final ModConfigSpec.DoubleValue HERO_VETERAN_PER_TIER;
+    public static final ModConfigSpec.IntValue HERO_SHIELD_ARC;
+    public static final ModConfigSpec.IntValue HERO_BASH_COOLDOWN_TICKS;
+    public static final ModConfigSpec.DoubleValue HERO_BASH_DAMAGE;
+    public static final ModConfigSpec.IntValue HERO_BASH_STUN_TICKS;
+    public static final ModConfigSpec.DoubleValue HERO_ARCHER_KEEP_DISTANCE;
+    public static final ModConfigSpec.IntValue HERO_VOLLEY_COOLDOWN_TICKS;
+    public static final ModConfigSpec.DoubleValue HERO_VOLLEY_SPREAD;
+    public static final ModConfigSpec.IntValue HERO_MARK_TICKS;
+    public static final ModConfigSpec.IntValue HERO_TRAP_COOLDOWN_TICKS;
+    public static final ModConfigSpec.IntValue HERO_TRAP_HOLD_TICKS;
+    public static final ModConfigSpec.DoubleValue HERO_TRAP_DAMAGE;
+    public static final ModConfigSpec.DoubleValue HERO_AURA_RADIUS;
+    public static final ModConfigSpec.IntValue HERO_SURROUND_COOLDOWN_TICKS;
+    public static final ModConfigSpec.IntValue HERO_LOST_TICKS;
+    public static final ModConfigSpec.IntValue HERO_RETREAT_DESPAWN_TICKS;
+    public static final ModConfigSpec.DoubleValue HERO_GEAR_DROP_CHANCE;
+    public static final ModConfigSpec.DoubleValue HERO_EMBLEM_CHANCE;
+    public static final ModConfigSpec.DoubleValue HERO_EMBLEM_CHANCE_VETERAN;
+    public static final ModConfigSpec.DoubleValue HERO_ORDER_CHANCE;
+
     // Уровни узлов (вехи)
     public static final ModConfigSpec.IntValue TIER_NODES_TO_ADVANCE;
     public static final ModConfigSpec.BooleanValue TIER_LEVEL_FLOOR;
@@ -412,6 +443,38 @@ public final class BalanceConfig {
                 .defineInRange("elderRaidDelayTicks", 24_000, 0, 1_000_000);
         RUIN_WOOD_CHANCE = b.comment("Руины: доля деревянных блоков, которые выгорают").defineInRange("ruinWoodChance", 0.4, 0.0, 1.0);
         RUIN_MOSS_CHANCE = b.comment("Руины: доля камня, который зарастает мхом или трескается").defineInRange("ruinMossChance", 0.25, 0.0, 1.0);
+        b.pop();
+
+        b.comment("Герои («Мобы», «Герои и набеги»). Ветеран: здоровье и урон × veteranMultiplier, два приёма").push("heroes");
+        HERO_WARRIOR_HEALTH = b.defineInRange("warriorHealth", 32.0, 1.0, 1000.0);
+        HERO_ARCHER_HEALTH = b.defineInRange("archerHealth", 22.0, 1.0, 1000.0);
+        HERO_TRACKER_HEALTH = b.defineInRange("trackerHealth", 24.0, 1.0, 1000.0);
+        HERO_COMMANDER_HEALTH = b.defineInRange("commanderHealth", 50.0, 1.0, 1000.0);
+        HERO_WARRIOR_DAMAGE = b.defineInRange("warriorDamage", 6.0, 0.0, 100.0);
+        HERO_ARCHER_DAMAGE = b.comment("Урон стрелы лучника = половина этого числа × скорость").defineInRange("archerDamage", 4.0, 0.0, 100.0);
+        HERO_TRACKER_DAMAGE = b.defineInRange("trackerDamage", 5.0, 0.0, 100.0);
+        HERO_COMMANDER_DAMAGE = b.defineInRange("commanderDamage", 7.0, 0.0, 100.0);
+        HERO_VETERAN_MULTIPLIER = b.defineInRange("veteranMultiplier", 1.4, 1.0, 10.0);
+        HERO_VETERAN_PER_TIER = b.comment("Прибавка к шансу ветерана за каждый уровень узлов выше первого").defineInRange("veteranPerTier", 0.15, 0.0, 1.0);
+        HERO_SHIELD_ARC = b.comment("Воин: ширина дуги щита спереди, градусы").defineInRange("shieldArc", 100, 0, 360);
+        HERO_BASH_COOLDOWN_TICKS = b.comment("Воин-ветеран: таран щитом, перезарядка").defineInRange("bashCooldownTicks", 160, 1, 2400);
+        HERO_BASH_DAMAGE = b.defineInRange("bashDamage", 4.0, 0.0, 100.0);
+        HERO_BASH_STUN_TICKS = b.comment("Оглушение от тарана (вместо сбивания с ног — отброса игрока нет)").defineInRange("bashStunTicks", 30, 0, 200);
+        HERO_ARCHER_KEEP_DISTANCE = b.comment("Лучник отходит, если игрок ближе").defineInRange("archerKeepDistance", 7.0, 0.0, 32.0);
+        HERO_VOLLEY_COOLDOWN_TICKS = b.comment("Лучник-ветеран: залп из трёх стрел, перезарядка").defineInRange("volleyCooldownTicks", 120, 1, 2400);
+        HERO_VOLLEY_SPREAD = b.comment("Разлёт стрел залпа, градусы").defineInRange("volleySpread", 8.0, 0.0, 45.0);
+        HERO_MARK_TICKS = b.comment("Следопыт: метка (подсветка игрока), тики").defineInRange("markTicks", 200, 0, 2400);
+        HERO_TRAP_COOLDOWN_TICKS = b.comment("Следопыт-ветеран: капкан, перезарядка").defineInRange("trapCooldownTicks", 300, 1, 6000);
+        HERO_TRAP_HOLD_TICKS = b.comment("Капкан держит игрока, тики").defineInRange("trapHoldTicks", 20, 0, 200);
+        HERO_TRAP_DAMAGE = b.defineInRange("trapDamage", 2.0, 0.0, 100.0);
+        HERO_AURA_RADIUS = b.comment("Командир: радиус ауры строя (сопротивление урону союзникам)").defineInRange("auraRadius", 8.0, 1.0, 64.0);
+        HERO_SURROUND_COOLDOWN_TICKS = b.comment("Командир-ветеран: приказ «окружить», перезарядка").defineInRange("surroundCooldownTicks", 200, 1, 6000);
+        HERO_LOST_TICKS = b.comment("Событие «игрок скрылся» — не виден дольше, тики").defineInRange("lostTicks", 100, 1, 6000);
+        HERO_RETREAT_DESPAWN_TICKS = b.comment("Отступивший герой пропадает вдали не раньше, тики").defineInRange("retreatDespawnTicks", 600, 0, 24_000);
+        HERO_GEAR_DROP_CHANCE = b.comment("Шанс выпадения каждого предмета снаряжения героя").defineInRange("gearDropChance", 0.25, 0.0, 1.0);
+        HERO_EMBLEM_CHANCE = b.comment("Эмблема (трофей для Альянса) с ученика").defineInRange("emblemChance", 0.3, 0.0, 1.0);
+        HERO_EMBLEM_CHANCE_VETERAN = b.comment("и с ветерана").defineInRange("emblemChanceVeteran", 0.6, 0.0, 1.0);
+        HERO_ORDER_CHANCE = b.comment("Приказ командира с командира (знамя выпадает всегда)").defineInRange("orderChance", 0.35, 0.0, 1.0);
         b.pop();
 
         b.comment("Уровни узлов: вехи и рост сложности").push("tiers");

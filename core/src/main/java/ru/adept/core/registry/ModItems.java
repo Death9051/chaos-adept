@@ -46,6 +46,12 @@ public final class ModItems {
         return NODE_CLUSTERS.get(Mth.clamp(level, 1, NODE_CLUSTERS.size()) - 1).get();
     }
 
+    // Трофеи героев для Альянса и приказ командира
+    public static final DeferredItem<Item> HERO_EMBLEM = ITEMS.registerSimpleItem("hero_emblem");
+    public static final DeferredItem<Item> HERO_BANNER = ITEMS.registerSimpleItem("hero_banner");
+    public static final DeferredItem<ru.adept.core.hero.CommanderOrderItem> COMMANDER_ORDER = ITEMS.register("commander_order",
+            () -> new ru.adept.core.hero.CommanderOrderItem(new Item.Properties().stacksTo(1)));
+
     private ModItems() {
     }
 

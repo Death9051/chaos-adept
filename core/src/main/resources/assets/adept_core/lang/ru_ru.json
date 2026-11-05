@@ -99,5 +99,12 @@
   "adept_core.threat.squads": "отряды",
   "adept_core.threat.warbands": "крупные отряды",
   "entity.adept_core.resident": "Житель",
-  "entity.adept_core.elder": "Старейшина"
+  "entity.adept_core.elder": "Старейшина",
+  "entity.adept_core.hero": "Герой",
+  "item.adept_core.hero_emblem": "Эмблема героя",
+  "item.adept_core.hero_banner": "Знамя отряда",
+  "item.adept_core.commander_order": "Приказ командира",
+  "block.adept_core.hero_trap": "Капкан следопыта",
+  "adept_core.commander_order.text": "Командир %1$s, деревня %2$s.",
+  "adept_core.commander_order.mark": "Метка деревни: %s, %s"
 }

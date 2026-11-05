@@ -57,6 +57,8 @@ public final class AdeptCommands {
                 .then(guardian())
                 .then(mob())
                 .then(village())
+                .then(hero())
+                .then(squad())
                 .then(extraction())
                 .then(absorb())
                 .then(base())
@@ -257,6 +259,48 @@ public final class AdeptCommands {
                                     + ru.adept.core.village.RuinsManager.ruinWhole(src.getLevel(), v)))
                             .orElseGet(() -> reply(ctx, "Рядом нет деревни"));
                 }));
+    }
+
+    // /adept hero <tracker|warrior|archer|commander> [veteran] — одиночный герой рядом (без отряда)
+    private static LiteralArgumentBuilder<CommandSourceStack> hero() {
+        LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("hero");
+        for (ru.adept.core.hero.HeroClass c : ru.adept.core.hero.HeroClass.values()) {
+            root.then(Commands.literal(c.id())
+                    .executes(ctx -> spawnHero(ctx, c, ru.adept.core.hero.HeroRank.APPRENTICE))
+                    .then(Commands.literal("veteran").executes(ctx -> spawnHero(ctx, c, ru.adept.core.hero.HeroRank.VETERAN))));
+        }
+        return root;
+    }
+
+    private static int spawnHero(CommandContext<CommandSourceStack> ctx, ru.adept.core.hero.HeroClass c, ru.adept.core.hero.HeroRank rank) {
+        CommandSourceStack src = ctx.getSource();
+        BlockPos pos = BlockPos.containing(src.getPosition()).offset(5, 0, 0);
+        var hero = ru.adept.core.hero.HeroSpawner.spawnHero(src.getLevel(), pos, c, rank, null);
+        if (hero != null && c == ru.adept.core.hero.HeroClass.COMMANDER) {
+            hero.setHeroName(ru.adept.core.village.NamePools.pick(ru.adept.core.village.NamePools.commanders(), java.util.Set.of(), src.getLevel().random));
+        }
+        return reply(ctx, c.id() + " (" + rank.id() + ") поставлен");
+    }
+
+    // /adept squad <scouts|squads|warbands> — отряд вокруг игрока по ступени угрозы, от ближайшей деревни
+    private static LiteralArgumentBuilder<CommandSourceStack> squad() {
+        LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("squad");
+        for (ru.adept.core.threat.ThreatLevel level : ru.adept.core.threat.ThreatLevel.values()) {
+            if (level == ru.adept.core.threat.ThreatLevel.CALM) {
+                continue;
+            }
+            root.then(Commands.literal(level.id()).executes(ctx -> {
+                CommandSourceStack src = ctx.getSource();
+                BlockPos at = BlockPos.containing(src.getPosition());
+                var village = ru.adept.core.village.VillageRegistry.get(src.getServer()).all().stream()
+                        .filter(v -> !v.ruined).min(java.util.Comparator.comparingDouble(v -> v.center().distSqr(at))).orElse(null);
+                var squad = ru.adept.core.hero.HeroSpawner.spawnSquad(src.getLevel(), at, src.getPlayer(), level, village);
+                return reply(ctx, "Отряд: " + squad.members.size() + " героев"
+                        + (squad.commanderName.isEmpty() ? "" : ", командир " + squad.commanderName)
+                        + (squad.villageName.isEmpty() ? "" : ", из деревни «" + squad.villageName + "»"));
+            }));
+        }
+        return root;
     }
 
     // /adept extraction — состояние; extraction set <проценты>
