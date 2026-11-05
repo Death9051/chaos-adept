@@ -7,7 +7,10 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import ru.adept.core.AdeptCore;
+import ru.adept.core.mob.ArmadilloEntity;
+import ru.adept.core.mob.BoarLeaderEntity;
 import ru.adept.core.mob.EmberSpiritEntity;
+import ru.adept.core.mob.SporelingEntity;
 import ru.adept.core.mob.HornedLeaderEntity;
 import ru.adept.core.mob.HornetEntity;
 import ru.adept.core.mob.WispEntity;
@@ -27,6 +30,16 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<HornedLeaderEntity>> HORNED_LEADER = ENTITIES.register("horned_leader",
             () -> EntityType.Builder.of(HornedLeaderEntity::new, MobCategory.MONSTER).sized(1.4f, 2.4f).clientTrackingRange(10).build("horned_leader"));
 
+    // Срез 2: новые противники на узле. Размеры = размеры будущих моделей («Мобы»).
+    public static final DeferredHolder<EntityType<?>, EntityType<BoarLeaderEntity>> BOAR_LEADER = ENTITIES.register("boar_leader",
+            () -> EntityType.Builder.of(BoarLeaderEntity::new, MobCategory.MONSTER).sized(1.4f, 1.2f).clientTrackingRange(10).build("boar_leader"));
+    public static final DeferredHolder<EntityType<?>, EntityType<ArmadilloEntity>> ARMADILLO = ENTITIES.register("armadillo",
+            () -> EntityType.Builder.of(ArmadilloEntity::new, MobCategory.MONSTER).sized(1.0f, 0.8f).clientTrackingRange(8).build("armadillo"));
+    public static final DeferredHolder<EntityType<?>, EntityType<SporelingEntity>> SPORELING = ENTITIES.register("sporeling",
+            () -> EntityType.Builder.of(SporelingEntity::new, MobCategory.MONSTER).sized(0.8f, 1.1f).clientTrackingRange(8).build("sporeling"));
+    public static final DeferredHolder<EntityType<?>, EntityType<SporelingEntity>> SPORELING_SMALL = ENTITIES.register("sporeling_small",
+            () -> EntityType.Builder.of(SporelingEntity::new, MobCategory.MONSTER).sized(0.4f, 0.55f).clientTrackingRange(8).build("sporeling_small"));
+
     public static final DeferredHolder<EntityType<?>, EntityType<TraderEntity>> TRADER = ENTITIES.register("trader",
             () -> EntityType.Builder.of(TraderEntity::new, MobCategory.MISC).sized(0.6f, 1.95f).clientTrackingRange(10).build("trader"));
 
@@ -42,6 +55,10 @@ public final class ModEntities {
         event.put(WISP.get(), WispEntity.attributes().build());
         event.put(EMBER_SPIRIT.get(), EmberSpiritEntity.attributes().build());
         event.put(HORNED_LEADER.get(), HornedLeaderEntity.attributes().build());
+        event.put(BOAR_LEADER.get(), BoarLeaderEntity.attributes().build());
+        event.put(ARMADILLO.get(), ArmadilloEntity.attributes().build());
+        event.put(SPORELING.get(), SporelingEntity.attributes().build());
+        event.put(SPORELING_SMALL.get(), SporelingEntity.smallAttributes().build());
         event.put(TRADER.get(), TraderEntity.attributes().build());
     }
 }

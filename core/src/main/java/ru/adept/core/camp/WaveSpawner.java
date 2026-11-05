@@ -69,6 +69,9 @@ public final class WaveSpawner {
             }
             add(level, spirit, ringPos(level, s.node, random), BalanceConfig.SPIRIT_HEALTH.get(), -1, null, spawned);
         }
+        if (s.level >= BalanceConfig.WAVE_EXTRA_MIN_NODE_LEVEL.get()) {
+            spawnExtras(level, s, wave, target, spawned);
+        }
         if (c.guardian()) {
             add(level, ModEntities.HORNED_LEADER.get().create(level), ringPos(level, s.node, random),
                     BalanceConfig.GUARDIAN_HEALTH.get(), BalanceConfig.GUARDIAN_DAMAGE.get(), target, spawned);
@@ -76,14 +79,45 @@ public final class WaveSpawner {
         return spawned;
     }
 
-    /** Поставить отдельного моба (для отладочной команды /adept guardian и волн). */
+    /** Новые противники среза 2: споровики (рой), кабан-вожак и броненосец (танки). */
+    private static void spawnExtras(ServerLevel level, ExtractionSession s, int wave, LivingEntity target, List<UUID> out) {
+        RandomSource random = level.random;
+        if (wave >= BalanceConfig.WAVE_SPORELINGS_FROM.get()) {
+            for (int i = 0; i < BalanceConfig.WAVE_SPORELINGS_COUNT.get(); i++) {
+                add(level, ModEntities.SPORELING.get().create(level), ringPos(level, s.node, random), -1, -1, target, out);
+            }
+        }
+        if (wave >= BalanceConfig.WAVE_BOARS_FROM.get()) {
+            for (int i = 0; i < BalanceConfig.WAVE_BOARS_COUNT.get(); i++) {
+                add(level, ModEntities.BOAR_LEADER.get().create(level), ringPos(level, s.node, random), -1, -1, target, out);
+            }
+        }
+        if (wave >= BalanceConfig.WAVE_ARMADILLOS_FROM.get()) {
+            for (int i = 0; i < BalanceConfig.WAVE_ARMADILLOS_COUNT.get(); i++) {
+                add(level, ModEntities.ARMADILLO.get().create(level), ringPos(level, s.node, random), -1, -1, target, out);
+            }
+        }
+    }
+
+    /** Моб, появившийся из моба волны (малые споровики), тоже считается мобом волны. */
+    public static void adoptIntoWave(ServerLevel level, Mob parent, Mob child) {
+        ExtractionManager.session(level.getServer()).ifPresent(s -> {
+            if (s.waveActive && s.waveMobs.contains(parent.getUUID())) {
+                s.waveMobs.add(child.getUUID());
+            }
+        });
+    }
+
+    /** Поставить отдельного моба (для отладочной команды /adept guardian и волн). Здоровье и урон &lt; 0 — как в атрибутах. */
     public static void add(ServerLevel level, Mob mob, BlockPos pos, double health, double damage, LivingEntity target, List<UUID> out) {
         if (mob == null) {
             return;
         }
         mob.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, level.random.nextFloat() * 360.0f, 0.0f);
         EventHooks.finalizeMobSpawn(mob, level, level.getCurrentDifficultyAt(pos), MobSpawnType.EVENT, null);
-        setBase(mob.getAttribute(Attributes.MAX_HEALTH), health);
+        if (health >= 0) {
+            setBase(mob.getAttribute(Attributes.MAX_HEALTH), health);
+        }
         if (damage >= 0) {
             setBase(mob.getAttribute(Attributes.ATTACK_DAMAGE), damage);
         }
