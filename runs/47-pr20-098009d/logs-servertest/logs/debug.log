@@ -1,0 +1,115 @@
+[05Nov2026 07:34:59.759] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeserverdev, --gameDir, ., --fml.fmlVersion, 4.0.45, --fml.mcVersion, 1.21.1, --fml.neoForgeVersion, 21.1.264, --fml.neoFormVersion, 20240808.144430]
+[05Nov2026 07:34:59.761] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: JVM identified as Eclipse Adoptium OpenJDK 64-Bit Server VM 21.0.13+9-LTS
+[05Nov2026 07:34:59.762] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 11.0.5+main.901c6ea8 starting: java version 21.0.13 by Eclipse Adoptium; OS Linux arch amd64 version 7.0.0-1019-azure
+[05Nov2026 07:34:59.906] [main/INFO] [net.neoforged.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgeserverdev
+[05Nov2026 07:34:59.947] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.7 Source=union:/home/runner/.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.16.4+mixin.0.8.7/26d01f0567ab46e9ca0d2ed89d0ecc11aadbd433/sponge-mixin-0.16.4+mixin.0.8.7.jar%2394!/ Service=ModLauncher Env=SERVER
+[05Nov2026 07:35:00.253] [main/INFO] [net.neoforged.fml.loading.moddiscovery.locators.JarInJarDependencyLocator/]: Found 4 dependencies adding them to mods collection
+[05Nov2026 07:35:00.255] [main/INFO] [net.neoforged.fml.loading.moddiscovery.ModDiscoverer/]: 
+     Mod List:
+		Name Version (Mod Id)
+
+		Minecraft 1.21.1 (minecraft)
+		Naturalist 2.0.7 (naturalist)
+		NeoForge 21.1.264 (neoforge)
+		Player Animation Library 1.1.6+mc.1.21.1 (player_animation_library)
+		Сюжет 0.1.0 (adept_story)
+		Ядро 0.1.0 (adept_core)
+[05Nov2026 07:35:01.081] [main/INFO] [mixin/]: Compatibility level set to JAVA_21
+[05Nov2026 07:35:01.095] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgeserverdev' with arguments [--gameDir, .]
+[05Nov2026 07:35:04.327] [main/INFO] [MixinExtras|Service/]: Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.5.5).
+[05Nov2026 07:35:10.437] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, location] and [teleport, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
+[05Nov2026 07:35:10.439] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, location] and [teleport, targets] with inputs: [0.1 -0.5 .9, 0 0 0]
+[05Nov2026 07:35:10.443] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, destination] and [teleport, targets] with inputs: [Player, 0123, @e, dd12be42-52a9-4a91-a8a1-11c01849e498]
+[05Nov2026 07:35:10.444] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, targets] and [teleport, destination] with inputs: [Player, 0123, dd12be42-52a9-4a91-a8a1-11c01849e498]
+[05Nov2026 07:35:10.446] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, targets, location] and [teleport, targets, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
+[05Nov2026 07:35:10.532] [modloading-worker-0/INFO] [net.neoforged.neoforge.common.NeoForgeMod/NEOFORGE-MOD]: NeoForge mod loading, version 21.1.264, for MC 1.21.1
+[05Nov2026 07:35:10.575] [modloading-worker-0/INFO] [ru.adept.core.AdeptCore/]: Ядро загружено, версия 0.1.0
+[05Nov2026 07:35:10.613] [modloading-worker-0/INFO] [ru.adept.story.AdeptStory/]: Сюжет загружен, версия 0.1.0
+[05Nov2026 07:35:11.281] [main/ERROR] [net.minecraft.server.dedicated.Settings/]: Failed to load properties from file: server.properties
+java.nio.file.NoSuchFileException: server.properties
+	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92) ~[?:?]
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106) ~[?:?]
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111) ~[?:?]
+	at java.base/sun.nio.fs.UnixFileSystemProvider.newByteChannel(UnixFileSystemProvider.java:261) ~[?:?]
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:380) ~[?:?]
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:432) ~[?:?]
+	at java.base/java.nio.file.spi.FileSystemProvider.newInputStream(FileSystemProvider.java:420) ~[?:?]
+	at java.base/java.nio.file.Files.newInputStream(Files.java:160) ~[?:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.dedicated.Settings.loadFromFile(Settings.java:38) ~[neoforge-21.1.264.jar%23126!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.dedicated.DedicatedServerProperties.fromFile(DedicatedServerProperties.java:132) ~[neoforge-21.1.264.jar%23126!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.dedicated.DedicatedServerSettings.<init>(DedicatedServerSettings.java:12) ~[neoforge-21.1.264.jar%23126!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.Main.main(Main.java:125) ~[neoforge-21.1.264.jar%23126!/:?]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[?:?]
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:136) ~[loader-4.0.45.jar%23102!/:4.0]
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.serverService(CommonLaunchHandler.java:128) ~[loader-4.0.45.jar%23102!/:4.0]
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.NeoForgeServerDevLaunchHandler.runService(NeoForgeServerDevLaunchHandler.java:23) ~[loader-4.0.45.jar%23102!/:4.0]
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.lambda$launchService$4(CommonLaunchHandler.java:118) ~[loader-4.0.45.jar%23102!/:4.0]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) [modlauncher-11.0.5.jar%2382!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) [modlauncher-11.0.5.jar%2382!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) [modlauncher-11.0.5.jar%2382!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.Launcher.run(Launcher.java:103) [modlauncher-11.0.5.jar%2382!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.Launcher.main(Launcher.java:74) [modlauncher-11.0.5.jar%2382!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) [modlauncher-11.0.5.jar%2382!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) [modlauncher-11.0.5.jar%2382!/:?]
+	at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.run(BootstrapLauncher.java:210) [bootstraplauncher-2.0.2.jar:?]
+	at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:69) [bootstraplauncher-2.0.2.jar:?]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[?:?]
+	at net.neoforged.devlaunch.Main.main(Main.java:57) [DevLaunch-1.0.2.jar:?]
+[05Nov2026 07:35:11.323] [main/INFO] [com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService/]: Environment: Environment[sessionHost=https://sessionserver.mojang.com, servicesHost=https://api.minecraftservices.com, name=PROD]
+[05Nov2026 07:35:11.415] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/home/runner/work/chaos-adept/chaos-adept/story/build/moddev/artifacts/neoforge-21.1.264.jar%23126!/assets/.mcassetsroot' uses unexpected schema
+[05Nov2026 07:35:11.416] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/home/runner/work/chaos-adept/chaos-adept/story/build/moddev/artifacts/neoforge-21.1.264.jar%23126!/data/.mcassetsroot' uses unexpected schema
+[05Nov2026 07:35:11.422] [main/INFO] [net.neoforged.neoforge.gametest.GameTestHooks/]: Enabled Gametest Namespaces: [adept_story, adept_core]
+[05Nov2026 07:35:12.845] [main/INFO] [net.minecraft.world.item.crafting.RecipeManager/]: Loaded 1399 recipes
+[05Nov2026 07:35:13.076] [main/INFO] [net.minecraft.advancements.AdvancementTree/]: Loaded 1440 advancements
+[05Nov2026 07:35:13.079] [main/INFO] [ru.adept.core.AdeptCore/]: Пулы имён: деревень 0, командиров 0
+[05Nov2026 07:35:13.081] [main/INFO] [ru.adept.story.AdeptStory/]: Журнал: 42 записей; ждут событий следующих срезов: [final_outcome, npc_met, pillar_defeated, pillar_materials_collected, raid_won, soul_burned, transport_built, village_ruins_entered]
+[05Nov2026 07:35:14.253] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Preparing start region for dimension minecraft:overworld
+[05Nov2026 07:35:14.293] [worldgen/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 2%
+[05Nov2026 07:35:14.601] [Server thread/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Time elapsed: 347 ms
+[05Nov2026 07:35:14.612] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestServer/]: Started game test server
+[05Nov2026 07:35:14.631] [Server thread/INFO] [net.neoforged.neoforge.server.permission.PermissionAPI/]: Successfully initialized permission handler neoforge:default_handler
+[05Nov2026 07:35:14.634] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Ветка сюжета для этого мира: PUBLIC
+[05Nov2026 07:35:14.695] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestServer/]: 54 tests are now running at position 14897266, -59, -14862531!
+[05Nov2026 07:35:15.160] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestRunner/]: Running test batch 'defaultBatch:0' (50 tests)...
+[05Nov2026 07:35:15.317] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestServer/]: [                                                      ]
+[05Nov2026 07:35:15.349] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись nodes/first
+[05Nov2026 07:35:15.350] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись nodes/level_1_repeat
+[05Nov2026 07:35:15.350] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись nodes/level_2_first
+[05Nov2026 07:35:15.350] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись nodes/level_2_repeat
+[05Nov2026 07:35:15.509] [Server thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager ResidentEntity['entity.adept_core.resident.none'/7, l='ServerLevel[Test Level]', x=14897297.50, y=-58.00, z=-14862529.50] died, message: 'entity.adept_core.resident.none was slain by test-mock-player'
+[05Nov2026 07:35:15.540] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись firsts/first_pair
+[05Nov2026 07:35:15.543] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись prologue/artifact_table
+[05Nov2026 07:35:15.559] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись firsts/first_pair
+[05Nov2026 07:35:15.560] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись firsts/first_prototype
+[05Nov2026 07:35:15.597] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись ritual/first
+[05Nov2026 07:35:15.598] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись trader/level_3
+[05Nov2026 07:35:15.618] [Server thread/WARN] [ru.adept.core.AdeptCore/]: Неизвестный товар у торговца: minecraft:nope
+[05Nov2026 07:35:15.626] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись firsts/first_pair
+[05Nov2026 07:35:15.739] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestServer/]: [+++++++++++++++++++++++++++++++++++++++_++++++++++    ]
+[05Nov2026 07:35:15.811] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestServer/]: [+++++++++++++++++++++++++++++++++++++++_++++++++++    ]
+[05Nov2026 07:35:15.879] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestServer/]: [+++++++++++++++++++++++++++++++++++++++_++++++++++    ]
+[05Nov2026 07:35:15.941] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestServer/]: [+++++++++++++++++++++++++++++++++++++++_++++++++++    ]
+[05Nov2026 07:35:15.990] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestServer/]: [+++++++++++++++++++++++++++++++++++++++_++++++++++    ]
+[05Nov2026 07:35:16.040] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestRunner/]: Running test batch 'defaultBatch:1' (4 tests)...
+[05Nov2026 07:35:16.204] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestServer/]: [++++++++++++++++++++++++++++++++++++++++++++++++++    ]
+[05Nov2026 07:35:16.217] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись nodes/first
+[05Nov2026 07:35:16.218] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись nodes/level_1_repeat
+[05Nov2026 07:35:16.219] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись nodes/level_1_repeat
+[05Nov2026 07:35:16.219] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись nodes/level_1_repeat
+[05Nov2026 07:35:16.221] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestServer/]: [++++++++++++++++++++++++++++++++++++++++++++++++++++++]
+[05Nov2026 07:35:16.225] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestServer/]: ========= 54 GAME TESTS COMPLETE IN 1.526 s ======================
+[05Nov2026 07:35:16.226] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestServer/]: All 54 required tests passed :)
+[05Nov2026 07:35:16.228] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestServer/]: ====================================================
+[05Nov2026 07:35:16.249] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Stopping server
+[05Nov2026 07:35:16.249] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving players
+[05Nov2026 07:35:16.251] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving worlds
+[05Nov2026 07:35:17.285] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:overworld
+[05Nov2026 07:35:17.866] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:the_nether
+[05Nov2026 07:35:17.868] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:the_end
+[05Nov2026 07:35:17.883] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (world): All chunks are saved
+[05Nov2026 07:35:17.883] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[05Nov2026 07:35:17.883] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[05Nov2026 07:35:17.883] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage: All dimensions are saved
+[05Nov2026 07:35:17.890] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestServer/]: Game test server shutting down
