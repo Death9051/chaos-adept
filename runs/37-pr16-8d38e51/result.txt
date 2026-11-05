@@ -1,0 +1,2 @@
+build=success servertest=success clienttest=success
+branch=core/slice2-heroes pr=16 sha=8d38e5144030a3efb00a4c4a0d1236819221bd21 run=37
