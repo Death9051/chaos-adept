@@ -53,6 +53,15 @@ public final class TierGameTests {
         helper.succeed();
     }
 
+    /** Со всей сборкой (Improved Mobs загружен) команда сложности должна проходить; без мода тест пропускается. */
+    @GameTest(template = "empty")
+    public static void improvedMobsCommandWorks(GameTestHelper helper) {
+        int result = TierProgression.applyDifficulty(helper.getLevel().getServer(),
+                ru.adept.core.api.WorldProgress.get(helper.getLevel().getServer()).nodeTier());
+        helper.assertTrue(result != 0, "Команда Improved Mobs не прошла: " + TierProgression.commandFor(2));
+        helper.succeed();
+    }
+
     @GameTest(template = "empty")
     public static void everyStepHasDescription(GameTestHelper helper) {
         helper.assertTrue(StepTexts.find(TableActions.BLADE_EDGE, 1).isPresent(), "Нет описания «Кромки» I");

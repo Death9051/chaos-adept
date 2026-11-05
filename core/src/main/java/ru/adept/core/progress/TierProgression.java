@@ -45,12 +45,24 @@ public final class TierProgression {
         return template.replace("%d", Integer.toString(difficultyFor(tier)));
     }
 
-    private static void applyDifficulty(MinecraftServer server, int tier) {
+    /**
+     * Выполнить команду Improved Mobs для уровня. Возвращает результат команды (больше 0 — успех),
+     * 0 — команда не прошла, -1 — мод не загружен или команда пустая.
+     */
+    public static int applyDifficulty(MinecraftServer server, int tier) {
         String command = commandFor(tier);
         if (command.isEmpty() || !ModList.get().isLoaded(IMPROVED_MOBS_ID)) {
-            return;
+            return -1;
         }
-        server.getCommands().performPrefixedCommand(server.createCommandSourceStack().withSuppressedOutput(), command);
-        AdeptCore.LOG.info("Уровень узлов {}: сложность Improved Mobs {}", tier, difficultyFor(tier));
+        int result;
+        try {
+            result = server.getCommands().getDispatcher().execute(command,
+                    server.createCommandSourceStack().withPermission(4).withSuppressedOutput());
+        } catch (com.mojang.brigadier.exceptions.CommandSyntaxException e) {
+            AdeptCore.LOG.error("Команда Improved Mobs «{}» не прошла: {}", command, e.getMessage());
+            return 0;
+        }
+        AdeptCore.LOG.info("Уровень узлов {}: сложность Improved Mobs {} (результат {})", tier, difficultyFor(tier), result);
+        return result;
     }
 }
