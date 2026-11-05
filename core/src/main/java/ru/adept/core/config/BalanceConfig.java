@@ -197,6 +197,18 @@ public final class BalanceConfig {
     public static final ModConfigSpec.IntValue RAID_WAIT_TICKS;
     public static final ModConfigSpec.IntValue RAID_ELDER_DELAY_RADIUS;
 
+    // Резервуары, сплавщик, литейная
+    public static final ModConfigSpec.IntValue RESERVOIR_CAPACITY_MB;
+    public static final ModConfigSpec.IntValue SMELTER_POUR_MB_PER_TICK;
+    public static final ModConfigSpec.IntValue ALLOY_MB;
+    public static final ModConfigSpec.IntValue ALLOY_TICKS;
+    public static final ModConfigSpec.IntValue ALLOY_ELECTRICITY_PER_TICK;
+    public static final ModConfigSpec.IntValue CAST_NEEDLE_MB;
+    public static final ModConfigSpec.IntValue CAST_NEEDLES_PER_CAST;
+    public static final ModConfigSpec.IntValue CAST_PLATE_MB;
+    public static final ModConfigSpec.IntValue CAST_TICKS;
+    public static final ModConfigSpec.IntValue CAST_ELECTRICITY_PER_TICK;
+
     // Уровни узлов (вехи)
     public static final ModConfigSpec.IntValue TIER_NODES_TO_ADVANCE;
     public static final ModConfigSpec.BooleanValue TIER_LEVEL_FLOOR;
@@ -498,6 +510,20 @@ public final class BalanceConfig {
         RAID_HORN_LEAD_TICKS = b.comment("Рог звучит за столько тиков до появления отряда").defineInRange("hornLeadTicks", 1200, 0, 12_000);
         RAID_WAIT_TICKS = b.comment("Сколько отряд ждёт у точки выхода, если игрок на базе").defineInRange("waitTicks", 6000, 0, 72_000);
         RAID_ELDER_DELAY_RADIUS = b.comment("Смерть старейшины откладывает набеги в этом радиусе от деревни, блоки").defineInRange("elderDelayRadius", 256, 0, 10_000);
+        b.pop();
+
+        b.comment("Резервуары, сплавщик и литейная («База и машины»)").push("foundry");
+        RESERVOIR_CAPACITY_MB = b.comment("Простой резервуар, первый уровень объёма, мВ").defineInRange("reservoirCapacityMb", 4000, 100, 1_000_000);
+        SMELTER_POUR_MB_PER_TICK = b.comment("Плавильня сливает в соседний резервуар, мВ за тик").defineInRange("smelterPourMbPerTick", 50, 1, 10_000);
+        ALLOY_MB = b.comment("Сплавщик: порция каждого металла, мВ (красное золото: золото + медь → вдвое больше; сталь: железо + уголь)")
+                .defineInRange("alloyMb", 100, 1, 10_000);
+        ALLOY_TICKS = b.defineInRange("alloyTicks", 100, 1, 12_000);
+        ALLOY_ELECTRICITY_PER_TICK = b.defineInRange("alloyElectricityPerTick", 5, 0, 10_000);
+        CAST_NEEDLE_MB = b.comment("Литейная: расплава на отливку игл").defineInRange("needleMb", 100, 1, 10_000);
+        CAST_NEEDLES_PER_CAST = b.comment("Игл за отливку").defineInRange("needlesPerCast", 8, 1, 64);
+        CAST_PLATE_MB = b.comment("Расплава на пластину тяжёлой брони").defineInRange("plateMb", 400, 1, 10_000);
+        CAST_TICKS = b.defineInRange("castTicks", 60, 1, 12_000);
+        CAST_ELECTRICITY_PER_TICK = b.defineInRange("castElectricityPerTick", 4, 0, 10_000);
         b.pop();
 
         b.comment("Уровни узлов: вехи и рост сложности").push("tiers");

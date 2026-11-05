@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["IWI", "CBC", "III"],
+  "key": {"I": {"item": "minecraft:iron_ingot"}, "W": {"item": "adept_core:crude_wiring"}, "C": {"item": "adept_core:crude_coil"}, "B": {"item": "minecraft:blast_furnace"}},
+  "result": {"id": "adept_core:alloyer", "count": 1}
+}

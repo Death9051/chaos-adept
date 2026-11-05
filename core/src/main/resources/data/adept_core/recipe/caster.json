@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["I I", "WAW", "SSS"],
+  "key": {"I": {"item": "minecraft:iron_ingot"}, "W": {"item": "adept_core:crude_wiring"}, "A": {"item": "minecraft:anvil"}, "S": {"item": "minecraft:smooth_stone"}},
+  "result": {"id": "adept_core:caster", "count": 1}
+}

@@ -17,11 +17,12 @@ import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * Общая основа машин базы: инвентарь, сохранение, данные для экрана
- * (0 — электричество, 1 — мана, 2 — ёмкость запаса, 3 — прогресс %, 4 — бак, 5 — объём бака).
+ * (0 — электричество, 1 — мана, 2 — ёмкость запаса, 3 — прогресс %, 4 — бак, 5 — объём бака,
+ * 6 и 7 — свои числа машины: рецепт или форма, материал).
  * Энергия общая на всю базу ({@link BaseData}).
  */
 public abstract class MachineBlockEntity extends BlockEntity implements MenuProvider {
-    public static final int DATA_SIZE = 6;
+    public static final int DATA_SIZE = 8;
 
     protected final SimpleContainer items;
     protected int progress;
@@ -37,6 +38,8 @@ public abstract class MachineBlockEntity extends BlockEntity implements MenuProv
                 case 3 -> progressPercent();
                 case 4 -> tankAmount();
                 case 5 -> tankCapacity();
+                case 6 -> extra1();
+                case 7 -> extra2();
                 default -> 0;
             };
         }
@@ -86,6 +89,14 @@ public abstract class MachineBlockEntity extends BlockEntity implements MenuProv
     }
 
     protected int tankCapacity() {
+        return 0;
+    }
+
+    protected int extra1() {
+        return 0;
+    }
+
+    protected int extra2() {
         return 0;
     }
 

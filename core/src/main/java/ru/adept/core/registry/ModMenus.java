@@ -20,6 +20,11 @@ public final class ModMenus {
     public static final DeferredHolder<MenuType<?>, MenuType<MachineMenu>> SMELTER =
             MENUS.register("smelter", () -> new MenuType<>(MachineMenu::smelter, FeatureFlags.DEFAULT_FLAGS));
 
+    public static final DeferredHolder<MenuType<?>, MenuType<MachineMenu>> ALLOYER =
+            MENUS.register("alloyer", () -> new MenuType<>(MachineMenu::alloyer, FeatureFlags.DEFAULT_FLAGS));
+    public static final DeferredHolder<MenuType<?>, MenuType<MachineMenu>> CASTER =
+            MENUS.register("caster", () -> new MenuType<>(MachineMenu::caster, FeatureFlags.DEFAULT_FLAGS));
+
     public static final DeferredHolder<MenuType<?>, MenuType<TransitionMenu>> TRANSITION =
             MENUS.register("transition", () -> new MenuType<>(TransitionMenu::new, FeatureFlags.DEFAULT_FLAGS));
 

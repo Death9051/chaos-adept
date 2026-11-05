@@ -46,6 +46,15 @@ public final class ModItems {
         return NODE_CLUSTERS.get(Mth.clamp(level, 1, NODE_CLUSTERS.size()) - 1).get();
     }
 
+    // Сплавы и литьё (срез 2). Иглы и пластины — по материалу, порядок как в base.Molten.
+    public static final DeferredItem<Item> STEEL_INGOT = ITEMS.registerSimpleItem("steel_ingot");
+    public static final DeferredItem<Item> RED_GOLD_INGOT = ITEMS.registerSimpleItem("red_gold_ingot");
+    public static final List<String> MOLTEN_IDS = List.of("iron", "copper", "gold", "steel", "red_gold");
+    public static final List<DeferredItem<Item>> NEEDLES = MOLTEN_IDS.stream()
+            .map(m -> ITEMS.registerSimpleItem(m + "_needle")).toList();
+    public static final List<DeferredItem<Item>> PLATES = MOLTEN_IDS.stream()
+            .map(m -> ITEMS.registerSimpleItem(m + "_plate", new Item.Properties().stacksTo(16))).toList();
+
     // Трофеи героев для Альянса и приказ командира
     public static final DeferredItem<Item> HERO_EMBLEM = ITEMS.registerSimpleItem("hero_emblem");
     public static final DeferredItem<Item> HERO_BANNER = ITEMS.registerSimpleItem("hero_banner");

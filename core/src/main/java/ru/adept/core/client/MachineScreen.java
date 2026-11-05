@@ -27,6 +27,37 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
         inventoryLabelY = imageHeight - 94;
     }
 
+    private net.minecraft.client.gui.components.Button modeButton;
+    private int shownMode = -1;
+
+    @Override
+    protected void init() {
+        super.init();
+        if (menu.kind == MachineMenu.Kind.ALLOYER || menu.kind == MachineMenu.Kind.CASTER) {
+            int count = menu.kind == MachineMenu.Kind.ALLOYER ? 2 : 3;
+            modeButton = addRenderableWidget(net.minecraft.client.gui.components.Button.builder(modeText(),
+                    b -> {
+                        if (minecraft != null && minecraft.gameMode != null) {
+                            minecraft.gameMode.handleInventoryButtonClick(menu.containerId, (menu.data(6) + 1) % count);
+                        }
+                    }).bounds(leftPos + 40, topPos + 58, 96, 16).build());
+        }
+    }
+
+    private Component modeText() {
+        String key = menu.kind == MachineMenu.Kind.ALLOYER ? "adept_core.alloyer.recipe." : "adept_core.caster.form.";
+        return Component.translatable(key + menu.data(6));
+    }
+
+    @Override
+    protected void containerTick() {
+        super.containerTick();
+        if (modeButton != null && menu.data(6) != shownMode) {
+            shownMode = menu.data(6);
+            modeButton.setMessage(modeText());
+        }
+    }
+
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.render(graphics, mouseX, mouseY, partialTick);
@@ -77,5 +108,11 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
     protected void renderLabels(GuiGraphics g, int mouseX, int mouseY) {
         g.drawString(font, title, 28, 6, 0xFFE8E0D0, false);
         g.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, 0xFF9A9080, false);
+        if (menu.kind == MachineMenu.Kind.CASTER) {
+            int m = menu.data(7);
+            Component material = m <= 0 ? Component.translatable("adept_core.caster.no_material")
+                    : Component.translatable("adept_core.molten." + ru.adept.core.base.Molten.values()[m - 1].id());
+            g.drawString(font, material, 28, 18, 0xFFFF8A2A, false);
+        }
     }
 }

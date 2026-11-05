@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["IGI", "I I", "IBI"],
+  "key": {"I": {"item": "minecraft:iron_ingot"}, "G": {"item": "minecraft:glass"}, "B": {"item": "minecraft:bricks"}},
+  "result": {"id": "adept_core:reservoir", "count": 1}
+}
