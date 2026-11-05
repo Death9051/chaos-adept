@@ -86,7 +86,18 @@ public final class AdeptCommands {
     // /adept tier [set <n>] — уровень узлов мира
     private static LiteralArgumentBuilder<CommandSourceStack> tier() {
         return Commands.literal("tier")
-                .executes(ctx -> reply(ctx, "Уровень узлов: " + WorldProgress.get(ctx.getSource().getServer()).nodeTier()))
+                .executes(ctx -> {
+                    WorldProgress progress = WorldProgress.get(ctx.getSource().getServer());
+                    return reply(ctx, "Уровень узлов: " + progress.nodeTier() + ", до вехи зачищено "
+                            + progress.cleansedAtTier() + "/" + BalanceConfig.TIER_NODES_TO_ADVANCE.get()
+                            + ", сложность Improved Mobs " + ru.adept.core.progress.TierProgression.difficultyFor(progress.nodeTier()));
+                })
+                .then(Commands.literal("cleanse").executes(ctx -> {
+                    WorldProgress progress = WorldProgress.get(ctx.getSource().getServer());
+                    progress.recordCleansed(ctx.getSource().getServer(), progress.nodeTier());
+                    return reply(ctx, "Уровень узлов: " + progress.nodeTier() + ", до вехи зачищено "
+                            + progress.cleansedAtTier() + "/" + BalanceConfig.TIER_NODES_TO_ADVANCE.get());
+                }))
                 .then(Commands.literal("set").then(Commands.argument("value", IntegerArgumentType.integer(1, 10))
                         .executes(ctx -> {
                             WorldProgress progress = WorldProgress.get(ctx.getSource().getServer());

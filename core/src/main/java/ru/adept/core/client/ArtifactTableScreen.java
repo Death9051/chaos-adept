@@ -9,6 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
+import ru.adept.core.artifact.StepTexts;
 import ru.adept.core.config.BalanceConfig;
 import ru.adept.core.table.ArtifactTableMenu;
 import ru.adept.core.table.CostList;
@@ -94,7 +95,10 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
             Button edge = Button.builder(Component.translatable("adept_core.table.blade.edge1"),
                             b -> press(ArtifactTableMenu.BTN_BLADE_EDGE))
                     .bounds(x, y + 120, 220, 20)
-                    .tooltip(Tooltip.create(costText(CostList.parse(BalanceConfig.TABLE_BLADE_EDGE_1.get())))).build();
+                    .tooltip(Tooltip.create(StepTexts.find(TableActions.BLADE_EDGE, 1)
+                            .map(step -> StepTexts.tooltip(step).append(Component.literal("\n\n")))
+                            .orElse(Component.empty())
+                            .append(costText(CostList.parse(BalanceConfig.TABLE_BLADE_EDGE_1.get()))))).build();
             edge.active = shownBuilt > 0 && shownEdge == 0;
             addRenderableWidget(edge);
         }
@@ -151,7 +155,9 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
         } else {
             g.drawString(font, Component.translatable("adept_core.table.components"), 10, 26, MUTED, false);
             if (choice == 1) {
-                g.drawString(font, Component.translatable("adept_core.table.segment.emitter"), 10, 136, MUTED, false);
+                MutableComponent label = Component.translatable("adept_core.table.segment.emitter");
+                StepTexts.find(TableActions.BLADE_EDGE, 1).ifPresent(step -> label.append(": ").append(step.name()));
+                g.drawString(font, label, 10, 136, MUTED, false);
                 if (menu.bladeEdge.get() > 0) {
                     g.drawString(font, Component.translatable("adept_core.table.done"), 170, 136, 0xFF60D060, false);
                 }

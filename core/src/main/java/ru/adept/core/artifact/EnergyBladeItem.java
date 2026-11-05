@@ -37,6 +37,13 @@ public class EnergyBladeItem extends Item {
     }
 
     @Override
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, java.util.List<net.minecraft.network.chat.Component> tooltip,
+                                net.minecraft.world.item.TooltipFlag flag) {
+        tooltip.add(net.minecraft.network.chat.Component.translatable("adept_core.blade.steps")
+                .withStyle(net.minecraft.ChatFormatting.DARK_GRAY));
+    }
+
+    @Override
     public boolean isEnchantable(ItemStack stack) {
         return false;
     }

@@ -18,7 +18,7 @@
   "adept_core.table.components": "Грубые компоненты",
   "adept_core.table.blade.build": "Собрать прототип клинка",
   "adept_core.table.blade.rebuild": "Собрать прототип заново",
-  "adept_core.table.segment.emitter": "Эмиттер: «Кромка» I — больше урона",
+  "adept_core.table.segment.emitter": "Эмиттер",
   "adept_core.table.blade.edge1": "Открыть «Кромку» I",
   "adept_core.table.done": "открыто",
   "adept_core.table.cost": "Цена:",
@@ -84,5 +84,9 @@
   "adept_core.transition.base": "На базу",
   "adept_core.transition.call": "Вызов Альянса",
   "adept_core.trader.not_cleansed": "Торговца можно вызвать только с зачищенного узла",
-  "adept_core.trader.already": "С этого узла торговца уже вызывали"
+  "adept_core.trader.already": "С этого узла торговца уже вызывали",
+  "adept_core.step.blade.emitter.edge.1.name": "«Кромка» I",
+  "adept_core.step.blade.emitter.edge.1.desc": "Поле лезвия становится плотнее. Каждый прямой удар клинком из основной руки наносит на %s урона больше, всего %s за удар.",
+  "adept_core.blade.stats": "Урон %s за удар, %s удара в секунду.",
+  "adept_core.blade.steps": "Ступени смотри на столе артефактов."
 }

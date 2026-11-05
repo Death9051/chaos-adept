@@ -63,10 +63,13 @@ public final class AbsorptionManager {
         if (level.getBlockState(node).is(ModBlocks.NODE_CRYSTAL.get())) {
             level.removeBlock(node, false);
         }
-        ItemStack cluster = new ItemStack(ModItems.cluster(event.getLevel()));
-        ItemEntity drop = new ItemEntity(level, node.getX() + 0.5, node.getY() + 0.5, node.getZ() + 0.5, cluster);
-        drop.setUnlimitedLifetime();
-        level.addFreshEntity(drop);
+        int clusters = BalanceConfig.clustersFor(event.getLevel());
+        if (clusters > 0) {
+            ItemStack cluster = new ItemStack(ModItems.cluster(event.getLevel()), clusters);
+            ItemEntity drop = new ItemEntity(level, node.getX() + 0.5, node.getY() + 0.5, node.getZ() + 0.5, cluster);
+            drop.setUnlimitedLifetime();
+            level.addFreshEntity(drop);
+        }
         start(server, node, event.getLevel());
     }
 

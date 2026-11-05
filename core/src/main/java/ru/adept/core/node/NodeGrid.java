@@ -48,6 +48,18 @@ public final class NodeGrid {
         return Mth.clamp(level, 1, BalanceConfig.NODE_MAX_LEVEL.get());
     }
 
+    /**
+     * Уровень с учётом вехи: ещё не поставленные узлы не ниже текущего уровня узлов мира
+     * ({@code tiers.levelFloor}). Уже поставленный узел хранит свой уровень и не меняется.
+     */
+    public static int withTierFloor(ServerLevel level, int raw) {
+        if (!BalanceConfig.TIER_LEVEL_FLOOR.get()) {
+            return raw;
+        }
+        int tier = ru.adept.core.api.WorldProgress.get(level.getServer()).nodeTier();
+        return Mth.clamp(Math.max(raw, tier), 1, BalanceConfig.NODE_MAX_LEVEL.get());
+    }
+
     public static Optional<Candidate> candidate(ServerLevel level, int cellX, int cellZ) {
         Optional<Candidate> raw = raw(level, cellX, cellZ);
         if (raw.isEmpty()) {
@@ -92,7 +104,7 @@ public final class NodeGrid {
         if (!eligible(biome)) {
             return Optional.empty();
         }
-        return Optional.of(new Candidate(cellKey(cellX, cellZ), new BlockPos(x, 0, z), levelForDistance(distance), biome));
+        return Optional.of(new Candidate(cellKey(cellX, cellZ), new BlockPos(x, 0, z), withTierFloor(level, levelForDistance(distance)), biome));
     }
 
     public static Holder<Biome> biomeAt(ServerLevel level, int x, int z) {
