@@ -32,6 +32,23 @@ public final class ModRegistries {
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, AdeptCore.MOD_ID);
     public static final DeferredRegister<MenuType<?>> MENUS =
             DeferredRegister.create(Registries.MENU, AdeptCore.MOD_ID);
+    public static final DeferredRegister<net.minecraft.world.item.ArmorMaterial> ARMOR_MATERIALS =
+            DeferredRegister.create(Registries.ARMOR_MATERIAL, AdeptCore.MOD_ID);
+
+    /** Тяжёлая силовая броня: броня 16 на три части (шлем 3, нагрудник 8, ноги 5), твёрдость 2 на комплект. */
+    public static final DeferredHolder<net.minecraft.world.item.ArmorMaterial, net.minecraft.world.item.ArmorMaterial> HEAVY_ARMOR =
+            ARMOR_MATERIALS.register("heavy_armor", () -> new net.minecraft.world.item.ArmorMaterial(
+                    java.util.Map.of(net.minecraft.world.item.ArmorItem.Type.HELMET, 3,
+                            net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, 8,
+                            net.minecraft.world.item.ArmorItem.Type.LEGGINGS, 5,
+                            net.minecraft.world.item.ArmorItem.Type.BOOTS, 0,
+                            net.minecraft.world.item.ArmorItem.Type.BODY, 0),
+                    0, net.minecraft.sounds.SoundEvents.ARMOR_EQUIP_NETHERITE,
+                    () -> net.minecraft.world.item.crafting.Ingredient.EMPTY,
+                    java.util.List.of(new net.minecraft.world.item.ArmorMaterial.Layer(
+                            net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(AdeptCore.MOD_ID, "heavy_armor"))),
+                    2.0f / 3.0f, 0.1f));
+
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENTS =
             DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, AdeptCore.MOD_ID);
 
@@ -74,5 +91,6 @@ public final class ModRegistries {
         TABS.register(modBus);
         MENUS.register(modBus);
         ATTACHMENTS.register(modBus);
+        ARMOR_MATERIALS.register(modBus);
     }
 }

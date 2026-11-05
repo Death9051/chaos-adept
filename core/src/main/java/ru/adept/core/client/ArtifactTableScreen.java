@@ -26,9 +26,9 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
     private static final int TEXT = 0xFFE8E0D0;
     private static final int MUTED = 0xFF9A9080;
 
-    private int shownChoice = -1;
-    private int shownBuilt = -1;
-    private int shownEdge = -1;
+    /** Вкладки: 0 — ближний бой, 1 — броня, 2 — дальний бой. */
+    private int tab;
+    private int shownState = -1;
     /** Выбранный, но ещё не подтверждённый вариант пары: -1 — нет. */
     private int pendingChoice = -1;
     /** Перестроить кнопки на следующем тике (не внутри обработчика нажатия). */
@@ -40,25 +40,88 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
         this.imageHeight = 180;
     }
 
+    /** Описание вкладки: выбор, собран ли прототип, ступень, кнопки и ключи текстов. */
+    private record Tab(String first, String second, int choiceFirst, int choiceSecond, int prototype, int step,
+                       String stepKey, String prototypeCost, String stepCost, String later) {
+    }
+
+    private Tab tabInfo() {
+        return switch (tab) {
+            case 1 -> new Tab("light", "heavy", ArtifactTableMenu.BTN_CHOOSE_LIGHT, ArtifactTableMenu.BTN_CHOOSE_HEAVY,
+                    ArtifactTableMenu.BTN_HEAVY_PROTOTYPE, ArtifactTableMenu.BTN_HEAVY_BASTION, TableActions.HEAVY_BASTION,
+                    BalanceConfig.TABLE_HEAVY_PROTOTYPE.get(), BalanceConfig.TABLE_HEAVY_BASTION_1.get(), "light");
+            case 2 -> new Tab("gauss", "rail", ArtifactTableMenu.BTN_CHOOSE_GAUSS, ArtifactTableMenu.BTN_CHOOSE_RAIL,
+                    ArtifactTableMenu.BTN_GAUSS_PROTOTYPE, ArtifactTableMenu.BTN_GAUSS_TEMPO, TableActions.GAUSS_TEMPO,
+                    BalanceConfig.TABLE_GAUSS_PROTOTYPE.get(), BalanceConfig.TABLE_GAUSS_TEMPO_1.get(), "rail");
+            default -> new Tab("blade", "hammer", ArtifactTableMenu.BTN_CHOOSE_BLADE, ArtifactTableMenu.BTN_CHOOSE_HAMMER,
+                    ArtifactTableMenu.BTN_BLADE_PROTOTYPE, ArtifactTableMenu.BTN_BLADE_EDGE, TableActions.BLADE_EDGE,
+                    BalanceConfig.TABLE_BLADE_PROTOTYPE.get(), BalanceConfig.TABLE_BLADE_EDGE_1.get(), "hammer");
+        };
+    }
+
+    /** Выбор вкладки: 0 — нет, 1 — первый вариант (с прототипом в срезе), 2 — второй (позже). */
+    private int choice() {
+        return switch (tab) {
+            case 1 -> menu.armorChoice.get() == 2 ? 1 : menu.armorChoice.get() == 1 ? 2 : 0;
+            case 2 -> menu.rangedChoice.get();
+            default -> menu.choice.get();
+        };
+    }
+
+    private int built() {
+        return switch (tab) {
+            case 1 -> menu.heavyBuilt.get();
+            case 2 -> menu.gaussBuilt.get();
+            default -> menu.bladeBuilt.get();
+        };
+    }
+
+    private int stepDone() {
+        return switch (tab) {
+            case 1 -> menu.heavyBastion.get();
+            case 2 -> menu.gaussTempo.get();
+            default -> menu.bladeEdge.get();
+        };
+    }
+
+    private int state() {
+        return tab * 1000 + choice() * 100 + built() * 10 + stepDone();
+    }
+
     @Override
     protected void init() {
         super.init();
-        shownChoice = menu.choice.get();
-        shownBuilt = menu.bladeBuilt.get();
-        shownEdge = menu.bladeEdge.get();
+        shownState = state();
+        String[] tabs = {"melee", "armor", "ranged"};
+        for (int i = 0; i < tabs.length; i++) {
+            int index = i;
+            Button t = Button.builder(Component.translatable("adept_core.table.tab." + tabs[i]), b -> {
+                tab = index;
+                pendingChoice = -1;
+                dirty = true;
+            }).bounds(leftPos + 96 + i * 46, topPos + 4, 44, 12).build();
+            t.active = tab != i;
+            addRenderableWidget(t);
+        }
+        Tab info = tabInfo();
         int x = leftPos + 10;
         int y = topPos + 26;
-        if (shownChoice == 0) {
-            addRenderableWidget(Button.builder(Component.translatable("adept_core.table.blade"), b -> { pendingChoice = 1; dirty = true; })
+        // Броня: первый вариант на экране — тяжёлая (в срезе есть прототип), второй — лёгкая.
+        String a = tab == 1 ? info.second() : info.first();
+        String bKey = tab == 1 ? info.first() : info.second();
+        int aBtn = tab == 1 ? info.choiceSecond() : info.choiceFirst();
+        int bBtn = tab == 1 ? info.choiceFirst() : info.choiceSecond();
+        if (choice() == 0) {
+            addRenderableWidget(Button.builder(Component.translatable("adept_core.table." + a), b -> { pendingChoice = aBtn; dirty = true; })
                     .bounds(x, y + 40, 105, 20)
-                    .tooltip(Tooltip.create(Component.translatable("adept_core.table.blade.desc"))).build());
-            addRenderableWidget(Button.builder(Component.translatable("adept_core.table.hammer"), b -> { pendingChoice = 2; dirty = true; })
+                    .tooltip(Tooltip.create(Component.translatable("adept_core.table." + a + ".desc"))).build());
+            addRenderableWidget(Button.builder(Component.translatable("adept_core.table." + bKey), b -> { pendingChoice = bBtn; dirty = true; })
                     .bounds(x + 115, y + 40, 105, 20)
-                    .tooltip(Tooltip.create(Component.translatable("adept_core.table.hammer.desc"))).build());
-            if (pendingChoice > 0) {
+                    .tooltip(Tooltip.create(Component.translatable("adept_core.table." + bKey + ".desc"))).build());
+            if (pendingChoice >= 0) {
                 addRenderableWidget(Button.builder(Component.translatable("adept_core.table.confirm").withStyle(ChatFormatting.GOLD),
                         b -> {
-                            press(pendingChoice == 1 ? ArtifactTableMenu.BTN_CHOOSE_BLADE : ArtifactTableMenu.BTN_CHOOSE_HAMMER);
+                            press(pendingChoice);
                             pendingChoice = -1;
                             dirty = true;
                         }).bounds(x + 30, y + 100, 160, 20).build());
@@ -86,21 +149,23 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
                         b -> press(ArtifactTableMenu.BTN_CAMP))
                 .bounds(x + 74, y + 56, 72, 18)
                 .tooltip(Tooltip.create(costText(CostList.parse(BalanceConfig.TABLE_CAMP.get())))).build());
-        if (shownChoice == 1) {
-            addRenderableWidget(Button.builder(Component.translatable(shownBuilt > 0
-                            ? "adept_core.table.blade.rebuild" : "adept_core.table.blade.build"),
-                            b -> press(ArtifactTableMenu.BTN_BLADE_PROTOTYPE))
+        if (choice() == 1) {
+            String variant = tab == 1 ? "heavy" : info.first();
+            addRenderableWidget(Button.builder(Component.translatable(built() > 0
+                            ? "adept_core.table." + variant + ".rebuild" : "adept_core.table." + variant + ".build"),
+                            b -> press(info.prototype()))
                     .bounds(x, y + 78, 220, 20)
-                    .tooltip(Tooltip.create(costText(CostList.parse(BalanceConfig.TABLE_BLADE_PROTOTYPE.get())))).build());
-            Button edge = Button.builder(Component.translatable("adept_core.table.blade.edge1"),
-                            b -> press(ArtifactTableMenu.BTN_BLADE_EDGE))
+                    .tooltip(Tooltip.create(costText(CostList.parse(info.prototypeCost())))).build());
+            Button step = Button.builder(Component.translatable("adept_core.table.open",
+                            StepTexts.find(info.stepKey(), 1).map(StepTexts.Step::name).orElse(Component.empty())),
+                            b -> press(info.step()))
                     .bounds(x, y + 120, 220, 20)
-                    .tooltip(Tooltip.create(StepTexts.find(TableActions.BLADE_EDGE, 1)
-                            .map(step -> StepTexts.tooltip(step).append(Component.literal("\n\n")))
+                    .tooltip(Tooltip.create(StepTexts.find(info.stepKey(), 1)
+                            .map(st -> StepTexts.tooltip(st).append(Component.literal("\n\n")))
                             .orElse(Component.empty())
-                            .append(costText(CostList.parse(BalanceConfig.TABLE_BLADE_EDGE_1.get()))))).build();
-            edge.active = shownBuilt > 0 && shownEdge == 0;
-            addRenderableWidget(edge);
+                            .append(costText(CostList.parse(info.stepCost()))))).build();
+            step.active = built() > 0 && stepDone() == 0;
+            addRenderableWidget(step);
         }
     }
 
@@ -122,7 +187,7 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
     @Override
     protected void containerTick() {
         super.containerTick();
-        if (dirty || menu.choice.get() != shownChoice || menu.bladeBuilt.get() != shownBuilt || menu.bladeEdge.get() != shownEdge) {
+        if (dirty || state() != shownState) {
             dirty = false;
             rebuildWidgets();
         }
@@ -145,24 +210,24 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
     @Override
     protected void renderLabels(GuiGraphics g, int mouseX, int mouseY) {
         g.drawString(font, title, 10, 7, TEXT, false);
-        int choice = menu.choice.get();
-        if (choice == 0) {
-            g.drawWordWrap(font, Component.translatable("adept_core.table.choose.hint"), 10, 26, 220, MUTED);
-            if (pendingChoice > 0) {
+        Tab info = tabInfo();
+        if (choice() == 0) {
+            g.drawWordWrap(font, Component.translatable("adept_core.table.choose.hint." + tab), 10, 26, 220, MUTED);
+            if (pendingChoice >= 0) {
                 g.drawWordWrap(font, Component.translatable("adept_core.table.choose.warning")
                         .withStyle(ChatFormatting.RED), 10, 92, 220, 0xFFFF6060);
             }
         } else {
             g.drawString(font, Component.translatable("adept_core.table.components"), 10, 26, MUTED, false);
-            if (choice == 1) {
-                MutableComponent label = Component.translatable("adept_core.table.segment.emitter");
-                StepTexts.find(TableActions.BLADE_EDGE, 1).ifPresent(step -> label.append(": ").append(step.name()));
+            if (choice() == 1) {
+                MutableComponent label = Component.translatable("adept_core.table.segment." + tab);
+                StepTexts.find(info.stepKey(), 1).ifPresent(step -> label.append(": ").append(step.name()));
                 g.drawString(font, label, 10, 136, MUTED, false);
-                if (menu.bladeEdge.get() > 0) {
+                if (stepDone() > 0) {
                     g.drawString(font, Component.translatable("adept_core.table.done"), 170, 136, 0xFF60D060, false);
                 }
             } else {
-                g.drawWordWrap(font, Component.translatable("adept_core.table.hammer.later"), 10, 106, 220, MUTED);
+                g.drawWordWrap(font, Component.translatable("adept_core.table." + info.later() + ".later"), 10, 106, 220, MUTED);
             }
         }
         int result = menu.lastResult.get();

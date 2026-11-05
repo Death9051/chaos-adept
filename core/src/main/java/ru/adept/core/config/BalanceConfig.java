@@ -209,6 +209,44 @@ public final class BalanceConfig {
     public static final ModConfigSpec.IntValue CAST_TICKS;
     public static final ModConfigSpec.IntValue CAST_ELECTRICITY_PER_TICK;
 
+    // Тяжёлая броня и гаусс-пушка
+    public static final ModConfigSpec.DoubleValue HEAVY_SHARE_HEAD;
+    public static final ModConfigSpec.DoubleValue HEAVY_SHARE_TORSO;
+    public static final ModConfigSpec.DoubleValue HEAVY_SHARE_ARMS;
+    public static final ModConfigSpec.DoubleValue HEAVY_SHARE_LEGS;
+    public static final ModConfigSpec.DoubleValue HEAVY_PLATE_ABSORB;
+    public static final ModConfigSpec.DoubleValue HEAVY_BASTION_PER_STEP;
+    public static final ModConfigSpec.DoubleValue PLATE_IRON;
+    public static final ModConfigSpec.DoubleValue PLATE_COPPER;
+    public static final ModConfigSpec.DoubleValue PLATE_GOLD;
+    public static final ModConfigSpec.DoubleValue PLATE_STEEL;
+    public static final ModConfigSpec.DoubleValue PLATE_RED_GOLD;
+    public static final ModConfigSpec.IntValue HEAVY_CHARGE_CAPACITY;
+    public static final ModConfigSpec.IntValue HEAVY_SERVO_PER_SECOND;
+    public static final ModConfigSpec.DoubleValue HEAVY_SLOW_POWERED;
+    public static final ModConfigSpec.DoubleValue HEAVY_SLOW_UNPOWERED;
+    public static final ModConfigSpec.IntValue ARTIFACT_BASE_CHARGE_PER_SECOND;
+    public static final ModConfigSpec.IntValue GAUSS_CHARGE_CAPACITY;
+    public static final ModConfigSpec.IntValue GAUSS_SHOT_COST;
+    public static final ModConfigSpec.DoubleValue GAUSS_FIRE_RATE;
+    public static final ModConfigSpec.DoubleValue GAUSS_TEMPO_PER_STEP;
+    public static final ModConfigSpec.IntValue GAUSS_MAGAZINE;
+    public static final ModConfigSpec.IntValue GAUSS_RELOAD_TICKS;
+    public static final ModConfigSpec.DoubleValue GAUSS_HEAT_PER_SHOT;
+    public static final ModConfigSpec.DoubleValue GAUSS_COOL_PER_SECOND;
+    public static final ModConfigSpec.IntValue GAUSS_OVERHEAT_TICKS;
+    public static final ModConfigSpec.DoubleValue GAUSS_SPREAD;
+    public static final ModConfigSpec.DoubleValue GAUSS_RANGE;
+    public static final ModConfigSpec.DoubleValue NEEDLE_DAMAGE_IRON;
+    public static final ModConfigSpec.DoubleValue NEEDLE_DAMAGE_COPPER;
+    public static final ModConfigSpec.DoubleValue NEEDLE_DAMAGE_GOLD;
+    public static final ModConfigSpec.DoubleValue NEEDLE_DAMAGE_STEEL;
+    public static final ModConfigSpec.DoubleValue NEEDLE_DAMAGE_RED_GOLD;
+    public static final ModConfigSpec.ConfigValue<String> TABLE_HEAVY_PROTOTYPE;
+    public static final ModConfigSpec.ConfigValue<String> TABLE_HEAVY_BASTION_1;
+    public static final ModConfigSpec.ConfigValue<String> TABLE_GAUSS_PROTOTYPE;
+    public static final ModConfigSpec.ConfigValue<String> TABLE_GAUSS_TEMPO_1;
+
     // Уровни узлов (вехи)
     public static final ModConfigSpec.IntValue TIER_NODES_TO_ADVANCE;
     public static final ModConfigSpec.BooleanValue TIER_LEVEL_FLOOR;
@@ -524,6 +562,55 @@ public final class BalanceConfig {
         CAST_PLATE_MB = b.comment("Расплава на пластину тяжёлой брони").defineInRange("plateMb", 400, 1, 10_000);
         CAST_TICKS = b.defineInRange("castTicks", 60, 1, 12_000);
         CAST_ELECTRICITY_PER_TICK = b.defineInRange("castElectricityPerTick", 4, 0, 10_000);
+        b.pop();
+
+        b.comment("Тяжёлая силовая броня («Артефакты», «Прокачка: числа»)").push("heavyArmor");
+        HEAVY_SHARE_HEAD = b.comment("Доли урона по пластинам: шлем").defineInRange("shareHead", 0.15, 0.0, 1.0);
+        HEAVY_SHARE_TORSO = b.comment("нагрудник, корпус").defineInRange("shareTorso", 0.40, 0.0, 1.0);
+        HEAVY_SHARE_ARMS = b.comment("нагрудник, руки").defineInRange("shareArms", 0.20, 0.0, 1.0);
+        HEAVY_SHARE_LEGS = b.comment("ноги").defineInRange("shareLegs", 0.25, 0.0, 1.0);
+        HEAVY_PLATE_ABSORB = b.comment("Сколько своей доли гасит целая пластина").defineInRange("plateAbsorb", 0.70, 0.0, 0.95);
+        HEAVY_BASTION_PER_STEP = b.comment("«Бастион»: прибавка к гашению за ступень").defineInRange("bastionPerStep", 0.05, 0.0, 0.5);
+        PLATE_IRON = b.comment("Прочность пластины по материалу: железо").defineInRange("plateIron", 40.0, 1.0, 10_000.0);
+        PLATE_COPPER = b.defineInRange("plateCopper", 25.0, 1.0, 10_000.0);
+        PLATE_GOLD = b.defineInRange("plateGold", 25.0, 1.0, 10_000.0);
+        PLATE_STEEL = b.defineInRange("plateSteel", 60.0, 1.0, 10_000.0);
+        PLATE_RED_GOLD = b.defineInRange("plateRedGold", 40.0, 1.0, 10_000.0);
+        HEAVY_CHARGE_CAPACITY = b.comment("Запас электричества сервоприводов (в нагруднике)").defineInRange("chargeCapacity", 600, 1, 100_000);
+        HEAVY_SERVO_PER_SECOND = b.comment("Расход при движении, в секунду").defineInRange("servoPerSecond", 5, 0, 1000);
+        HEAVY_SLOW_POWERED = b.comment("Замедление с электричеством").defineInRange("slowPowered", 0.15, 0.0, 0.95);
+        HEAVY_SLOW_UNPOWERED = b.comment("и без него").defineInRange("slowUnpowered", 0.50, 0.0, 0.95);
+        ARTIFACT_BASE_CHARGE_PER_SECOND = b.comment("На базе броня и гаусс заряжаются от запаса базы, в секунду").defineInRange("baseChargePerSecond", 50, 0, 100_000);
+        b.pop();
+
+        b.comment("Гаусс-пушка («Артефакты», «Прокачка: числа»)").push("gauss");
+        GAUSS_CHARGE_CAPACITY = b.defineInRange("chargeCapacity", 400, 1, 100_000);
+        GAUSS_SHOT_COST = b.comment("Электричества на выстрел").defineInRange("shotCost", 4, 0, 1000);
+        GAUSS_FIRE_RATE = b.comment("Выстрелов в секунду").defineInRange("fireRate", 4.0, 0.1, 40.0);
+        GAUSS_TEMPO_PER_STEP = b.comment("«Темп»: прибавка скорострельности за ступень").defineInRange("tempoPerStep", 0.20, 0.0, 5.0);
+        GAUSS_MAGAZINE = b.defineInRange("magazine", 30, 1, 1000);
+        GAUSS_RELOAD_TICKS = b.defineInRange("reloadTicks", 40, 0, 1200);
+        GAUSS_HEAT_PER_SHOT = b.defineInRange("heatPerShot", 0.05, 0.0, 1.0);
+        GAUSS_COOL_PER_SECOND = b.defineInRange("coolPerSecond", 0.15, 0.0, 10.0);
+        GAUSS_OVERHEAT_TICKS = b.comment("При 100% нагрева пушка молчит, тики").defineInRange("overheatTicks", 60, 0, 1200);
+        GAUSS_SPREAD = b.comment("Разброс, градусы").defineInRange("spread", 2.0, 0.0, 45.0);
+        GAUSS_RANGE = b.defineInRange("range", 48.0, 1.0, 256.0);
+        NEEDLE_DAMAGE_IRON = b.comment("Урон иглы по материалу: железо (лёгкое отбрасывание — позже)").defineInRange("needleIron", 3.0, 0.0, 100.0);
+        NEEDLE_DAMAGE_COPPER = b.comment("медь: +30% по целям без брони, −30% по бронированным").defineInRange("needleCopper", 2.5, 0.0, 100.0);
+        NEEDLE_DAMAGE_GOLD = b.comment("золото").defineInRange("needleGold", 2.5, 0.0, 100.0);
+        NEEDLE_DAMAGE_STEEL = b.comment("сталь: прошивает одну цель насквозь").defineInRange("needleSteel", 4.0, 0.0, 100.0);
+        NEEDLE_DAMAGE_RED_GOLD = b.comment("красное золото: каждое следующее попадание по той же цели +15% (до 3)").defineInRange("needleRedGold", 3.0, 0.0, 100.0);
+        b.pop();
+
+        b.comment("Стол: тяжёлая броня и гаусс-пушка").push("tableSlice2");
+        TABLE_HEAVY_PROTOTYPE = b.comment("Прототип тяжёлой брони (шлем, нагрудник, ноги без пластин)")
+                .define("heavyPrototype", "minecraft:iron_ingot*12;adept_core:crude_wiring*2;adept_core:crude_coil*2");
+        TABLE_HEAVY_BASTION_1 = b.comment("Тяжёлая броня, нагрудник, путь «Бастион», ступень I")
+                .define("heavyBastion1", "adept_core:crude_coil*2;adept_core:crude_wiring*2;minecraft:iron_ingot*4");
+        TABLE_GAUSS_PROTOTYPE = b.comment("Прототип гаусс-пушки")
+                .define("gaussPrototype", "adept_core:crude_coil*3;adept_core:crude_emitter;adept_core:crude_wiring*2;minecraft:iron_ingot*4");
+        TABLE_GAUSS_TEMPO_1 = b.comment("Гаусс-пушка, ствол, путь «Темп», ступень I")
+                .define("gaussTempo1", "adept_core:crude_coil*2;adept_core:crude_wiring");
         b.pop();
 
         b.comment("Уровни узлов: вехи и рост сложности").push("tiers");

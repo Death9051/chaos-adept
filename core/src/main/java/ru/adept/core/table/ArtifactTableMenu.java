@@ -23,11 +23,27 @@ public class ArtifactTableMenu extends AbstractContainerMenu {
     public static final int BTN_KEY = 17;
     public static final int BTN_BLADE_PROTOTYPE = 20;
     public static final int BTN_BLADE_EDGE = 30;
+    public static final int BTN_CHOOSE_LIGHT = 2;
+    public static final int BTN_CHOOSE_HEAVY = 3;
+    public static final int BTN_CHOOSE_GAUSS = 4;
+    public static final int BTN_CHOOSE_RAIL = 5;
+    public static final int BTN_HEAVY_PROTOTYPE = 21;
+    public static final int BTN_GAUSS_PROTOTYPE = 22;
+    public static final int BTN_HEAVY_BASTION = 31;
+    public static final int BTN_GAUSS_TEMPO = 32;
 
     /** 0 — пара не выбрана, 1 — клинок, 2 — молот. */
     public final DataSlot choice = DataSlot.standalone();
     public final DataSlot bladeBuilt = DataSlot.standalone();
     public final DataSlot bladeEdge = DataSlot.standalone();
+    /** 0 — броня не выбрана, 1 — лёгкая, 2 — тяжёлая. */
+    public final DataSlot armorChoice = DataSlot.standalone();
+    public final DataSlot heavyBuilt = DataSlot.standalone();
+    public final DataSlot heavyBastion = DataSlot.standalone();
+    /** 0 — дальний бой не выбран, 1 — гаусс, 2 — рельса. */
+    public final DataSlot rangedChoice = DataSlot.standalone();
+    public final DataSlot gaussBuilt = DataSlot.standalone();
+    public final DataSlot gaussTempo = DataSlot.standalone();
     /** Итог последнего действия: 0 — нет, иначе ordinal {@link TableActions.Result} + 1. */
     public final DataSlot lastResult = DataSlot.standalone();
 
@@ -46,6 +62,12 @@ public class ArtifactTableMenu extends AbstractContainerMenu {
         addDataSlot(bladeBuilt);
         addDataSlot(bladeEdge);
         addDataSlot(lastResult);
+        addDataSlot(armorChoice);
+        addDataSlot(heavyBuilt);
+        addDataSlot(heavyBastion);
+        addDataSlot(rangedChoice);
+        addDataSlot(gaussBuilt);
+        addDataSlot(gaussTempo);
         refresh();
     }
 
@@ -58,6 +80,14 @@ public class ArtifactTableMenu extends AbstractContainerMenu {
         choice.set(TableActions.BLADE.equals(melee) ? 1 : TableActions.HAMMER.equals(melee) ? 2 : 0);
         bladeBuilt.set(p.step(TableActions.BLADE_BUILT));
         bladeEdge.set(p.step(TableActions.BLADE_EDGE));
+        String armor = p.choice(TableActions.ARMOR).orElse("");
+        armorChoice.set(TableActions.LIGHT.equals(armor) ? 1 : TableActions.HEAVY.equals(armor) ? 2 : 0);
+        heavyBuilt.set(p.step(TableActions.HEAVY_BUILT));
+        heavyBastion.set(p.step(TableActions.HEAVY_BASTION));
+        String ranged = p.choice(TableActions.RANGED).orElse("");
+        rangedChoice.set(TableActions.GAUSS.equals(ranged) ? 1 : TableActions.RAIL.equals(ranged) ? 2 : 0);
+        gaussBuilt.set(p.step(TableActions.GAUSS_BUILT));
+        gaussTempo.set(p.step(TableActions.GAUSS_TEMPO));
     }
 
     @Override
@@ -79,6 +109,22 @@ public class ArtifactTableMenu extends AbstractContainerMenu {
             result = TableActions.craftBladePrototype(player);
         } else if (id == BTN_BLADE_EDGE) {
             result = TableActions.upgradeBladeEdge(player);
+        } else if (id == BTN_CHOOSE_LIGHT) {
+            result = TableActions.choosePair(player, TableActions.ARMOR, TableActions.LIGHT);
+        } else if (id == BTN_CHOOSE_HEAVY) {
+            result = TableActions.choosePair(player, TableActions.ARMOR, TableActions.HEAVY);
+        } else if (id == BTN_CHOOSE_GAUSS) {
+            result = TableActions.choosePair(player, TableActions.RANGED, TableActions.GAUSS);
+        } else if (id == BTN_CHOOSE_RAIL) {
+            result = TableActions.choosePair(player, TableActions.RANGED, TableActions.RAIL);
+        } else if (id == BTN_HEAVY_PROTOTYPE) {
+            result = TableActions.craftHeavyPrototype(player);
+        } else if (id == BTN_GAUSS_PROTOTYPE) {
+            result = TableActions.craftGaussPrototype(player);
+        } else if (id == BTN_HEAVY_BASTION) {
+            result = TableActions.upgradeHeavyBastion(player);
+        } else if (id == BTN_GAUSS_TEMPO) {
+            result = TableActions.upgradeGaussTempo(player);
         } else {
             return false;
         }
