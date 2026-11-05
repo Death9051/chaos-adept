@@ -88,5 +88,9 @@
   "adept_core.step.blade.emitter.edge.1.name": "«Кромка» I",
   "adept_core.step.blade.emitter.edge.1.desc": "Поле лезвия становится плотнее. Каждый прямой удар клинком из основной руки наносит на %s урона больше, всего %s за удар.",
   "adept_core.blade.stats": "Урон %s за удар, %s удара в секунду.",
-  "adept_core.blade.steps": "Ступени смотри на столе артефактов."
+  "adept_core.blade.steps": "Ступени смотри на столе артефактов.",
+  "entity.adept_core.boar_leader": "Кабан-вожак",
+  "entity.adept_core.armadillo": "Броненосец",
+  "entity.adept_core.sporeling": "Споровик",
+  "entity.adept_core.sporeling_small": "Маленький споровик"
 }

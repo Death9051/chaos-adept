@@ -66,6 +66,28 @@ public final class BalanceConfig {
     public static final ModConfigSpec.IntValue WAVE_SPAWN_MIN_RADIUS;
     public static final ModConfigSpec.IntValue WAVE_SPAWN_MAX_RADIUS;
 
+    // Новые противники на узле (срез 2)
+    public static final ModConfigSpec.IntValue WAVE_EXTRA_MIN_NODE_LEVEL;
+    public static final ModConfigSpec.IntValue WAVE_SPORELINGS_FROM;
+    public static final ModConfigSpec.IntValue WAVE_SPORELINGS_COUNT;
+    public static final ModConfigSpec.IntValue WAVE_BOARS_FROM;
+    public static final ModConfigSpec.IntValue WAVE_BOARS_COUNT;
+    public static final ModConfigSpec.IntValue WAVE_ARMADILLOS_FROM;
+    public static final ModConfigSpec.IntValue WAVE_ARMADILLOS_COUNT;
+    public static final ModConfigSpec.IntValue BOAR_CHARGE_MIN_RANGE;
+    public static final ModConfigSpec.IntValue BOAR_CHARGE_MAX_RANGE;
+    public static final ModConfigSpec.IntValue BOAR_WINDUP_TICKS;
+    public static final ModConfigSpec.IntValue BOAR_CHARGE_TICKS;
+    public static final ModConfigSpec.DoubleValue BOAR_CHARGE_SPEED;
+    public static final ModConfigSpec.DoubleValue BOAR_RAM_MULTIPLIER;
+    public static final ModConfigSpec.IntValue BOAR_STUN_TICKS;
+    public static final ModConfigSpec.IntValue BOAR_CHARGE_COOLDOWN_TICKS;
+    public static final ModConfigSpec.IntValue ARMADILLO_FRONT_ARC;
+    public static final ModConfigSpec.DoubleValue ARMADILLO_CURLED_REDUCTION;
+    public static final ModConfigSpec.IntValue ARMADILLO_CURL_TICKS;
+    public static final ModConfigSpec.IntValue ARMADILLO_CURL_COOLDOWN_TICKS;
+    public static final ModConfigSpec.IntValue SPORELING_SPLIT_COUNT;
+
     // Мобы
     public static final ModConfigSpec.DoubleValue POSSESSED_HEALTH_MULTIPLIER;
     public static final ModConfigSpec.DoubleValue POSSESSED_DAMAGE;
@@ -310,6 +332,36 @@ public final class BalanceConfig {
                 .defineInRange("attackSpeed", 1.8, 0.1, 10.0);
         BLADE_EDGE_DAMAGE_PER_STEP = b.comment("Прибавка урона за каждую ступень пути «Кромка»")
                 .defineInRange("edgeDamagePerStep", 2.0, 0.0, 50.0);
+        b.pop();
+
+        b.comment("Новые противники на узле: споровик, кабан-вожак, броненосец").push("nodeMobs");
+        WAVE_EXTRA_MIN_NODE_LEVEL = b.comment("С какого уровня узла они приходят в волнах")
+                .defineInRange("minNodeLevel", 2, 1, 10);
+        WAVE_SPORELINGS_FROM = b.defineInRange("sporelingsFromWave", 1, 1, 20);
+        WAVE_SPORELINGS_COUNT = b.defineInRange("sporelingsCount", 2, 0, 30);
+        WAVE_BOARS_FROM = b.defineInRange("boarsFromWave", 2, 1, 20);
+        WAVE_BOARS_COUNT = b.defineInRange("boarsCount", 1, 0, 10);
+        WAVE_ARMADILLOS_FROM = b.defineInRange("armadillosFromWave", 3, 1, 20);
+        WAVE_ARMADILLOS_COUNT = b.defineInRange("armadillosCount", 1, 0, 10);
+        BOAR_CHARGE_MIN_RANGE = b.comment("Кабан-вожак: разгоняется, если цель дальше стольких блоков")
+                .defineInRange("boarChargeMinRange", 6, 1, 64);
+        BOAR_CHARGE_MAX_RANGE = b.comment("и ближе стольких").defineInRange("boarChargeMaxRange", 16, 2, 64);
+        BOAR_WINDUP_TICKS = b.comment("Подготовка к броску (роет землю), тики").defineInRange("boarWindupTicks", 20, 0, 200);
+        BOAR_CHARGE_TICKS = b.comment("Наибольшая длина броска, тики").defineInRange("boarChargeTicks", 30, 1, 200);
+        BOAR_CHARGE_SPEED = b.comment("Скорость броска, блоков за тик").defineInRange("boarChargeSpeed", 0.6, 0.1, 3.0);
+        BOAR_RAM_MULTIPLIER = b.comment("Урон тарана = урон атаки × это число (отброса игрока нет)")
+                .defineInRange("boarRamMultiplier", 1.5, 0.0, 10.0);
+        BOAR_STUN_TICKS = b.comment("Оглушение после удара о стену, тики").defineInRange("boarStunTicks", 40, 0, 400);
+        BOAR_CHARGE_COOLDOWN_TICKS = b.comment("Перезарядка броска, тики").defineInRange("boarChargeCooldownTicks", 160, 0, 2400);
+        ARMADILLO_FRONT_ARC = b.comment("Броненосец: ширина передней дуги, где удары гасятся, градусы")
+                .defineInRange("armadilloFrontArc", 120, 0, 360);
+        ARMADILLO_CURLED_REDUCTION = b.comment("Доля урона, которую гасит свёрнутый панцирь (со всех сторон)")
+                .defineInRange("armadilloCurledReduction", 0.75, 0.0, 1.0);
+        ARMADILLO_CURL_TICKS = b.comment("Сколько держится свёрнутым, тики").defineInRange("armadilloCurlTicks", 60, 1, 600);
+        ARMADILLO_CURL_COOLDOWN_TICKS = b.comment("Пауза перед следующим сворачиванием, тики")
+                .defineInRange("armadilloCurlCooldownTicks", 120, 0, 2400);
+        SPORELING_SPLIT_COUNT = b.comment("Споровик: сколько маленьких выпускает при смерти")
+                .defineInRange("sporelingSplitCount", 2, 0, 8);
         b.pop();
 
         b.comment("Уровни узлов: вехи и рост сложности").push("tiers");

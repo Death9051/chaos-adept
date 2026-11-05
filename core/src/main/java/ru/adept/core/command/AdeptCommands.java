@@ -53,6 +53,7 @@ public final class AdeptCommands {
                 .then(node())
                 .then(wave())
                 .then(guardian())
+                .then(mob())
                 .then(extraction())
                 .then(absorb())
                 .then(base())
@@ -196,6 +197,22 @@ public final class AdeptCommands {
                     BalanceConfig.GUARDIAN_HEALTH.get(), BalanceConfig.GUARDIAN_DAMAGE.get(), src.getPlayer(), null);
             return reply(ctx, "Рогатый вожак поставлен");
         });
+    }
+
+    // /adept mob <boar_leader|armadillo|sporeling|sporeling_small> — поставить противника узла рядом
+    private static LiteralArgumentBuilder<CommandSourceStack> mob() {
+        LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("mob");
+        java.util.Map<String, java.util.function.Supplier<? extends net.minecraft.world.entity.EntityType<? extends net.minecraft.world.entity.Mob>>> mobs =
+                java.util.Map.of("boar_leader", ModEntities.BOAR_LEADER, "armadillo", ModEntities.ARMADILLO,
+                        "sporeling", ModEntities.SPORELING, "sporeling_small", ModEntities.SPORELING_SMALL,
+                        "hornet", ModEntities.HORNET, "wisp", ModEntities.WISP, "ember_spirit", ModEntities.EMBER_SPIRIT);
+        mobs.forEach((name, type) -> root.then(Commands.literal(name).executes(ctx -> {
+            CommandSourceStack src = ctx.getSource();
+            BlockPos pos = BlockPos.containing(src.getPosition()).offset(4, 0, 0);
+            WaveSpawner.add(src.getLevel(), type.get().create(src.getLevel()), pos, -1, -1, src.getPlayer(), null);
+            return reply(ctx, name + " поставлен");
+        })));
+        return root;
     }
 
     // /adept extraction — состояние; extraction set <проценты>

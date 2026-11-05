@@ -88,5 +88,9 @@
   "adept_core.step.blade.emitter.edge.1.name": "Edge I",
   "adept_core.step.blade.emitter.edge.1.desc": "The blade field gets denser. Every direct hit with the blade in your main hand deals %s more damage, %s per hit in total.",
   "adept_core.blade.stats": "%s damage per hit, %s hits per second.",
-  "adept_core.blade.steps": "Upgrades are shown on the artifact table."
+  "adept_core.blade.steps": "Upgrades are shown on the artifact table.",
+  "entity.adept_core.boar_leader": "Boar Leader",
+  "entity.adept_core.armadillo": "Shellback",
+  "entity.adept_core.sporeling": "Sporeling",
+  "entity.adept_core.sporeling_small": "Small Sporeling"
 }
