@@ -59,6 +59,7 @@ public final class AdeptCommands {
                 .then(village())
                 .then(hero())
                 .then(squad())
+                .then(raid())
                 .then(extraction())
                 .then(absorb())
                 .then(base())
@@ -301,6 +302,33 @@ public final class AdeptCommands {
             }));
         }
         return root;
+    }
+
+    // /adept raid — почему набега нет / состояние; raid check — проверка с шансом; raid now — рог без шанса;
+    // raid spawn — отряд сразу, без рога
+    private static LiteralArgumentBuilder<CommandSourceStack> raid() {
+        return Commands.literal("raid")
+                .executes(ctx -> {
+                    var player = ctx.getSource().getPlayerOrException();
+                    var st = ru.adept.core.raid.RaidManager.state(player);
+                    long now = ctx.getSource().getServer().overworld().getGameTime();
+                    String status = st.spawnAt > 0 ? "рог прозвучал, отряд через " + (st.spawnAt - now) / 20 + " с"
+                            : st.squad != null ? (st.waitUntil > 0 ? "отряд ждёт у выхода " + (st.waitUntil - now) / 20 + " с" : "идёт бой")
+                            : ru.adept.core.raid.RaidManager.blocker(player).map(b -> "набег невозможен: " + b).orElse("набег возможен");
+                    return reply(ctx, "Набег: " + status);
+                })
+                .then(Commands.literal("check").executes(ctx -> reply(ctx,
+                        ru.adept.core.raid.RaidManager.check(ctx.getSource().getPlayerOrException(), false) ? "Рог!" : "Набега нет")))
+                .then(Commands.literal("now").executes(ctx -> reply(ctx,
+                        ru.adept.core.raid.RaidManager.check(ctx.getSource().getPlayerOrException(), true) ? "Рог!" : "Набег невозможен")))
+                .then(Commands.literal("spawn").executes(ctx -> {
+                    var player = ctx.getSource().getPlayerOrException();
+                    var st = ru.adept.core.raid.RaidManager.state(player);
+                    var level = ThreatManager.level(ctx.getSource().getServer());
+                    ru.adept.core.raid.RaidManager.horn(player, level == ru.adept.core.threat.ThreatLevel.CALM ? ru.adept.core.threat.ThreatLevel.SCOUTS : level);
+                    st.spawnAt = ctx.getSource().getServer().overworld().getGameTime();
+                    return reply(ctx, "Отряд появится на следующей секунде");
+                }));
     }
 
     // /adept extraction — состояние; extraction set <проценты>

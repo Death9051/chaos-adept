@@ -186,6 +186,17 @@ public final class BalanceConfig {
     public static final ModConfigSpec.DoubleValue HERO_EMBLEM_CHANCE_VETERAN;
     public static final ModConfigSpec.DoubleValue HERO_ORDER_CHANCE;
 
+    // Набеги
+    public static final ModConfigSpec.IntValue RAID_CHECK_TICKS;
+    public static final ModConfigSpec.IntValue RAID_COOLDOWN_MIN_TICKS;
+    public static final ModConfigSpec.IntValue RAID_COOLDOWN_MAX_TICKS;
+    public static final ModConfigSpec.DoubleValue RAID_CHANCE_SCOUTS;
+    public static final ModConfigSpec.DoubleValue RAID_CHANCE_SQUADS;
+    public static final ModConfigSpec.DoubleValue RAID_CHANCE_WARBANDS;
+    public static final ModConfigSpec.IntValue RAID_HORN_LEAD_TICKS;
+    public static final ModConfigSpec.IntValue RAID_WAIT_TICKS;
+    public static final ModConfigSpec.IntValue RAID_ELDER_DELAY_RADIUS;
+
     // Уровни узлов (вехи)
     public static final ModConfigSpec.IntValue TIER_NODES_TO_ADVANCE;
     public static final ModConfigSpec.BooleanValue TIER_LEVEL_FLOOR;
@@ -475,6 +486,18 @@ public final class BalanceConfig {
         HERO_EMBLEM_CHANCE = b.comment("Эмблема (трофей для Альянса) с ученика").defineInRange("emblemChance", 0.3, 0.0, 1.0);
         HERO_EMBLEM_CHANCE_VETERAN = b.comment("и с ветерана").defineInRange("emblemChanceVeteran", 0.6, 0.0, 1.0);
         HERO_ORDER_CHANCE = b.comment("Приказ командира с командира (знамя выпадает всегда)").defineInRange("orderChance", 0.35, 0.0, 1.0);
+        b.pop();
+
+        b.comment("Набеги героев («Мобы», «Герои и набеги»)").push("raids");
+        RAID_CHECK_TICKS = b.comment("Проверка набега в пути, раз в сколько тиков (и при уходе с узла)").defineInRange("checkTicks", 12_000, 200, 1_000_000);
+        RAID_COOLDOWN_MIN_TICKS = b.comment("Не чаще одного набега за (от)").defineInRange("cooldownMinTicks", 18_000, 0, 1_000_000);
+        RAID_COOLDOWN_MAX_TICKS = b.comment("(до), тики").defineInRange("cooldownMaxTicks", 24_000, 0, 1_000_000);
+        RAID_CHANCE_SCOUTS = b.comment("Шанс набега при проверке: разведка").defineInRange("chanceScouts", 0.35, 0.0, 1.0);
+        RAID_CHANCE_SQUADS = b.comment("отряды").defineInRange("chanceSquads", 0.5, 0.0, 1.0);
+        RAID_CHANCE_WARBANDS = b.comment("крупные отряды").defineInRange("chanceWarbands", 0.65, 0.0, 1.0);
+        RAID_HORN_LEAD_TICKS = b.comment("Рог звучит за столько тиков до появления отряда").defineInRange("hornLeadTicks", 1200, 0, 12_000);
+        RAID_WAIT_TICKS = b.comment("Сколько отряд ждёт у точки выхода, если игрок на базе").defineInRange("waitTicks", 6000, 0, 72_000);
+        RAID_ELDER_DELAY_RADIUS = b.comment("Смерть старейшины откладывает набеги в этом радиусе от деревни, блоки").defineInRange("elderDelayRadius", 256, 0, 10_000);
         b.pop();
 
         b.comment("Уровни узлов: вехи и рост сложности").push("tiers");
