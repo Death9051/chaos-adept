@@ -1,7 +1,7 @@
 name: CI
 
-# Схема «Осколка»: build → servertest и clienttest параллельно → логи в ветку ci-logs.
-# fullpack (прогон со всем модпаком) добавим, когда соберём список модов в сборку.
+# Схема «Осколка»: build → servertest, clienttest и fullpack параллельно → логи в ветку ci-logs.
+# fullpack — наши моды со всем составом сборки из pack/mods.txt.
 
 on:
   push:
@@ -127,12 +127,140 @@ jobs:
           if-no-files-found: ignore
           retention-days: 14
 
+  # fullpack: наши моды со всем составом сборки (pack/mods.txt, версии — pack/modrinth.lock.json).
+  # Сервер геймтестов → клиент со сценами и снимками → клиент с шейдерпаком (пробный, не валит CI).
+  fullpack:
+    name: fullpack
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: true
+      - name: Состав сборки по lock (или разрешение, если mods.txt изменён)
+        run: |
+          mkdir -p ci-out
+          if python3 .github/scripts/pack.py check; then
+            echo "LOCK_STATE=ok" >> "$GITHUB_ENV"
+          else
+            echo "::warning::Lock не соответствует pack/mods.txt — разрешаю заново. Новый lock: ci-logs, logs-fullpack/modrinth.lock.json"
+            echo "LOCK_STATE=resolved" >> "$GITHUB_ENV"
+            PACK_REPORT=ci-out/pack-report.md python3 .github/scripts/pack.py resolve
+          fi
+          cp pack/modrinth.lock.json ci-out/
+      - name: Кэш файлов модов
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/adept-pack
+          key: pack-${{ hashFiles('pack/modrinth.lock.json') }}
+          restore-keys: pack-
+      - name: Виртуальный экран, программный OpenGL, снимки экрана
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q xvfb libgl1-mesa-dri mesa-utils imagemagick xdotool
+      - name: Моды сборки в папки запусков
+        run: |
+          C=~/.cache/adept-pack
+          python3 .github/scripts/pack.py fetch --side server --dest story/run/fullpack-server --skip-dev --cache $C
+          python3 .github/scripts/pack.py fetch --side client --dest story/run/fullpack-client --skip-dev --cache $C
+          python3 .github/scripts/pack.py fetch --side client --dest story/run/fullpack-shaders --skip-dev --with-shaders --cache $C
+          ls -1 story/run/fullpack-client/mods > ci-out/mods-client.txt
+          ls -1 story/run/fullpack-server/mods > ci-out/mods-server.txt
+          ls -1 story/run/fullpack-shaders/shaderpacks > ci-out/shaderpacks.txt
+          for d in fullpack-client fullpack-shaders; do
+            cat > story/run/$d/options.txt <<'EOF'
+          onboardAccessibility:false
+          narrator:0
+          soundCategory_master:0.0
+          renderDistance:6
+          simulationDistance:5
+          maxFps:30
+          guiScale:2
+          tutorialStep:none
+          EOF
+          done
+          # Шейдерпак включаем только в пробном прогоне; в сборке шейдеры по умолчанию выключены.
+          mkdir -p story/run/fullpack-shaders/config
+          PACK=$(grep -i makeup ci-out/shaderpacks.txt | head -n1)
+          printf 'enableShaders=true\nshaderPack=%s\n' "$PACK" > story/run/fullpack-shaders/config/iris.properties
+      - name: Геймтесты на сервере со сборкой
+        id: gametest
+        # Провал геймтеста со всей сборкой — несовместимость для «Ядра»; итог пишется в summary.txt.
+        continue-on-error: true
+        run: ./gradlew :story:runFullpackGameTest --stacktrace
+      - name: Клиент со сборкой, сцены и снимки
+        id: client
+        if: always()
+        env:
+          LIBGL_ALWAYS_SOFTWARE: '1'
+          GRADLE_TASK: ':story:runFullpackClient'
+          RUN_DIR: story/run/fullpack-client
+          TIMEOUT: 25m
+          TITLE_DEADLINE: '600'
+          MAX_SHOTS: '40'
+        run: bash .github/scripts/clienttest.sh
+      - name: Клиент с шейдерпаком (пробный)
+        id: shaders
+        if: always()
+        continue-on-error: true
+        env:
+          LIBGL_ALWAYS_SOFTWARE: '1'
+          GRADLE_TASK: ':story:runFullpackClient'
+          RUN_DIR: story/run/fullpack-shaders
+          TIMEOUT: 15m
+          TITLE_DEADLINE: '600'
+          MAX_SHOTS: '15'
+        run: |
+          # Тот же запуск, но в папке с включённым шейдерпаком.
+          rm -rf story/run/fullpack-client.bak
+          mv story/run/fullpack-client story/run/fullpack-client.bak
+          mv story/run/fullpack-shaders story/run/fullpack-client
+          RUN_DIR=story/run/fullpack-client bash .github/scripts/clienttest.sh; code=$?
+          mv story/run/fullpack-client story/run/fullpack-shaders
+          mv story/run/fullpack-client.bak story/run/fullpack-client
+          exit $code
+      - name: Итог fullpack
+        if: always()
+        run: |
+          {
+            echo "lock=$LOCK_STATE"
+            echo "gametest=${{ steps.gametest.outcome }}"
+            echo "client=${{ steps.client.outcome }}"
+            echo "shaders=${{ steps.shaders.outcome }}"
+            grep -h "failed at\|required tests failed" story/run/fullpack-server/logs/latest.log 2>/dev/null | sed 's/^.*\]: //' || true
+          } | tee ci-out/summary.txt
+          # Задание падает, только если клиент со сборкой не дошёл до мира.
+          [ "${{ steps.client.outcome }}" = success ]
+      - name: Логи, состав и снимки
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs-fullpack
+          path: |
+            ci-out/
+            story/run/fullpack-server/logs/
+            story/run/fullpack-server/crash-reports/
+            story/run/fullpack-client/logs/
+            story/run/fullpack-client/crash-reports/
+            story/run/fullpack-client/ci-screenshots/
+            story/run/fullpack-shaders/logs/
+            story/run/fullpack-shaders/crash-reports/
+            story/run/fullpack-shaders/ci-screenshots/
+          if-no-files-found: ignore
+          retention-days: 14
+
   # Логи, вывод сборки и скриншоты каждого прогона кладутся в ветку ci-logs:
   # их можно читать по прямой ссылке (raw.githubusercontent.com) без входа в GitHub.
   # Пишутся прогоны main, ручные и pull request из веток этого же репозитория.
   logs:
     name: logs → ci-logs
-    needs: [build, servertest, clienttest]
+    needs: [build, servertest, clienttest, fullpack]
     if: >-
       always() && (github.event_name != 'pull_request'
       || github.event.pull_request.head.repo.full_name == github.repository)
@@ -155,7 +283,7 @@ jobs:
           SHA: ${{ github.event.pull_request.head.sha || github.sha }}
           PR: ${{ github.event.pull_request.number }}
           RUN: ${{ github.run_number }}
-          RESULT: build=${{ needs.build.result }} servertest=${{ needs.servertest.result }} clienttest=${{ needs.clienttest.result }}
+          RESULT: build=${{ needs.build.result }} servertest=${{ needs.servertest.result }} clienttest=${{ needs.clienttest.result }} fullpack=${{ needs.fullpack.result }}
         run: |
           set -e
           git config --global user.name "ci-logs"
@@ -175,6 +303,10 @@ jobs:
             echo "$RESULT"
             echo "branch=$BRANCH pr=${PR:-} sha=$SHA run=$RUN"
           } > "$RUN_DIR/result.txt"
+          # Подробности fullpack (геймтесты, клиент, шейдеры) — в тот же итог.
+          if [ -f "$RUN_DIR/logs-fullpack/ci-out/summary.txt" ]; then
+            sed 's/^/fullpack: /' "$RUN_DIR/logs-fullpack/ci-out/summary.txt" >> "$RUN_DIR/result.txt"
+          fi
           # Последний прогон: общий и по каждой ветке отдельно.
           mkdir -p latest
           echo "$RUN_DIR" > latest.txt
