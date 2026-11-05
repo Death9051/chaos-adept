@@ -58,7 +58,7 @@ public final class TierGameTests {
         helper.assertTrue(StepTexts.find(TableActions.BLADE_EDGE, 1).isPresent(), "Нет описания «Кромки» I");
         for (StepTexts.Step step : StepTexts.all()) {
             String desc = step.description().getString();
-            helper.assertTrue(!desc.equals(step.langBase() + ".desc") && !desc.contains("%"),
+            helper.assertTrue(!desc.equals(step.langBase() + ".desc") && !desc.contains("%s") && !desc.contains("$s"),
                     "Описание ступени не заполнено: " + step.langBase());
         }
         helper.assertTrue(StepTexts.format(9.0).equals("9") && StepTexts.format(1.5).equals("1,5"), "Формат чисел");

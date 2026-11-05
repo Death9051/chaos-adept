@@ -25,6 +25,18 @@ public final class TableActions {
     public static final String BLADE_BUILT = "blade/base";
     public static final String BLADE_EDGE = "blade/emitter/edge";
 
+    // Срез 2: броня и дальний бой
+    public static final String ARMOR = "armor";
+    public static final String LIGHT = "light";
+    public static final String HEAVY = "heavy";
+    public static final String RANGED = "ranged";
+    public static final String GAUSS = "gauss";
+    public static final String RAIL = "rail";
+    public static final String HEAVY_BUILT = "heavy/base";
+    public static final String HEAVY_BASTION = "heavy/chest/bastion";
+    public static final String GAUSS_BUILT = "gauss/base";
+    public static final String GAUSS_TEMPO = "gauss/barrel/tempo";
+
     /** Грубые компоненты, которые делаются на столе вручную. Порядок = порядок кнопок. */
     public static final List<Craft> CRUDE = List.of(
             new Craft("crude_wiring", () -> ModItems.CRUDE_WIRING.get(), BalanceConfig.TABLE_CRUDE_WIRING::get),
@@ -49,12 +61,91 @@ public final class TableActions {
 
     /** Выбор пары ближнего боя. Исключающий: второй раз выбрать нельзя. */
     public static Result choosePair(Player player, String variant) {
+        return choosePair(player, MELEE, variant);
+    }
+
+    /** Выбор пары категории ({@code melee}, {@code armor}, {@code ranged}). Исключающий, один раз на прохождение. */
+    public static Result choosePair(Player player, String category, String variant) {
         ArtifactProgress p = progress(player);
-        if (p.choice(MELEE).isPresent()) {
+        if (p.choice(category).isPresent()) {
             return Result.ALREADY_CHOSEN;
         }
-        player.setData(ModRegistries.ARTIFACT_PROGRESS, p.withChoice(MELEE, variant));
-        post(player, new ArtifactEvent.PairChosen(player, MELEE, variant));
+        player.setData(ModRegistries.ARTIFACT_PROGRESS, p.withChoice(category, variant));
+        post(player, new ArtifactEvent.PairChosen(player, category, variant));
+        return Result.OK;
+    }
+
+    /** Прототип тяжёлой брони: шлем, нагрудник (с полным зарядом) и ноги, пластины ставятся отдельно. */
+    public static Result craftHeavyPrototype(Player player) {
+        ArtifactProgress p = progress(player);
+        if (!p.choice(ARMOR).filter(HEAVY::equals).isPresent()) {
+            return Result.NOT_CHOSEN;
+        }
+        CostList cost = CostList.parse(BalanceConfig.TABLE_HEAVY_PROTOTYPE.get());
+        if (!cost.canPay(player)) {
+            return Result.NOT_ENOUGH;
+        }
+        cost.pay(player);
+        give(player, new ItemStack(ModItems.HEAVY_HELMET.get()));
+        ItemStack chest = new ItemStack(ModItems.HEAVY_CHESTPLATE.get());
+        ru.adept.core.artifact.HeavyArmorItem.setCharge(chest, BalanceConfig.HEAVY_CHARGE_CAPACITY.get());
+        give(player, chest);
+        give(player, new ItemStack(ModItems.HEAVY_LEGGINGS.get()));
+        boolean first = p.step(HEAVY_BUILT) == 0;
+        if (first) {
+            player.setData(ModRegistries.ARTIFACT_PROGRESS, p.withStep(HEAVY_BUILT, 1));
+        }
+        post(player, new ArtifactEvent.PrototypeCrafted(player, HEAVY, first));
+        return Result.OK;
+    }
+
+    /** Прототип гаусс-пушки (с полным зарядом). */
+    public static Result craftGaussPrototype(Player player) {
+        ArtifactProgress p = progress(player);
+        if (!p.choice(RANGED).filter(GAUSS::equals).isPresent()) {
+            return Result.NOT_CHOSEN;
+        }
+        CostList cost = CostList.parse(BalanceConfig.TABLE_GAUSS_PROTOTYPE.get());
+        if (!cost.canPay(player)) {
+            return Result.NOT_ENOUGH;
+        }
+        cost.pay(player);
+        ItemStack gun = new ItemStack(ModItems.GAUSS_GUN.get());
+        ru.adept.core.artifact.GaussGunItem.setCharge(gun, ru.adept.core.artifact.GaussGunItem.capacity());
+        give(player, gun);
+        boolean first = p.step(GAUSS_BUILT) == 0;
+        if (first) {
+            player.setData(ModRegistries.ARTIFACT_PROGRESS, p.withStep(GAUSS_BUILT, 1));
+        }
+        post(player, new ArtifactEvent.PrototypeCrafted(player, GAUSS, first));
+        return Result.OK;
+    }
+
+    /** Ступень I «Бастиона» (нагрудник тяжёлой брони). */
+    public static Result upgradeHeavyBastion(Player player) {
+        return upgradeStep(player, HEAVY_BUILT, HEAVY_BASTION, BalanceConfig.TABLE_HEAVY_BASTION_1.get());
+    }
+
+    /** Ступень I «Темпа» (ствол гаусс-пушки). */
+    public static Result upgradeGaussTempo(Player player) {
+        return upgradeStep(player, GAUSS_BUILT, GAUSS_TEMPO, BalanceConfig.TABLE_GAUSS_TEMPO_1.get());
+    }
+
+    private static Result upgradeStep(Player player, String built, String step, String price) {
+        ArtifactProgress p = progress(player);
+        if (p.step(built) == 0) {
+            return Result.NOT_CHOSEN;
+        }
+        if (p.step(step) >= 1) {
+            return Result.ALREADY_DONE;
+        }
+        CostList cost = CostList.parse(price);
+        if (!cost.canPay(player)) {
+            return Result.NOT_ENOUGH;
+        }
+        cost.pay(player);
+        player.setData(ModRegistries.ARTIFACT_PROGRESS, p.withStep(step, 1));
+        post(player, new ArtifactEvent.StepUnlocked(player, step, 1));
         return Result.OK;
     }
 

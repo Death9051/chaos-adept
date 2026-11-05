@@ -55,6 +55,16 @@ public final class ModItems {
     public static final List<DeferredItem<Item>> PLATES = MOLTEN_IDS.stream()
             .map(m -> ITEMS.registerSimpleItem(m + "_plate", new Item.Properties().stacksTo(16))).toList();
 
+    // Тяжёлая силовая броня (прототип) и гаусс-пушка (прототип)
+    public static final DeferredItem<ru.adept.core.artifact.HeavyArmorItem> HEAVY_HELMET = ITEMS.register("heavy_helmet",
+            () -> new ru.adept.core.artifact.HeavyArmorItem(ModRegistries.HEAVY_ARMOR, net.minecraft.world.item.ArmorItem.Type.HELMET, new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<ru.adept.core.artifact.HeavyArmorItem> HEAVY_CHESTPLATE = ITEMS.register("heavy_chestplate",
+            () -> new ru.adept.core.artifact.HeavyArmorItem(ModRegistries.HEAVY_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<ru.adept.core.artifact.HeavyArmorItem> HEAVY_LEGGINGS = ITEMS.register("heavy_leggings",
+            () -> new ru.adept.core.artifact.HeavyArmorItem(ModRegistries.HEAVY_ARMOR, net.minecraft.world.item.ArmorItem.Type.LEGGINGS, new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<ru.adept.core.artifact.GaussGunItem> GAUSS_GUN = ITEMS.register("gauss_gun",
+            () -> new ru.adept.core.artifact.GaussGunItem(new Item.Properties().stacksTo(1)));
+
     // Трофеи героев для Альянса и приказ командира
     public static final DeferredItem<Item> HERO_EMBLEM = ITEMS.registerSimpleItem("hero_emblem");
     public static final DeferredItem<Item> HERO_BANNER = ITEMS.registerSimpleItem("hero_banner");

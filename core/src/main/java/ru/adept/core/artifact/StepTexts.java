@@ -36,7 +36,13 @@ public final class StepTexts {
     private static final List<Step> STEPS = List.of(
             new Step(TableActions.BLADE_EDGE, 1, () -> new Object[]{
                     format(BalanceConfig.BLADE_EDGE_DAMAGE_PER_STEP.get()),
-                    format(BalanceConfig.BLADE_BASE_DAMAGE.get() + BalanceConfig.BLADE_EDGE_DAMAGE_PER_STEP.get())})
+                    format(BalanceConfig.BLADE_BASE_DAMAGE.get() + BalanceConfig.BLADE_EDGE_DAMAGE_PER_STEP.get())}),
+            new Step(TableActions.HEAVY_BASTION, 1, () -> new Object[]{
+                    format(100 * (BalanceConfig.HEAVY_PLATE_ABSORB.get() + BalanceConfig.HEAVY_BASTION_PER_STEP.get())),
+                    format(100 * BalanceConfig.HEAVY_PLATE_ABSORB.get())}),
+            new Step(TableActions.GAUSS_TEMPO, 1, () -> new Object[]{
+                    format(BalanceConfig.GAUSS_FIRE_RATE.get() * (1 + BalanceConfig.GAUSS_TEMPO_PER_STEP.get())),
+                    format(BalanceConfig.GAUSS_FIRE_RATE.get())})
     );
 
     private static final Map<String, Step> BY_ID = STEPS.stream()
