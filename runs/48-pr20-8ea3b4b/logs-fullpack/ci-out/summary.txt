@@ -1,0 +1,6 @@
+lock=ok
+gametest=failure
+client=success
+shaders=success
+armadilloblocksfrontandcurls failed at -1231063, -60, -11608779! Свёрнутый хитбокс не 0,9
+1 required tests failed :(
