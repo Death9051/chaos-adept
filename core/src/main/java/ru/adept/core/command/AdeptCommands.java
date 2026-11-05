@@ -56,6 +56,7 @@ public final class AdeptCommands {
                 .then(wave())
                 .then(guardian())
                 .then(mob())
+                .then(village())
                 .then(extraction())
                 .then(absorb())
                 .then(base())
@@ -227,6 +228,35 @@ public final class AdeptCommands {
             return reply(ctx, name + " поставлен");
         })));
         return root;
+    }
+
+    // /adept village — деревня рядом; village list; village ruin — сделать руинами деревню рядом
+    private static LiteralArgumentBuilder<CommandSourceStack> village() {
+        return Commands.literal("village")
+                .executes(ctx -> {
+                    CommandSourceStack src = ctx.getSource();
+                    return ru.adept.core.village.VillageRegistry.get(src.getServer())
+                            .findOrRegisterAt(src.getLevel(), BlockPos.containing(src.getPosition()))
+                            .map(v -> reply(ctx, "Деревня «" + v.name + "» #" + v.id + ": жителей " + v.residents.size()
+                                    + ", старейшина " + (v.elder != null ? "жив" : "нет")
+                                    + (v.ruined ? ", руины" : "") + (v.destroyed ? ", разрушена" : "")))
+                            .orElseGet(() -> reply(ctx, "Рядом нет деревни"));
+                })
+                .then(Commands.literal("list").executes(ctx -> {
+                    var all = ru.adept.core.village.VillageRegistry.get(ctx.getSource().getServer()).all();
+                    StringBuilder sb = new StringBuilder("Деревень: " + all.size());
+                    all.forEach(v -> sb.append("\n«").append(v.name).append("» ").append(v.center().toShortString())
+                            .append(v.ruined ? " (руины)" : ""));
+                    return reply(ctx, sb.toString());
+                }))
+                .then(Commands.literal("ruin").executes(ctx -> {
+                    CommandSourceStack src = ctx.getSource();
+                    return ru.adept.core.village.VillageRegistry.get(src.getServer())
+                            .findOrRegisterAt(src.getLevel(), BlockPos.containing(src.getPosition()))
+                            .map(v -> reply(ctx, "«" + v.name + "» — руины, колонок: "
+                                    + ru.adept.core.village.RuinsManager.ruinWhole(src.getLevel(), v)))
+                            .orElseGet(() -> reply(ctx, "Рядом нет деревни"));
+                }));
     }
 
     // /adept extraction — состояние; extraction set <проценты>

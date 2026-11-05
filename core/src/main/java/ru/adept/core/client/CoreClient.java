@@ -36,6 +36,8 @@ public final class CoreClient {
         event.registerEntityRenderer(ModEntities.ARMADILLO.get(), ctx -> new StubEntityRenderer<>(ctx, Blocks.POLISHED_DEEPSLATE.defaultBlockState()));
         event.registerEntityRenderer(ModEntities.SPORELING.get(), ctx -> new StubEntityRenderer<>(ctx, Blocks.RED_MUSHROOM_BLOCK.defaultBlockState()));
         event.registerEntityRenderer(ModEntities.SPORELING_SMALL.get(), ctx -> new StubEntityRenderer<>(ctx, Blocks.RED_MUSHROOM_BLOCK.defaultBlockState()));
+        event.registerEntityRenderer(ModEntities.RESIDENT.get(), ctx -> new StubEntityRenderer<>(ctx, Blocks.OAK_PLANKS.defaultBlockState()));
+        event.registerEntityRenderer(ModEntities.ELDER.get(), ctx -> new StubEntityRenderer<>(ctx, Blocks.BOOKSHELF.defaultBlockState()));
         event.registerEntityRenderer(ModEntities.TRADER.get(), ctx -> new StubEntityRenderer<>(ctx, Blocks.CRYING_OBSIDIAN.defaultBlockState()));
     }
 }

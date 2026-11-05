@@ -167,6 +167,7 @@ public final class AbsorptionManager {
             }
         }
         level.getChunkSource().chunkMap.resendBiomesForChunks(List.<ChunkAccess>of(chunk));
+        ru.adept.core.village.RuinsManager.onChunkConverted(level, chunk, mask);
     }
 
     /** Поверхность колонки: растения и листва исчезают, земля и песок становятся пеплом. */

@@ -15,6 +15,8 @@ import ru.adept.core.mob.HornedLeaderEntity;
 import ru.adept.core.mob.HornetEntity;
 import ru.adept.core.mob.WispEntity;
 import ru.adept.core.trader.TraderEntity;
+import ru.adept.core.village.ElderEntity;
+import ru.adept.core.village.ResidentEntity;
 
 import static ru.adept.core.registry.ModRegistries.ENTITIES;
 
@@ -40,6 +42,14 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<SporelingEntity>> SPORELING_SMALL = ENTITIES.register("sporeling_small",
             () -> EntityType.Builder.of(SporelingEntity::new, MobCategory.MONSTER).sized(0.4f, 0.55f).clientTrackingRange(8).build("sporeling_small"));
 
+    // Жители деревень (свои вместо ванильных)
+    public static final DeferredHolder<EntityType<?>, EntityType<ResidentEntity>> RESIDENT = ENTITIES.register("resident",
+            () -> EntityType.Builder.<ResidentEntity>of(ResidentEntity::new, MobCategory.MISC).sized(0.6f, 1.95f).eyeHeight(1.62f)
+                    .clientTrackingRange(10).build("resident"));
+    public static final DeferredHolder<EntityType<?>, EntityType<ElderEntity>> ELDER = ENTITIES.register("elder",
+            () -> EntityType.Builder.<ElderEntity>of(ElderEntity::new, MobCategory.MISC).sized(0.6f, 1.95f).eyeHeight(1.62f)
+                    .clientTrackingRange(10).build("elder"));
+
     public static final DeferredHolder<EntityType<?>, EntityType<TraderEntity>> TRADER = ENTITIES.register("trader",
             () -> EntityType.Builder.of(TraderEntity::new, MobCategory.MISC).sized(0.6f, 1.95f).clientTrackingRange(10).build("trader"));
 
@@ -59,6 +69,8 @@ public final class ModEntities {
         event.put(ARMADILLO.get(), ArmadilloEntity.attributes().build());
         event.put(SPORELING.get(), SporelingEntity.attributes().build());
         event.put(SPORELING_SMALL.get(), SporelingEntity.smallAttributes().build());
+        event.put(RESIDENT.get(), net.minecraft.world.entity.npc.Villager.createAttributes().build());
+        event.put(ELDER.get(), net.minecraft.world.entity.npc.Villager.createAttributes().build());
         event.put(TRADER.get(), TraderEntity.attributes().build());
     }
 }
