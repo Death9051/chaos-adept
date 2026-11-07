@@ -1,0 +1,15 @@
+{
+  "trigger": {
+    "type": "node_tier_changed",
+    "level": 2
+  },
+  "popup": true,
+  "text": {
+    "public": [
+      "adept_story.journal.nodes.tier_2.public"
+    ],
+    "streamer": [
+      "adept_story.journal.nodes.tier_2.streamer"
+    ]
+  }
+}
