@@ -1,0 +1,6 @@
+build=success servertest=success clienttest=success fullpack=success
+branch=claude/general-slice3-d32a17 pr=23 sha=0dbe54f99a740e221137534c1f12a6ca929407ef run=54
+fullpack: lock=ok
+fullpack: gametest=success
+fullpack: client=success
+fullpack: shaders=success
