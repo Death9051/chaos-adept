@@ -25,7 +25,8 @@ public final class JournalDefs extends SimpleJsonResourceReloadListener {
             "first_dawn", "item_obtained", "artifact_table_built", "biome_entered",
             "artifact_pair_chosen", "artifact_prototype_crafted", "artifact_segment_apex",
             "base_entered", "node_wave_cleared", "node_player_died", "node_cleansed", "node_absorbed",
-            "trader_account_opened", "ritual_done", "node_level_reached");
+            "trader_account_opened", "ritual_done", "node_level_reached",
+            "threat_raised", "node_tier_changed", "raid_won", "village_ruins_entered", "npc_met");
 
     private static volatile Map<String, JournalDef> defs = Map.of();
 
