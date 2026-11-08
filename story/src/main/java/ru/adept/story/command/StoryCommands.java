@@ -1,6 +1,7 @@
 package ru.adept.story.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -19,6 +20,8 @@ import ru.adept.story.journal.JournalDef;
 import ru.adept.story.journal.JournalDefs;
 import ru.adept.story.net.EntryView;
 import ru.adept.story.net.StoryNetwork;
+import ru.adept.story.talk.HeroTalk;
+import ru.adept.story.talk.VillageTalk;
 import ru.adept.story.trader.TraderTalk;
 
 import java.util.HashMap;
@@ -34,6 +37,8 @@ import java.util.Map;
  * /story trigger &lt;тип&gt; [k=v …]  — вызвать событие журнала, например: node_absorbed level=2
  * /story trader &lt;arrive|ritual&gt;   — реплики торговца при появлении (обычном или первом ритуале)
  * /story subtitle &lt;ключ&gt;         — показать строку субтитром от имени торговца
+ * /story talk hero &lt;событие&gt; &lt;класс&gt; &lt;ранг&gt; — реплика героя (без шанса и откатов), например: talk hero spotted warrior apprentice
+ * /story talk village &lt;роль&gt; &lt;угроза&gt;      — реплика жителя или старейшины при этой угрозе
  * </pre>
  */
 @EventBusSubscriber(modid = AdeptStory.MOD_ID)
@@ -62,6 +67,22 @@ public final class StoryCommands {
                 .then(Commands.literal("trader")
                         .then(Commands.literal("arrive").executes(ctx -> trader(ctx, false)))
                         .then(Commands.literal("ritual").executes(ctx -> trader(ctx, true))))
+                .then(Commands.literal("talk")
+                        .then(Commands.literal("hero")
+                                .then(Commands.argument("event", StringArgumentType.word())
+                                        .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(List.of("spotted", "wounded", "missed",
+                                                "player_lost", "ally_fell", "squad_retreating", "ally_healed"), builder))
+                                        .then(Commands.argument("class", StringArgumentType.word())
+                                                .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(List.of("tracker", "warrior",
+                                                        "archer", "commander", "mage", "healer"), builder))
+                                                .then(Commands.argument("rank", StringArgumentType.word())
+                                                        .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(List.of("apprentice", "veteran"), builder))
+                                                        .executes(StoryCommands::talkHero)))))
+                        .then(Commands.literal("village")
+                                .then(Commands.argument("role", StringArgumentType.word())
+                                        .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(List.of("villager", "elder"), builder))
+                                        .then(Commands.argument("threat", IntegerArgumentType.integer(0, 100))
+                                                .executes(StoryCommands::talkVillage)))))
                 .then(Commands.literal("subtitle")
                         .then(Commands.argument("key", StringArgumentType.greedyString())
                                 .executes(StoryCommands::subtitle))));
@@ -133,6 +154,38 @@ public final class StoryCommands {
         }
         ctx.getSource().sendSuccess(() -> Component.literal("Торговец: " + lines), false);
         return lines.size();
+    }
+
+    private static int talkHero(CommandContext<CommandSourceStack> ctx) {
+        String event = StringArgumentType.getString(ctx, "event");
+        String heroClass = StringArgumentType.getString(ctx, "class");
+        String rank = StringArgumentType.getString(ctx, "rank");
+        HeroTalk.reset();
+        String key = HeroTalk.line(ctx.getSource().getServer(), java.util.UUID.randomUUID(), null, event, heroClass, rank, 0);
+        HeroTalk.reset();
+        return talkResult(ctx, HeroTalk.SPEAKER + heroClass, key, "строк " + HeroTalk.pool(event, heroClass, rank).size());
+    }
+
+    private static int talkVillage(CommandContext<CommandSourceStack> ctx) {
+        String role = StringArgumentType.getString(ctx, "role");
+        int threat = IntegerArgumentType.getInteger(ctx, "threat");
+        VillageTalk.reset();
+        String key = VillageTalk.line(ctx.getSource().getServer(), role, threat);
+        VillageTalk.reset();
+        return talkResult(ctx, VillageTalk.SPEAKER + role, key, "угроза " + VillageTalk.mood(threat));
+    }
+
+    private static int talkResult(CommandContext<CommandSourceStack> ctx, String speaker, String key, String info) {
+        if (key == null) {
+            ctx.getSource().sendFailure(Component.literal("Реплик нет (" + info + ")"));
+            return 0;
+        }
+        ServerPlayer player = ctx.getSource().getPlayer();
+        if (player != null) {
+            StoryNetwork.sendSubtitle(player, speaker, List.of(key));
+        }
+        ctx.getSource().sendSuccess(() -> Component.literal(key + " (" + info + ")"), false);
+        return 1;
     }
 
     private static int subtitle(CommandContext<CommandSourceStack> ctx) {

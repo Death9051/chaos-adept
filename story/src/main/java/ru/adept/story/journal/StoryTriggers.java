@@ -22,6 +22,9 @@ import ru.adept.core.api.event.ArtifactEvent;
 import ru.adept.core.api.event.BaseEvent;
 import ru.adept.core.api.event.BiomeAbsorbedEvent;
 import ru.adept.core.api.event.NodeEvent;
+import ru.adept.core.api.event.RaidEvent;
+import ru.adept.core.api.event.VillageEvent;
+import ru.adept.core.api.event.WorldProgressEvent;
 import ru.adept.story.AdeptStory;
 import ru.adept.story.net.StoryNetwork;
 
@@ -98,6 +101,37 @@ public final class StoryTriggers {
         Integer level = CLEANSED_LEVELS.remove(event.getNode());
         // Поглощение отладочной командой идёт без зачистки — тогда берём текущий уровень узлов мира.
         Journal.nodeAbsorbed(server, level != null ? level : WorldProgress.get(server).nodeTier());
+    }
+
+    // --- Срез 2: угроза, уровень узлов, набеги, руины ---
+
+    /** Ступень угрозы выросла (первая — запись «на меня обратили внимание»). */
+    @SubscribeEvent
+    public static void onThreatLevel(WorldProgressEvent.ThreatLevelChanged event) {
+        if (event.getNewValue() > event.getOldValue()) {
+            Journal.fire(event.getServer(), "threat_raised", Map.of("level", Integer.toString(event.getNewValue())));
+        }
+    }
+
+    /** Мир перешёл на новый уровень узлов (сразу при вехе ядра, до ритуала с торговцем). */
+    @SubscribeEvent
+    public static void onNodeTier(WorldProgressEvent.NodeTierChanged event) {
+        if (event.getNewValue() > event.getOldValue()) {
+            Journal.fire(event.getServer(), "node_tier_changed", Map.of("level", Integer.toString(event.getNewValue())));
+        }
+    }
+
+    /** Набег отбит: отряд разгромлен (погиб или отступил). */
+    @SubscribeEvent
+    public static void onRaidEnded(RaidEvent.Ended event) {
+        if (event.isDefeated()) {
+            Journal.fire(event.getServer(), "raid_won", Map.of("level", Integer.toString(event.getThreatLevel())));
+        }
+    }
+
+    @SubscribeEvent
+    public static void onRuinsEntered(VillageEvent.RuinsEntered event) {
+        Journal.fire(event.getServer(), "village_ruins_entered");
     }
 
     // --- Ванильные триггеры ---
