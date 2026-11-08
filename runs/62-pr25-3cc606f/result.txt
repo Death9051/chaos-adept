@@ -1,0 +1,2 @@
+build=cancelled servertest=cancelled clienttest=cancelled fullpack=cancelled
+branch=claude/pack-configs-874393 pr=25 sha=3cc606fcfd8dfe9857355c86d570460b573370e8 run=62
