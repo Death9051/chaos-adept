@@ -1,0 +1,21 @@
+# Improved Mobs — настройки сборки (docs/mods.md). Остальные ключи мод допишет со значениями по умолчанию.
+
+[general]
+	# Сложность не растёт со временем: её поднимает «Ядро» командой при смене уровня узлов.
+	"Enable difficulty scaling" = false
+	# Наши моды не трогаем: размеры, здоровье и поведение мобов «Ядра» заданы им самим
+	# (иначе атрибут масштаба ±10 % ломает хитбоксы под модели, проходы и арены).
+	"Entity Configs" = ["adept_core", "adept_story"]
+	# Ездовые помощники (страж, летающий) и кража из сундуков выключены.
+	"Feature Blacklist" = ["GUARDIAN", "FLYING", "STEAL"]
+
+[ai]
+	"Guardian Chance" = "0"
+	"Flying Chance" = "0"
+	"Stealer Chance" = "0"
+
+[equipment]
+	# Предметы наших модов (артефакты и их части) мобам не выдаются.
+	"Item Blacklist" = ["adept_core", "adept_story"]
+	# Эндер-жемчуг мобы не используют.
+	"Item Use Blacklist" = ["minecraft:ender_pearl"]

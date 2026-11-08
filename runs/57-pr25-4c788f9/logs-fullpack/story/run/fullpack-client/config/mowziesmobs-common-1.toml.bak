@@ -1,0 +1,17 @@
+# Mowzie's Mobs — настройки сборки (docs/mods.md). Остальные ключи мод допишет со значениями по умолчанию.
+# Пустой список biome_tags — «ни одного биома».
+
+# Ледяная пасть не генерируется.
+[mobs.frostmaw.generation_config.biome_config]
+	biome_tags = []
+
+# Роща Умвути (Умвути и его племя) не генерируется.
+[mobs.umvuthi.generation_config.biome_config]
+	biome_tags = []
+
+# Охотничьи отряды умвутана не появляются.
+[mobs.umvuthana.spawn_config]
+	spawn_rate = 0
+
+	[mobs.umvuthana.spawn_config.biome_config]
+		biome_tags = []
