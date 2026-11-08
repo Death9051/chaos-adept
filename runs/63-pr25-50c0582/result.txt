@@ -1,0 +1,6 @@
+build=success servertest=success clienttest=success fullpack=success
+branch=claude/pack-configs-874393 pr=25 sha=50c05829d23583bea6aaaf330b553ec14ff14a93 run=63
+fullpack: lock=ok
+fullpack: gametest=success
+fullpack: client=success
+fullpack: shaders=success
