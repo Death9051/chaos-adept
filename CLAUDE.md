@@ -29,7 +29,7 @@
 | Сюжет: ветки, голос и тексты | [docs/story-voice.md](docs/story-voice.md) |
 | Сюжетный мод — устройство | [docs/story-mod.md](docs/story-mod.md) |
 | Репозиторий и CI | [docs/repo-ci.md](docs/repo-ci.md) |
-| Срез 1, Срез 2 | [docs/slice-1.md](docs/slice-1.md), [docs/slice-2.md](docs/slice-2.md) |
+| Срез 1, Срез 2, Срез 3 | [docs/slice-1.md](docs/slice-1.md), [docs/slice-2.md](docs/slice-2.md), [docs/slice-3.md](docs/slice-3.md) |
 | Вопросы между чатами | [docs/questions.md](docs/questions.md) |
 | Контекст проекта — по направлениям | [docs/context/](docs/context/) |
 
