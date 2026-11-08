@@ -1,0 +1,13 @@
+{
+  "trigger": {
+    "type": "threat_raised"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.firsts.first_threat.public"
+    ],
+    "streamer": [
+      "adept_story.journal.firsts.first_threat.streamer"
+    ]
+  }
+}

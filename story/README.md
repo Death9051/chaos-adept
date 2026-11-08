@@ -40,6 +40,11 @@
 | `trader_account_opened` | `TraderEvent.AccountOpened` | — |
 | `ritual_done` | уход торговца после первого ритуала | `first` = `game` |
 | `node_level_reached` | первый ритуал на новом уровне узлов (веха) | `level` |
+| `threat_raised` | `WorldProgressEvent.ThreatLevelChanged`, ступень угрозы выросла | `level` |
+| `node_tier_changed` | `WorldProgressEvent.NodeTierChanged`, мир перешёл на новый уровень узлов | `level` |
+| `raid_won` | `RaidEvent.Ended`, отряд разгромлен | `level` (ступень угрозы) |
+| `village_ruins_entered` | `VillageEvent.RuinsEntered` | — |
+| `npc_met` | `VillageEvent.NpcNoticedPlayer` | `npc` (роль: `villager`, `elder`, позже `refugee`) |
 
 Остальные типы в данных (опоры, герои, руины, финал и т. п.) ждут событий следующих срезов; при загрузке они перечислены в логе.
 
@@ -49,6 +54,19 @@
 - Появление: первый ритуал — свои реплики по ветке; первый ритуал на новом уровне узлов — веха (реплика и запись на странице «Торговец»); иначе случайное приветствие.
 - Открытие счёта, особые продажи (`trophy`, `pillar_material`), прощание при уходе.
 
+## Реплики героев и жителей
+
+- Герои: `talk/HeroTalk.java`, события `HeroEvent`. Ключи `adept_story.hero.<группа>.<событие>.<номер>`, группа — класс (`tracker`, `warrior`, `archer`, `commander`; заготовки `mage`, `healer`), ранг (`apprentice` — строки о страхе, `veteran` — сдержанные) или `common`. Набор на событие — строки класса, ранга и общие. Число строк в группе — таблица `HeroTalk.LINES` (тест сверяет её с lang).
+- События: `spotted`, `wounded`, `missed`, `player_lost`, `ally_fell`, `squad_retreating`, `ally_healed` (заготовка под целителей).
+- Частота: шанс по рангу (ученик 0,7, ветеран 0,35), приказ отступать — всегда. Откаты: герой 12 с, одно событие в отряде 10 с (на «союзник пал» отвечает один), общая пауза 3 с. Слышно в радиусе 32 блоков. Говорящий — класс или имя командира.
+- Жители: `talk/VillageTalk.java`, событие `VillageEvent.NpcNoticedPlayer`. Ключи `adept_story.village.<роль>.<low|high>.<номер>`, высокая угроза — с 50. Пауза между репликами жителей 5 с (ядро и так шлёт не чаще раза в 30 с от NPC).
+- Числа — раздел `talk` в `config/adept_story-common.toml`.
+
+## Пулы имён и приказ командира
+
+- `data/adept_story/adept_names/villages.json` и `commanders.json` (`{"names": [...]}`), ядро берёт имена оттуда.
+- Текст приказа — ключ `adept_core.commander_order.text` в lang сюжета (`%1$s` командир, `%2$s` деревня), перекрывает запасной текст ядра.
+
 ## Клиент
 
 - Журнал: клавиша `J` (меняется в настройках, раздел «Сюжет») и кнопка «Ж» над окном инвентаря.
@@ -56,4 +74,4 @@
 
 ## Отладка
 
-`/story` (права 2): `journal list | reset | add <id>`, `trigger <тип> [k=v …]`, `trader arrive | ritual`, `subtitle <ключ>`.
+`/story` (права 2): `journal list | reset | add <id>`, `trigger <тип> [k=v …]`, `trader arrive | ritual`, `subtitle <ключ>`, `talk hero <событие> <класс> <ранг>`, `talk village <роль> <угроза>` (реплика без шанса и откатов).
