@@ -3,19 +3,24 @@
 [general]
 	# Сложность не растёт со временем: её поднимает «Ядро» командой при смене уровня узлов.
 	"Enable difficulty scaling" = false
-	# Наши моды не трогаем: размеры, здоровье и поведение мобов «Ядра» заданы им самим
-	# (иначе атрибут масштаба ±10 % ломает хитбоксы под модели, проходы и арены).
-	"Entity Configs" = ["adept_core", "adept_story"]
-	# Ездовые помощники (страж, летающий) и кража из сундуков выключены.
-	"Feature Blacklist" = ["GUARDIAN", "FLYING", "STEAL"]
 
 [ai]
+	# Ездовые помощники (страж, летающий) и кража из сундуков выключены.
 	"Guardian Chance" = "0"
 	"Flying Chance" = "0"
 	"Stealer Chance" = "0"
+	# Ломают только мягкое: землю, дерево, листву, стекло, деревянные двери и калитки. Камень — нет.
+	"Block Break Whitelist" = ["#minecraft:dirt", "#minecraft:logs", "#minecraft:planks", "#minecraft:leaves", "#minecraft:wooden_doors", "#minecraft:wooden_trapdoors", "#minecraft:wooden_fences", "#minecraft:fence_gates", "#c:fence_gates", "#c:glass_blocks", "#c:glass_panes"]
 
 [equipment]
 	# Предметы наших модов (артефакты и их части) мобам не выдаются.
 	"Item Blacklist" = ["adept_core", "adept_story"]
 	# Эндер-жемчуг мобы не используют.
 	"Item Use Blacklist" = ["minecraft:ender_pearl"]
+
+[features]
+	# Ездовые помощники и кража выключены целиком.
+	"Feature Blacklist" = ["GUARDIAN", "FLYING", "STEAL"]
+	# Мобы наших модов не меняются вовсе: размеры, здоровье и поведение задают сами моды
+	# (иначе атрибут масштаба ±10 % ломает хитбоксы под модели, проходы и арены).
+	"Entity Configs" = ["#improvedmobs:non_hostile_mobs", "adept_core", "adept_story"]
