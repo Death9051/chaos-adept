@@ -1,0 +1,887 @@
+[09Nov2026 19:00:30.649] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeclientdev, --version, 21.1.264, --assetIndex, 17, --assetsDir, /home/runner/.gradle/caches/neoformruntime/assets, --gameDir, ., --fml.fmlVersion, 4.0.45, --fml.mcVersion, 1.21.1, --fml.neoForgeVersion, 21.1.264, --fml.neoFormVersion, 20240808.144430, --width, 1280, --height, 720]
+[09Nov2026 19:00:30.652] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: JVM identified as Eclipse Adoptium OpenJDK 64-Bit Server VM 21.0.13+9-LTS
+[09Nov2026 19:00:30.654] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 11.0.5+main.901c6ea8 starting: java version 21.0.13 by Eclipse Adoptium; OS Linux arch amd64 version 7.0.0-1019-azure
+[09Nov2026 19:00:30.898] [main/INFO] [Sodium-GraphicsAdapterProbe/]: Searching for graphics cards...
+[09Nov2026 19:00:30.900] [main/WARN] [Sodium-GraphicsAdapterProbe/]: Could not find any graphics adapters! Probably the device is not on a bus we can probe, or there are no devices supporting 3D acceleration.
+[09Nov2026 19:00:30.904] [main/WARN] [Sodium-Workarounds/]: Sodium has applied one or more workarounds to prevent crashes or other issues on your system: [NO_ERROR_CONTEXT_UNSUPPORTED]
+[09Nov2026 19:00:30.905] [main/WARN] [Sodium-Workarounds/]: This is not necessarily an issue, but it may result in certain features or optimizations being disabled. You can sometimes fix these issues by upgrading your graphics driver.
+[09Nov2026 19:00:30.905] [main/INFO] [net.neoforged.fml.loading.ImmediateWindowHandler/]: Loading ImmediateWindowProvider fmlearlywindow
+[09Nov2026 19:00:31.045] [main/INFO] [EARLYDISPLAY/]: Trying GL version 4.6
+[09Nov2026 19:00:31.082] [main/INFO] [EARLYDISPLAY/]: Trying GL version 4.5
+[09Nov2026 19:00:31.119] [main/INFO] [EARLYDISPLAY/]: Requested GL version 4.5 got version 4.5
+[09Nov2026 19:00:31.249] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.7 Source=union:/home/runner/.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.16.4+mixin.0.8.7/26d01f0567ab46e9ca0d2ed89d0ecc11aadbd433/sponge-mixin-0.16.4+mixin.0.8.7.jar%23126!/ Service=ModLauncher Env=CLIENT
+[09Nov2026 19:00:31.403] [pool-2-thread-1/INFO] [EARLYDISPLAY/]: GL info: llvmpipe (LLVM 21.1.8, 256 bits) GL version 4.5 (Core Profile) Mesa 26.0.8-1ubuntu0.3, Mesa
+[09Nov2026 19:00:32.207] [main/WARN] [net.neoforged.jarjar.selection.JarSelector/]: Attempted to select a dependency jar for JarJar which was passed in as source: fabric_api_base. Using Mod File: 
+[09Nov2026 19:00:32.208] [main/WARN] [net.neoforged.jarjar.selection.JarSelector/]: Attempted to select a dependency jar for JarJar which was passed in as source: fabric_renderer_api_v1. Using Mod File: 
+[09Nov2026 19:00:32.209] [main/WARN] [net.neoforged.jarjar.selection.JarSelector/]: Attempted to select a dependency jar for JarJar which was passed in as source: fabric_block_view_api_v2. Using Mod File: 
+[09Nov2026 19:00:32.209] [main/WARN] [net.neoforged.jarjar.selection.JarSelector/]: Attempted to select a dependency jar for JarJar which was passed in as source: fabric_rendering_data_attachment_v1. Using Mod File: 
+[09Nov2026 19:00:32.209] [main/INFO] [net.neoforged.fml.loading.moddiscovery.locators.JarInJarDependencyLocator/]: Found 23 dependencies adding them to mods collection
+[09Nov2026 19:00:32.213] [main/INFO] [net.neoforged.fml.loading.moddiscovery.ModDiscoverer/]: 
+     Mod List:
+		Name Version (Mod Id)
+
+		AdoraBuild: Structures 2.11.0 (adorabuild_structures)
+		Apollib 1.2.0 (apollib)
+		AppleSkin 3.0.9+mc1.21 (appleskin)
+		Born in Chaos  1.7.6 (born_in_chaos_v1)
+		Bosses of Mass Destruction 1.3.3 (bosses_of_mass_destruction)
+		Cerbons API 1.3.0 (cerbons_api)
+		Cloth Config v15 API 15.0.140 (cloth_config)
+		Controlling 19.0.5 (controlling)
+		Curios API 9.5.1+1.21.1 (curios)
+		EMI 1.1.24+1.21.1+neoforge (emi)
+		EntityCulling 1.11.3 (entityculling)
+		Ferrite Core 7.0.3 (ferritecore)
+		Forgified Fabric API Base 0.4.42+d1308ded19 (fabric_api_base)
+		Forgified Fabric BlockView API (v2) 1.0.10+9afaaf8c19 (fabric_block_view_api_v2)
+		Forgified Fabric Renderer API (v1) 3.4.1+9125b6dc19 (fabric_renderer_api_v1)
+		Forgified Fabric Rendering Data Attachment (v1) 0.3.48+73761d2e19 (fabric_rendering_data_attachment_v1)
+		GeckoLib 4 4.9.3 (geckolib)
+		ImmediatelyFast 1.6.15+1.21.1 (immediatelyfast)
+		Improved Mobs Mod 1.21.1-1.16.0.b-neoforge (improvedmobs)
+		Inventory Profiles Next 2.2.5 (inventoryprofilesnext)
+		Iris 1.8.14-beta.1+mc1.21.1 (iris)
+		Jade 15.10.6+neoforge (jade)
+		Kotlin For Forge 5.12.0 (kotlinforforge)
+		libIPN 6.6.3 (libipn)
+		Lithium 0.15.4+mc1.21.1 (lithium)
+		Lithostitched 1.8.1 (lithostitched)
+		Minecraft 1.21.1 (minecraft)
+		ModernFix 5.27.27+mc1.21.1 (modernfix)
+		Mouse Tweaks 2.26.1 (mousetweaks)
+		Mowzie's Mobs 1.8.2 (mowziesmobs)
+		Naturalist 2.0.7 (naturalist)
+		NeoForge 21.1.264 (neoforge)
+		Player Animation Library 1.1.6+mc.1.21.1 (player_animation_library)
+		Searchables 1.0.2 (searchables)
+		Sodium 0.8.13+mc1.21.1 (sodium)
+		spark 1.10.124 (spark)
+		Tectonic 3.0.28 (tectonic)
+		TenshiLib 1.21.1-2.3.1-neoforge (tenshilib)
+		Terralith 2.6.2 (terralith)
+		TRansition 1.0.26 (transition)
+		TRender 1.0.17 (trender)
+		Xaero's Minimap 26.6.0 (xaerominimap)
+		Xaero's World Map 1.47.0 (xaeroworldmap)
+		XaeroLib 1.7.3 (xaerolib)
+		YUNG's API 1.21.1-NeoForge-5.1.9 (yungsapi)
+		YUNG's Better Desert Temples 1.21.1-NeoForge-4.1.5 (betterdeserttemples)
+		YUNG's Better Dungeons 1.21.1-NeoForge-5.1.4 (betterdungeons)
+		YUNG's Better Jungle Temples 1.21.1-NeoForge-3.1.2 (betterjungletemples)
+		YUNG's Better Mineshafts 1.21.1-NeoForge-5.1.1 (bettermineshafts)
+		YUNG's Better Nether Fortresses 1.21.1-NeoForge-3.1.5 (betterfortresses)
+		YUNG's Better Ocean Monuments 1.21.1-NeoForge-4.1.2 (betteroceanmonuments)
+		YUNG's Better Strongholds 1.21.1-NeoForge-5.1.3 (betterstrongholds)
+		YUNG's Better Witch Huts 1.21.1-NeoForge-4.1.1 (betterwitchhuts)
+		Сюжет 0.1.0 (adept_story)
+		Ядро 0.1.0 (adept_core)
+[09Nov2026 19:00:32.555] [main/INFO] [net.neoforged.fml.loading.FMLServiceProvider/CORE]: Loading coremod script-engine for [xaeroworldmap, xaerominimap]
+[09Nov2026 19:00:34.345] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
+[09Nov2026 19:00:34.347] [main/INFO] [mixin/]: Compatibility level set to JAVA_21
+[09Nov2026 19:00:34.450] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgeclientdev' with arguments [--version, 21.1.264, --gameDir, ., --assetsDir, /home/runner/.gradle/caches/neoformruntime/assets, --assetIndex, 17, --width, 1280, --height, 720]
+[09Nov2026 19:00:34.501] [main/WARN] [mixin/]: Reference map 'betterdungeons.refmap.json' for betterdungeons.mixins.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.502] [main/WARN] [mixin/]: Reference map 'mowziesmobs.refmap.json' for mowziesmobs.mixins.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.504] [main/WARN] [mixin/]: Reference map 'betterwitchhuts.refmap.json' for betterwitchhuts.mixins.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.506] [main/WARN] [mixin/]: Reference map 'geckolib.refmap.json' for geckolib.mixins.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.535] [main/INFO] [LithiumConfig/]: Option 'mixin.experimental.entity.block_caching.suffocation' requires 'mixin.util.block_tracking=true' but found 'false'. Setting 'mixin.experimental.entity.block_caching.suffocation=false'.
+[09Nov2026 19:00:34.536] [main/INFO] [LithiumConfig/]: Option 'mixin.experimental.entity.block_caching.block_support' requires 'mixin.util.block_tracking=true' but found 'false'. Setting 'mixin.experimental.entity.block_caching.block_support=false'.
+[09Nov2026 19:00:34.536] [main/INFO] [LithiumConfig/]: Option 'mixin.experimental.entity.block_caching.block_touching' requires 'mixin.util.block_tracking=true' but found 'false'. Setting 'mixin.experimental.entity.block_caching.block_touching=false'.
+[09Nov2026 19:00:34.537] [main/INFO] [LithiumConfig/]: Option 'mixin.experimental.entity.block_caching' requires 'mixin.util.block_tracking=true' but found 'false'. Setting 'mixin.experimental.entity.block_caching=false'.
+[09Nov2026 19:00:34.538] [main/INFO] [Lithium/]: Loaded configuration file for Lithium: 148 options available, 0 override(s) found
+[09Nov2026 19:00:34.542] [main/WARN] [mixin/]: Reference map 'xaerolib.refmap.json' for xaerolib.mixins.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.543] [main/WARN] [mixin/]: Reference map 'betteroceanmonuments.refmap.json' for betteroceanmonuments.mixins.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.546] [main/WARN] [mixin/]: Reference map 'xaeroworldmap.refmap.json' for xaeroworldmap.mixins.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.547] [main/WARN] [mixin/]: Reference map 'controlling.refmap.json' for controlling.mixins.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.548] [main/WARN] [mixin/]: Reference map 'controlling.refmap.json' for controlling.neoforge.mixins.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.667] [main/INFO] [ModernFix/]: Loaded configuration file for ModernFix 5.27.27+mc1.21.1: 89 options available, 0 override(s) found
+[09Nov2026 19:00:34.671] [main/INFO] [ModernFix/]: Applying Nashorn fix
+[09Nov2026 19:00:34.672] [main/INFO] [ModernFix/]: Configuring Minecraft's max.bg.threads option with 1 threads
+[09Nov2026 19:00:34.680] [main/WARN] [mixin/]: Reference map 'yungsapi.refmap.json' for yungsapi.mixins.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.683] [main/WARN] [mixin/]: Reference map 'iris.refmap.json' for mixins.iris.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.684] [main/WARN] [mixin/]: Reference map 'iris.refmap.json' for mixins.iris.fantastic.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.685] [main/WARN] [mixin/]: Reference map 'iris.refmap.json' for mixins.iris.vertexformat.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.686] [main/WARN] [mixin/]: Reference map 'iris.refmap.json' for iris-batched-entity-rendering.mixins.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.686] [main/WARN] [mixin/]: Reference map 'iris.refmap.json' for mixins.iris.compat.sodium.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.689] [main/WARN] [mixin/]: Reference map 'betterdeserttemples.refmap.json' for betterdeserttemples.mixins.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.703] [main/INFO] [Sodium/]: Loaded configuration file for Sodium: 45 options available, 1 override(s) found
+[09Nov2026 19:00:34.706] [main/WARN] [mixin/]: Reference map 'betterfortresses.refmap.json' for betterfortresses.mixins.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.712] [main/WARN] [mixin/]: Reference map 'curios.refmap.json' for curios.neoforge.mixins.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.713] [main/WARN] [mixin/]: Reference map 'curios.refmap.json' for curios.mixins.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.713] [main/WARN] [mixin/]: Reference map 'xaerominimap.refmap.json' for xaerohud.mixins.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.714] [main/WARN] [mixin/]: Reference map 'xaerominimap.refmap.json' for xaerominimap.mixins.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.717] [main/WARN] [mixin/]: Reference map 'searchables.refmap.json' for searchables.mixins.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.718] [main/WARN] [mixin/]: Reference map 'searchables.refmap.json' for searchables.neoforge.mixins.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.719] [main/WARN] [mixin/]: Reference map 'entityculling.refmap.mixins.json' for entityculling.mixins.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.720] [main/WARN] [mixin/]: Reference map 'betterstrongholds.refmap.json' for betterstrongholds.mixins.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.750] [main/WARN] [mixin/]: Reference map 'ipnext.refmap.json' for mixins.ipnext.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.769] [main/WARN] [mixin/]: Reference map '${refmap_target}refmap.json' for ferritecore.predicates.mixin.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.772] [main/WARN] [mixin/]: Reference map '${refmap_target}refmap.json' for ferritecore.fastmap.mixin.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.777] [main/WARN] [mixin/]: Reference map '${refmap_target}refmap.json' for ferritecore.mrl.mixin.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.780] [main/WARN] [mixin/]: Reference map '${refmap_target}refmap.json' for ferritecore.dedupmultipart.mixin.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.782] [main/WARN] [mixin/]: Reference map '${refmap_target}refmap.json' for ferritecore.blockstatecache.mixin.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.783] [main/WARN] [mixin/]: Reference map '${refmap_target}refmap.json' for ferritecore.dedupbakedquad.mixin.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.786] [main/WARN] [mixin/]: Reference map '${refmap_target}refmap.json' for ferritecore.threaddetec.mixin.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.787] [main/WARN] [mixin/]: Reference map '${refmap_target}refmap.json' for ferritecore.modelsides.mixin.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.788] [main/WARN] [mixin/]: Reference map '${refmap_target}refmap.json' for ferritecore.datacomponents.mixin.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.789] [main/WARN] [mixin/]: Reference map '${refmap_target}refmap.json' for ferritecore.accessors.mixin.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.792] [main/WARN] [mixin/]: Reference map 'bettermineshafts.refmap.json' for bettermineshafts.mixins.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:34.792] [main/WARN] [mixin/]: Reference map 'betterjungletemples.refmap.json' for betterjungletemples.mixins.json could not be read. If this is a development environment you can ignore this message
+[09Nov2026 19:00:35.403] [main/WARN] [mixin/]: Error loading class: com/evandev/fieldguide/client/gui/util/EntryRenderHelper (java.lang.ClassNotFoundException: com.evandev.fieldguide.client.gui.util.EntryRenderHelper)
+[09Nov2026 19:00:35.403] [main/WARN] [mixin/]: @Mixin target com.evandev.fieldguide.client.gui.util.EntryRenderHelper was not found naturalist.fieldguide.mixins.json:EntryRenderHelperMixin from mod naturalist
+[09Nov2026 19:00:35.405] [main/WARN] [mixin/]: Error loading class: com/evandev/fieldguide/client/gui/screens/FieldGuideEntryScreen (java.lang.ClassNotFoundException: com.evandev.fieldguide.client.gui.screens.FieldGuideEntryScreen)
+[09Nov2026 19:00:35.405] [main/WARN] [mixin/]: @Mixin target com.evandev.fieldguide.client.gui.screens.FieldGuideEntryScreen was not found naturalist.fieldguide.mixins.json:FieldGuideEntryScreenMixin from mod naturalist
+[09Nov2026 19:00:35.406] [main/WARN] [mixin/]: Error loading class: com/evandev/fieldguide/client/gui/util/IconCacheManager (java.lang.ClassNotFoundException: com.evandev.fieldguide.client.gui.util.IconCacheManager)
+[09Nov2026 19:00:35.406] [main/WARN] [mixin/]: @Mixin target com.evandev.fieldguide.client.gui.util.IconCacheManager was not found naturalist.fieldguide.mixins.json:IconCacheManagerMixin from mod naturalist
+[09Nov2026 19:00:36.058] [main/WARN] [mixin/]: Error loading class: com/portingdeadmods/cable_facades/events/GameClientEvents$2 (java.lang.ClassNotFoundException: com.portingdeadmods.cable_facades.events.GameClientEvents$2)
+[09Nov2026 19:00:36.060] [main/WARN] [mixin/]: Error loading class: com/direwolf20/justdirethings/client/renderers/OurRenderTypes (java.lang.ClassNotFoundException: com.direwolf20.justdirethings.client.renderers.OurRenderTypes)
+[09Nov2026 19:00:36.060] [main/WARN] [mixin/]: Error loading class: mekanism/client/render/entity/RenderFlame (java.lang.ClassNotFoundException: mekanism.client.render.entity.RenderFlame)
+[09Nov2026 19:00:36.061] [main/WARN] [mixin/]: Error loading class: mekanism/client/render/armor/MekaSuitArmor (java.lang.ClassNotFoundException: mekanism.client.render.armor.MekaSuitArmor)
+[09Nov2026 19:00:36.063] [main/WARN] [mixin/]: Error loading class: mekanism/client/render/lib/effect/BillboardingEffectRenderer (java.lang.ClassNotFoundException: mekanism.client.render.lib.effect.BillboardingEffectRenderer)
+[09Nov2026 19:00:36.066] [main/WARN] [mixin/]: Error loading class: blusunrize/immersiveengineering/client/utils/IEGLShaders (java.lang.ClassNotFoundException: blusunrize.immersiveengineering.client.utils.IEGLShaders)
+[09Nov2026 19:00:36.091] [main/WARN] [Sodium/]: Force-disabling mixin 'features.render.world.sky.ClientLevelMixin' as rule 'mixin.features.render.world.sky' (added by mods [iris]) disables it and children
+[09Nov2026 19:00:36.092] [main/WARN] [Sodium/]: Force-disabling mixin 'features.render.world.sky.FogRendererMixin' as rule 'mixin.features.render.world.sky' (added by mods [iris]) disables it and children
+[09Nov2026 19:00:36.093] [main/WARN] [Sodium/]: Force-disabling mixin 'features.render.world.sky.LevelRendererMixin' as rule 'mixin.features.render.world.sky' (added by mods [iris]) disables it and children
+[09Nov2026 19:00:36.174] [main/WARN] [mixin/]: Error loading class: mezz/jei/library/load/PluginCaller (java.lang.ClassNotFoundException: mezz.jei.library.load.PluginCaller)
+[09Nov2026 19:00:36.371] [main/WARN] [IMixinConfigPlugin/]: Inventory Profiles Next: Doing our own dependency resolving! Because Forge is being Forge....: https://github.com/MinecraftForge/MinecraftForge/issues/9088
+[09Nov2026 19:00:36.373] [main/WARN] [mixin/]: Error loading class: dev/isxander/controlify/virtualmouse/VirtualMouseHandler (java.lang.ClassNotFoundException: dev.isxander.controlify.virtualmouse.VirtualMouseHandler)
+[09Nov2026 19:00:36.373] [main/WARN] [mixin/]: @Mixin target dev.isxander.controlify.virtualmouse.VirtualMouseHandler was not found mixins.ipnext.json:MixinVirtualMouseHandler from mod inventoryprofilesnext
+[09Nov2026 19:00:36.382] [main/WARN] [mixin/]: Error loading class: de/maxhenkel/easyvillagers/blocks/tileentity/TraderTileentityBase (java.lang.ClassNotFoundException: de.maxhenkel.easyvillagers.blocks.tileentity.TraderTileentityBase)
+[09Nov2026 19:00:36.382] [main/WARN] [mixin/]: @Mixin target de.maxhenkel.easyvillagers.blocks.tileentity.TraderTileentityBase was not found mixins.ipnext.json:MixinTraderTileEntityBase from mod inventoryprofilesnext
+[09Nov2026 19:00:36.599] [main/INFO] [MixinExtras|Service/]: Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.5.5).
+[09Nov2026 19:00:39.017] [Datafixer Bootstrap/INFO] [com.mojang.datafixers.DataFixerBuilder/]: 229 Datafixer optimizations took 375 milliseconds
+[09Nov2026 19:00:39.265] [pool-7-thread-1/INFO] [net.minecraft.server.Bootstrap/]: ModernFix reached bootstrap stage (10.33 s after launch)
+[09Nov2026 19:00:40.462] [pool-7-thread-1/WARN] [mixin/]: Method overwrite conflict for getTemperature in modernfix-modernfix.mixins.json:perf.remove_biome_temperature_cache.BiomeMixin from mod modernfix, previously written by net.caffeinemc.mods.lithium.mixin.world.temperature_cache.BiomeMixin. Skipping method.
+[09Nov2026 19:00:43.070] [pool-7-thread-1/INFO] [net.minecraft.server.Bootstrap/]: Vanilla bootstrap took 3803 milliseconds
+[09Nov2026 19:00:44.288] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, location] and [teleport, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
+[09Nov2026 19:00:44.289] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, location] and [teleport, targets] with inputs: [0.1 -0.5 .9, 0 0 0]
+[09Nov2026 19:00:44.291] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, destination] and [teleport, targets] with inputs: [Player, 0123, @e, dd12be42-52a9-4a91-a8a1-11c01849e498]
+[09Nov2026 19:00:44.293] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, targets] and [teleport, destination] with inputs: [Player, 0123, dd12be42-52a9-4a91-a8a1-11c01849e498]
+[09Nov2026 19:00:44.294] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, targets, location] and [teleport, targets, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
+[09Nov2026 19:00:44.456] [Render thread/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/home/runner/work/chaos-adept/chaos-adept/story/build/moddev/artifacts/neoforge-21.1.264.jar%23220!/assets/.mcassetsroot' uses unexpected schema
+[09Nov2026 19:00:44.456] [Render thread/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/home/runner/work/chaos-adept/chaos-adept/story/build/moddev/artifacts/neoforge-21.1.264.jar%23220!/data/.mcassetsroot' uses unexpected schema
+[09Nov2026 19:00:44.479] [Render thread/INFO] [com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService/]: Environment: Environment[sessionHost=https://sessionserver.mojang.com, servicesHost=https://api.minecraftservices.com, name=PROD]
+[09Nov2026 19:00:44.489] [Render thread/INFO] [net.minecraft.client.Minecraft/]: Setting user: Dev
+[09Nov2026 19:00:44.638] [Render thread/INFO] [net.minecraft.client.Minecraft/]: Backend library: LWJGL version 3.3.3+5
+[09Nov2026 19:00:44.678] [Render thread/INFO] [com.mojang.blaze3d.platform.Window/]: OpenGL Vendor: Mesa
+[09Nov2026 19:00:44.679] [Render thread/INFO] [com.mojang.blaze3d.platform.Window/]: OpenGL Renderer: llvmpipe (LLVM 21.1.8, 256 bits)
+[09Nov2026 19:00:44.679] [Render thread/INFO] [com.mojang.blaze3d.platform.Window/]: OpenGL Version: 4.5 (Core Profile) Mesa 26.0.8-1ubuntu0.3
+[09Nov2026 19:00:44.744] [Render thread/INFO] [ImmediatelyFast/]: Initializing ImmediatelyFast 1.6.15+1.21.1 on llvmpipe (LLVM 21.1.8, 256 bits) (Mesa) with OpenGL 4.5 (Core Profile) Mesa 26.0.8-1ubuntu0.3
+[09Nov2026 19:00:44.745] [Render thread/INFO] [ImmediatelyFast/]: Found Iris 1.8.14-beta.1+mc1.21.1. Enabling compatibility.
+[09Nov2026 19:00:45.163] [Render thread/INFO] [Iris/]: Debug functionality is disabled.
+[09Nov2026 19:00:45.167] [Render thread/INFO] [Iris/]: OpenGL 4.5 detected, enabling DSA.
+[09Nov2026 19:00:45.280] [ForkJoinPool.commonPool-worker-2/WARN] [Iris/]: [Iris Update Check] This version doesn't have an update index, skipping.
+[09Nov2026 19:00:45.401] [Render thread/INFO] [Iris/]: Profile: medium (+0 options changed by user)
+[09Nov2026 19:00:45.787] [Render thread/WARN] [Iris/]: Warning: the block ID map entry "betterendforge::lumecorn:shape=light_top_middle" could not be fully parsed:
+[09Nov2026 19:00:45.789] [Render thread/WARN] [Iris/]: - Block state property filters must be of the form "key=value", but lumecorn is not of that form!
+[09Nov2026 19:00:45.789] [Render thread/WARN] [Iris/]: Warning: the block ID map entry "betterendforge::lumecorn:shape=light_middle" could not be fully parsed:
+[09Nov2026 19:00:45.789] [Render thread/WARN] [Iris/]: - Block state property filters must be of the form "key=value", but lumecorn is not of that form!
+[09Nov2026 19:00:45.789] [Render thread/WARN] [Iris/]: Warning: the block ID map entry "betterendforge::lumecorn:shape=light_bottom" could not be fully parsed:
+[09Nov2026 19:00:45.789] [Render thread/WARN] [Iris/]: - Block state property filters must be of the form "key=value", but lumecorn is not of that form!
+[09Nov2026 19:00:45.789] [Render thread/WARN] [Iris/]: Warning: the block ID map entry "betterendforge::purple_polypore" could not be fully parsed:
+[09Nov2026 19:00:45.789] [Render thread/WARN] [Iris/]: - Block state property filters must be of the form "key=value", but purple_polypore is not of that form!
+[09Nov2026 19:00:45.790] [Render thread/WARN] [Iris/]: Warning: the block ID map entry "betterendforge::bulb_vine:shape=bottom" could not be fully parsed:
+[09Nov2026 19:00:45.790] [Render thread/WARN] [Iris/]: - Block state property filters must be of the form "key=value", but bulb_vine is not of that form!
+[09Nov2026 19:00:45.796] [Render thread/INFO] [Iris/]: Using shaderpack: MakeUp-UltraFast-9.6.zip
+[09Nov2026 19:00:46.064] [modloading-worker-0/INFO] [xaero.lib.XaeroLib/]: Registering common data for channel xaerolib:main!
+[09Nov2026 19:00:46.079] [modloading-worker-0/INFO] [xaero.lib.XaeroLib/]: Registering client data for channel xaerolib:main!
+[09Nov2026 19:00:46.099] [modloading-worker-0/INFO] [xaero.lib.XaeroLib/]: Loading primary common config for channel xaerolib:main!
+[09Nov2026 19:00:46.104] [modloading-worker-0/INFO] [xaero.lib.XaeroLib/]: Loading server config profiles for channel xaerolib:main!
+[09Nov2026 19:00:46.111] [modloading-worker-0/INFO] [xaero.lib.XaeroLib/]: Loading primary client config for channel xaerolib:main!
+[09Nov2026 19:00:46.111] [modloading-worker-0/INFO] [xaero.lib.XaeroLib/]: Loading client config profiles for channel xaerolib:main!
+[09Nov2026 19:00:46.166] [modloading-worker-0/INFO] [STDOUT/]: [dev.tr7zw.trender.gui.impl.client.LibGuiClient:onInitializeClient:37]: [TRender] Initializing Client...
+[09Nov2026 19:00:46.194] [modloading-worker-0/INFO] [xaero.map.WorldMap/]: Registering common data for channel xaeroworldmap:main!
+[09Nov2026 19:00:46.242] [modloading-worker-0/INFO] [xaero.map.WorldMap/]: Registering client data for channel xaeroworldmap:main!
+[09Nov2026 19:00:46.266] [modloading-worker-0/INFO] [xaero.map.WorldMap/]: Loading primary common config for channel xaeroworldmap:main!
+[09Nov2026 19:00:46.267] [modloading-worker-0/INFO] [xaero.map.WorldMap/]: Loading server config profiles for channel xaeroworldmap:main!
+[09Nov2026 19:00:46.269] [modloading-worker-0/INFO] [xaero.map.WorldMap/]: Loading primary client config for channel xaeroworldmap:main!
+[09Nov2026 19:00:46.269] [modloading-worker-0/INFO] [xaero.map.WorldMap/]: Loading client config profiles for channel xaeroworldmap:main!
+[09Nov2026 19:00:46.322] [modloading-worker-0/INFO] [net.neoforged.neoforge.common.NeoForgeMod/NEOFORGE-MOD]: NeoForge mod loading, version 21.1.264, for MC 1.21.1
+[09Nov2026 19:00:46.483] [modloading-worker-0/INFO] [betterdeserttemples/]: Creating directory for additional Better Desert Temples configuration at /home/runner/work/chaos-adept/chaos-adept/story/run/fullpack-client/config/betterdeserttemples/neoforge-1_21
+[09Nov2026 19:00:46.546] [modloading-worker-0/INFO] [betterfortresses/]: Creating directory for additional Better Nether Fortresses configuration at /home/runner/work/chaos-adept/chaos-adept/story/run/fullpack-client/config/betterfortresses/neoforge-1_21
+[09Nov2026 19:00:46.635] [modloading-worker-0/INFO] [STDOUT/]: [yalter.mousetweaks.Logger:Log:6]: [Mouse Tweaks] Main.initialize()
+[09Nov2026 19:00:46.647] [modloading-worker-0/INFO] [STDOUT/]: [yalter.mousetweaks.Logger:Log:6]: [Mouse Tweaks] Generating the config file at: /home/runner/work/chaos-adept/chaos-adept/story/run/fullpack-client/./config/MouseTweaks.cfg
+[09Nov2026 19:00:46.650] [modloading-worker-0/INFO] [STDOUT/]: [yalter.mousetweaks.Logger:Log:6]: [Mouse Tweaks] Created the config file.
+[09Nov2026 19:00:46.650] [modloading-worker-0/INFO] [STDOUT/]: [yalter.mousetweaks.Logger:Log:6]: [Mouse Tweaks] Initialized.
+[09Nov2026 19:00:46.757] [modloading-worker-0/INFO] [xaero.hud.minimap.MinimapLogs/]: Xaero's Minimap: World Map found!
+[09Nov2026 19:00:46.758] [modloading-worker-0/INFO] [xaero.hud.minimap.MinimapLogs/]: No Optifine!
+[09Nov2026 19:00:46.758] [modloading-worker-0/INFO] [xaero.hud.minimap.MinimapLogs/]: Xaero's Minimap: No Vivecraft!
+[09Nov2026 19:00:46.760] [modloading-worker-0/INFO] [xaero.hud.minimap.MinimapLogs/]: Xaero's Minimap: Iris found!
+[09Nov2026 19:00:46.768] [modloading-worker-0/INFO] [xaero.common.HudMod/]: Registering common data for channel xaerominimap:main!
+[09Nov2026 19:00:46.786] [modloading-worker-0/INFO] [xaero.common.HudMod/]: Registering client data for channel xaerominimap:main!
+[09Nov2026 19:00:46.801] [modloading-worker-0/INFO] [xaero.common.HudMod/]: Loading primary common config for channel xaerominimap:main!
+[09Nov2026 19:00:46.804] [modloading-worker-0/INFO] [xaero.common.HudMod/]: Loading server config profiles for channel xaerominimap:main!
+[09Nov2026 19:00:46.804] [modloading-worker-0/INFO] [xaero.common.HudMod/]: Loading primary client config for channel xaerominimap:main!
+[09Nov2026 19:00:46.805] [modloading-worker-0/INFO] [xaero.common.HudMod/]: Loading client config profiles for channel xaerominimap:main!
+[09Nov2026 19:00:46.865] [modloading-worker-0/INFO] [ru.adept.core.AdeptCore/]: Ядро загружено, версия 0.1.0
+[09Nov2026 19:00:46.958] [modloading-worker-0/INFO] [ru.adept.story.AdeptStory/]: Сюжет загружен, версия 0.1.0
+[09Nov2026 19:00:47.050] [modloading-worker-0/INFO] [betterstrongholds/]: Creating directory for additional Better Strongholds configuration at /home/runner/work/chaos-adept/chaos-adept/story/run/fullpack-client/config/betterstrongholds/neoforge-1_21
+[09Nov2026 19:00:47.132] [modloading-worker-0/INFO] [Inventory Profiles Next/]: [Inventory Profiles Next] Inventory Profiles Next - init in Kotlin
+[09Nov2026 19:00:47.155] [modloading-worker-0/INFO] [thedarkcolour.kotlinforforge.neoforge.test.KotlinForForge/]: Kotlin For Forge Enabled!
+[09Nov2026 19:00:48.019] [modloading-sync-worker/WARN] [net.neoforged.fml.config.ConfigTracker/CONFIG]: Configuration file /home/runner/work/chaos-adept/chaos-adept/story/run/fullpack-client/config/mowziesmobs-common.toml is not correct. Correcting
+[09Nov2026 19:00:48.051] [modloading-sync-worker/WARN] [net.neoforged.fml.config.ConfigTracker/CONFIG]: Configuration file /home/runner/work/chaos-adept/chaos-adept/story/run/fullpack-client/config/improvedmobs/common.toml is not correct. Correcting
+[09Nov2026 19:00:48.534] [Render thread/INFO] [Iris/]: Hardware information:
+[09Nov2026 19:00:48.535] [Render thread/INFO] [Iris/]: CPU: 4x AMD EPYC 9V74 80-Core Processor
+[09Nov2026 19:00:48.535] [Render thread/INFO] [Iris/]: GPU: llvmpipe (LLVM 21.1.8, 256 bits) (Supports OpenGL 4.5 (Core Profile) Mesa 26.0.8-1ubuntu0.3)
+[09Nov2026 19:00:48.535] [Render thread/INFO] [Iris/]: OS: Linux (7.0.0-1019-azure)
+[09Nov2026 19:00:48.722] [Render thread/INFO] [net.neoforged.neoforge.gametest.GameTestHooks/]: Enabled Gametest Namespaces: []
+[09Nov2026 19:00:49.215] [Render thread/WARN] [ModernFix/]: Failed to initialize Linux Narrator. Make sure you have libflite installed!
+[09Nov2026 19:00:49.238] [Render thread/INFO] [net.minecraft.server.packs.resources.ReloadableResourceManager/]: Reloading ResourceManager: vanilla, mod_resources, mod/sodium, mod/betterdungeons, mod/mowziesmobs, mod/fabric_renderer_api_v1, mod/betterwitchhuts, mod/geckolib, mod/lithostitched, mod/naturalist, mod/lithium, mod/xaerolib, mod/betteroceanmonuments, mod/apollib, mod/trender, mod/xaeroworldmap, mod/controlling, mod/neoforge, mod/modernfix, mod/fabric_block_view_api_v2, mod/yungsapi, mod/iris, mod/adorabuild_structures, mod/betterdeserttemples, mod/bosses_of_mass_destruction, mod/terralith, mod/player_animation_library, mod/betterfortresses, mod/cloth_config, mod/tectonic, mod/tenshilib, mod/emi, mod/libipn, mod/fabric_api_base, mod/mousetweaks, mod/jade, mod/born_in_chaos_v1, mod/spark, mod/kotlinforforge, mod/curios, mod/xaerominimap, mod/cerbons_api, mod/searchables, mod/entityculling, mod/adept_core, mod/adept_story, mod/betterstrongholds, mod/immediatelyfast, mod/inventoryprofilesnext, mod/appleskin, mod/ferritecore, mod/transition, mod/fabric_rendering_data_attachment_v1, mod/improvedmobs, mod/bettermineshafts, mod/betterjungletemples
+[09Nov2026 19:00:49.263] [Worker-ResourceReload-2/INFO] [xaero.lib.XaeroLib/]: Loading XaeroLib common 1/2!
+[09Nov2026 19:00:49.351] [Render thread/INFO] [com.cerbon.bosses_of_mass_destruction.util.BMDConstants/]: NeoForge only mixins are working for Bosses of Mass Destruction!
+[09Nov2026 19:00:49.353] [Render thread/INFO] [com.cerbon.bosses_of_mass_destruction.util.BMDConstants/]: Common mixins are working for Bosses of Mass Destruction on NeoForge!
+[09Nov2026 19:00:49.398] [NeoForge Version Check/INFO] [net.neoforged.fml.VersionChecker/]: [controlling] Starting version check at https://updates.blamejared.com/get?n=controlling&gv=1.21.1&ml=neoforge
+[09Nov2026 19:00:49.573] [Worker-ResourceReload-1/ERROR] [GeckoLib/]: Unable to parse animation: idle
+	-> Failed to parse expression '-'
+		-> Unable to parse compiled symbols from expression: [Left[-]]
+[09Nov2026 19:00:49.575] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: Geckolib.CompoundException: Unable to parse animation: idle
+	-> Failed to parse expression '-'
+		-> Unable to parse compiled symbols from expression: [Left[-]]
+[09Nov2026 19:00:49.575] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.math.MathParser.parseSymbols(MathParser.java:427)
+[09Nov2026 19:00:49.575] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.math.MathParser.compileExpression(MathParser.java:234)
+[09Nov2026 19:00:49.575] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.math.MathParser.compileMolang(MathParser.java:226)
+[09Nov2026 19:00:49.576] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.math.MathParser.parseJson(MathParser.java:171)
+[09Nov2026 19:00:49.576] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.json.typeadapter.BakedAnimationsAdapter.buildKeyframeStack(BakedAnimationsAdapter.java:203)
+[09Nov2026 19:00:49.576] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.json.typeadapter.BakedAnimationsAdapter.bakeBoneAnimations(BakedAnimationsAdapter.java:78)
+[09Nov2026 19:00:49.576] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.json.typeadapter.BakedAnimationsAdapter.bakeAnimation(BakedAnimationsAdapter.java:61)
+[09Nov2026 19:00:49.576] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.json.typeadapter.BakedAnimationsAdapter.deserialize(BakedAnimationsAdapter.java:41)
+[09Nov2026 19:00:49.576] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.json.typeadapter.BakedAnimationsAdapter.deserialize(BakedAnimationsAdapter.java:31)
+[09Nov2026 19:00:49.576] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.internal.bind.TreeTypeAdapter.read(TreeTypeAdapter.java:76)
+[09Nov2026 19:00:49.576] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.Gson.fromJson(Gson.java:1227)
+[09Nov2026 19:00:49.578] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.Gson.fromJson(Gson.java:1329)
+[09Nov2026 19:00:49.579] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.Gson.fromJson(Gson.java:1271)
+[09Nov2026 19:00:49.579] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.FileLoader.loadAnimationsFile(FileLoader.java:36)
+[09Nov2026 19:00:49.579] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.cache.GeckoLibCache.lambda$loadAnimations$2(GeckoLibCache.java:79)
+[09Nov2026 19:00:49.579] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.cache.GeckoLibCache.lambda$loadResources$8(GeckoLibCache.java:121)
+[09Nov2026 19:00:49.579] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768)
+[09Nov2026 19:00:49.579] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760)
+[09Nov2026 19:00:49.579] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+[09Nov2026 19:00:49.579] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312)
+[09Nov2026 19:00:49.580] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843)
+[09Nov2026 19:00:49.580] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808)
+[09Nov2026 19:00:49.580] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188)
+[09Nov2026 19:00:49.586] [Worker-ResourceReload-1/ERROR] [GeckoLib/]: Unable to parse animation: idle
+	-> Failed to parse expression '-'
+		-> Unable to parse compiled symbols from expression: [Left[-]]
+[09Nov2026 19:00:49.587] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: Geckolib.CompoundException: Unable to parse animation: idle
+	-> Failed to parse expression '-'
+		-> Unable to parse compiled symbols from expression: [Left[-]]
+[09Nov2026 19:00:49.587] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.math.MathParser.parseSymbols(MathParser.java:427)
+[09Nov2026 19:00:49.587] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.math.MathParser.compileExpression(MathParser.java:234)
+[09Nov2026 19:00:49.587] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.math.MathParser.compileMolang(MathParser.java:226)
+[09Nov2026 19:00:49.587] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.math.MathParser.parseJson(MathParser.java:171)
+[09Nov2026 19:00:49.590] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.json.typeadapter.BakedAnimationsAdapter.buildKeyframeStack(BakedAnimationsAdapter.java:203)
+[09Nov2026 19:00:49.591] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.json.typeadapter.BakedAnimationsAdapter.bakeBoneAnimations(BakedAnimationsAdapter.java:78)
+[09Nov2026 19:00:49.591] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.json.typeadapter.BakedAnimationsAdapter.bakeAnimation(BakedAnimationsAdapter.java:61)
+[09Nov2026 19:00:49.591] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.json.typeadapter.BakedAnimationsAdapter.deserialize(BakedAnimationsAdapter.java:41)
+[09Nov2026 19:00:49.591] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.json.typeadapter.BakedAnimationsAdapter.deserialize(BakedAnimationsAdapter.java:31)
+[09Nov2026 19:00:49.591] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.internal.bind.TreeTypeAdapter.read(TreeTypeAdapter.java:76)
+[09Nov2026 19:00:49.591] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.Gson.fromJson(Gson.java:1227)
+[09Nov2026 19:00:49.591] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.Gson.fromJson(Gson.java:1329)
+[09Nov2026 19:00:49.591] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.Gson.fromJson(Gson.java:1271)
+[09Nov2026 19:00:49.593] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.FileLoader.loadAnimationsFile(FileLoader.java:36)
+[09Nov2026 19:00:49.593] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.cache.GeckoLibCache.lambda$loadAnimations$2(GeckoLibCache.java:79)
+[09Nov2026 19:00:49.593] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.cache.GeckoLibCache.lambda$loadResources$8(GeckoLibCache.java:121)
+[09Nov2026 19:00:49.593] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768)
+[09Nov2026 19:00:49.593] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760)
+[09Nov2026 19:00:49.593] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+[09Nov2026 19:00:49.593] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312)
+[09Nov2026 19:00:49.594] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843)
+[09Nov2026 19:00:49.594] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808)
+[09Nov2026 19:00:49.594] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188)
+[09Nov2026 19:00:49.616] [Worker-ResourceReload-1/ERROR] [GeckoLib/]: Unable to parse animation: idle
+	-> Failed to parse expression '-'
+		-> Unable to parse compiled symbols from expression: [Left[-]]
+[09Nov2026 19:00:49.619] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: Geckolib.CompoundException: Unable to parse animation: idle
+	-> Failed to parse expression '-'
+		-> Unable to parse compiled symbols from expression: [Left[-]]
+[09Nov2026 19:00:49.619] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.math.MathParser.parseSymbols(MathParser.java:427)
+[09Nov2026 19:00:49.619] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.math.MathParser.compileExpression(MathParser.java:234)
+[09Nov2026 19:00:49.619] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.math.MathParser.compileMolang(MathParser.java:226)
+[09Nov2026 19:00:49.620] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.math.MathParser.parseJson(MathParser.java:171)
+[09Nov2026 19:00:49.620] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.json.typeadapter.BakedAnimationsAdapter.buildKeyframeStack(BakedAnimationsAdapter.java:203)
+[09Nov2026 19:00:49.620] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.json.typeadapter.BakedAnimationsAdapter.bakeBoneAnimations(BakedAnimationsAdapter.java:78)
+[09Nov2026 19:00:49.620] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.json.typeadapter.BakedAnimationsAdapter.bakeAnimation(BakedAnimationsAdapter.java:61)
+[09Nov2026 19:00:49.621] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.json.typeadapter.BakedAnimationsAdapter.deserialize(BakedAnimationsAdapter.java:41)
+[09Nov2026 19:00:49.621] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.json.typeadapter.BakedAnimationsAdapter.deserialize(BakedAnimationsAdapter.java:31)
+[09Nov2026 19:00:49.622] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.internal.bind.TreeTypeAdapter.read(TreeTypeAdapter.java:76)
+[09Nov2026 19:00:49.622] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.Gson.fromJson(Gson.java:1227)
+[09Nov2026 19:00:49.622] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.Gson.fromJson(Gson.java:1329)
+[09Nov2026 19:00:49.622] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.Gson.fromJson(Gson.java:1271)
+[09Nov2026 19:00:49.622] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.FileLoader.loadAnimationsFile(FileLoader.java:36)
+[09Nov2026 19:00:49.622] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.cache.GeckoLibCache.lambda$loadAnimations$2(GeckoLibCache.java:79)
+[09Nov2026 19:00:49.622] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.cache.GeckoLibCache.lambda$loadResources$8(GeckoLibCache.java:121)
+[09Nov2026 19:00:49.622] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768)
+[09Nov2026 19:00:49.622] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760)
+[09Nov2026 19:00:49.624] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+[09Nov2026 19:00:49.624] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312)
+[09Nov2026 19:00:49.624] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843)
+[09Nov2026 19:00:49.624] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808)
+[09Nov2026 19:00:49.624] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188)
+[09Nov2026 19:00:49.892] [Worker-ResourceReload-1/ERROR] [GeckoLib/]: Unable to parse animation: attack_single
+	-> Failed to parse expression '27.5+math.cos((query.anim_time-0.5)*180)*-4-nan'
+		-> Unable to parse compiled symbols from expression: [Left[nan]]
+[09Nov2026 19:00:49.893] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: Geckolib.CompoundException: Unable to parse animation: attack_single
+	-> Failed to parse expression '27.5+math.cos((query.anim_time-0.5)*180)*-4-nan'
+		-> Unable to parse compiled symbols from expression: [Left[nan]]
+[09Nov2026 19:00:49.893] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.math.MathParser.parseSymbols(MathParser.java:427)
+[09Nov2026 19:00:49.893] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.math.MathParser.compileCalculation(MathParser.java:554)
+[09Nov2026 19:00:49.893] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.math.MathParser.compileValue(MathParser.java:451)
+[09Nov2026 19:00:49.893] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.math.MathParser.parseSymbols(MathParser.java:422)
+[09Nov2026 19:00:49.894] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.math.MathParser.compileExpression(MathParser.java:234)
+[09Nov2026 19:00:49.895] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.math.MathParser.compileMolang(MathParser.java:226)
+[09Nov2026 19:00:49.895] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.math.MathParser.parseJson(MathParser.java:171)
+[09Nov2026 19:00:49.895] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.json.typeadapter.BakedAnimationsAdapter.buildKeyframeStack(BakedAnimationsAdapter.java:202)
+[09Nov2026 19:00:49.899] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.json.typeadapter.BakedAnimationsAdapter.bakeBoneAnimations(BakedAnimationsAdapter.java:78)
+[09Nov2026 19:00:49.899] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.json.typeadapter.BakedAnimationsAdapter.bakeAnimation(BakedAnimationsAdapter.java:61)
+[09Nov2026 19:00:49.899] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.json.typeadapter.BakedAnimationsAdapter.deserialize(BakedAnimationsAdapter.java:41)
+[09Nov2026 19:00:49.899] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.json.typeadapter.BakedAnimationsAdapter.deserialize(BakedAnimationsAdapter.java:31)
+[09Nov2026 19:00:49.900] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.internal.bind.TreeTypeAdapter.read(TreeTypeAdapter.java:76)
+[09Nov2026 19:00:49.900] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.Gson.fromJson(Gson.java:1227)
+[09Nov2026 19:00:49.900] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.Gson.fromJson(Gson.java:1329)
+[09Nov2026 19:00:49.900] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.Gson.fromJson(Gson.java:1271)
+[09Nov2026 19:00:49.900] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.FileLoader.loadAnimationsFile(FileLoader.java:36)
+[09Nov2026 19:00:49.900] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.cache.GeckoLibCache.lambda$loadAnimations$2(GeckoLibCache.java:79)
+[09Nov2026 19:00:49.900] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.cache.GeckoLibCache.lambda$loadResources$8(GeckoLibCache.java:121)
+[09Nov2026 19:00:49.900] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768)
+[09Nov2026 19:00:49.900] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760)
+[09Nov2026 19:00:49.900] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+[09Nov2026 19:00:49.900] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312)
+[09Nov2026 19:00:49.900] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843)
+[09Nov2026 19:00:49.901] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808)
+[09Nov2026 19:00:49.901] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188)
+[09Nov2026 19:00:50.042] [Worker-ResourceReload-0/INFO] [net.minecraft.client.gui.font.providers.UnihexProvider/]: Found unifont_all_no_pua-15.1.05.hex, loading
+[09Nov2026 19:00:50.211] [Worker-ResourceReload-1/ERROR] [GeckoLib/]: Unable to parse animation: attack
+	-> Failed to parse expression '-'
+		-> Unable to parse compiled symbols from expression: [Left[-]]
+[09Nov2026 19:00:50.211] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: Geckolib.CompoundException: Unable to parse animation: attack
+	-> Failed to parse expression '-'
+		-> Unable to parse compiled symbols from expression: [Left[-]]
+[09Nov2026 19:00:50.211] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.math.MathParser.parseSymbols(MathParser.java:427)
+[09Nov2026 19:00:50.211] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.math.MathParser.compileExpression(MathParser.java:234)
+[09Nov2026 19:00:50.211] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.math.MathParser.compileMolang(MathParser.java:226)
+[09Nov2026 19:00:50.211] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.math.MathParser.parseJson(MathParser.java:171)
+[09Nov2026 19:00:50.211] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.json.typeadapter.BakedAnimationsAdapter.buildKeyframeStack(BakedAnimationsAdapter.java:202)
+[09Nov2026 19:00:50.211] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.json.typeadapter.BakedAnimationsAdapter.bakeBoneAnimations(BakedAnimationsAdapter.java:78)
+[09Nov2026 19:00:50.212] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.json.typeadapter.BakedAnimationsAdapter.bakeAnimation(BakedAnimationsAdapter.java:61)
+[09Nov2026 19:00:50.212] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.json.typeadapter.BakedAnimationsAdapter.deserialize(BakedAnimationsAdapter.java:41)
+[09Nov2026 19:00:50.212] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.json.typeadapter.BakedAnimationsAdapter.deserialize(BakedAnimationsAdapter.java:31)
+[09Nov2026 19:00:50.212] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.internal.bind.TreeTypeAdapter.read(TreeTypeAdapter.java:76)
+[09Nov2026 19:00:50.212] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.Gson.fromJson(Gson.java:1227)
+[09Nov2026 19:00:50.212] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.Gson.fromJson(Gson.java:1329)
+[09Nov2026 19:00:50.212] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.Gson.fromJson(Gson.java:1271)
+[09Nov2026 19:00:50.212] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.FileLoader.loadAnimationsFile(FileLoader.java:36)
+[09Nov2026 19:00:50.212] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.cache.GeckoLibCache.lambda$loadAnimations$2(GeckoLibCache.java:79)
+[09Nov2026 19:00:50.212] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.cache.GeckoLibCache.lambda$loadResources$8(GeckoLibCache.java:121)
+[09Nov2026 19:00:50.212] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768)
+[09Nov2026 19:00:50.212] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760)
+[09Nov2026 19:00:50.212] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+[09Nov2026 19:00:50.212] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312)
+[09Nov2026 19:00:50.212] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843)
+[09Nov2026 19:00:50.212] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808)
+[09Nov2026 19:00:50.213] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188)
+[09Nov2026 19:00:50.340] [NeoForge Version Check/INFO] [net.neoforged.fml.VersionChecker/]: [controlling] Found status: BETA Current: 19.0.5 Target: 19.0.5
+[09Nov2026 19:00:50.341] [NeoForge Version Check/INFO] [net.neoforged.fml.VersionChecker/]: [searchables] Starting version check at https://updates.blamejared.com/get?n=searchables&gv=1.21.1&ml=neoforge
+[09Nov2026 19:00:50.475] [Worker-ResourceReload-1/ERROR] [GeckoLib/]: Unable to parse animation: supernova
+	-> Failed to parse expression 'nan-(math.sin(query.anim_time*2800)*3)'
+		-> Unable to parse compiled symbols from expression: [Left[nan]]
+[09Nov2026 19:00:50.495] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: Geckolib.CompoundException: Unable to parse animation: supernova
+	-> Failed to parse expression 'nan-(math.sin(query.anim_time*2800)*3)'
+		-> Unable to parse compiled symbols from expression: [Left[nan]]
+[09Nov2026 19:00:50.495] [NeoForge Version Check/INFO] [net.neoforged.fml.VersionChecker/]: [searchables] Found status: BETA Current: 1.0.2 Target: 1.0.2
+[09Nov2026 19:00:50.495] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.math.MathParser.parseSymbols(MathParser.java:427)
+[09Nov2026 19:00:50.506] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.math.MathParser.compileCalculation(MathParser.java:546)
+[09Nov2026 19:00:50.506] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.math.MathParser.compileValue(MathParser.java:451)
+[09Nov2026 19:00:50.506] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.math.MathParser.parseSymbols(MathParser.java:422)
+[09Nov2026 19:00:50.506] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.math.MathParser.compileExpression(MathParser.java:234)
+[09Nov2026 19:00:50.506] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.math.MathParser.compileMolang(MathParser.java:226)
+[09Nov2026 19:00:50.506] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.math.MathParser.parseJson(MathParser.java:171)
+[09Nov2026 19:00:50.506] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.json.typeadapter.BakedAnimationsAdapter.buildKeyframeStack(BakedAnimationsAdapter.java:203)
+[09Nov2026 19:00:50.506] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.json.typeadapter.BakedAnimationsAdapter.bakeBoneAnimations(BakedAnimationsAdapter.java:78)
+[09Nov2026 19:00:50.507] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.json.typeadapter.BakedAnimationsAdapter.bakeAnimation(BakedAnimationsAdapter.java:61)
+[09Nov2026 19:00:50.507] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.json.typeadapter.BakedAnimationsAdapter.deserialize(BakedAnimationsAdapter.java:41)
+[09Nov2026 19:00:50.507] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.json.typeadapter.BakedAnimationsAdapter.deserialize(BakedAnimationsAdapter.java:31)
+[09Nov2026 19:00:50.507] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.internal.bind.TreeTypeAdapter.read(TreeTypeAdapter.java:76)
+[09Nov2026 19:00:50.507] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.Gson.fromJson(Gson.java:1227)
+[09Nov2026 19:00:50.507] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.Gson.fromJson(Gson.java:1329)
+[09Nov2026 19:00:50.507] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at MC-BOOTSTRAP/com.google.gson@2.10.1/com.google.gson.Gson.fromJson(Gson.java:1271)
+[09Nov2026 19:00:50.507] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.loading.FileLoader.loadAnimationsFile(FileLoader.java:36)
+[09Nov2026 19:00:50.507] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.cache.GeckoLibCache.lambda$loadAnimations$2(GeckoLibCache.java:79)
+[09Nov2026 19:00:50.507] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at TRANSFORMER/geckolib@4.9.3/software.bernie.geckolib.cache.GeckoLibCache.lambda$loadResources$8(GeckoLibCache.java:121)
+[09Nov2026 19:00:50.507] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768)
+[09Nov2026 19:00:50.507] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760)
+[09Nov2026 19:00:50.507] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+[09Nov2026 19:00:50.507] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312)
+[09Nov2026 19:00:50.508] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843)
+[09Nov2026 19:00:50.508] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808)
+[09Nov2026 19:00:50.508] [Worker-ResourceReload-1/INFO] [STDERR/]: [java.lang.Throwable:printStackTrace:651]: 	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188)
+[09Nov2026 19:00:50.568] [Worker-ResourceReload-1/INFO] [xaero.lib.XaeroLib/]: Loading XaeroLib client 1/2!
+[09Nov2026 19:00:50.852] [Worker-ResourceReload-1/WARN] [xaero.lib.XaeroLib/]: io exception while checking patreon: Online mod data expired! Date: Fri Nov 06 12:28:29 UTC 2026
+[09Nov2026 19:00:50.861] [Worker-ResourceReload-1/INFO] [xaero.map.WorldMap/]: Loading Xaero's World Map - Stage 1/2
+[09Nov2026 19:00:51.135] [Worker-ResourceReload-0/INFO] [net.minecraft.client.gui.font.providers.UnihexProvider/]: Found unifont_jp_patch-15.1.05.hex, loading
+[09Nov2026 19:00:51.173] [Worker-ResourceReload-1/INFO] [org.anti_ad.mc.common.LogBase/]: [libIPN] Initializing client...
+[09Nov2026 19:00:51.307] [Worker-ResourceReload-1/INFO] [org.anti_ad.mc.common.LogBase/]: [libIPN] libIPN - init in Kotlin
+[09Nov2026 19:00:51.591] [Worker-ResourceReload-1/INFO] [xaero.minimap.XaeroMinimap/]: Loading Xaero's Minimap - Stage 1/2
+[09Nov2026 19:00:51.927] [Render thread/INFO] [xaero.lib.XaeroLib/]: Loading XaeroLib common 2/2!
+[09Nov2026 19:00:51.931] [Render thread/INFO] [xaero.lib.XaeroLib/]: Loading XaeroLib client 2/2!
+[09Nov2026 19:00:51.931] [Render thread/INFO] [xaero.map.WorldMap/]: Loading Xaero's World Map - Stage 2/2
+[09Nov2026 19:00:51.941] [Render thread/INFO] [xaero.map.WorldMap/]: New world map region cache hash code: -26740990
+[09Nov2026 19:00:52.136] [Render thread/ERROR] [xaero.map.WorldMap/]: io exception while checking versions: Online mod data expired! Date: Fri Nov 06 12:28:29 UTC 2026
+[09Nov2026 19:00:52.139] [Render thread/INFO] [xaero.map.WorldMap/]: Registered player tracker system: map_synced
+[09Nov2026 19:00:52.151] [Render thread/INFO] [xaero.map.WorldMap/]: Xaero's WorldMap Mod: Xaero's minimap found!
+[09Nov2026 19:00:52.162] [Render thread/INFO] [xaero.map.WorldMap/]: Registered player tracker system: minimap_synced
+[09Nov2026 19:00:52.167] [Render thread/INFO] [xaero.map.WorldMap/]: No Optifine!
+[09Nov2026 19:00:52.167] [Render thread/INFO] [xaero.map.WorldMap/]: Xaero's World Map: No Vivecraft!
+[09Nov2026 19:00:52.171] [Render thread/INFO] [xaero.map.WorldMap/]: Xaero's World Map: Iris found!
+[09Nov2026 19:00:52.218] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:grudbone' referenced from: born_in_chaos_v1:block/gnawed_bones: java.io.FileNotFoundException: minecraft:models/grudbone.json
+[09Nov2026 19:00:52.234] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:puddleofintoxication' referenced from: born_in_chaos_v1:block/puddleofintoxication: java.io.FileNotFoundException: minecraft:models/puddleofintoxication.json
+[09Nov2026 19:00:52.234] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:houndtrap' referenced from: born_in_chaos_v1:block/hound_trap: java.io.FileNotFoundException: minecraft:models/houndtrap.json
+[09Nov2026 19:00:52.234] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:houndtrapserried' referenced from: born_in_chaos_v1:block/closed_hound_trap: java.io.FileNotFoundException: minecraft:models/houndtrapserried.json
+[09Nov2026 19:00:52.234] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:shellspikes' referenced from: born_in_chaos_v1:block/spiny_shell_trap: java.io.FileNotFoundException: minecraft:models/shellspikes.json
+[09Nov2026 19:00:52.235] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:puddleofstimulation' referenced from: born_in_chaos_v1:block/puddleof_stimulation: java.io.FileNotFoundException: minecraft:models/puddleofstimulation.json
+[09Nov2026 19:00:52.235] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:tombstonedarktitan' referenced from: born_in_chaos_v1:block/tombstone_dark_titan_066: java.io.FileNotFoundException: minecraft:models/tombstonedarktitan.json
+[09Nov2026 19:00:52.235] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:tombstonepetasi' referenced from: born_in_chaos_v1:block/tombstone_petasi: java.io.FileNotFoundException: minecraft:models/tombstonepetasi.json
+[09Nov2026 19:00:52.235] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:tombstonewise' referenced from: born_in_chaos_v1:block/tombstone_2003wise: java.io.FileNotFoundException: minecraft:models/tombstonewise.json
+[09Nov2026 19:00:52.235] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:tombstoneorion' referenced from: born_in_chaos_v1:block/tombstone_orion: java.io.FileNotFoundException: minecraft:models/tombstoneorion.json
+[09Nov2026 19:00:52.236] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:cobwebcover' referenced from: born_in_chaos_v1:block/cobweb_cover: java.io.FileNotFoundException: minecraft:models/cobwebcover.json
+[09Nov2026 19:00:52.236] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:lifestealerskull' referenced from: born_in_chaos_v1:block/lifestealer_skull: java.io.FileNotFoundException: minecraft:models/lifestealerskull.json
+[09Nov2026 19:00:52.236] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:tombstonederivas' referenced from: born_in_chaos_v1:block/tombstone_derivas: java.io.FileNotFoundException: minecraft:models/tombstonederivas.json
+[09Nov2026 19:00:52.236] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:tombstonefubukibanzai' referenced from: born_in_chaos_v1:block/tombstone_fubuki_banzai: java.io.FileNotFoundException: minecraft:models/tombstonefubukibanzai.json
+[09Nov2026 19:00:52.242] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:rotteninfernalpumpkin' referenced from: born_in_chaos_v1:block/rotten_infernal_pumpkin: java.io.FileNotFoundException: minecraft:models/rotteninfernalpumpkin.json
+[09Nov2026 19:00:52.243] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:creepysnowmanhead' referenced from: born_in_chaos_v1:block/spooky_snowman_head: java.io.FileNotFoundException: minecraft:models/creepysnowmanhead.json
+[09Nov2026 19:00:52.243] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:nutcracker' referenced from: born_in_chaos_v1:block/creepy_nutcracker: java.io.FileNotFoundException: minecraft:models/nutcracker.json
+[09Nov2026 19:00:52.243] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:tombstonesomfunambulist' referenced from: born_in_chaos_v1:block/tombstone_somfunambulist: java.io.FileNotFoundException: minecraft:models/tombstonesomfunambulist.json
+[09Nov2026 19:00:52.243] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:tombstonememesus' referenced from: born_in_chaos_v1:block/tombstone_memesus: java.io.FileNotFoundException: minecraft:models/tombstonememesus.json
+[09Nov2026 19:00:52.244] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:tombstonetem' referenced from: born_in_chaos_v1:block/tombstone_tem_187: java.io.FileNotFoundException: minecraft:models/tombstonetem.json
+[09Nov2026 19:00:52.244] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:tombstonecarrion' referenced from: born_in_chaos_v1:block/tombstone_carrion: java.io.FileNotFoundException: minecraft:models/tombstonecarrion.json
+[09Nov2026 19:00:52.244] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:tombstonedling' referenced from: born_in_chaos_v1:block/tombstone_2_dling: java.io.FileNotFoundException: minecraft:models/tombstonedling.json
+[09Nov2026 19:00:52.244] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:tombstoneeuthymia' referenced from: born_in_chaos_v1:block/tombstone_euthymia: java.io.FileNotFoundException: minecraft:models/tombstoneeuthymia.json
+[09Nov2026 19:00:52.244] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:tombstoneferal' referenced from: born_in_chaos_v1:block/tombstone_feral: java.io.FileNotFoundException: minecraft:models/tombstoneferal.json
+[09Nov2026 19:00:52.244] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:tombstonemikerory' referenced from: born_in_chaos_v1:block/tombstone_mike_rory: java.io.FileNotFoundException: minecraft:models/tombstonemikerory.json
+[09Nov2026 19:00:52.245] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:tombstoned4rkdevilx' referenced from: born_in_chaos_v1:block/tombstone_d_4rkdevilx: java.io.FileNotFoundException: minecraft:models/tombstoned4rkdevilx.json
+[09Nov2026 19:00:52.245] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:tombstonerotborne' referenced from: born_in_chaos_v1:block/tombstone_rotborne: java.io.FileNotFoundException: minecraft:models/tombstonerotborne.json
+[09Nov2026 19:00:52.245] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:tombstonethegentlemanfrog' referenced from: born_in_chaos_v1:block/tombstone_the_gentleman_frog: java.io.FileNotFoundException: minecraft:models/tombstonethegentlemanfrog.json
+[09Nov2026 19:00:52.245] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:tombstoneplug' referenced from: born_in_chaos_v1:block/tombstone_plug: java.io.FileNotFoundException: minecraft:models/tombstoneplug.json
+[09Nov2026 19:00:52.245] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:tombstonenino4416' referenced from: born_in_chaos_v1:block/tombstone_nino_4416: java.io.FileNotFoundException: minecraft:models/tombstonenino4416.json
+[09Nov2026 19:00:52.315] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:nightmarescythe' referenced from: born_in_chaos_v1:custom/nightmarescythe: java.io.FileNotFoundException: minecraft:models/nightmarescythe.json
+[09Nov2026 19:00:52.350] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:shellmace' referenced from: born_in_chaos_v1:custom/shellmace: java.io.FileNotFoundException: minecraft:models/shellmace.json
+[09Nov2026 19:00:52.357] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:frostbittenblade' referenced from: born_in_chaos_v1:custom/frostbittenblade: java.io.FileNotFoundException: minecraft:models/frostbittenblade.json
+[09Nov2026 19:00:52.367] [Worker-ResourceReload-0/WARN] [net.minecraft.client.renderer.texture.SpriteContents/]: Invalid frame index on sprite born_in_chaos_v1:dimanim frame 1: 1
+[09Nov2026 19:00:52.368] [Worker-ResourceReload-0/WARN] [net.minecraft.client.renderer.texture.SpriteContents/]: Invalid frame index on sprite born_in_chaos_v1:dimanim frame 2: 2
+[09Nov2026 19:00:52.372] [Worker-ResourceReload-0/WARN] [net.minecraft.client.renderer.texture.SpriteContents/]: Invalid frame index on sprite born_in_chaos_v1:dimanim frame 3: 3
+[09Nov2026 19:00:52.372] [Worker-ResourceReload-0/WARN] [net.minecraft.client.renderer.texture.SpriteContents/]: Invalid frame index on sprite born_in_chaos_v1:dimanim frame 4: 4
+[09Nov2026 19:00:52.372] [Worker-ResourceReload-0/WARN] [net.minecraft.client.renderer.texture.SpriteContents/]: Invalid frame index on sprite born_in_chaos_v1:dimanim frame 5: 5
+[09Nov2026 19:00:52.372] [Worker-ResourceReload-0/WARN] [net.minecraft.client.renderer.texture.SpriteContents/]: Invalid frame index on sprite born_in_chaos_v1:dimanim frame 6: 6
+[09Nov2026 19:00:52.375] [Render thread/INFO] [xaero.minimap.XaeroMinimap/]: Loading Xaero's Minimap - Stage 2/2
+[09Nov2026 19:00:52.394] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:soulsaber' referenced from: born_in_chaos_v1:custom/soulsaber: java.io.FileNotFoundException: minecraft:models/soulsaber.json
+[09Nov2026 19:00:52.443] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:greatdarksword' referenced from: born_in_chaos_v1:custom/greatdarksword: java.io.FileNotFoundException: minecraft:models/greatdarksword.json
+[09Nov2026 19:00:52.475] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:skullbreaker' referenced from: born_in_chaos_v1:custom/skullbreaker: java.io.FileNotFoundException: minecraft:models/skullbreaker.json
+[09Nov2026 19:00:52.494] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:spiderbite' referenced from: born_in_chaos_v1:custom/spiderbite: java.io.FileNotFoundException: minecraft:models/spiderbite.json
+[09Nov2026 19:00:52.509] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:sweetness' referenced from: born_in_chaos_v1:custom/sweetness: java.io.FileNotFoundException: minecraft:models/sweetness.json
+[09Nov2026 19:00:52.510] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:nuthammer' referenced from: born_in_chaos_v1:custom/nuthammer: java.io.FileNotFoundException: minecraft:models/nuthammer.json
+[09Nov2026 19:00:52.521] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:pitchfork' referenced from: born_in_chaos_v1:custom/pitchfork: java.io.FileNotFoundException: minecraft:models/pitchfork.json
+[09Nov2026 19:00:52.538] [Worker-ResourceReload-2/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:executionersgreatax' referenced from: born_in_chaos_v1:custom/executionersgreatax: java.io.FileNotFoundException: minecraft:models/executionersgreatax.json
+[09Nov2026 19:00:52.869] [Render thread/WARN] [xaero.hud.minimap.MinimapLogs/]: io exception while checking versions: Online mod data expired! Date: Fri Nov 06 12:28:29 UTC 2026
+[09Nov2026 19:00:52.870] [Render thread/INFO] [xaero.hud.minimap.MinimapLogs/]: Registered player tracker system: minimap_synced
+[09Nov2026 19:00:54.048] [Worker-ResourceReload-2/INFO] [snownee.jade.Jade/]: Start loading plugin from snownee.jade.addon.vanilla.VanillaPlugin
+[09Nov2026 19:00:54.102] [Worker-ResourceReload-2/INFO] [snownee.jade.Jade/]: Bootstrapped plugin from snownee.jade.addon.vanilla.VanillaPlugin in 48.88 ms
+[09Nov2026 19:00:54.110] [Worker-ResourceReload-2/INFO] [snownee.jade.Jade/]: Loaded plugin from snownee.jade.addon.vanilla.VanillaPlugin in 57.93 ms
+[09Nov2026 19:00:54.111] [Worker-ResourceReload-2/INFO] [snownee.jade.Jade/]: Start loading plugin from snownee.jade.addon.universal.UniversalPlugin
+[09Nov2026 19:00:54.117] [Worker-ResourceReload-2/INFO] [snownee.jade.Jade/]: Bootstrapped plugin from snownee.jade.addon.universal.UniversalPlugin in 5.463 ms
+[09Nov2026 19:00:54.117] [Worker-ResourceReload-2/INFO] [snownee.jade.Jade/]: Loaded plugin from snownee.jade.addon.universal.UniversalPlugin in 6.030 ms
+[09Nov2026 19:00:54.118] [Worker-ResourceReload-2/INFO] [snownee.jade.Jade/]: Start loading plugin from snownee.jade.addon.debug.DebugPlugin
+[09Nov2026 19:00:54.121] [Worker-ResourceReload-2/INFO] [snownee.jade.Jade/]: Bootstrapped plugin from snownee.jade.addon.debug.DebugPlugin in 2.527 ms
+[09Nov2026 19:00:54.121] [Worker-ResourceReload-2/INFO] [snownee.jade.Jade/]: Loaded plugin from snownee.jade.addon.debug.DebugPlugin in 3.160 ms
+[09Nov2026 19:00:54.121] [Worker-ResourceReload-2/INFO] [snownee.jade.Jade/]: Start loading plugin from snownee.jade.addon.core.CorePlugin
+[09Nov2026 19:00:54.128] [Worker-ResourceReload-2/INFO] [snownee.jade.Jade/]: Bootstrapped plugin from snownee.jade.addon.core.CorePlugin in 5.584 ms
+[09Nov2026 19:00:54.128] [Worker-ResourceReload-2/INFO] [snownee.jade.Jade/]: Loaded plugin from snownee.jade.addon.core.CorePlugin in 5.897 ms
+[09Nov2026 19:00:54.128] [Worker-ResourceReload-2/INFO] [snownee.jade.Jade/]: Start loading plugin from snownee.jade.addon.access.AccessibilityPlugin
+[09Nov2026 19:00:54.133] [Worker-ResourceReload-2/INFO] [snownee.jade.Jade/]: Bootstrapped plugin from snownee.jade.addon.access.AccessibilityPlugin in 4.403 ms
+[09Nov2026 19:00:54.133] [Worker-ResourceReload-2/INFO] [snownee.jade.Jade/]: Loaded plugin from snownee.jade.addon.access.AccessibilityPlugin in 4.682 ms
+[09Nov2026 19:00:54.390] [Render thread/ERROR] [net.minecraft.client.sounds.SoundManager/]: Missing subtitle translation{key='subtitles.mowziesmobs.block.gong', args=[]} for sound event: mowziesmobs:block.gong
+[09Nov2026 19:00:54.390] [Render thread/ERROR] [net.minecraft.client.sounds.SoundManager/]: Missing subtitle translation{key='subtitles.mowziesmobs.block.rakesand', args=[]} for sound event: mowziesmobs:block.rakesand
+[09Nov2026 19:00:54.391] [Render thread/ERROR] [net.minecraft.client.sounds.SoundManager/]: Missing subtitle translation{key='subtitles.mowziesmobs.umvuthana.inhale', args=[]} for sound event: mowziesmobs:umvuthana.inhale
+[09Nov2026 19:00:54.392] [Render thread/ERROR] [net.minecraft.client.sounds.SoundManager/]: Missing subtitle translation{key='subtitles.mowziesmobs.sculptor.test_start', args=[]} for sound event: mowziesmobs:sculptor.test_start
+[09Nov2026 19:00:54.393] [Render thread/WARN] [net.minecraft.client.sounds.SoundEngine/]: Missing sound for event: minecraft:item.goat_horn.play
+[09Nov2026 19:00:54.393] [Render thread/WARN] [net.minecraft.client.sounds.SoundEngine/]: Missing sound for event: minecraft:entity.goat.screaming.horn_break
+[09Nov2026 19:00:54.398] [Render thread/ERROR] [net.minecraft.client.sounds.SoundEngine/SOUNDS]: Error starting SoundSystem. Turning off sounds & music
+java.lang.IllegalStateException: Failed to open OpenAL device
+	at TRANSFORMER/minecraft@1.21.1/com.mojang.blaze3d.audio.Library.openDeviceOrFallback(Library.java:302) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/com.mojang.blaze3d.audio.Library.init(Library.java:154) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.sounds.SoundEngine.loadLibrary(SoundEngine.java:107) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.sounds.SoundEngine.reload(SoundEngine.java:99) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.sounds.SoundManager.apply(SoundManager.java:128) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.sounds.SoundManager.apply(SoundManager.java:42) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.packs.resources.SimplePreparableReloadListener.lambda$reload$1(SimplePreparableReloadListener.java:19) ~[neoforge-21.1.264.jar%23220!/:?]
+	at java.base/java.util.concurrent.CompletableFuture$UniAccept.tryFire(CompletableFuture.java:718) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture$Completion.run(CompletableFuture.java:482) ~[?:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.packs.resources.SimpleReloadInstance.lambda$new$3(SimpleReloadInstance.java:69) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.thread.BlockableEventLoop.doRunTask(BlockableEventLoop.java:148) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.thread.ReentrantBlockableEventLoop.doRunTask(ReentrantBlockableEventLoop.java:23) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.thread.BlockableEventLoop.pollTask(BlockableEventLoop.java:122) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.thread.BlockableEventLoop.runAllTasks(BlockableEventLoop.java:111) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.runTick(Minecraft.java:1155) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.run(Minecraft.java:807) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.main.Main.main(Main.java:230) ~[neoforge-21.1.264.jar%23220!/:?]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[?:?]
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:136) ~[loader-4.0.45.jar%23134!/:4.0]
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:124) ~[loader-4.0.45.jar%23134!/:4.0]
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.NeoForgeClientDevLaunchHandler.runService(NeoForgeClientDevLaunchHandler.java:23) ~[loader-4.0.45.jar%23134!/:4.0]
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.lambda$launchService$4(CommonLaunchHandler.java:118) ~[loader-4.0.45.jar%23134!/:4.0]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) [modlauncher-11.0.5.jar%23114!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) [modlauncher-11.0.5.jar%23114!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) [modlauncher-11.0.5.jar%23114!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.Launcher.run(Launcher.java:103) [modlauncher-11.0.5.jar%23114!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.Launcher.main(Launcher.java:74) [modlauncher-11.0.5.jar%23114!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) [modlauncher-11.0.5.jar%23114!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) [modlauncher-11.0.5.jar%23114!/:?]
+	at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.run(BootstrapLauncher.java:210) [bootstraplauncher-2.0.2.jar:?]
+	at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:69) [bootstraplauncher-2.0.2.jar:?]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[?:?]
+	at net.neoforged.devlaunch.Main.main(Main.java:57) [DevLaunch-1.0.2.jar:?]
+[09Nov2026 19:00:54.598] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 2048x1024x4 minecraft:textures/atlas/blocks.png-atlas
+[09Nov2026 19:00:54.634] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 256x256x4 minecraft:textures/atlas/signs.png-atlas
+[09Nov2026 19:00:54.635] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x512x4 minecraft:textures/atlas/shield_patterns.png-atlas
+[09Nov2026 19:00:54.637] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x512x4 minecraft:textures/atlas/banner_patterns.png-atlas
+[09Nov2026 19:00:54.639] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 1024x1024x4 minecraft:textures/atlas/armor_trims.png-atlas
+[09Nov2026 19:00:54.646] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 128x64x4 minecraft:textures/atlas/decorated_pot.png-atlas
+[09Nov2026 19:00:54.647] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 256x256x4 minecraft:textures/atlas/chest.png-atlas
+[09Nov2026 19:00:54.647] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x256x4 minecraft:textures/atlas/beds.png-atlas
+[09Nov2026 19:00:54.648] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x256x4 minecraft:textures/atlas/shulker_boxes.png-atlas
+[09Nov2026 19:00:54.813] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 1024x512x0 minecraft:textures/atlas/particles.png-atlas
+[09Nov2026 19:00:54.819] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x256x0 minecraft:textures/atlas/paintings.png-atlas
+[09Nov2026 19:00:54.820] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x256x0 minecraft:textures/atlas/mob_effects.png-atlas
+[09Nov2026 19:00:54.821] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 64x64x0 minecraft:textures/atlas/map_decorations.png-atlas
+[09Nov2026 19:00:54.821] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 1024x512x0 minecraft:textures/atlas/gui.png-atlas
+[09Nov2026 19:00:54.867] [Render thread/WARN] [net.minecraft.client.renderer.ShaderInstance/]: Shader rendertype_entity_translucent_emissive could not find sampler named Sampler2 in the specified shader program.
+[09Nov2026 19:00:54.989] [Render thread/INFO] [xaero.lib.XaeroLib/]: Successfully reloaded the XaeroLib shaders!
+[09Nov2026 19:00:54.992] [Render thread/INFO] [net.neoforged.neoforge.client.entity.animation.json.AnimationLoader/]: Loaded 0 entity animations
+[09Nov2026 19:00:55.082] [Render thread/INFO] [Iris/]: Creating pipeline for dimension minecraft:overworld
+[09Nov2026 19:00:55.368] [Render thread/WARN] [Iris/]: Failed to resolve uniform fixedTaaCorrection, reason: Couldn't resolve: 
+[DEBUG] resolving BinaryExpr{ {FunctionCall{vec2 {[Id{pixelSizeX}, Id{pixelSizeY}]} }} multiply{0} {Number{0.51}} } to type vec2 (11)
+[DEBUG] resolving function multiply with args [FunctionCall{vec2 {[Id{pixelSizeX}, Id{pixelSizeY}]} }, Number{0.51}] to type vec2
+[DEBUG] resolving FunctionCall{vec2 {[Id{pixelSizeX}, Id{pixelSizeY}]} } to type vec2 (10)
+[DEBUG] resolving function vec2 with args [Id{pixelSizeX}, Id{pixelSizeY}] to type vec2
+[DEBUG] resolving Id{pixelSizeX} to type float (10)
+[DEBUG] resolved variable pixelSizeX to type float
+[DEBUG] resolving Id{pixelSizeY} to type float (10)
+[DEBUG] resolved variable pixelSizeY to type float
+[DEBUG] resolved function vec2 with args [Id{pixelSizeX}, Id{pixelSizeY}] to type vec2 directly
+[DEBUG] resolving Number{0.51} to type vec2 (10)
+[DEBUG] failed to resolve constant 0.51 (of type float) to type vec2 without implicit casts
+[DEBUG] resolving FunctionCall{vec2 {[Id{pixelSizeX}, Id{pixelSizeY}]} } to type vec2 (11)
+[DEBUG] resolving function vec2 with args [Id{pixelSizeX}, Id{pixelSizeY}] to type vec2
+[DEBUG] resolving Id{pixelSizeX} to type float (10)
+[DEBUG] resolved variable pixelSizeX to type float
+[DEBUG] resolving Id{pixelSizeY} to type float (10)
+[DEBUG] resolved variable pixelSizeY to type float
+[DEBUG] resolved function vec2 with args [Id{pixelSizeX}, Id{pixelSizeY}] to type vec2 directly
+[DEBUG] resolving Number{0.51} to type vec2 (11)
+[DEBUG] trying implicit casts to resolve constant 0.51 (of type float) to type vec2
+[DEBUG] failed to resolved Number{0.51} to type vec2, even using implicit casts
+[DEBUG] failed to resolve function multiply with args [FunctionCall{vec2 {[Id{pixelSizeX}, Id{pixelSizeY}]} }, Number{0.51}] to type vec2 ( = BinaryExpr{ {FunctionCall{vec2 {[Id{pixelSizeX}, Id{pixelSizeY}]} }} multiply{0} {Number{0.51}} })
+java.lang.RuntimeException: Couldn't resolve: 
+[DEBUG] resolving BinaryExpr{ {FunctionCall{vec2 {[Id{pixelSizeX}, Id{pixelSizeY}]} }} multiply{0} {Number{0.51}} } to type vec2 (11)
+[DEBUG] resolving function multiply with args [FunctionCall{vec2 {[Id{pixelSizeX}, Id{pixelSizeY}]} }, Number{0.51}] to type vec2
+[DEBUG] resolving FunctionCall{vec2 {[Id{pixelSizeX}, Id{pixelSizeY}]} } to type vec2 (10)
+[DEBUG] resolving function vec2 with args [Id{pixelSizeX}, Id{pixelSizeY}] to type vec2
+[DEBUG] resolving Id{pixelSizeX} to type float (10)
+[DEBUG] resolved variable pixelSizeX to type float
+[DEBUG] resolving Id{pixelSizeY} to type float (10)
+[DEBUG] resolved variable pixelSizeY to type float
+[DEBUG] resolved function vec2 with args [Id{pixelSizeX}, Id{pixelSizeY}] to type vec2 directly
+[DEBUG] resolving Number{0.51} to type vec2 (10)
+[DEBUG] failed to resolve constant 0.51 (of type float) to type vec2 without implicit casts
+[DEBUG] resolving FunctionCall{vec2 {[Id{pixelSizeX}, Id{pixelSizeY}]} } to type vec2 (11)
+[DEBUG] resolving function vec2 with args [Id{pixelSizeX}, Id{pixelSizeY}] to type vec2
+[DEBUG] resolving Id{pixelSizeX} to type float (10)
+[DEBUG] resolved variable pixelSizeX to type float
+[DEBUG] resolving Id{pixelSizeY} to type float (10)
+[DEBUG] resolved variable pixelSizeY to type float
+[DEBUG] resolved function vec2 with args [Id{pixelSizeX}, Id{pixelSizeY}] to type vec2 directly
+[DEBUG] resolving Number{0.51} to type vec2 (11)
+[DEBUG] trying implicit casts to resolve constant 0.51 (of type float) to type vec2
+[DEBUG] failed to resolved Number{0.51} to type vec2, even using implicit casts
+[DEBUG] failed to resolve function multiply with args [FunctionCall{vec2 {[Id{pixelSizeX}, Id{pixelSizeY}]} }, Number{0.51}] to type vec2
+	at TRANSFORMER/iris@1.8.14-beta.1+mc1.21.1/kroppeb.stareval.resolver.ExpressionResolver.resolveExpression(ExpressionResolver.java:54) ~[iris-neoforge-1.8.14-beta.1+mc1.21.1.jar%23242!/:?]
+	at TRANSFORMER/iris@1.8.14-beta.1+mc1.21.1/net.irisshaders.iris.uniforms.custom.CustomUniforms.<init>(CustomUniforms.java:60) ~[iris-neoforge-1.8.14-beta.1+mc1.21.1.jar%23242!/:?]
+	at TRANSFORMER/iris@1.8.14-beta.1+mc1.21.1/net.irisshaders.iris.uniforms.custom.CustomUniforms$Builder.build(CustomUniforms.java:332) ~[iris-neoforge-1.8.14-beta.1+mc1.21.1.jar%23242!/:?]
+	at TRANSFORMER/iris@1.8.14-beta.1+mc1.21.1/net.irisshaders.iris.uniforms.custom.CustomUniforms$Builder.build(CustomUniforms.java:343) ~[iris-neoforge-1.8.14-beta.1+mc1.21.1.jar%23242!/:?]
+	at TRANSFORMER/iris@1.8.14-beta.1+mc1.21.1/net.irisshaders.iris.pipeline.IrisRenderingPipeline.<init>(IrisRenderingPipeline.java:282) ~[iris-neoforge-1.8.14-beta.1+mc1.21.1.jar%23242!/:?]
+	at TRANSFORMER/iris@1.8.14-beta.1+mc1.21.1/net.irisshaders.iris.Iris.createPipeline(Iris.java:642) ~[iris-neoforge-1.8.14-beta.1+mc1.21.1.jar%23242!/:?]
+	at TRANSFORMER/iris@1.8.14-beta.1+mc1.21.1/net.irisshaders.iris.pipeline.PipelineManager.preparePipeline(PipelineManager.java:33) ~[iris-neoforge-1.8.14-beta.1+mc1.21.1.jar%23242!/:?]
+	at TRANSFORMER/iris@1.8.14-beta.1+mc1.21.1/net.irisshaders.iris.Iris.onLoadingComplete(Iris.java:152) ~[iris-neoforge-1.8.14-beta.1+mc1.21.1.jar%23242!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.gui.screens.TitleScreen.handler$bhc000$iris$firstInit(TitleScreen.java:525) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.gui.screens.TitleScreen.init(TitleScreen.java:157) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.gui.screens.Screen.init(Screen.java:317) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.setScreen(Minecraft.java:1057) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.lambda$buildInitialScreens$9(Minecraft.java:664) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.onGameLoadFinished(Minecraft.java:650) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.onResourceLoadFinished(Minecraft.java:641) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.lambda$new$7(Minecraft.java:629) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.Util.ifElse(Util.java:513) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.lambda$new$8(Minecraft.java:623) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/neoforge@21.1.264/net.neoforged.neoforge.client.loading.NeoForgeLoadingOverlay.render(NeoForgeLoadingOverlay.java:144) ~[neoforge-21.1.264.jar%23221!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.renderer.GameRenderer.render(GameRenderer.java:1081) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.runTick(Minecraft.java:1195) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.run(Minecraft.java:807) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.main.Main.main(Main.java:230) ~[neoforge-21.1.264.jar%23220!/:?]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[?:?]
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:136) ~[loader-4.0.45.jar%23134!/:4.0]
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:124) ~[loader-4.0.45.jar%23134!/:4.0]
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.NeoForgeClientDevLaunchHandler.runService(NeoForgeClientDevLaunchHandler.java:23) ~[loader-4.0.45.jar%23134!/:4.0]
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.lambda$launchService$4(CommonLaunchHandler.java:118) ~[loader-4.0.45.jar%23134!/:4.0]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) [modlauncher-11.0.5.jar%23114!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) [modlauncher-11.0.5.jar%23114!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) [modlauncher-11.0.5.jar%23114!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.Launcher.run(Launcher.java:103) [modlauncher-11.0.5.jar%23114!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.Launcher.main(Launcher.java:74) [modlauncher-11.0.5.jar%23114!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) [modlauncher-11.0.5.jar%23114!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) [modlauncher-11.0.5.jar%23114!/:?]
+	at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.run(BootstrapLauncher.java:210) [bootstraplauncher-2.0.2.jar:?]
+	at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:69) [bootstraplauncher-2.0.2.jar:?]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[?:?]
+	at net.neoforged.devlaunch.Main.main(Main.java:57) [DevLaunch-1.0.2.jar:?]
+[09Nov2026 19:00:57.865] [Render thread/INFO] [ru.adept.core.AdeptCore/]: [clienttest] главное меню открыто, создаю мир
+[09Nov2026 19:00:58.135] [Render thread/INFO] [net.minecraft.server.MinecraftServer/]: Found new data pack mod/yungsapi:locate_replacer, loading it automatically
+[09Nov2026 19:00:58.135] [Render thread/INFO] [net.minecraft.server.MinecraftServer/]: Found new data pack tectonic, loading it automatically
+[09Nov2026 19:01:00.202] [Worker-ResourceReload-2/ERROR] [improvedmobs/]: Error during default entity config for EntityType ResourceKey[minecraft:entity_type / bosses_of_mass_destruction:obsidilith], skipping this type. Cause: Cannot read field "eventScheduler" because "levelEventScheduler" is null
+[09Nov2026 19:01:00.212] [Worker-ResourceReload-2/ERROR] [improvedmobs/]: Error during default entity config for EntityType ResourceKey[minecraft:entity_type / bosses_of_mass_destruction:gauntlet], skipping this type. Cause: Cannot read field "eventScheduler" because "levelEventScheduler" is null
+[09Nov2026 19:01:00.318] [Render thread/INFO] [net.minecraft.world.item.crafting.RecipeManager/]: Loaded 1583 recipes
+[09Nov2026 19:01:00.496] [Render thread/INFO] [net.minecraft.advancements.AdvancementTree/]: Loaded 1574 advancements
+[09Nov2026 19:01:00.504] [Render thread/INFO] [Curios API/]: Loaded 10 curio slots
+[09Nov2026 19:01:00.505] [Render thread/INFO] [Curios API/]: Loaded 1 curio entities
+[09Nov2026 19:01:00.506] [Render thread/INFO] [ru.adept.core.AdeptCore/]: Пулы имён: деревень 32, командиров 24
+[09Nov2026 19:01:00.507] [Render thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: 44 записей; ждут событий следующих срезов: [final_outcome, pillar_defeated, pillar_materials_collected, soul_burned, transport_built]
+[09Nov2026 19:01:00.710] [Render thread/INFO] [EMI/]: [EMI] Recipes synchronized, waiting for tags to reload EMI...
+[09Nov2026 19:01:00.719] [Render thread/INFO] [snownee.jade.Jade/]: LootTableMineableCollector took 8.190 ms
+[09Nov2026 19:01:00.720] [Render thread/WARN] [ModernFix/]: Initial datapack load took 2.601 s
+[09Nov2026 19:01:00.936] [Server thread/INFO] [net.minecraft.client.server.IntegratedServer/]: Starting integrated minecraft server version 1.21.1
+[09Nov2026 19:01:00.937] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Generating keypair
+[09Nov2026 19:01:01.045] [Server thread/ERROR] [net.neoforged.neoforge.server.ServerLifecycleHooks/]: The following entities have not registered to the RegisterSpawnPlacementsEvent, but a spawn entry was found. This will mean that the entity doesn't have restrictions on its spawn location, please register a spawn placement for the entity, you can register with NO_RESTRICTIONS if you don't want any restrictions.
+	 - minecraft:camel
+[09Nov2026 19:01:01.052] [Server thread/INFO] [spark/]: Starting background profiler...
+[09Nov2026 19:01:02.097] [Server thread/WARN] [mixin/]: Method overwrite conflict for removeIf in modernfix-modernfix.mixins.json:bugfix.paper_chunk_patches.SortedArraySetMixin from mod modernfix, previously written by net.caffeinemc.mods.lithium.mixin.collections.chunk_tickets.SortedArraySetMixin. Skipping method.
+[09Nov2026 19:01:23.244] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Preparing start region for dimension minecraft:overworld
+[09Nov2026 19:01:23.572] [progressListener/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 2%
+[09Nov2026 19:01:24.160] [progressListener/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 2%
+[09Nov2026 19:01:24.499] [progressListener/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 2%
+[09Nov2026 19:01:24.949] [progressListener/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 2%
+[09Nov2026 19:01:25.656] [progressListener/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 2%
+[09Nov2026 19:01:25.934] [progressListener/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 2%
+[09Nov2026 19:01:26.485] [progressListener/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 2%
+[09Nov2026 19:01:27.053] [progressListener/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 2%
+[09Nov2026 19:01:27.419] [progressListener/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 2%
+[09Nov2026 19:01:27.936] [progressListener/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 2%
+[09Nov2026 19:01:28.553] [progressListener/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 2%
+[09Nov2026 19:01:29.143] [progressListener/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 2%
+[09Nov2026 19:01:29.488] [progressListener/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 2%
+[09Nov2026 19:01:29.985] [progressListener/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 2%
+[09Nov2026 19:01:30.572] [progressListener/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 2%
+[09Nov2026 19:01:31.001] [progressListener/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 2%
+[09Nov2026 19:01:31.806] [progressListener/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 2%
+[09Nov2026 19:01:32.013] [progressListener/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 2%
+[09Nov2026 19:01:32.586] [progressListener/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 2%
+[09Nov2026 19:01:33.152] [progressListener/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 2%
+[09Nov2026 19:01:33.444] [progressListener/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 2%
+[09Nov2026 19:01:34.036] [progressListener/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 2%
+[09Nov2026 19:01:34.551] [progressListener/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 2%
+[09Nov2026 19:01:35.038] [progressListener/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 2%
+[09Nov2026 19:01:35.542] [progressListener/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 2%
+[09Nov2026 19:01:35.912] [Server thread/INFO] [net.neoforged.neoforge.server.permission.PermissionAPI/]: Successfully initialized permission handler neoforge:default_handler
+[09Nov2026 19:01:35.925] [Server thread/WARN] [net.neoforged.neoforge.common.TagConventionLogWarning/]: 
+   Dev warning - Legacy Tags detected. Please migrate your 'forge' namespace tags to the 'c' namespace! See net.neoforged.neoforge.common.Tags.java for all tags.
+   NOTE: Many tags have been moved around or renamed. Some new ones were added so please review the new tags.
+    And make sure you follow tag conventions for new tags! The convention is `c` with nouns generally being plural and adjectives being singular.
+   You can disable this message in NeoForge's common config by setting `logLegacyTagWarnings` to "SILENCED" or see individual tags with "DEV_VERBOSE".
+
+[09Nov2026 19:01:35.939] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Ветка сюжета для этого мира: PUBLIC
+[09Nov2026 19:01:36.058] [Server thread/INFO] [net.minecraft.client.server.IntegratedServer/]: Changing view distance to 6, from 10
+[09Nov2026 19:01:36.059] [Server thread/INFO] [net.minecraft.client.server.IntegratedServer/]: Changing simulation distance to 5, from 0
+[09Nov2026 19:01:36.226] [Render thread/WARN] [ModernFix/]: Game took 67.291 seconds to start
+[09Nov2026 19:01:36.391] [progressListener/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Time elapsed: 13005 ms
+[09Nov2026 19:01:36.884] [Render thread/INFO] [EMI/]: [EMI] Recipes synchronized, waiting for tags to reload EMI...
+[09Nov2026 19:01:37.101] [Server thread/INFO] [STDOUT/]: [net.caffeinemc.mods.lithium.common.block.TrackedBlockStatePredicate:<clinit>:13]: Lithium Cached BlockState Flags are disabled!
+[09Nov2026 19:01:37.145] [Server thread/INFO] [net.minecraft.server.players.PlayerList/]: Dev[local:E:b5505d33] logged in with entity id 367 at (-37.5, 83.0, 72.5)
+[09Nov2026 19:01:37.265] [Render thread/INFO] [xaero.map.WorldMap/]: Fullscreen map required item set to nothing.
+[09Nov2026 19:01:37.272] [Render thread/INFO] [xaero.map.WorldMap/]: New world map session initialized!
+[09Nov2026 19:01:37.280] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Dev joined the game
+[09Nov2026 19:01:37.313] [Render thread/INFO] [xaero.hud.minimap.MinimapLogs/]: Minimap required item set to nothing.
+[09Nov2026 19:01:37.322] [Render thread/INFO] [xaero.hud.minimap.MinimapLogs/]: New Xaero hud session initialized!
+[09Nov2026 19:01:37.597] [Render thread/INFO] [Inventory Profiles Next/]: [Inventory Profiles Next] Loaded 0 external GUI hints
+[09Nov2026 19:01:37.598] [Render thread/INFO] [Inventory Profiles Next/]: [Inventory Profiles Next] Loaded 803 build-in GUI hints
+[09Nov2026 19:01:37.598] [Render thread/INFO] [Inventory Profiles Next/]: [Inventory Profiles Next] Effective GUI hints after merge: 803
+[09Nov2026 19:01:37.747] [Render thread/INFO] [Iris/]: Reloading pipeline on dimension change: minecraft:overworld => minecraft:overworld
+[09Nov2026 19:01:37.748] [Render thread/INFO] [Iris/]: Destroying pipeline minecraft:overworld
+[09Nov2026 19:01:37.759] [Render thread/INFO] [Iris/]: Creating pipeline for dimension minecraft:overworld
+[09Nov2026 19:01:37.766] [Render thread/WARN] [Iris/]: Failed to resolve uniform fixedTaaCorrection, reason: Couldn't resolve: 
+[DEBUG] resolving BinaryExpr{ {FunctionCall{vec2 {[Id{pixelSizeX}, Id{pixelSizeY}]} }} multiply{0} {Number{0.51}} } to type vec2 (11)
+[DEBUG] resolving function multiply with args [FunctionCall{vec2 {[Id{pixelSizeX}, Id{pixelSizeY}]} }, Number{0.51}] to type vec2
+[DEBUG] resolving FunctionCall{vec2 {[Id{pixelSizeX}, Id{pixelSizeY}]} } to type vec2 (10)
+[DEBUG] resolving function vec2 with args [Id{pixelSizeX}, Id{pixelSizeY}] to type vec2
+[DEBUG] resolving Id{pixelSizeX} to type float (10)
+[DEBUG] resolved variable pixelSizeX to type float
+[DEBUG] resolving Id{pixelSizeY} to type float (10)
+[DEBUG] resolved variable pixelSizeY to type float
+[DEBUG] resolved function vec2 with args [Id{pixelSizeX}, Id{pixelSizeY}] to type vec2 directly
+[DEBUG] resolving Number{0.51} to type vec2 (10)
+[DEBUG] failed to resolve constant 0.51 (of type float) to type vec2 without implicit casts
+[DEBUG] resolving FunctionCall{vec2 {[Id{pixelSizeX}, Id{pixelSizeY}]} } to type vec2 (11)
+[DEBUG] resolving function vec2 with args [Id{pixelSizeX}, Id{pixelSizeY}] to type vec2
+[DEBUG] resolving Id{pixelSizeX} to type float (10)
+[DEBUG] resolved variable pixelSizeX to type float
+[DEBUG] resolving Id{pixelSizeY} to type float (10)
+[DEBUG] resolved variable pixelSizeY to type float
+[DEBUG] resolved function vec2 with args [Id{pixelSizeX}, Id{pixelSizeY}] to type vec2 directly
+[DEBUG] resolving Number{0.51} to type vec2 (11)
+[DEBUG] trying implicit casts to resolve constant 0.51 (of type float) to type vec2
+[DEBUG] failed to resolved Number{0.51} to type vec2, even using implicit casts
+[DEBUG] failed to resolve function multiply with args [FunctionCall{vec2 {[Id{pixelSizeX}, Id{pixelSizeY}]} }, Number{0.51}] to type vec2 ( = BinaryExpr{ {FunctionCall{vec2 {[Id{pixelSizeX}, Id{pixelSizeY}]} }} multiply{0} {Number{0.51}} })
+java.lang.RuntimeException: Couldn't resolve: 
+[DEBUG] resolving BinaryExpr{ {FunctionCall{vec2 {[Id{pixelSizeX}, Id{pixelSizeY}]} }} multiply{0} {Number{0.51}} } to type vec2 (11)
+[DEBUG] resolving function multiply with args [FunctionCall{vec2 {[Id{pixelSizeX}, Id{pixelSizeY}]} }, Number{0.51}] to type vec2
+[DEBUG] resolving FunctionCall{vec2 {[Id{pixelSizeX}, Id{pixelSizeY}]} } to type vec2 (10)
+[DEBUG] resolving function vec2 with args [Id{pixelSizeX}, Id{pixelSizeY}] to type vec2
+[DEBUG] resolving Id{pixelSizeX} to type float (10)
+[DEBUG] resolved variable pixelSizeX to type float
+[DEBUG] resolving Id{pixelSizeY} to type float (10)
+[DEBUG] resolved variable pixelSizeY to type float
+[DEBUG] resolved function vec2 with args [Id{pixelSizeX}, Id{pixelSizeY}] to type vec2 directly
+[DEBUG] resolving Number{0.51} to type vec2 (10)
+[DEBUG] failed to resolve constant 0.51 (of type float) to type vec2 without implicit casts
+[DEBUG] resolving FunctionCall{vec2 {[Id{pixelSizeX}, Id{pixelSizeY}]} } to type vec2 (11)
+[DEBUG] resolving function vec2 with args [Id{pixelSizeX}, Id{pixelSizeY}] to type vec2
+[DEBUG] resolving Id{pixelSizeX} to type float (10)
+[DEBUG] resolved variable pixelSizeX to type float
+[DEBUG] resolving Id{pixelSizeY} to type float (10)
+[DEBUG] resolved variable pixelSizeY to type float
+[DEBUG] resolved function vec2 with args [Id{pixelSizeX}, Id{pixelSizeY}] to type vec2 directly
+[DEBUG] resolving Number{0.51} to type vec2 (11)
+[DEBUG] trying implicit casts to resolve constant 0.51 (of type float) to type vec2
+[DEBUG] failed to resolved Number{0.51} to type vec2, even using implicit casts
+[DEBUG] failed to resolve function multiply with args [FunctionCall{vec2 {[Id{pixelSizeX}, Id{pixelSizeY}]} }, Number{0.51}] to type vec2
+	at TRANSFORMER/iris@1.8.14-beta.1+mc1.21.1/kroppeb.stareval.resolver.ExpressionResolver.resolveExpression(ExpressionResolver.java:54) ~[iris-neoforge-1.8.14-beta.1+mc1.21.1.jar%23242!/:?]
+	at TRANSFORMER/iris@1.8.14-beta.1+mc1.21.1/net.irisshaders.iris.uniforms.custom.CustomUniforms.<init>(CustomUniforms.java:60) ~[iris-neoforge-1.8.14-beta.1+mc1.21.1.jar%23242!/:?]
+	at TRANSFORMER/iris@1.8.14-beta.1+mc1.21.1/net.irisshaders.iris.uniforms.custom.CustomUniforms$Builder.build(CustomUniforms.java:332) ~[iris-neoforge-1.8.14-beta.1+mc1.21.1.jar%23242!/:?]
+	at TRANSFORMER/iris@1.8.14-beta.1+mc1.21.1/net.irisshaders.iris.uniforms.custom.CustomUniforms$Builder.build(CustomUniforms.java:343) ~[iris-neoforge-1.8.14-beta.1+mc1.21.1.jar%23242!/:?]
+	at TRANSFORMER/iris@1.8.14-beta.1+mc1.21.1/net.irisshaders.iris.pipeline.IrisRenderingPipeline.<init>(IrisRenderingPipeline.java:282) ~[iris-neoforge-1.8.14-beta.1+mc1.21.1.jar%23242!/:?]
+	at TRANSFORMER/iris@1.8.14-beta.1+mc1.21.1/net.irisshaders.iris.Iris.createPipeline(Iris.java:642) ~[iris-neoforge-1.8.14-beta.1+mc1.21.1.jar%23242!/:?]
+	at TRANSFORMER/iris@1.8.14-beta.1+mc1.21.1/net.irisshaders.iris.pipeline.PipelineManager.preparePipeline(PipelineManager.java:33) ~[iris-neoforge-1.8.14-beta.1+mc1.21.1.jar%23242!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.handler$bge000$iris$resetPipeline(Minecraft.java:9043) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.updateLevelInEngines(Minecraft.java) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.setLevel(Minecraft.java:2117) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.multiplayer.ClientPacketListener.handleLogin(ClientPacketListener.java:421) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.network.protocol.game.ClientboundLoginPacket.handle(ClientboundLoginPacket.java:69) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.network.protocol.game.ClientboundLoginPacket.handle(ClientboundLoginPacket.java:17) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.network.protocol.PacketUtils.lambda$ensureRunningOnSameThread$0(PacketUtils.java:27) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.thread.BlockableEventLoop.doRunTask(BlockableEventLoop.java:148) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.thread.ReentrantBlockableEventLoop.doRunTask(ReentrantBlockableEventLoop.java:23) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.thread.BlockableEventLoop.pollTask(BlockableEventLoop.java:122) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.thread.BlockableEventLoop.runAllTasks(BlockableEventLoop.java:111) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.runTick(Minecraft.java:1155) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.run(Minecraft.java:807) ~[neoforge-21.1.264.jar%23220!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.main.Main.main(Main.java:230) ~[neoforge-21.1.264.jar%23220!/:?]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[?:?]
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:136) ~[loader-4.0.45.jar%23134!/:4.0]
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:124) ~[loader-4.0.45.jar%23134!/:4.0]
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.NeoForgeClientDevLaunchHandler.runService(NeoForgeClientDevLaunchHandler.java:23) ~[loader-4.0.45.jar%23134!/:4.0]
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.lambda$launchService$4(CommonLaunchHandler.java:118) ~[loader-4.0.45.jar%23134!/:4.0]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) [modlauncher-11.0.5.jar%23114!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) [modlauncher-11.0.5.jar%23114!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) [modlauncher-11.0.5.jar%23114!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.Launcher.run(Launcher.java:103) [modlauncher-11.0.5.jar%23114!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.Launcher.main(Launcher.java:74) [modlauncher-11.0.5.jar%23114!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) [modlauncher-11.0.5.jar%23114!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) [modlauncher-11.0.5.jar%23114!/:?]
+	at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.run(BootstrapLauncher.java:210) [bootstraplauncher-2.0.2.jar:?]
+	at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:69) [bootstraplauncher-2.0.2.jar:?]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[?:?]
+	at net.neoforged.devlaunch.Main.main(Main.java:57) [DevLaunch-1.0.2.jar:?]
+[09Nov2026 19:01:38.230] [Render thread/INFO] [ChunkBuilder/]: Started 1 worker threads
+[09Nov2026 19:01:38.368] [Render thread/INFO] [EMI/]: [EMI] Tags synchronized, reloading EMI
+[09Nov2026 19:01:38.369] [Render thread/INFO] [EMI/]: [EMI] Starting Reload
+[09Nov2026 19:01:38.377] [Thread-23/INFO] [EMI/]: [EMI] Starting EMI reload...
+[09Nov2026 19:01:38.377] [Thread-23/INFO] [EMI/]: [EMI] Clearing data
+[09Nov2026 19:01:38.401] [Render thread/INFO] [xaero.hud.minimap.MinimapLogs/]: Minimap updated server level id: -865973704 for world ResourceKey[minecraft:dimension / minecraft:overworld]
+[09Nov2026 19:01:38.410] [Render thread/INFO] [snownee.jade.Jade/]: Received config from the server: 
+[09Nov2026 19:01:38.478] [Thread-23/INFO] [EMI/]: [EMI] Initializing plugin from emi
+[09Nov2026 19:01:38.486] [Render thread/INFO] [ru.adept.core.AdeptCore/]: [clienttest] игрок в мире
+[09Nov2026 19:01:38.501] [Thread-23/INFO] [EMI/]: [EMI] Initialized plugin from emi in 18ms
+[09Nov2026 19:01:38.502] [Thread-23/INFO] [EMI/]: [EMI] Initializing plugin from curios
+[09Nov2026 19:01:38.502] [Thread-23/INFO] [EMI/]: [EMI] Initialized plugin from curios in 0ms
+[09Nov2026 19:01:38.504] [Thread-23/INFO] [EMI/]: [EMI] Processing tags
+[09Nov2026 19:01:38.513] [Thread-23/ERROR] [EMI/]: [EMI] Untranslated tag #born_in_chaos_v1:easter_eggs
+[09Nov2026 19:01:38.513] [Thread-23/ERROR] [EMI/]: [EMI] Untranslated tag #born_in_chaos_v1:rareloot
+[09Nov2026 19:01:38.514] [Thread-23/ERROR] [EMI/]: [EMI] Untranslated tag #born_in_chaos_v1:sweets
+[09Nov2026 19:01:38.514] [Thread-23/ERROR] [EMI/]: [EMI] Untranslated tag #born_in_chaos_v1:unusualloot
+[09Nov2026 19:01:38.514] [Thread-23/ERROR] [EMI/]: [EMI] Untranslated tag #forge:permafrost_shard
+[09Nov2026 19:01:38.514] [Thread-23/ERROR] [EMI/]: [EMI] Untranslated tag #minecraft:d_dub
+[09Nov2026 19:01:38.514] [Thread-23/ERROR] [EMI/]: [EMI] Untranslated tag #minecraft:logss
+[09Nov2026 19:01:38.514] [Thread-23/ERROR] [EMI/]: [EMI] Untranslated tag #minecraft:moseek
+[09Nov2026 19:01:38.514] [Thread-23/ERROR] [EMI/]: [EMI] Untranslated tag #minecraft:woodkr
+[09Nov2026 19:01:38.514] [Thread-23/ERROR] [EMI/]: [EMI] Untranslated tag #mowziesmobs:hand_weapons
+[09Nov2026 19:01:38.514] [Thread-23/ERROR] [EMI/]: [EMI] Untranslated tag #terralith:spire/common_tools
+[09Nov2026 19:01:38.514] [Thread-23/ERROR] [EMI/]: [EMI] Untranslated tag #terralith:spire/diamond
+[09Nov2026 19:01:38.514] [Thread-23/ERROR] [EMI/]: [EMI] Untranslated tag #terralith:spire/junk_tools
+[09Nov2026 19:01:38.514] [Thread-23/ERROR] [EMI/]: [EMI] Untranslated tag #terralith:spire/leather_armor
+[09Nov2026 19:01:38.514] [Thread-23/ERROR] [EMI/]: [EMI] Untranslated tag #terralith:spire/rare_tools
+[09Nov2026 19:01:38.514] [Thread-23/INFO] [EMI/]: [EMI]  Tag warning can be disabled in the config, EMI docs describe how to add a translation or exclude tags.
+[09Nov2026 19:01:38.531] [Thread-23/INFO] [EMI/]: [EMI] Constructing index
+[09Nov2026 19:01:38.536] [Thread-23/INFO] [EMI/]: [EMI] Reloading item groups on client thread...
+[09Nov2026 19:01:38.604] [Render thread/INFO] [ChunkBuilder/]: Stopping worker threads
+[09Nov2026 19:01:38.617] [Render thread/INFO] [ChunkBuilder/]: Started 1 worker threads
+[09Nov2026 19:01:38.833] [Render thread/WARN] [Sodium-VertexConsumerTracker/]: Class com.mojang.blaze3d.vertex.BufferBuilder does not support optimized vertex writing code paths, which may cause reduced rendering performance
+[09Nov2026 19:01:41.685] [Render thread/INFO] [xaero.hud.minimap.MinimapLogs/]: Reloading radar icon resources...
+[09Nov2026 19:01:41.709] [Render thread/INFO] [xaero.hud.minimap.MinimapLogs/]: Reloaded radar icon resources!
+[09Nov2026 19:01:42.081] [Render thread/INFO] [net.minecraft.advancements.AdvancementTree/]: Loaded 75 advancements
+[09Nov2026 19:01:42.082] [Thread-23/INFO] [EMI/]: [EMI] Reloading item groups on client thread took 3545ms
+[09Nov2026 19:01:42.131] [Thread-23/INFO] [EMI/]: [EMI] Loading plugin from emi
+[09Nov2026 19:01:42.252] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Hello, thank you for downloading Terralith!\n\n- Warning: you CANNOT cleanly uninstall Terralith - things will break!\n- Terralith Discord (Stardust Labs)\n- Disable this message using the config menu\n 
+[09Nov2026 19:01:42.814] [Thread-23/INFO] [EMI/]: [EMI] Reloaded plugin from emi in 682ms
+[09Nov2026 19:01:42.815] [Thread-23/INFO] [EMI/]: [EMI] Loading plugin from curios
+[09Nov2026 19:01:42.815] [Thread-23/INFO] [EMI/]: [EMI] Reloaded plugin from curios in 0ms
+[09Nov2026 19:01:42.815] [Thread-23/INFO] [EMI/]: [EMI] Baking index
+[09Nov2026 19:01:42.885] [Thread-23/INFO] [EMI/]: [EMI] Registering late recipes
+[09Nov2026 19:01:42.885] [Thread-23/INFO] [EMI/]: [EMI] Baking recipes
+[09Nov2026 19:01:43.241] [Thread-23/INFO] [EMI/]: [EMI] Baked 4497 recipes in 353ms
+[09Nov2026 19:01:43.250] [Thread-23/INFO] [EMI/]: [EMI] Baking search
+[09Nov2026 19:01:43.470] [Thread-24/INFO] [EMI/]: [EMI] Baked recipes after reload in 231ms
+[09Nov2026 19:01:44.552] [Thread-23/INFO] [EMI/]: [EMI] Finishing up
+[09Nov2026 19:01:44.733] [Thread-23/INFO] [EMI/]: [EMI] Reloaded EMI in 6355ms
+[09Nov2026 19:01:47.430] [Render thread/INFO] [net.minecraft.advancements.AdvancementTree/]: Loaded 76 advancements
+[09Nov2026 19:01:49.698] [Render thread/INFO] [ru.adept.core.AdeptCore/]: [clienttest] ADEPT_SCENE table
+[09Nov2026 19:01:51.938] [Render thread/WARN] [ModernFix/]: Time from main menu to in-game was 51.218204 seconds
+[09Nov2026 19:01:51.939] [Render thread/WARN] [ModernFix/]: Total time to load game and open world was 118.5092 seconds
+[09Nov2026 19:01:55.132] [Render thread/INFO] [ru.adept.core.AdeptCore/]: [clienttest] ADEPT_SCENE node_camp
+[09Nov2026 19:02:00.610] [Render thread/INFO] [ru.adept.core.AdeptCore/]: [clienttest] ADEPT_SCENE machines
+[09Nov2026 19:02:05.804] [Render thread/INFO] [ru.adept.core.AdeptCore/]: [clienttest] ADEPT_SCENE mobs
+[09Nov2026 19:02:10.201] [Render thread/INFO] [ru.adept.core.AdeptCore/]: [clienttest] ADEPT_SCENE blade_hand
+[09Nov2026 19:02:44.297] [Render thread/INFO] [ru.adept.core.AdeptCore/]: [clienttest] измерение базы: ADEPT_BASE_DIM_OK
+[09Nov2026 19:02:44.298] [Render thread/INFO] [ru.adept.core.AdeptCore/]: [clienttest] ADEPT_CLIENTTEST_OK
+[09Nov2026 19:02:44.301] [CullThread/INFO] [STDOUT/]: [dev.tr7zw.entityculling.CullTask:run:81]: Shutting down culling task!
+[09Nov2026 19:02:44.580] [Render thread/INFO] [net.minecraft.client.Minecraft/]: Stopping!
+[09Nov2026 19:02:44.582] [Render thread/INFO] [xaero.map.WorldMap/]: Finalizing world map session...
+[09Nov2026 19:02:44.597] [Server thread/INFO] [net.minecraft.server.network.ServerGamePacketListenerImpl/]: Dev lost connection: Disconnected
+[09Nov2026 19:02:44.597] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Dev left the game
+[09Nov2026 19:02:44.609] [Server thread/INFO] [net.minecraft.server.network.ServerCommonPacketListenerImpl/]: Stopping singleplayer server as player logged out
+[09Nov2026 19:02:44.623] [Thread-7/INFO] [xaero.map.WorldMap/]: World map cleaned normally!
+[09Nov2026 19:02:44.664] [Render thread/INFO] [xaero.map.WorldMap/]: World map session finalized.
+[09Nov2026 19:02:44.664] [Render thread/INFO] [xaero.hud.minimap.MinimapLogs/]: Xaero hud session finalized.
+[09Nov2026 19:02:44.676] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Stopping server
+[09Nov2026 19:02:44.677] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving players
+[09Nov2026 19:02:44.677] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving worlds
+[09Nov2026 19:02:44.812] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[clienttest-1794250857865]'/minecraft:overworld
+[09Nov2026 19:02:44.990] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[clienttest-1794250857865]'/minecraft:the_nether
+[09Nov2026 19:02:44.993] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[clienttest-1794250857865]'/adept_core:base
+[09Nov2026 19:02:44.996] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[clienttest-1794250857865]'/minecraft:the_end
+[09Nov2026 19:02:45.008] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (clienttest-1794250857865): All chunks are saved
+[09Nov2026 19:02:45.008] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[09Nov2026 19:02:45.008] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (base): All chunks are saved
+[09Nov2026 19:02:45.008] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[09Nov2026 19:02:45.008] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage: All dimensions are saved
+[09Nov2026 19:02:45.085] [Render thread/INFO] [ChunkBuilder/]: Stopping worker threads
