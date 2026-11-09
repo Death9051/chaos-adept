@@ -40,7 +40,9 @@ public final class ComponentGameTests {
                     helper.assertTrue(item.rank() == rank && item.family() == family && item.variant() == variant,
                             "Предмет " + id + " хранит не те ранг, семейство или вариацию");
                     String name = item.getName(new ItemStack(item)).getString();
-                    helper.assertTrue(name.contains(ComponentItem.roman(rank)), "В названии " + id + " нет ранга: " + name);
+                    helper.assertTrue(!name.isBlank() && !name.equals(id.getPath()), "У " + id + " пустое название: " + name);
+                    helper.assertTrue(item.getDescriptionId().equals("item." + AdeptCore.MOD_ID + "." + id.getPath()),
+                            "У " + id + " не тот ключ названия: " + item.getDescriptionId());
                 }
             }
         }

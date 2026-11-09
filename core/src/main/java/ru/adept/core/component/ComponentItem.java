@@ -10,6 +10,7 @@ import java.util.List;
 
 /**
  * Компонент для ступеней прокачки артефактов: семейство, ранг I–III и вариация.
+ * Название — обычный ключ предмета {@code item.adept_core.<id>}: ранг в нём передан материалом, вариация — словом.
  * В срезе 4 рецептов нет — выдаётся командой {@code /adept component} и лежит во вкладке творческого режима.
  */
 public class ComponentItem extends Item {
@@ -43,18 +44,8 @@ public class ComponentItem extends Item {
     }
 
     @Override
-    public Component getName(ItemStack stack) {
-        Component familyName = Component.translatable("adept_core.component." + family.id());
-        String key = family.nature() == ComponentFamily.Nature.BOTH
-                ? "adept_core.component.name." + variant.id()
-                : "adept_core.component.name";
-        return Component.translatable(key, familyName, roman(rank));
-    }
-
-    @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("adept_core.component.rank", roman(rank),
-                Component.translatable("adept_core.component.material." + rank)).withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("adept_core.component.rank", roman(rank)).withStyle(ChatFormatting.GRAY));
         tooltip.add(Component.translatable("adept_core.component.variant." + variant.id())
                 .withStyle(variant == ComponentVariant.MAGIC ? ChatFormatting.BLUE : ChatFormatting.RED));
         tooltip.add(Component.translatable("adept_core.component.no_recipe").withStyle(ChatFormatting.DARK_GRAY));
