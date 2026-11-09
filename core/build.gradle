@@ -22,3 +22,7 @@ neoForge {
         }
     }
 }
+
+// Датапак сборки (pack/datapack): правки сторонних модов, которые делаются только данными.
+// Едет в jar ядра; файлы с условием neoforge:mod_loaded без нужного мода пропускаются.
+sourceSets.main.resources.srcDir rootProject.file('pack/datapack')

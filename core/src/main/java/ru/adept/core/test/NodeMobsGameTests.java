@@ -52,6 +52,7 @@ public final class NodeMobsGameTests {
         helper.assertTrue(armadillo.isCurled(), "Броненосец не свернулся");
         // Высота считается с масштабом сущности: моды сборки (Improved Mobs) могут менять атрибут масштаба.
         float scale = armadillo.getScale();
+        AdeptCore.LOG.info("Броненосец в тесте: масштаб {}", scale);
         helper.assertTrue(Math.abs(armadillo.getBbHeight() - 0.9f * scale) < 1e-3 && Math.abs(armadillo.getBbWidth() - 0.9f * scale) < 1e-3,
                 "Свёрнутый хитбокс не 0,9 × 0,9: " + armadillo.getBbWidth() + " × " + armadillo.getBbHeight() + ", масштаб " + scale);
         helper.succeed();
