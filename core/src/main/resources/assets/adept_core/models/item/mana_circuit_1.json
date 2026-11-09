@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "adept_core:item/component/mana_circuit_1"
+  }
+}
