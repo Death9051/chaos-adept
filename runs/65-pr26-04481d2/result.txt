@@ -1,0 +1,6 @@
+build=success servertest=success clienttest=success fullpack=success
+branch=docs/slice-4 pr=26 sha=04481d21e5b686fff05050776a6b7468af84c502 run=65
+fullpack: lock=ok
+fullpack: gametest=success
+fullpack: client=success
+fullpack: shaders=success
