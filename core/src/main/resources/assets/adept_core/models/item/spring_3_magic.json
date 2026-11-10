@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "adept_core:item/component/spring_3_magic"
+  }
+}
