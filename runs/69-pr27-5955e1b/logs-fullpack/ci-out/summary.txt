@@ -1,0 +1,6 @@
+lock=ok
+gametest=failure
+client=success
+shaders=success
+componentcommandgives failed at -10536578, -60, -5867197! Payload curios:sync_data may not be sent to the client!
+1 required tests failed :(
