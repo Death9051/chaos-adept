@@ -1,0 +1,8 @@
+build=success servertest=success clienttest=success fullpack=success
+branch=build/slice3-hero-skins pr=29 sha=b95307dc23173d42abaf87454e9b08d9b9a21941 run=72
+fullpack: lock=ok
+fullpack: gametest=failure
+fullpack: client=success
+fullpack: shaders=success
+fullpack: componentcommandgives failed at -4584500, -60, -10844774! Payload curios:sync_data may not be sent to the client!
+fullpack: 1 required tests failed :(
