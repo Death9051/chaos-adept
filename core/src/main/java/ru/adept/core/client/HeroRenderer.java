@@ -7,15 +7,16 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.resources.ResourceLocation;
+import ru.adept.core.AdeptCore;
 import ru.adept.core.hero.HeroEntity;
 
 /**
- * Герои рисуются моделью игрока (ванильный рендер-тип, совместим с Iris). Скины — заглушка до выбора
- * из открытой базы скинов: ванильные Стив и Алекс по классу.
+ * Герои рисуются моделью игрока (ванильный рендер-тип, совместим с Iris). Скины из открытой базы
+ * (авторы и лицензии — docs/skins.md): по {@link #VARIANTS} на класс,
+ * {@code textures/entity/hero/<класс>_<n>.png}; вариант постоянен для героя (по UUID).
  */
 public class HeroRenderer extends HumanoidMobRenderer<HeroEntity, PlayerModel<HeroEntity>> {
-    private static final ResourceLocation STEVE = ResourceLocation.withDefaultNamespace("textures/entity/player/wide/steve.png");
-    private static final ResourceLocation ALEX = ResourceLocation.withDefaultNamespace("textures/entity/player/wide/alex.png");
+    private static final int VARIANTS = 3;
 
     public HeroRenderer(EntityRendererProvider.Context ctx) {
         super(ctx, new PlayerModel<>(ctx.bakeLayer(ModelLayers.PLAYER), false), 0.5f);
@@ -25,9 +26,8 @@ public class HeroRenderer extends HumanoidMobRenderer<HeroEntity, PlayerModel<He
 
     @Override
     public ResourceLocation getTextureLocation(HeroEntity hero) {
-        return switch (hero.heroClass()) {
-            case ARCHER, TRACKER -> ALEX;
-            default -> STEVE;
-        };
+        int n = Math.floorMod(hero.getUUID().hashCode(), VARIANTS) + 1;
+        return ResourceLocation.fromNamespaceAndPath(AdeptCore.MOD_ID,
+                "textures/entity/hero/" + hero.heroClass().id() + "_" + n + ".png");
     }
 }
