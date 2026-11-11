@@ -23,6 +23,10 @@ import ru.adept.core.base.BaseData;
 import ru.adept.core.base.BaseTravel;
 import ru.adept.core.camp.ExtractionManager;
 import ru.adept.core.camp.WaveSpawner;
+import ru.adept.core.component.ComponentFamily;
+import ru.adept.core.component.ComponentItem;
+import ru.adept.core.component.ComponentVariant;
+import ru.adept.core.component.ModComponents;
 import ru.adept.core.config.BalanceConfig;
 import ru.adept.core.threat.ThreatManager;
 import ru.adept.core.data.ArtifactProgress;
@@ -63,7 +67,8 @@ public final class AdeptCommands {
                 .then(extraction())
                 .then(absorb())
                 .then(base())
-                .then(trader()));
+                .then(trader())
+                .then(component()));
     }
 
     // /adept flag get|set|remove <key> [value]
@@ -386,6 +391,64 @@ public final class AdeptCommands {
             TraderManager.startRitual(player, player.blockPosition().relative(player.getDirection(), 3));
             return reply(ctx, "Ритуал начат");
         });
+    }
+
+    // /adept component rank <1-3> [кол-во] — все семейства ранга;
+    // /adept component <семейство> <1-3> [magic|tech] [кол-во] — один компонент (у семейств одной природы вариация не нужна)
+    private static LiteralArgumentBuilder<CommandSourceStack> component() {
+        LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("component");
+        root.then(Commands.literal("rank").then(Commands.argument("rank", IntegerArgumentType.integer(1, ComponentFamily.MAX_RANK))
+                .executes(ctx -> giveRank(ctx, 16))
+                .then(Commands.argument("count", IntegerArgumentType.integer(1, 64))
+                        .executes(ctx -> giveRank(ctx, IntegerArgumentType.getInteger(ctx, "count"))))));
+        for (ComponentFamily family : ComponentFamily.values()) {
+            var rankArg = Commands.argument("rank", IntegerArgumentType.integer(1, ComponentFamily.MAX_RANK));
+            if (family.nature() == ComponentFamily.Nature.BOTH) {
+                for (ComponentVariant variant : ComponentVariant.values()) {
+                    rankArg.then(Commands.literal(variant.id())
+                            .executes(ctx -> giveComponent(ctx, family, variant, 16))
+                            .then(Commands.argument("count", IntegerArgumentType.integer(1, 64))
+                                    .executes(ctx -> giveComponent(ctx, family, variant,
+                                            IntegerArgumentType.getInteger(ctx, "count")))));
+                }
+            } else {
+                ComponentVariant only = family.variants().get(0);
+                rankArg.executes(ctx -> giveComponent(ctx, family, only, 16))
+                        .then(Commands.argument("count", IntegerArgumentType.integer(1, 64))
+                                .executes(ctx -> giveComponent(ctx, family, only, IntegerArgumentType.getInteger(ctx, "count"))));
+            }
+            root.then(Commands.literal(family.id()).then(rankArg));
+        }
+        return root;
+    }
+
+    private static int giveComponent(CommandContext<CommandSourceStack> ctx, ComponentFamily family,
+                                     ComponentVariant variant, int count) throws CommandSyntaxException {
+        ServerPlayer player = ctx.getSource().getPlayerOrException();
+        int rank = IntegerArgumentType.getInteger(ctx, "rank");
+        ComponentItem item = ModComponents.get(family, rank, variant);
+        giveStack(player, new net.minecraft.world.item.ItemStack(item, count));
+        return reply(ctx, "Выдано: " + family.itemId(rank, variant) + " ×" + count);
+    }
+
+    private static int giveRank(CommandContext<CommandSourceStack> ctx, int count) throws CommandSyntaxException {
+        ServerPlayer player = ctx.getSource().getPlayerOrException();
+        int rank = IntegerArgumentType.getInteger(ctx, "rank");
+        int kinds = 0;
+        for (ComponentFamily family : ComponentFamily.values()) {
+            for (ComponentVariant variant : family.variants()) {
+                giveStack(player, new net.minecraft.world.item.ItemStack(ModComponents.get(family, rank, variant), count));
+                kinds++;
+            }
+        }
+        return reply(ctx, "Выданы компоненты ранга " + ComponentItem.roman(rank) + ": " + kinds + " видов ×" + count);
+    }
+
+    /** В инвентарь, а что не влезло — на землю у игрока. */
+    private static void giveStack(ServerPlayer player, net.minecraft.world.item.ItemStack stack) {
+        if (!player.getInventory().add(stack) && !stack.isEmpty()) {
+            player.drop(stack, false);
+        }
     }
 
     private static ArtifactProgress progress(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {

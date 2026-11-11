@@ -173,6 +173,10 @@ jobs:
           ls -1 story/run/fullpack-client/mods > ci-out/mods-client.txt
           ls -1 story/run/fullpack-server/mods > ci-out/mods-server.txt
           ls -1 story/run/fullpack-shaders/shaderpacks > ci-out/shaderpacks.txt
+          # Конфиги сборки (pack/config) — в каждую папку запуска; недостающие ключи моды допишут сами.
+          for d in fullpack-server fullpack-client fullpack-shaders; do
+            mkdir -p story/run/$d/config && cp -r pack/config/. story/run/$d/config/
+          done
           for d in fullpack-client fullpack-shaders; do
             cat > story/run/$d/options.txt <<'EOF'
           onboardAccessibility:false
@@ -246,8 +250,10 @@ jobs:
             ci-out/
             story/run/fullpack-server/logs/
             story/run/fullpack-server/crash-reports/
+            story/run/fullpack-server/config/
             story/run/fullpack-client/logs/
             story/run/fullpack-client/crash-reports/
+            story/run/fullpack-client/config/
             story/run/fullpack-client/ci-screenshots/
             story/run/fullpack-shaders/logs/
             story/run/fullpack-shaders/crash-reports/

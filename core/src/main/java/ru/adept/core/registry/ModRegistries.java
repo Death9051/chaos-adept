@@ -81,6 +81,7 @@ public final class ModRegistries {
         // Классы с объектами загружаются здесь, до регистрации.
         ModBlocks.init();
         ModItems.init();
+        ru.adept.core.component.ModComponents.init();
         ModMenus.init();
         ModEntities.init();
         ModBlockEntities.init();
