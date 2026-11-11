@@ -68,7 +68,10 @@ public final class AdeptCommands {
                 .then(absorb())
                 .then(base())
                 .then(trader())
-                .then(component()));
+                .then(component())
+                .then(accumulator())
+                .then(soul())
+                .then(cauldron()));
     }
 
     // /adept flag get|set|remove <key> [value]
@@ -442,6 +445,97 @@ public final class AdeptCommands {
             }
         }
         return reply(ctx, "Выданы компоненты ранга " + ComponentItem.roman(rank) + ": " + kinds + " видов ×" + count);
+    }
+
+    // /adept accumulator — запасы накопителя; /adept accumulator set <мана> <электричество>
+    private static LiteralArgumentBuilder<CommandSourceStack> accumulator() {
+        return Commands.literal("accumulator")
+                .executes(ctx -> {
+                    ServerPlayer player = ctx.getSource().getPlayerOrException();
+                    var acc = ru.adept.core.mana.AccumulatorItem.find(player);
+                    if (acc.isEmpty()) {
+                        return reply(ctx, "Накопителя в инвентаре нет");
+                    }
+                    return reply(ctx, "Накопитель: мана " + ru.adept.core.mana.AccumulatorItem.stored(acc, ru.adept.core.mana.ArtifactPower.Resource.MANA)
+                            + ", электричество " + ru.adept.core.mana.AccumulatorItem.stored(acc, ru.adept.core.mana.ArtifactPower.Resource.ELECTRICITY)
+                            + " из " + ru.adept.core.mana.AccumulatorItem.capacity(player) + " каждого");
+                })
+                .then(Commands.literal("set").then(Commands.argument("mana", IntegerArgumentType.integer(0, 1_000_000))
+                        .then(Commands.argument("electricity", IntegerArgumentType.integer(0, 1_000_000)).executes(ctx -> {
+                            ServerPlayer player = ctx.getSource().getPlayerOrException();
+                            var acc = ru.adept.core.mana.AccumulatorItem.find(player);
+                            if (acc.isEmpty()) {
+                                acc = new net.minecraft.world.item.ItemStack(ru.adept.core.registry.ModItems.ACCUMULATOR.get());
+                                giveStack(player, acc);
+                                acc = ru.adept.core.mana.AccumulatorItem.find(player);
+                            }
+                            int cap = ru.adept.core.mana.AccumulatorItem.capacity(player);
+                            ru.adept.core.mana.AccumulatorItem.setStored(acc, ru.adept.core.mana.ArtifactPower.Resource.MANA,
+                                    Math.min(cap, IntegerArgumentType.getInteger(ctx, "mana")));
+                            ru.adept.core.mana.AccumulatorItem.setStored(acc, ru.adept.core.mana.ArtifactPower.Resource.ELECTRICITY,
+                                    Math.min(cap, IntegerArgumentType.getInteger(ctx, "electricity")));
+                            return reply(ctx, "Запасы накопителя заданы (потолок " + cap + ")");
+                        }))));
+    }
+
+    // /adept soul <normal|strong|guardian> [кол-во] — положить душу на землю перед игроком (убийца — игрок);
+    // /adept soul core [кол-во] — выдать ядра душ
+    private static LiteralArgumentBuilder<CommandSourceStack> soul() {
+        LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("soul");
+        for (ru.adept.core.mana.SoulStrength s : ru.adept.core.mana.SoulStrength.values()) {
+            root.then(Commands.literal(s.id())
+                    .executes(ctx -> spawnSoul(ctx, s, 1))
+                    .then(Commands.argument("count", IntegerArgumentType.integer(1, 1000))
+                            .executes(ctx -> spawnSoul(ctx, s, IntegerArgumentType.getInteger(ctx, "count")))));
+        }
+        root.then(Commands.literal("core")
+                .executes(ctx -> giveCores(ctx, 1))
+                .then(Commands.argument("count", IntegerArgumentType.integer(1, 64))
+                        .executes(ctx -> giveCores(ctx, IntegerArgumentType.getInteger(ctx, "count")))));
+        return root;
+    }
+
+    private static int spawnSoul(CommandContext<CommandSourceStack> ctx, ru.adept.core.mana.SoulStrength strength, int count)
+            throws CommandSyntaxException {
+        ServerPlayer player = ctx.getSource().getPlayerOrException();
+        var pos = player.position().add(player.getLookAngle().multiply(1, 0, 1).normalize().scale(3)).add(0, 0.5, 0);
+        player.level().addFreshEntity(ru.adept.core.mana.SoulEntity.create(player.level(), pos, strength, count, player.getUUID()));
+        return reply(ctx, "Душа (" + strength.id() + ") ×" + count + " лежит перед вами");
+    }
+
+    private static int giveCores(CommandContext<CommandSourceStack> ctx, int count) throws CommandSyntaxException {
+        giveStack(ctx.getSource().getPlayerOrException(),
+                new net.minecraft.world.item.ItemStack(ru.adept.core.registry.ModItems.SOUL_CORE.get(), count));
+        return reply(ctx, "Выдано ядер душ: " + count);
+    }
+
+    // /adept cauldron — горнило, сосуд и запас маны котла; /adept cauldron fill <normal|strong|guardian> <кол-во> — души в котёл
+    private static LiteralArgumentBuilder<CommandSourceStack> cauldron() {
+        LiteralArgumentBuilder<CommandSourceStack> fill = Commands.literal("fill");
+        for (ru.adept.core.mana.SoulStrength s : ru.adept.core.mana.SoulStrength.values()) {
+            fill.then(Commands.literal(s.id()).then(Commands.argument("count", IntegerArgumentType.integer(1, 1000)).executes(ctx -> {
+                ServerPlayer player = ctx.getSource().getPlayerOrException();
+                var cauldron = ru.adept.core.mana.SoulCauldronItem.find(player);
+                if (cauldron.isEmpty()) {
+                    return reply(ctx, "Котла душ в инвентаре нет");
+                }
+                int taken = ru.adept.core.mana.SoulCauldronItem.collect(cauldron, s, IntegerArgumentType.getInteger(ctx, "count"));
+                return reply(ctx, "Котёл принял душ: " + taken);
+            })));
+        }
+        return Commands.literal("cauldron")
+                .executes(ctx -> {
+                    ServerPlayer player = ctx.getSource().getPlayerOrException();
+                    var c = ru.adept.core.mana.SoulCauldronItem.find(player);
+                    if (c.isEmpty()) {
+                        return reply(ctx, "Котла душ в инвентаре нет");
+                    }
+                    return reply(ctx, "Горнило: " + java.util.Arrays.toString(ru.adept.core.mana.SoulCauldronItem.furnace(c))
+                            + ", сосуд: " + (ru.adept.core.mana.SoulCauldronItem.vessel(c).isEmpty() ? "нет"
+                            : ru.adept.core.mana.SoulCauldronItem.vessel(c) + " " + java.util.Arrays.toString(ru.adept.core.mana.SoulCauldronItem.vesselSouls(c)))
+                            + ", мана в котле: " + ru.adept.core.mana.SoulCauldronItem.buffer(c));
+                })
+                .then(fill);
     }
 
     /** В инвентарь, а что не влезло — на землю у игрока. */

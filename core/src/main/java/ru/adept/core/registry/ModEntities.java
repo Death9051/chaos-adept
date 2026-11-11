@@ -59,6 +59,11 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<TraderEntity>> TRADER = ENTITIES.register("trader",
             () -> EntityType.Builder.of(TraderEntity::new, MobCategory.MISC).sized(0.6f, 1.95f).clientTrackingRange(10).build("trader"));
 
+    /** Душа на земле (срез 3): лёгкая сущность, заглушка 0,4 × 0,4, вид — частицы. */
+    public static final DeferredHolder<EntityType<?>, EntityType<ru.adept.core.mana.SoulEntity>> SOUL = ENTITIES.register("soul",
+            () -> EntityType.Builder.<ru.adept.core.mana.SoulEntity>of(ru.adept.core.mana.SoulEntity::new, MobCategory.MISC)
+                    .sized(0.4f, 0.4f).clientTrackingRange(8).updateInterval(2).build("soul"));
+
     private ModEntities() {
     }
 

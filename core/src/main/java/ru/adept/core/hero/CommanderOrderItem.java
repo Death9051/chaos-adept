@@ -43,8 +43,12 @@ public class CommanderOrderItem extends Item {
         if (tag.isEmpty()) {
             return;
         }
-        tooltip.add(Component.translatable("adept_core.commander_order.text", tag.getString("commander"), tag.getString("village"))
-                .withStyle(ChatFormatting.GRAY));
+        // Шаблон сюжета длинный (около 120 знаков) — переносим по словам, «\n» в шаблоне тоже даёт перенос.
+        String text = Component.translatable("adept_core.commander_order.text", tag.getString("commander"), tag.getString("village"))
+                .getString();
+        for (String line : ru.adept.core.util.TextWrap.wrap(text, ru.adept.core.util.TextWrap.TOOLTIP_CHARS)) {
+            tooltip.add(Component.literal(line).withStyle(ChatFormatting.GRAY));
+        }
         tooltip.add(Component.translatable("adept_core.commander_order.mark", tag.getInt("x"), tag.getInt("z"))
                 .withStyle(ChatFormatting.DARK_GRAY));
     }

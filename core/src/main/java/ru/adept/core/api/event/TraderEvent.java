@@ -38,18 +38,32 @@ public abstract class TraderEvent extends AdeptEvent {
 
     /**
      * Сделка: предмет, категория ({@code purchase} — покупка у торговца; позже {@code trophy}, {@code pillar_material},
-     * {@code trinket}, {@code semi_finished}, {@code other} — продажа ему) и количество.
+     * {@code trinket}, {@code semi_finished}, {@code other} — продажа ему), количество и валюта оплаты
+     * ({@code node_cluster} — сгустки узлов, {@code soul_core} — ядра душ, срез 3).
      */
     public static final class Deal extends TraderEvent {
+        public static final String NODE_CLUSTER = "node_cluster";
+        public static final String SOUL_CORE = "soul_core";
+
         private final String item;
         private final String category;
         private final int count;
+        private final String currency;
 
         public Deal(Player player, String item, String category, int count) {
+            this(player, item, category, count, NODE_CLUSTER);
+        }
+
+        public Deal(Player player, String item, String category, int count, String currency) {
             super(player);
             this.item = item;
             this.category = category;
             this.count = count;
+            this.currency = currency;
+        }
+
+        public String getCurrency() {
+            return currency;
         }
 
         public String getItem() {

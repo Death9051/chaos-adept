@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " N ",
+    "M M",
+    " M "
+  ],
+  "key": {
+    "N": {
+      "item": "minecraft:gold_nugget"
+    },
+    "M": {
+      "item": "minecraft:quartz"
+    }
+  },
+  "result": {
+    "id": "adept_core:quartz_soul_vessel",
+    "count": 1
+  }
+}

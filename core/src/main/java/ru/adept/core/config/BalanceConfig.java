@@ -627,6 +627,8 @@ public final class BalanceConfig {
                 .defineInRange("improvedMobsPerTier", 50, 0, 10_000);
         b.pop();
 
+        ManaConfig.define(b);
+
         SPEC = b.build();
     }
 

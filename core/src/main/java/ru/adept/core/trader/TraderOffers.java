@@ -85,12 +85,42 @@ public final class TraderOffers {
         for (int i = 0; i < n; i++) {
             offers.add(offer(pool.remove(random.nextInt(pool.size())), spread, random));
         }
-        return offers;
+        // Каждая позиция — и за сгустки, и за ядра душ (срез 3): вариант за ядра идёт сразу следом.
+        MerchantOffers withCores = new MerchantOffers();
+        for (MerchantOffer o : offers) {
+            withCores.add(o);
+            MerchantOffer cores = coreOffer(o);
+            if (cores != null) {
+                withCores.add(cores);
+            }
+        }
+        return withCores;
     }
 
     private static MerchantOffer offer(Entry e, double spread, RandomSource random) {
         int price = Math.min(64, spread(e.price(), spread, random));
         int uses = Mth.randomBetweenInclusive(random, 1, BalanceConfig.TRADER_MAX_USES.get());
         return new MerchantOffer(new ItemCost(ModItems.cluster(1), price), e.goods().copy(), uses, 0, 0.0f);
+    }
+
+    /**
+     * Та же позиция за ядра душ (валюта наравне со сгустками): цена в сгустках × курс, до двух стопок.
+     * {@code null}, если дороже 128 ядер.
+     */
+    public static MerchantOffer coreOffer(MerchantOffer clusterOffer) {
+        int cores = clusterOffer.getItemCostA().count() * ru.adept.core.config.ManaConfig.SOUL_CORES_PER_CLUSTER.get();
+        if (cores > 128) {
+            return null;
+        }
+        ItemCost a = new ItemCost(ModItems.SOUL_CORE.get(), Math.min(64, cores));
+        java.util.Optional<ItemCost> b = cores > 64
+                ? java.util.Optional.of(new ItemCost(ModItems.SOUL_CORE.get(), cores - 64)) : java.util.Optional.empty();
+        return new MerchantOffer(a, b, clusterOffer.getResult().copy(), clusterOffer.getMaxUses(), 0, 0.0f);
+    }
+
+    /** Валюта сделки для события: ядра душ или сгустки. */
+    public static String currency(MerchantOffer offer) {
+        return offer.getItemCostA().item().value() == ModItems.SOUL_CORE.get()
+                ? ru.adept.core.api.event.TraderEvent.Deal.SOUL_CORE : ru.adept.core.api.event.TraderEvent.Deal.NODE_CLUSTER;
     }
 }

@@ -37,6 +37,14 @@ public final class TableActions {
     public static final String GAUSS_BUILT = "gauss/base";
     public static final String GAUSS_TEMPO = "gauss/barrel/tempo";
 
+    // Срез 3: одиночные артефакты — накопитель и котёл душ
+    public static final String ACCUMULATOR = "accumulator";
+    public static final String ACCUMULATOR_BUILT = "accumulator/base";
+    public static final String ACCUMULATOR_CAPACITY = "accumulator/core/capacity";
+    public static final String CAULDRON = "cauldron";
+    public static final String CAULDRON_BUILT = "cauldron/base";
+    public static final String CAULDRON_YIELD = "cauldron/furnace/yield";
+
     /** Грубые компоненты, которые делаются на столе вручную. Порядок = порядок кнопок. */
     public static final List<Craft> CRUDE = List.of(
             new Craft("crude_wiring", () -> ModItems.CRUDE_WIRING.get(), BalanceConfig.TABLE_CRUDE_WIRING::get),
@@ -129,6 +137,44 @@ public final class TableActions {
     /** Ступень I «Темпа» (ствол гаусс-пушки). */
     public static Result upgradeGaussTempo(Player player) {
         return upgradeStep(player, GAUSS_BUILT, GAUSS_TEMPO, BalanceConfig.TABLE_GAUSS_TEMPO_1.get());
+    }
+
+    /** Накопитель — одиночный артефакт, можно собрать заново, если потерян. */
+    public static Result craftAccumulator(Player player) {
+        return craftSingle(player, ACCUMULATOR, ACCUMULATOR_BUILT, ru.adept.core.config.ManaConfig.TABLE_ACCUMULATOR.get(),
+                () -> new ItemStack(ModItems.ACCUMULATOR.get()));
+    }
+
+    /** Котёл душ — одиночный артефакт. */
+    public static Result craftCauldron(Player player) {
+        return craftSingle(player, CAULDRON, CAULDRON_BUILT, ru.adept.core.config.ManaConfig.TABLE_CAULDRON.get(),
+                () -> new ItemStack(ModItems.SOUL_CAULDRON.get()));
+    }
+
+    /** Ступень I «Ёмкости» (ядро накопителя). */
+    public static Result upgradeAccumulatorCapacity(Player player) {
+        return upgradeStep(player, ACCUMULATOR_BUILT, ACCUMULATOR_CAPACITY, ru.adept.core.config.ManaConfig.TABLE_ACCUMULATOR_CAPACITY_1.get());
+    }
+
+    /** Ступень I «Выхода» (горнило котла душ). */
+    public static Result upgradeCauldronYield(Player player) {
+        return upgradeStep(player, CAULDRON_BUILT, CAULDRON_YIELD, ru.adept.core.config.ManaConfig.TABLE_CAULDRON_YIELD_1.get());
+    }
+
+    private static Result craftSingle(Player player, String id, String built, String price, Supplier<ItemStack> result) {
+        CostList cost = CostList.parse(price);
+        if (!cost.canPay(player)) {
+            return Result.NOT_ENOUGH;
+        }
+        cost.pay(player);
+        give(player, result.get());
+        ArtifactProgress p = progress(player);
+        boolean first = p.step(built) == 0;
+        if (first) {
+            player.setData(ModRegistries.ARTIFACT_PROGRESS, p.withStep(built, 1));
+        }
+        post(player, new ArtifactEvent.PrototypeCrafted(player, id, first));
+        return Result.OK;
     }
 
     private static Result upgradeStep(Player player, String built, String step, String price) {

@@ -71,6 +71,18 @@ public final class ModItems {
     public static final DeferredItem<ru.adept.core.hero.CommanderOrderItem> COMMANDER_ORDER = ITEMS.register("commander_order",
             () -> new ru.adept.core.hero.CommanderOrderItem(new Item.Properties().stacksTo(1)));
 
+    // Срез 3: накопитель, котёл душ, сосуды, ядро души
+    public static final DeferredItem<ru.adept.core.mana.AccumulatorItem> ACCUMULATOR = ITEMS.register("accumulator",
+            () -> new ru.adept.core.mana.AccumulatorItem(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<ru.adept.core.mana.SoulCauldronItem> SOUL_CAULDRON = ITEMS.register("soul_cauldron",
+            () -> new ru.adept.core.mana.SoulCauldronItem(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<ru.adept.core.mana.SoulVesselItem> GLASS_SOUL_VESSEL = ITEMS.register("glass_soul_vessel",
+            () -> new ru.adept.core.mana.SoulVesselItem("glass", () -> ru.adept.core.config.ManaConfig.VESSEL_GLASS.get(), new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<ru.adept.core.mana.SoulVesselItem> QUARTZ_SOUL_VESSEL = ITEMS.register("quartz_soul_vessel",
+            () -> new ru.adept.core.mana.SoulVesselItem("quartz", () -> ru.adept.core.config.ManaConfig.VESSEL_QUARTZ.get(), new Item.Properties().stacksTo(1)));
+    /** Ядро души — побочный продукт горнила, валюта торговца наравне со сгустками. */
+    public static final DeferredItem<Item> SOUL_CORE = ITEMS.registerSimpleItem("soul_core");
+
     private ModItems() {
     }
 
