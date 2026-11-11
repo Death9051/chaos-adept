@@ -57,7 +57,7 @@ public final class ClientSmokeTest {
             new Scene("node_camp", 6.5, 2.0, 1.0, 0, 20, false),
             new Scene("machines", -5.5, 2.0, 1.0, 0, 20, false),
             new Scene("mobs", 0.5, 2.5, 3.0, 0, 12, false),
-            new Scene("heroes", 0.5, 1.5, -1.0, 180, 15, false),
+            new Scene("heroes", 0.5, 3.5, -1.0, 180, 20, false),
             new Scene("blade_hand", 0.5, 1.0, 1.5, 0, 0, true));
 
     private static Stage stage = Stage.WAIT_TITLE;
