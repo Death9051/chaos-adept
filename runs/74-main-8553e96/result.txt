@@ -1,0 +1,8 @@
+build=success servertest=success clienttest=success fullpack=success
+branch=main pr= sha=8553e964653baaa2fc7ab0762545de6a95eb44ad run=74
+fullpack: lock=ok
+fullpack: gametest=failure
+fullpack: client=success
+fullpack: shaders=success
+fullpack: componentcommandgives failed at 14194759, -60, 12309335! Payload curios:sync_data may not be sent to the client!
+fullpack: 1 required tests failed :(
