@@ -10,7 +10,7 @@
 
 ## Текущая работа
 
-Срез 2 «мир отвечает»: [docs/slice-2.md](docs/slice-2.md). Срез 1 закрыт: [docs/slice-1.md](docs/slice-1.md).
+Срез 3 «мана и руны»: [docs/slice-3.md](docs/slice-3.md). Срезы 1 и 2 закрыты: [docs/slice-1.md](docs/slice-1.md), [docs/slice-2.md](docs/slice-2.md). Следующий — срез 4 (гаусс и клинок целиком), его компоненты уже готовы.
 
 ## Документы
 
