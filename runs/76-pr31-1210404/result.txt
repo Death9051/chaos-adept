@@ -1,0 +1,2 @@
+build=cancelled servertest=cancelled clienttest=cancelled fullpack=cancelled
+branch=core/slice3-souls pr=31 sha=1210404cc306214f9e61d49dda61ea46f322fd8b run=76

@@ -1,2 +1,0 @@
-build=success servertest=success clienttest=success
-branch=core/slice2-villages pr=15 sha=b248dd7c3c10f8f0d3dd2775e804dd4905c1f9b0 run=35
