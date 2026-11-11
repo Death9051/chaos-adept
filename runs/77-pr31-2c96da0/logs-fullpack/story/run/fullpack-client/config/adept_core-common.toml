@@ -1,0 +1,943 @@
+#Узлы концентрации магии
+[node]
+	#Максимальный уровень узлов (число актов)
+	# Default: 5
+	# Range: 1 ~ 10
+	maxLevel = 5
+	#Через сколько блоков от точки появления уровень узлов растёт на 1
+	# Default: 1500
+	# Range: 100 ~ 100000
+	blocksPerLevel = 1500
+	#Размер ячейки сетки узлов, блоки (кратно 16). В ячейке не больше одного узла;
+	#соседние ячейки с тем же биомом уступают одной — так узлов не больше одного на биом
+	# Default: 384
+	# Range: 64 ~ 4096
+	cellSize = 384
+	#Ближе этого к точке появления узлов нет, блоки
+	# Default: 160
+	# Range: 0 ~ 10000
+	minSpawnDistance = 160
+	#Дальность поиска резонатора, блоки
+	# Default: 1200
+	# Range: 64 ~ 10000
+	resonatorRange = 1200
+	#Перезарядка резонатора, тики
+	# Default: 40
+	# Range: 0 ~ 6000
+	resonatorCooldownTicks = 40
+
+#Выкачка узла
+[extraction]
+	#Длительность выкачки на первом уровне, минуты
+	# Default: 10
+	# Range: 1 ~ 120
+	minutesAtFirstLevel = 10
+	#Длительность выкачки на максимальном уровне, минуты
+	# Default: 30
+	# Range: 1 ~ 180
+	minutesAtMaxLevel = 30
+	#Откат прогресса при смерти игрока, проценты
+	# Default: 10
+	# Range: 0 ~ 100
+	deathRollbackPercent = 10
+	#Дальше этого расстояния от узла выкачка и волны на паузе, блоки
+	# Default: 48
+	# Range: 8 ~ 512
+	pauseDistance = 48
+	#Лагерь разворачивается не дальше стольких блоков от кристалла узла
+	# Default: 12
+	# Range: 2 ~ 64
+	campRadius = 12
+	#Скорость выкачки, пока волна не отбита (1.0 — полная)
+	# Default: 0.25
+	# Range: 0.0 ~ 1.0
+	waveSpeed = 0.25
+	#Прочность установки выкачки
+	# Default: 100
+	# Range: 1 ~ 10000
+	extractorHealth = 100
+	#Предмет для ремонта установки (ПКМ по установке)
+	extractorRepairItem = "minecraft:iron_ingot"
+	#Сколько прочности чинит один предмет
+	# Default: 25
+	# Range: 1 ~ 10000
+	extractorRepairAmount = 25
+
+#Поглощение биома после зачистки узла
+[absorb]
+	#Дальше стольких блоков от узла биом не поглощается (защита от огромных биомов)
+	# Default: 768
+	# Range: 32 ~ 4096
+	maxRadius = 768
+	#Предел ячеек 8×8 в одной области поглощения
+	# Default: 40000
+	# Range: 100 ~ 1000000
+	maxCells = 40000
+	#Сколько ячеек проверять за тик при поиске границ биома
+	# Default: 1500
+	# Range: 10 ~ 100000
+	samplesPerTick = 1500
+	#Сколько чанков превращать в пустошь за тик
+	# Default: 2
+	# Range: 1 ~ 64
+	chunksPerTick = 2
+
+#База, ключ и машины
+[base]
+	#Запас базы: электричество и мана, каждого (не больше 30000)
+	# Default: 20000
+	# Range: 100 ~ 30000
+	energyCapacity = 20000
+	#Перезарядка ключа, тики
+	# Default: 100
+	# Range: 0 ~ 12000
+	keyCooldownTicks = 100
+	#Кристаллов узла (топливо генератора) за зачищенный узел, на уровень узла
+	# Default: 8
+	# Range: 0 ~ 640
+	nodeShardsPerLevel = 8
+	#Генератор: сколько тиков горит один кристалл
+	# Default: 400
+	# Range: 1 ~ 72000
+	generatorBurnTicks = 400
+	# Default: 10
+	# Range: 0 ~ 10000
+	generatorElectricityPerTick = 10
+	# Default: 10
+	# Range: 0 ~ 10000
+	generatorManaPerTick = 10
+	#Переработка руды: тиков на один кусок
+	# Default: 100
+	# Range: 1 ~ 12000
+	crusherTicks = 100
+	# Default: 5
+	# Range: 0 ~ 10000
+	crusherElectricityPerTick = 5
+	#Плавильня: тиков на одну пыль
+	# Default: 80
+	# Range: 1 ~ 12000
+	smelterTicks = 80
+	# Default: 5
+	# Range: 0 ~ 10000
+	smelterManaPerTick = 5
+	#Плавильня: объём внутреннего бака, мВ
+	# Default: 1000
+	# Range: 100 ~ 30000
+	smelterTankMb = 1000
+	# Default: 100
+	# Range: 1 ~ 10000
+	smelterMbPerDust = 100
+	#Плавильня: расплава на один слиток, мВ
+	# Default: 100
+	# Range: 1 ~ 10000
+	smelterMbPerIngot = 100
+
+#Волны защитников
+[waves]
+	#Число волн = base + уровень узла
+	# Default: 3
+	# Range: 0 ~ 20
+	base = 3
+	#Не больше стольких волн на узел
+	# Default: 8
+	# Range: 1 ~ 20
+	max = 8
+	#Передышка между волнами, минимум, секунды
+	# Default: 60
+	# Range: 0 ~ 600
+	breakMinSeconds = 60
+	#Передышка между волнами, максимум, секунды
+	# Default: 120
+	# Range: 0 ~ 600
+	breakMaxSeconds = 120
+	#Одержимых зверей в первой волне
+	# Default: 4
+	# Range: 0 ~ 50
+	possessedBase = 4
+	#Прибавка одержимых с каждой следующей волной
+	# Default: 1
+	# Range: 0 ~ 20
+	possessedPerWave = 1
+	#С какой волны приходят шершни (номер с 1)
+	# Default: 1
+	# Range: 1 ~ 20
+	hornetsFromWave = 1
+	#Шершней в стае
+	# Default: 3
+	# Range: 0 ~ 30
+	hornetsCount = 3
+	#С какой волны приходят блуждающие огоньки
+	# Default: 2
+	# Range: 1 ~ 20
+	wispsFromWave = 2
+	#Блуждающих огоньков в волне
+	# Default: 2
+	# Range: 0 ~ 30
+	wispsCount = 2
+	#С какой волны приходят тлеющие духи (диверсанты)
+	# Default: 2
+	# Range: 1 ~ 20
+	spiritsFromWave = 2
+	#Тлеющих духов в волне
+	# Default: 1
+	# Range: 0 ~ 30
+	spiritsCount = 1
+	#Волна появляется не ближе стольких блоков от узла
+	# Default: 16
+	# Range: 4 ~ 128
+	spawnMinRadius = 16
+	#и не дальше стольких
+	# Default: 24
+	# Range: 4 ~ 128
+	spawnMaxRadius = 24
+
+#Противники на узле
+[mobs]
+	#Множитель здоровья одержимых зверей
+	# Default: 1.5
+	# Range: 0.1 ~ 20.0
+	possessedHealthMultiplier = 1.5
+	#Урон одержимого зверя
+	# Default: 3.0
+	# Range: 0.0 ~ 100.0
+	possessedDamage = 3.0
+	#Множитель скорости одержимых зверей
+	# Default: 1.25
+	# Range: 0.1 ~ 5.0
+	possessedSpeedMultiplier = 1.25
+	# Default: 6.0
+	# Range: 1.0 ~ 1000.0
+	hornetHealth = 6.0
+	# Default: 2.0
+	# Range: 0.0 ~ 100.0
+	hornetDamage = 2.0
+	#Длительность яда от шершня, тики
+	# Default: 60
+	# Range: 0 ~ 1200
+	hornetPoisonTicks = 60
+	# Default: 8.0
+	# Range: 1.0 ~ 1000.0
+	wispHealth = 8.0
+	#Сила взрыва огонька (блоки не ломает)
+	# Default: 1.5
+	# Range: 0.1 ~ 10.0
+	wispExplosion = 1.5
+	# Default: 12.0
+	# Range: 1.0 ~ 1000.0
+	spiritHealth = 12.0
+	#Урон тлеющего духа по установке выкачки
+	# Default: 25
+	# Range: 0 ~ 10000
+	spiritExtractorDamage = 25
+	#Рогатый вожак: здоровье
+	# Default: 120.0
+	# Range: 1.0 ~ 10000.0
+	guardianHealth = 120.0
+	#Рогатый вожак: урон
+	# Default: 8.0
+	# Range: 0.0 ~ 1000.0
+	guardianDamage = 8.0
+	#Рогатый вожак: лозы (замедление рядом), раз в столько тиков
+	# Default: 200
+	# Range: 20 ~ 6000
+	guardianVinesInterval = 200
+	#Рогатый вожак: зов зверей, раз в столько тиков
+	# Default: 400
+	# Range: 20 ~ 6000
+	guardianCallInterval = 400
+	#Рогатый вожак: сколько зверей приходит на зов
+	# Default: 2
+	# Range: 0 ~ 20
+	guardianCallCount = 2
+
+#Торговец Альянса
+[trader]
+	#Разброс цен от вызова к вызову (0.15 = ±15%)
+	# Default: 0.15
+	# Range: 0.0 ~ 1.0
+	priceSpread = 0.15
+	#Надбавка к цене категории в спросе (0.30 = +30%)
+	# Default: 0.3
+	# Range: 0.0 ~ 5.0
+	demandBonus = 0.3
+	#Случайных позиций в ассортименте, минимум
+	# Default: 3
+	# Range: 0 ~ 20
+	randomOffersMin = 3
+	#Случайных позиций в ассортименте, максимум
+	# Default: 5
+	# Range: 0 ~ 20
+	randomOffersMax = 5
+	#Сколько торговец ждёт без сделки, секунды
+	# Default: 120
+	# Range: 10 ~ 1200
+	staySeconds = 120
+	#После скольких зачищенных узлов открывается счёт
+	# Default: 3
+	# Range: 1 ~ 50
+	accountAfterNodes = 3
+	#Постоянный ассортимент: «товар*кол-во=цена» через «;», цена — в сгустках узла I
+	fixedOffers = "minecraft:netherite_ingot*1=4"
+	#Набор случайных позиций (формат тот же); на вызов выбирается randomOffersMin…Max
+	offerPool = "minecraft:diamond*2=2;minecraft:emerald*6=1;minecraft:ender_pearl*4=2;minecraft:blaze_rod*4=2;minecraft:quartz*16=1;minecraft:glowstone_dust*16=1;minecraft:amethyst_shard*8=1;minecraft:experience_bottle*8=2"
+	#Сколько раз можно купить позицию за вызов, максимум (случайно от 1)
+	# Default: 3
+	# Range: 1 ~ 64
+	maxUses = 3
+	#Сколько тиков раскрывается разрыв до появления торговца
+	# Default: 60
+	# Range: 0 ~ 600
+	arrivalTicks = 60
+
+#Стол артефактов. Рецепт: список «id*кол-во» через точку с запятой, без *кол-во — 1 штука
+[table]
+	#Грубая проводка
+	crudeWiring = "minecraft:copper_ingot*2"
+	#Грубая катушка
+	crudeCoil = "minecraft:copper_ingot*3;minecraft:iron_ingot"
+	#Грубый эмиттер
+	crudeEmitter = "minecraft:copper_ingot*2;minecraft:iron_ingot;minecraft:redstone*2"
+	#Грубый контур маны
+	crudeManaCircuit = "minecraft:gold_ingot*2;minecraft:lapis_lazuli*3"
+	#Резонатор
+	resonator = "adept_core:crude_coil*2;adept_core:crude_wiring;minecraft:compass"
+	#Лагерь (установка выкачки и стационарный переход)
+	camp = "adept_core:crude_coil*2;adept_core:crude_emitter;adept_core:crude_mana_circuit;minecraft:iron_block"
+	#Ключ к базе
+	key = "adept_core:crude_emitter*2;adept_core:crude_mana_circuit*2;minecraft:gold_ingot*2"
+	#Прототип энергоклинка
+	bladePrototype = "adept_core:crude_emitter;adept_core:crude_coil;adept_core:crude_mana_circuit;adept_core:crude_wiring*2"
+	#Клинок, эмиттер, путь «Кромка», ступень I
+	bladeEdge1 = "adept_core:crude_emitter*2;adept_core:crude_coil"
+
+#Энергоклинок
+[blade]
+	#Урон прототипа (как у меча: полный урон удара)
+	# Default: 7.0
+	# Range: 1.0 ~ 100.0
+	baseDamage = 7.0
+	#Скорость атаки (ударов в секунду)
+	# Default: 1.8
+	# Range: 0.1 ~ 10.0
+	attackSpeed = 1.8
+	#Прибавка урона за каждую ступень пути «Кромка»
+	# Default: 2.0
+	# Range: 0.0 ~ 50.0
+	edgeDamagePerStep = 2.0
+
+#Новые противники на узле: споровик, кабан-вожак, броненосец
+[nodeMobs]
+	#С какого уровня узла они приходят в волнах
+	# Default: 2
+	# Range: 1 ~ 10
+	minNodeLevel = 2
+	# Default: 1
+	# Range: 1 ~ 20
+	sporelingsFromWave = 1
+	# Default: 2
+	# Range: 0 ~ 30
+	sporelingsCount = 2
+	# Default: 2
+	# Range: 1 ~ 20
+	boarsFromWave = 2
+	# Default: 1
+	# Range: 0 ~ 10
+	boarsCount = 1
+	# Default: 3
+	# Range: 1 ~ 20
+	armadillosFromWave = 3
+	# Default: 1
+	# Range: 0 ~ 10
+	armadillosCount = 1
+	#Кабан-вожак: разгоняется, если цель дальше стольких блоков
+	# Default: 6
+	# Range: 1 ~ 64
+	boarChargeMinRange = 6
+	#и ближе стольких
+	# Default: 16
+	# Range: 2 ~ 64
+	boarChargeMaxRange = 16
+	#Подготовка к броску (роет землю), тики
+	# Default: 20
+	# Range: 0 ~ 200
+	boarWindupTicks = 20
+	#Наибольшая длина броска, тики
+	# Default: 30
+	# Range: 1 ~ 200
+	boarChargeTicks = 30
+	#Скорость броска, блоков за тик
+	# Default: 0.6
+	# Range: 0.1 ~ 3.0
+	boarChargeSpeed = 0.6
+	#Урон тарана = урон атаки × это число (отброса игрока нет)
+	# Default: 1.5
+	# Range: 0.0 ~ 10.0
+	boarRamMultiplier = 1.5
+	#Оглушение после удара о стену, тики
+	# Default: 40
+	# Range: 0 ~ 400
+	boarStunTicks = 40
+	#Перезарядка броска, тики
+	# Default: 160
+	# Range: 0 ~ 2400
+	boarChargeCooldownTicks = 160
+	#Броненосец: ширина передней дуги, где удары гасятся, градусы
+	# Default: 120
+	# Range: 0 ~ 360
+	armadilloFrontArc = 120
+	#Доля урона, которую гасит свёрнутый панцирь (со всех сторон)
+	# Default: 0.75
+	# Range: 0.0 ~ 1.0
+	armadilloCurledReduction = 0.75
+	#Сколько держится свёрнутым, тики
+	# Default: 60
+	# Range: 1 ~ 600
+	armadilloCurlTicks = 60
+	#Пауза перед следующим сворачиванием, тики
+	# Default: 120
+	# Range: 0 ~ 2400
+	armadilloCurlCooldownTicks = 120
+	#Споровик: сколько маленьких выпускает при смерти
+	# Default: 2
+	# Range: 0 ~ 8
+	sporelingSplitCount = 2
+
+#Угроза мира 0–100 («Мобы», «Герои и набеги»)
+[threat]
+	#С этой угрозы — разведка (одиночные следопыты или пары)
+	# Default: 25
+	# Range: 0 ~ 100
+	scoutsAt = 25
+	#С этой — отряды из 3–5 героев
+	# Default: 50
+	# Range: 0 ~ 100
+	squadsAt = 50
+	#С этой — крупные отряды с командиром
+	# Default: 75
+	# Range: 0 ~ 100
+	warbandsAt = 75
+	#Рост за поглощённый биом (сильно)
+	# Default: 15
+	# Range: 0 ~ 100
+	biomeAbsorbed = 15
+	#Рост за разрушенную деревню (заметно)
+	# Default: 8
+	# Range: 0 ~ 100
+	villageDestroyed = 8
+	#Рост за убитого старейшину (заметно)
+	# Default: 10
+	# Range: 0 ~ 100
+	elderKilled = 10
+	#Рост за убитого жителя (понемногу)
+	# Default: 2
+	# Range: 0 ~ 100
+	villagerKilled = 2
+	#Спад после разгромленного набега (заметно)
+	# Default: 10
+	# Range: 0 ~ 100
+	raidDefeated = 10
+	#Рост, если отряд прождал у точки выхода с базы и ушёл
+	# Default: 3
+	# Range: 0 ~ 100
+	raidWaited = 3
+	#Спад со временем: на сколько
+	# Default: 1
+	# Range: 0 ~ 100
+	decayAmount = 1
+	#и раз в сколько тиков (0 — без спада)
+	# Default: 6000
+	# Range: 0 ~ 1000000
+	decayTicks = 6000
+
+#Деревни и руины («Мобы», «Жители деревень»)
+[villages]
+	#Заменять ванильных жителей своими
+	replaceVanilla = true
+	#С какого расстояния житель замечает игрока, блоки
+	# Default: 16
+	# Range: 2 ~ 64
+	noticeRange = 16
+	#Событие «NPC заметил игрока» от одного NPC не чаще, тики
+	# Default: 600
+	# Range: 20 ~ 72000
+	noticeCooldownTicks = 600
+	#С этой угрозы жители при виде игрока прячутся по домам
+	# Default: 50
+	# Range: 0 ~ 101
+	hideAt = 50
+	#С этой угрозы жители не торгуют
+	# Default: 50
+	# Range: 0 ~ 101
+	tradeRefuseAt = 50
+	#Насколько смерть старейшины откладывает набег в этой местности, тики
+	# Default: 24000
+	# Range: 0 ~ 1000000
+	elderRaidDelayTicks = 24000
+	#Руины: доля деревянных блоков, которые выгорают
+	# Default: 0.4
+	# Range: 0.0 ~ 1.0
+	ruinWoodChance = 0.4
+	#Руины: доля камня, который зарастает мхом или трескается
+	# Default: 0.25
+	# Range: 0.0 ~ 1.0
+	ruinMossChance = 0.25
+
+#Герои («Мобы», «Герои и набеги»). Ветеран: здоровье и урон × veteranMultiplier, два приёма
+[heroes]
+	# Default: 32.0
+	# Range: 1.0 ~ 1000.0
+	warriorHealth = 32.0
+	# Default: 22.0
+	# Range: 1.0 ~ 1000.0
+	archerHealth = 22.0
+	# Default: 24.0
+	# Range: 1.0 ~ 1000.0
+	trackerHealth = 24.0
+	# Default: 50.0
+	# Range: 1.0 ~ 1000.0
+	commanderHealth = 50.0
+	# Default: 6.0
+	# Range: 0.0 ~ 100.0
+	warriorDamage = 6.0
+	#Урон стрелы лучника = половина этого числа × скорость
+	# Default: 4.0
+	# Range: 0.0 ~ 100.0
+	archerDamage = 4.0
+	# Default: 5.0
+	# Range: 0.0 ~ 100.0
+	trackerDamage = 5.0
+	# Default: 7.0
+	# Range: 0.0 ~ 100.0
+	commanderDamage = 7.0
+	# Default: 1.4
+	# Range: 1.0 ~ 10.0
+	veteranMultiplier = 1.4
+	#Прибавка к шансу ветерана за каждый уровень узлов выше первого
+	# Default: 0.15
+	# Range: 0.0 ~ 1.0
+	veteranPerTier = 0.15
+	#Воин: ширина дуги щита спереди, градусы
+	# Default: 100
+	# Range: 0 ~ 360
+	shieldArc = 100
+	#Воин-ветеран: таран щитом, перезарядка
+	# Default: 160
+	# Range: 1 ~ 2400
+	bashCooldownTicks = 160
+	# Default: 4.0
+	# Range: 0.0 ~ 100.0
+	bashDamage = 4.0
+	#Оглушение от тарана (вместо сбивания с ног — отброса игрока нет)
+	# Default: 30
+	# Range: 0 ~ 200
+	bashStunTicks = 30
+	#Лучник отходит, если игрок ближе
+	# Default: 7.0
+	# Range: 0.0 ~ 32.0
+	archerKeepDistance = 7.0
+	#Лучник-ветеран: залп из трёх стрел, перезарядка
+	# Default: 120
+	# Range: 1 ~ 2400
+	volleyCooldownTicks = 120
+	#Разлёт стрел залпа, градусы
+	# Default: 8.0
+	# Range: 0.0 ~ 45.0
+	volleySpread = 8.0
+	#Следопыт: метка (подсветка игрока), тики
+	# Default: 200
+	# Range: 0 ~ 2400
+	markTicks = 200
+	#Следопыт-ветеран: капкан, перезарядка
+	# Default: 300
+	# Range: 1 ~ 6000
+	trapCooldownTicks = 300
+	#Капкан держит игрока, тики
+	# Default: 20
+	# Range: 0 ~ 200
+	trapHoldTicks = 20
+	# Default: 2.0
+	# Range: 0.0 ~ 100.0
+	trapDamage = 2.0
+	#Командир: радиус ауры строя (сопротивление урону союзникам)
+	# Default: 8.0
+	# Range: 1.0 ~ 64.0
+	auraRadius = 8.0
+	#Командир-ветеран: приказ «окружить», перезарядка
+	# Default: 200
+	# Range: 1 ~ 6000
+	surroundCooldownTicks = 200
+	#Событие «игрок скрылся» — не виден дольше, тики
+	# Default: 100
+	# Range: 1 ~ 6000
+	lostTicks = 100
+	#Отступивший герой пропадает вдали не раньше, тики
+	# Default: 600
+	# Range: 0 ~ 24000
+	retreatDespawnTicks = 600
+	#Шанс выпадения каждого предмета снаряжения героя
+	# Default: 0.25
+	# Range: 0.0 ~ 1.0
+	gearDropChance = 0.25
+	#Эмблема (трофей для Альянса) с ученика
+	# Default: 0.3
+	# Range: 0.0 ~ 1.0
+	emblemChance = 0.3
+	#и с ветерана
+	# Default: 0.6
+	# Range: 0.0 ~ 1.0
+	emblemChanceVeteran = 0.6
+	#Приказ командира с командира (знамя выпадает всегда)
+	# Default: 0.35
+	# Range: 0.0 ~ 1.0
+	orderChance = 0.35
+
+#Набеги героев («Мобы», «Герои и набеги»)
+[raids]
+	#Проверка набега в пути, раз в сколько тиков (и при уходе с узла)
+	# Default: 12000
+	# Range: 200 ~ 1000000
+	checkTicks = 12000
+	#Не чаще одного набега за (от)
+	# Default: 18000
+	# Range: 0 ~ 1000000
+	cooldownMinTicks = 18000
+	#(до), тики
+	# Default: 24000
+	# Range: 0 ~ 1000000
+	cooldownMaxTicks = 24000
+	#Шанс набега при проверке: разведка
+	# Default: 0.35
+	# Range: 0.0 ~ 1.0
+	chanceScouts = 0.35
+	#отряды
+	# Default: 0.5
+	# Range: 0.0 ~ 1.0
+	chanceSquads = 0.5
+	#крупные отряды
+	# Default: 0.65
+	# Range: 0.0 ~ 1.0
+	chanceWarbands = 0.65
+	#Рог звучит за столько тиков до появления отряда
+	# Default: 1200
+	# Range: 0 ~ 12000
+	hornLeadTicks = 1200
+	#Сколько отряд ждёт у точки выхода, если игрок на базе
+	# Default: 6000
+	# Range: 0 ~ 72000
+	waitTicks = 6000
+	#Смерть старейшины откладывает набеги в этом радиусе от деревни, блоки
+	# Default: 256
+	# Range: 0 ~ 10000
+	elderDelayRadius = 256
+
+#Резервуары, сплавщик и литейная («База и машины»)
+[foundry]
+	#Простой резервуар, первый уровень объёма, мВ
+	# Default: 4000
+	# Range: 100 ~ 1000000
+	reservoirCapacityMb = 4000
+	#Плавильня сливает в соседний резервуар, мВ за тик
+	# Default: 50
+	# Range: 1 ~ 10000
+	smelterPourMbPerTick = 50
+	#Сплавщик: порция каждого металла, мВ (красное золото: золото + медь → вдвое больше; сталь: железо + уголь)
+	# Default: 100
+	# Range: 1 ~ 10000
+	alloyMb = 100
+	# Default: 100
+	# Range: 1 ~ 12000
+	alloyTicks = 100
+	# Default: 5
+	# Range: 0 ~ 10000
+	alloyElectricityPerTick = 5
+	#Литейная: расплава на отливку игл
+	# Default: 100
+	# Range: 1 ~ 10000
+	needleMb = 100
+	#Игл за отливку
+	# Default: 8
+	# Range: 1 ~ 64
+	needlesPerCast = 8
+	#Расплава на пластину тяжёлой брони
+	# Default: 400
+	# Range: 1 ~ 10000
+	plateMb = 400
+	# Default: 60
+	# Range: 1 ~ 12000
+	castTicks = 60
+	# Default: 4
+	# Range: 0 ~ 10000
+	castElectricityPerTick = 4
+
+#Тяжёлая силовая броня («Артефакты», «Прокачка: числа»)
+[heavyArmor]
+	#Доли урона по пластинам: шлем
+	# Default: 0.15
+	# Range: 0.0 ~ 1.0
+	shareHead = 0.15
+	#нагрудник, корпус
+	# Default: 0.4
+	# Range: 0.0 ~ 1.0
+	shareTorso = 0.4
+	#нагрудник, руки
+	# Default: 0.2
+	# Range: 0.0 ~ 1.0
+	shareArms = 0.2
+	#ноги
+	# Default: 0.25
+	# Range: 0.0 ~ 1.0
+	shareLegs = 0.25
+	#Сколько своей доли гасит целая пластина
+	# Default: 0.7
+	# Range: 0.0 ~ 0.95
+	plateAbsorb = 0.7
+	#«Бастион»: прибавка к гашению за ступень
+	# Default: 0.05
+	# Range: 0.0 ~ 0.5
+	bastionPerStep = 0.05
+	#Прочность пластины по материалу: железо
+	# Default: 40.0
+	# Range: 1.0 ~ 10000.0
+	plateIron = 40.0
+	# Default: 25.0
+	# Range: 1.0 ~ 10000.0
+	plateCopper = 25.0
+	# Default: 25.0
+	# Range: 1.0 ~ 10000.0
+	plateGold = 25.0
+	# Default: 60.0
+	# Range: 1.0 ~ 10000.0
+	plateSteel = 60.0
+	# Default: 40.0
+	# Range: 1.0 ~ 10000.0
+	plateRedGold = 40.0
+	#Запас электричества сервоприводов (в нагруднике)
+	# Default: 600
+	# Range: 1 ~ 100000
+	chargeCapacity = 600
+	#Расход при движении, в секунду
+	# Default: 5
+	# Range: 0 ~ 1000
+	servoPerSecond = 5
+	#Замедление с электричеством
+	# Default: 0.15
+	# Range: 0.0 ~ 0.95
+	slowPowered = 0.15
+	#и без него
+	# Default: 0.5
+	# Range: 0.0 ~ 0.95
+	slowUnpowered = 0.5
+	#На базе броня и гаусс заряжаются от запаса базы, в секунду
+	# Default: 50
+	# Range: 0 ~ 100000
+	baseChargePerSecond = 50
+
+#Гаусс-пушка («Артефакты», «Прокачка: числа»)
+[gauss]
+	# Default: 400
+	# Range: 1 ~ 100000
+	chargeCapacity = 400
+	#Электричества на выстрел
+	# Default: 4
+	# Range: 0 ~ 1000
+	shotCost = 4
+	#Выстрелов в секунду
+	# Default: 4.0
+	# Range: 0.1 ~ 40.0
+	fireRate = 4.0
+	#«Темп»: прибавка скорострельности за ступень
+	# Default: 0.2
+	# Range: 0.0 ~ 5.0
+	tempoPerStep = 0.2
+	# Default: 30
+	# Range: 1 ~ 1000
+	magazine = 30
+	# Default: 40
+	# Range: 0 ~ 1200
+	reloadTicks = 40
+	# Default: 0.05
+	# Range: 0.0 ~ 1.0
+	heatPerShot = 0.05
+	# Default: 0.15
+	# Range: 0.0 ~ 10.0
+	coolPerSecond = 0.15
+	#При 100% нагрева пушка молчит, тики
+	# Default: 60
+	# Range: 0 ~ 1200
+	overheatTicks = 60
+	#Разброс, градусы
+	# Default: 2.0
+	# Range: 0.0 ~ 45.0
+	spread = 2.0
+	# Default: 48.0
+	# Range: 1.0 ~ 256.0
+	range = 48.0
+	#Урон иглы по материалу: железо (лёгкое отбрасывание — позже)
+	# Default: 3.0
+	# Range: 0.0 ~ 100.0
+	needleIron = 3.0
+	#медь: +30% по целям без брони, −30% по бронированным
+	# Default: 2.5
+	# Range: 0.0 ~ 100.0
+	needleCopper = 2.5
+	#золото
+	# Default: 2.5
+	# Range: 0.0 ~ 100.0
+	needleGold = 2.5
+	#сталь: прошивает одну цель насквозь
+	# Default: 4.0
+	# Range: 0.0 ~ 100.0
+	needleSteel = 4.0
+	#красное золото: каждое следующее попадание по той же цели +15% (до 3)
+	# Default: 3.0
+	# Range: 0.0 ~ 100.0
+	needleRedGold = 3.0
+
+#Стол: тяжёлая броня и гаусс-пушка
+[tableSlice2]
+	#Прототип тяжёлой брони (шлем, нагрудник, ноги без пластин)
+	heavyPrototype = "minecraft:iron_ingot*12;adept_core:crude_wiring*2;adept_core:crude_coil*2"
+	#Тяжёлая броня, нагрудник, путь «Бастион», ступень I
+	heavyBastion1 = "adept_core:crude_coil*2;adept_core:crude_wiring*2;minecraft:iron_ingot*4"
+	#Прототип гаусс-пушки
+	gaussPrototype = "adept_core:crude_coil*3;adept_core:crude_emitter;adept_core:crude_wiring*2;minecraft:iron_ingot*4"
+	#Гаусс-пушка, ствол, путь «Темп», ступень I
+	gaussTempo1 = "adept_core:crude_coil*2;adept_core:crude_wiring"
+
+#Уровни узлов: вехи и рост сложности
+[tiers]
+	#Сколько узлов текущего уровня (или выше) зачистить, чтобы мир перешёл на следующий уровень
+	# Default: 5
+	# Range: 1 ~ 100
+	nodesToAdvance = 5
+	#Новые узлы (в ещё не открытых чанках) не ниже текущего уровня узлов мира
+	levelFloor = true
+	#Сгустков за зачищенный узел по уровням 1–5, через запятую
+	clustersByLevel = "1,1,2,3,4"
+	#Команда Improved Mobs при смене уровня узлов (%d — сложность). Пусто — не вызывать.
+	#Выполняется, только если Improved Mobs загружен
+	improvedMobsCommand = "improvedmobs difficulty set %d"
+	#Сложность Improved Mobs = (уровень узлов − 1) × это число
+	# Default: 50
+	# Range: 0 ~ 10000
+	improvedMobsPerTier = 50
+
+#Накопитель («Артефакты», «Накопитель»): два раздельных запаса, мана и электричество
+[accumulator]
+	#Каждый запас без прокачки
+	# Default: 1000
+	# Range: 1 ~ 1000000
+	capacity = 1000
+	#«Ёмкость» I–III: каждый запас по ступеням, через запятую
+	capacitySteps = "2000,3000,4350"
+	#Приём на запас в секунду (от запаса базы на базе, от котла)
+	# Default: 20
+	# Range: 0 ~ 100000
+	intakePerSecond = 20
+	#Отдача одному артефакту в секунду, без потерь
+	# Default: 10
+	# Range: 0 ~ 100000
+	outputPerSecond = 10
+
+#Котёл душ («Артефакты», «Котёл душ»)
+[soulCauldron]
+	#Мана с обычной души
+	# Default: 10
+	# Range: 0 ~ 100000
+	manaNormal = 10
+	#Мана с сильной души (герои, элита или моб от strongHealth здоровья)
+	# Default: 40
+	# Range: 0 ~ 100000
+	manaStrong = 40
+	#Мана с души стража узла
+	# Default: 200
+	# Range: 0 ~ 100000
+	manaGuardian = 200
+	#С какого запаса здоровья моб даёт сильную душу
+	# Default: 40.0
+	# Range: 1.0 ~ 100000.0
+	strongHealth = 40.0
+	#Мобы, дающие душу стража (id сущностей)
+	guardians = ["adept_core:horned_leader"]
+	#Горнило сжигает одну душу за столько тиков (40 = 2 с)
+	# Default: 40
+	# Range: 1 ~ 72000
+	burnTicks = 40
+	#Душа на земле исчезает через столько тиков (1200 = 60 с)
+	# Default: 1200
+	# Range: 20 ~ 72000
+	soulLifetimeTicks = 1200
+	#Радиус сбора душ котлом, блоков
+	# Default: 4.0
+	# Range: 0.5 ~ 64.0
+	pickupRadius = 4.0
+	#Души одной силы ближе этого расстояния сливаются в одну
+	# Default: 1.5
+	# Range: 0.0 ~ 16.0
+	mergeRadius = 1.5
+	#Шанс ядра души при сжигании обычной души
+	# Default: 0.02
+	# Range: 0.0 ~ 1.0
+	coreChanceNormal = 0.02
+	#сильной
+	# Default: 0.15
+	# Range: 0.0 ~ 1.0
+	coreChanceStrong = 0.15
+	#стража
+	# Default: 1.0
+	# Range: 0.0 ~ 1.0
+	coreChanceGuardian = 1.0
+	#Сколько душ ждёт в горниле; лишние уходят в сосуд
+	# Default: 4
+	# Range: 1 ~ 1000
+	furnaceSouls = 4
+	#Запас маны в самом котле до передачи в накопитель
+	# Default: 400
+	# Range: 1 ~ 100000
+	manaBuffer = 400
+	#Отдача маны в накопитель в секунду
+	# Default: 10
+	# Range: 0 ~ 100000
+	transferPerSecond = 10
+	#Потери при передаче (0,2 = 20%)
+	# Default: 0.2
+	# Range: 0.0 ~ 1.0
+	transferLoss = 0.2
+	#«Выход»: прибавка маны с души за ступень (0,15 = +15%)
+	# Default: 0.15
+	# Range: 0.0 ~ 10.0
+	yieldPerStep = 0.15
+	#Объём сосуда в душах: стекло
+	# Default: 16
+	# Range: 1 ~ 10000
+	vesselGlass = 16
+	#кварц
+	# Default: 32
+	# Range: 1 ~ 10000
+	vesselQuartz = 32
+
+#Ядра душ — валюта торговца наравне со сгустками
+[soulCores]
+	#Сколько ядер душ стоит один сгусток узла I в ценах торговца
+	# Default: 6
+	# Range: 1 ~ 64
+	coresPerCluster = 6
+
+#Стол: накопитель и котёл душ. Ступени — по «Компонентам» («Материалы и расходники»):
+#ранг по ступени, доля подпорки I 60% / II 40% / III 20%, пути 3:1 и 1:3 по семействам сегмента
+[tableSlice3]
+	#Накопитель (базовая версия, грубые компоненты)
+	accumulator = "adept_core:crude_coil*2;adept_core:crude_mana_circuit*2;minecraft:glass*4;minecraft:copper_ingot*4"
+	#Накопитель, ядро (конденсатор + решётка), путь «Ёмкость», ступень I.
+	#Гибрид: подпорки поровну — 2 магических и 2 технических
+	accumulatorCapacity1 = "adept_core:capacitor_1_tech*2;adept_core:capacitor_1_magic;adept_core:matrix_1"
+	#Котёл душ (базовая версия)
+	cauldron = "adept_core:crude_mana_circuit*2;adept_core:crude_wiring*2;minecraft:iron_ingot*6;minecraft:soul_sand*4"
+	#Котёл душ, горнило (решётка вместо колбы душ + радиатор), путь «Выход», ступень I.
+	#Магический сегмент: подпорка — техника, её закрывает радиатор
+	cauldronYield1 = "adept_core:matrix_1*3;adept_core:radiator_1"
+
+#Команды при создании мира (один раз на мир). Формат «мод|команда»: команда выполняется,
+#только если мод загружен; без «мод|» — всегда. Born in Chaos: выключить хэллоуинские тыквы
+[worldInit]
+	createCommands = ["born_in_chaos_v1|gamerule seasonalEvents false"]

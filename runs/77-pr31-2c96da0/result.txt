@@ -1,0 +1,10 @@
+build=success servertest=failure clienttest=success fullpack=success
+branch=core/slice3-souls pr=31 sha=2c96da05d72597d71bc8e630d672babe6a8acc57 run=77
+fullpack: lock=ok
+fullpack: gametest=failure
+fullpack: client=success
+fullpack: shaders=success
+fullpack: componentcommandgives failed at 1745733, -60, -473919! Payload curios:sync_data may not be sent to the client!
+fullpack: tablebuildssinglesandopenssteps failed at 1745739, -60, -473919! Накопитель не собран
+fullpack: offersparseandroll failed at 1745733, -60, -473912! Число случайных позиций вне диапазона: 11
+fullpack: 3 required tests failed :(

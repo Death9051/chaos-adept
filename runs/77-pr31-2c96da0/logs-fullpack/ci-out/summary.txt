@@ -1,0 +1,8 @@
+lock=ok
+gametest=failure
+client=success
+shaders=success
+componentcommandgives failed at 1745733, -60, -473919! Payload curios:sync_data may not be sent to the client!
+tablebuildssinglesandopenssteps failed at 1745739, -60, -473919! Накопитель не собран
+offersparseandroll failed at 1745733, -60, -473912! Число случайных позиций вне диапазона: 11
+3 required tests failed :(
