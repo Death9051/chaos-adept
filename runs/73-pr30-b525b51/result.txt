@@ -1,0 +1,8 @@
+build=success servertest=success clienttest=success fullpack=success
+branch=tools/graphify-skill pr=30 sha=b525b518061f5d3e5ae84d758cb4d9d8e340536d run=73
+fullpack: lock=ok
+fullpack: gametest=failure
+fullpack: client=success
+fullpack: shaders=success
+fullpack: componentcommandgives failed at -10785119, -60, -5090096! Payload curios:sync_data may not be sent to the client!
+fullpack: 1 required tests failed :(
