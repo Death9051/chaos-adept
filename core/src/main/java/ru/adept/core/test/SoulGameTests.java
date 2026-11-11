@@ -139,6 +139,7 @@ public final class SoulGameTests {
     @GameTest(template = "empty")
     public static void tableBuildsSinglesAndOpensSteps(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.CREATIVE);
+        player.getAbilities().instabuild = true;
         helper.assertTrue(TableActions.upgradeAccumulatorCapacity(player) == TableActions.Result.NOT_CHOSEN, "Ступень без накопителя");
         helper.assertTrue(TableActions.craftAccumulator(player) == TableActions.Result.OK, "Накопитель не собран");
         helper.assertTrue(TableActions.craftCauldron(player) == TableActions.Result.OK, "Котёл не собран");
