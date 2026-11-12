@@ -1,2 +1,0 @@
-build=success servertest=success clienttest=success fullpack=failure
-branch=build/slice2-fullpack pr=20 sha=393cd216f9fce7aa8cec95cb7659131c33b4bd7d run=46
