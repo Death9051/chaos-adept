@@ -1,8 +1,0 @@
-build=success servertest=success clienttest=success fullpack=success
-branch=build/slice2-fullpack pr=20 sha=8ea3b4b98363df0cb272c4edbf9d4f87f423e5bf run=48
-fullpack: lock=ok
-fullpack: gametest=failure
-fullpack: client=success
-fullpack: shaders=success
-fullpack: armadilloblocksfrontandcurls failed at -1231063, -60, -11608779! Свёрнутый хитбокс не 0,9
-fullpack: 1 required tests failed :(
