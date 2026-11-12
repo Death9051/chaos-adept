@@ -26,6 +26,8 @@ public final class TraderTalk {
     public static final String SPEAKER = AdeptStory.MOD_ID + ".speaker.trader";
     private static final String KEY = AdeptStory.MOD_ID + ".trader.";
     private static final int GREETINGS = 5;
+    /** Запись журнала о первой сожжённой душе: после неё торговец вспоминает котёл. */
+    public static final String FIRST_SOUL = "firsts/first_soul";
 
     private TraderTalk() {
     }
@@ -43,12 +45,26 @@ public final class TraderTalk {
 
     @SubscribeEvent
     public static void onDeal(TraderEvent.Deal event) {
-        switch (event.getCategory()) {
-            case "trophy" -> say(event.getPlayer(), List.of(KEY + "trophy"));
-            case "pillar_material" -> say(event.getPlayer(), List.of(KEY + "pillar_material"));
+        say(event.getPlayer(), dealLines(event.getServer(), event.getCategory(), event.getCurrency()));
+    }
+
+    /**
+     * Что торговец говорит о сделке. Первая сделка ядрами душ — реплика и условие на странице «Торговец»
+     * (запись «один раз» и служит отметкой, поэтому реплика тоже звучит один раз).
+     */
+    public static List<String> dealLines(MinecraftServer server, String category, String currency) {
+        List<String> lines = new ArrayList<>();
+        if (currency != null && !Journal.fire(server, "trader_deal", Map.of("currency", currency)).isEmpty()
+                && currency.equals(TraderEvent.Deal.SOUL_CORE)) {
+            lines.add(KEY + "soul_core");
+        }
+        switch (category == null ? "" : category) {
+            case "trophy" -> lines.add(KEY + "trophy");
+            case "pillar_material" -> lines.add(KEY + "pillar_material");
             default -> {
             }
         }
+        return lines;
     }
 
     @SubscribeEvent
@@ -96,12 +112,18 @@ public final class TraderTalk {
             return lines;
         }
 
+        // Первое появление после первой сожжённой души — реплика о котле вместо приветствия.
+        if (data.done.contains(FIRST_SOUL) && Journal.markFirst(server, "trader:cauldron")) {
+            lines.add(KEY + "cauldron");
+            return lines;
+        }
+
         lines.add(KEY + "greet." + (1 + server.overworld().getRandom().nextInt(GREETINGS)));
         return lines;
     }
 
     private static void say(Player player, List<String> lines) {
-        if (player instanceof ServerPlayer serverPlayer) {
+        if (!lines.isEmpty() && player instanceof ServerPlayer serverPlayer) {
             StoryNetwork.sendSubtitle(serverPlayer, SPEAKER, lines);
         }
     }
