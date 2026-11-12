@@ -1,2 +1,0 @@
-build=success servertest=success clienttest=success
-branch=core/slice2-foundry pr=18 sha=58309bcc8d284f2834f535ecba7548817776093d run=41
