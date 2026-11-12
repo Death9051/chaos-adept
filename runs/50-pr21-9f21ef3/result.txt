@@ -1,6 +1,0 @@
-build=success servertest=success clienttest=success fullpack=success
-branch=core/slice2-fullpack-fixes pr=21 sha=9f21ef30f74f2c0401ddd5dfb28e0945156f254f run=50
-fullpack: lock=ok
-fullpack: gametest=success
-fullpack: client=success
-fullpack: shaders=success
