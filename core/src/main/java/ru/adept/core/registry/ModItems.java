@@ -83,6 +83,12 @@ public final class ModItems {
     /** Ядро души — побочный продукт горнила, валюта торговца наравне со сгустками. */
     public static final DeferredItem<Item> SOUL_CORE = ITEMS.registerSimpleItem("soul_core");
 
+    // Срез 3, часть 2: фокусы и лёгкий экзокостюм (прототип — нагрудник, генератор щита)
+    public static final DeferredItem<ru.adept.core.focus.FocusItem> FOCUS = ITEMS.register("focus",
+            () -> new ru.adept.core.focus.FocusItem(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<ru.adept.core.artifact.LightArmorItem> LIGHT_CHESTPLATE = ITEMS.register("light_chestplate",
+            () -> new ru.adept.core.artifact.LightArmorItem(ModRegistries.LIGHT_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1)));
+
     private ModItems() {
     }
 

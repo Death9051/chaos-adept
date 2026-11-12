@@ -49,6 +49,10 @@ public final class ArtifactPower {
             out.add(new Consumer(chest, Resource.ELECTRICITY, () -> HeavyArmorItem.charge(chest),
                     v -> HeavyArmorItem.setCharge(chest, v), BalanceConfig.HEAVY_CHARGE_CAPACITY.get()));
         }
+        if (chest.getItem() instanceof ru.adept.core.artifact.LightArmorItem) {
+            out.add(new Consumer(chest, Resource.MANA, () -> ru.adept.core.artifact.LightArmorItem.mana(chest),
+                    v -> ru.adept.core.artifact.LightArmorItem.setMana(chest, v), ru.adept.core.config.FocusConfig.LIGHT_MANA_CAPACITY.get()));
+        }
         for (ItemStack stack : player.getInventory().items) {
             if (stack.getItem() instanceof GaussGunItem) {
                 out.add(new Consumer(stack, Resource.ELECTRICITY, () -> GaussGunItem.charge(stack),

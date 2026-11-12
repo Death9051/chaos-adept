@@ -46,6 +46,11 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
     }
 
     private Tab tabInfo() {
+        if (tab == 1 && menu.armorChoice.get() == 1) {
+            return new Tab("light", "heavy", ArtifactTableMenu.BTN_CHOOSE_LIGHT, ArtifactTableMenu.BTN_CHOOSE_HEAVY,
+                    ArtifactTableMenu.BTN_LIGHT_PROTOTYPE, ArtifactTableMenu.BTN_LIGHT_CAPACITY, TableActions.LIGHT_CAPACITY,
+                    ru.adept.core.config.FocusConfig.TABLE_LIGHT_PROTOTYPE.get(), ru.adept.core.config.FocusConfig.TABLE_LIGHT_CAPACITY_1.get(), "light");
+        }
         return switch (tab) {
             case 1 -> new Tab("light", "heavy", ArtifactTableMenu.BTN_CHOOSE_LIGHT, ArtifactTableMenu.BTN_CHOOSE_HEAVY,
                     ArtifactTableMenu.BTN_HEAVY_PROTOTYPE, ArtifactTableMenu.BTN_HEAVY_BASTION, TableActions.HEAVY_BASTION,
@@ -68,9 +73,14 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
         };
     }
 
+    /** У выбранного варианта вкладки есть прототип в срезе (броня — оба варианта, остальное — первый). */
+    private boolean hasPrototype() {
+        return choice() == 1 || (tab == 1 && choice() == 2);
+    }
+
     private int built() {
         return switch (tab) {
-            case 1 -> menu.heavyBuilt.get();
+            case 1 -> menu.armorChoice.get() == 1 ? menu.lightBuilt.get() : menu.heavyBuilt.get();
             case 2 -> menu.gaussBuilt.get();
             default -> menu.bladeBuilt.get();
         };
@@ -78,7 +88,7 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
 
     private int stepDone() {
         return switch (tab) {
-            case 1 -> menu.heavyBastion.get();
+            case 1 -> menu.armorChoice.get() == 1 ? menu.lightCapacity.get() : menu.heavyBastion.get();
             case 2 -> menu.gaussTempo.get();
             default -> menu.bladeEdge.get();
         };
@@ -157,8 +167,8 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
                         b -> press(ArtifactTableMenu.BTN_CAMP))
                 .bounds(x + 74, y + 56, 72, 18)
                 .tooltip(Tooltip.create(costText(CostList.parse(BalanceConfig.TABLE_CAMP.get())))).build());
-        if (choice() == 1) {
-            String variant = tab == 1 ? "heavy" : info.first();
+        if (hasPrototype()) {
+            String variant = tab == 1 ? (menu.armorChoice.get() == 1 ? "light" : "heavy") : info.first();
             addRenderableWidget(Button.builder(Component.translatable(built() > 0
                             ? "adept_core.table." + variant + ".rebuild" : "adept_core.table." + variant + ".build"),
                             b -> press(info.prototype()))
@@ -276,7 +286,7 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
             }
         } else {
             g.drawString(font, Component.translatable("adept_core.table.components"), 10, 26, MUTED, false);
-            if (choice() == 1) {
+            if (hasPrototype()) {
                 MutableComponent label = Component.translatable("adept_core.table.segment." + tab);
                 StepTexts.find(info.stepKey(), 1).ifPresent(step -> label.append(": ").append(step.name()));
                 g.drawString(font, label, 10, 136, MUTED, false);

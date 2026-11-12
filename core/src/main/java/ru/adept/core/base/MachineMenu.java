@@ -18,7 +18,7 @@ import ru.adept.core.registry.ModMenus;
  * сервер синхронизирует слоты и {@link ContainerData}. Слот 0 — вход, слот 1 (если есть) — выход.
  */
 public class MachineMenu extends AbstractContainerMenu {
-    public enum Kind { GENERATOR, CRUSHER, SMELTER, ALLOYER, CASTER }
+    public enum Kind { GENERATOR, CRUSHER, SMELTER, ALLOYER, CASTER, CUTTER }
 
     public final Kind kind;
     private final Container container;
@@ -45,6 +45,9 @@ public class MachineMenu extends AbstractContainerMenu {
             addSlot(new Slot(container, 0, 56, 35) {
                 @Override
                 public boolean mayPlace(ItemStack stack) {
+                    if (kind == Kind.CUTTER) {
+                        return ru.adept.core.focus.FocusItem.is(stack) || ru.adept.core.focus.FocusCrystal.of(stack).isPresent();
+                    }
                     return kind == Kind.ALLOYER ? AlloyerBlockEntity.isAdditive(stack) : kind != Kind.CASTER;
                 }
             });
@@ -52,6 +55,14 @@ public class MachineMenu extends AbstractContainerMenu {
                 @Override
                 public boolean mayPlace(ItemStack stack) {
                     return false;
+                }
+
+                @Override
+                public void onTake(Player player, ItemStack stack) {
+                    if (kind == Kind.CUTTER) {
+                        ru.adept.core.focus.Focuses.onTaken(player, stack);
+                    }
+                    super.onTake(player, stack);
                 }
             });
         }
@@ -110,6 +121,16 @@ public class MachineMenu extends AbstractContainerMenu {
         return menu;
     }
 
+    public static MachineMenu cutter(int id, Inventory inventory) {
+        return new MachineMenu(ModMenus.CUTTER.get(), Kind.CUTTER, id, inventory, new SimpleContainer(2), new SimpleContainerData(MachineBlockEntity.DATA_SIZE));
+    }
+
+    public static MachineMenu cutter(int id, Inventory inventory, Container c, ContainerData d, ContainerLevelAccess access, java.util.function.IntConsumer buttons) {
+        MachineMenu menu = new MachineMenu(ModMenus.CUTTER.get(), Kind.CUTTER, id, inventory, c, d);
+        menu.buttons = buttons;
+        return menu;
+    }
+
     @Override
     public boolean clickMenuButton(Player player, int id) {
         buttons.accept(id);
@@ -127,6 +148,9 @@ public class MachineMenu extends AbstractContainerMenu {
             return ItemStack.EMPTY;
         }
         ItemStack stack = slot.getItem();
+        if (kind == Kind.CUTTER && index == 1) {
+            ru.adept.core.focus.Focuses.onTaken(player, stack);
+        }
         ItemStack copy = stack.copy();
         if (index < machineSlots) {
             if (!moveItemStackTo(stack, machineSlots, slots.size(), true)) {

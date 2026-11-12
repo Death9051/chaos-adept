@@ -50,7 +50,11 @@ public final class StepTexts {
                     format(100 * ru.adept.core.config.ManaConfig.CAULDRON_YIELD_PER_STEP.get()),
                     format(Math.round(ru.adept.core.config.ManaConfig.SOUL_MANA_NORMAL.get() * (1 + ru.adept.core.config.ManaConfig.CAULDRON_YIELD_PER_STEP.get()))),
                     format(Math.round(ru.adept.core.config.ManaConfig.SOUL_MANA_STRONG.get() * (1 + ru.adept.core.config.ManaConfig.CAULDRON_YIELD_PER_STEP.get()))),
-                    format(Math.round(ru.adept.core.config.ManaConfig.SOUL_MANA_GUARDIAN.get() * (1 + ru.adept.core.config.ManaConfig.CAULDRON_YIELD_PER_STEP.get())))})
+                    format(Math.round(ru.adept.core.config.ManaConfig.SOUL_MANA_GUARDIAN.get() * (1 + ru.adept.core.config.ManaConfig.CAULDRON_YIELD_PER_STEP.get())))}),
+            new Step(TableActions.LIGHT_CAPACITY, 1, () -> new Object[]{
+                    format(ru.adept.core.config.FocusConfig.shieldCapacity(1)),
+                    format(ru.adept.core.config.FocusConfig.shieldCapacity(0)),
+                    format(ru.adept.core.config.FocusConfig.LIGHT_MANA_PER_UNIT.get())})
     );
 
     private static final Map<String, Step> BY_ID = STEPS.stream()

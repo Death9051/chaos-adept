@@ -86,8 +86,14 @@ public final class ModBlocks {
             () -> new MachineBlock.Caster(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.METAL).strength(3.0f).sound(SoundType.METAL)));
 
+    /** Ограночная машина (нулевой уровень): огранка фокусов и их починка. Заглушка 1×1×1: станина и диск. */
+    public static final DeferredBlock<MachineBlock.Cutter> CUTTER = BLOCKS.register("cutter",
+            () -> new MachineBlock.Cutter(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.METAL).strength(3.0f).sound(SoundType.METAL).noOcclusion()));
+
     static {
         ITEMS.registerSimpleBlockItem(NODE_CRYSTAL);
+        ITEMS.registerSimpleBlockItem(CUTTER);
         ITEMS.registerSimpleBlockItem(ASH);
         ITEMS.registerSimpleBlockItem(GENERATOR);
         ITEMS.registerSimpleBlockItem(CRUSHER);

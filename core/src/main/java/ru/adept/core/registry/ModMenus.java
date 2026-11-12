@@ -24,6 +24,8 @@ public final class ModMenus {
             MENUS.register("alloyer", () -> new MenuType<>(MachineMenu::alloyer, FeatureFlags.DEFAULT_FLAGS));
     public static final DeferredHolder<MenuType<?>, MenuType<MachineMenu>> CASTER =
             MENUS.register("caster", () -> new MenuType<>(MachineMenu::caster, FeatureFlags.DEFAULT_FLAGS));
+    public static final DeferredHolder<MenuType<?>, MenuType<MachineMenu>> CUTTER =
+            MENUS.register("cutter", () -> new MenuType<>(MachineMenu::cutter, FeatureFlags.DEFAULT_FLAGS));
 
     public static final DeferredHolder<MenuType<?>, MenuType<TransitionMenu>> TRANSITION =
             MENUS.register("transition", () -> new MenuType<>(TransitionMenu::new, FeatureFlags.DEFAULT_FLAGS));

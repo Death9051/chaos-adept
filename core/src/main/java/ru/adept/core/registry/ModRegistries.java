@@ -49,6 +49,20 @@ public final class ModRegistries {
                             net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(AdeptCore.MOD_ID, "heavy_armor"))),
                     2.0f / 3.0f, 0.1f));
 
+    /** Лёгкий экзокостюм: слабая базовая защита без маны — броня 6 на прототипе (нагрудник), без твёрдости. */
+    public static final DeferredHolder<net.minecraft.world.item.ArmorMaterial, net.minecraft.world.item.ArmorMaterial> LIGHT_ARMOR =
+            ARMOR_MATERIALS.register("light_armor", () -> new net.minecraft.world.item.ArmorMaterial(
+                    java.util.Map.of(net.minecraft.world.item.ArmorItem.Type.HELMET, 0,
+                            net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, 6,
+                            net.minecraft.world.item.ArmorItem.Type.LEGGINGS, 0,
+                            net.minecraft.world.item.ArmorItem.Type.BOOTS, 0,
+                            net.minecraft.world.item.ArmorItem.Type.BODY, 0),
+                    0, net.minecraft.sounds.SoundEvents.ARMOR_EQUIP_CHAIN,
+                    () -> net.minecraft.world.item.crafting.Ingredient.EMPTY,
+                    java.util.List.of(new net.minecraft.world.item.ArmorMaterial.Layer(
+                            net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(AdeptCore.MOD_ID, "light_armor"))),
+                    0.0f, 0.0f));
+
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENTS =
             DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, AdeptCore.MOD_ID);
 
