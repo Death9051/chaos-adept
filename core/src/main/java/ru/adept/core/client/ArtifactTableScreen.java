@@ -26,7 +26,7 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
     private static final int TEXT = 0xFFE8E0D0;
     private static final int MUTED = 0xFF9A9080;
 
-    /** Вкладки: 0 — ближний бой, 1 — броня, 2 — дальний бой. */
+    /** Вкладки: 0 — ближний бой, 1 — броня, 2 — дальний бой, 3 — одиночные артефакты (срез 3). */
     private int tab;
     private int shownState = -1;
     /** Выбранный, но ещё не подтверждённый вариант пары: -1 — нет. */
@@ -36,7 +36,7 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
 
     public ArtifactTableScreen(ArtifactTableMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
-        this.imageWidth = 240;
+        this.imageWidth = 280;
         this.imageHeight = 180;
     }
 
@@ -85,6 +85,10 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
     }
 
     private int state() {
+        if (tab == 3) {
+            return 3000 + menu.accumulatorBuilt.get() * 100 + menu.accumulatorCapacity.get() * 10
+                    + menu.cauldronBuilt.get() * 5 + menu.cauldronYield.get() + 7;
+        }
         return tab * 1000 + choice() * 100 + built() * 10 + stepDone();
     }
 
@@ -92,7 +96,7 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
     protected void init() {
         super.init();
         shownState = state();
-        String[] tabs = {"melee", "armor", "ranged"};
+        String[] tabs = {"melee", "armor", "ranged", "singles"};
         for (int i = 0; i < tabs.length; i++) {
             int index = i;
             Button t = Button.builder(Component.translatable("adept_core.table.tab." + tabs[i]), b -> {
@@ -102,6 +106,10 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
             }).bounds(leftPos + 96 + i * 46, topPos + 4, 44, 12).build();
             t.active = tab != i;
             addRenderableWidget(t);
+        }
+        if (tab == 3) {
+            initSingles(leftPos + 10, topPos + 26);
+            return;
         }
         Tab info = tabInfo();
         int x = leftPos + 10;
@@ -169,6 +177,44 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
         }
     }
 
+    /** Строка одиночного артефакта: сборка и первая ступень. */
+    private record Single(String id, int build, int step, String stepKey, String buildCost, String stepCost, int built, int stepDone) {
+    }
+
+    private Single[] singles() {
+        return new Single[]{
+                new Single("accumulator", ArtifactTableMenu.BTN_ACCUMULATOR, ArtifactTableMenu.BTN_ACCUMULATOR_CAPACITY,
+                        TableActions.ACCUMULATOR_CAPACITY, ru.adept.core.config.ManaConfig.TABLE_ACCUMULATOR.get(),
+                        ru.adept.core.config.ManaConfig.TABLE_ACCUMULATOR_CAPACITY_1.get(),
+                        menu.accumulatorBuilt.get(), menu.accumulatorCapacity.get()),
+                new Single("soul_cauldron", ArtifactTableMenu.BTN_CAULDRON, ArtifactTableMenu.BTN_CAULDRON_YIELD,
+                        TableActions.CAULDRON_YIELD, ru.adept.core.config.ManaConfig.TABLE_CAULDRON.get(),
+                        ru.adept.core.config.ManaConfig.TABLE_CAULDRON_YIELD_1.get(),
+                        menu.cauldronBuilt.get(), menu.cauldronYield.get())};
+    }
+
+    private void initSingles(int x, int y) {
+        Single[] rows = singles();
+        for (int i = 0; i < rows.length; i++) {
+            Single s = rows[i];
+            int rowY = y + 30 + i * 34;
+            addRenderableWidget(Button.builder(Component.translatable("item.adept_core." + s.id()), b -> press(s.build()))
+                    .bounds(x, rowY, 118, 20)
+                    .tooltip(Tooltip.create(Component.translatable("adept_core.table." + s.id() + ".desc")
+                            .append(Component.literal("\n\n")).append(costText(CostList.parse(s.buildCost()))))).build());
+            Button step = Button.builder(Component.translatable("adept_core.table.open",
+                            StepTexts.find(s.stepKey(), 1).map(StepTexts.Step::name).orElse(Component.empty())),
+                            b -> press(s.step()))
+                    .bounds(x + 124, rowY, 136, 20)
+                    .tooltip(Tooltip.create(StepTexts.find(s.stepKey(), 1)
+                            .map(st -> StepTexts.tooltip(st).append(Component.literal("\n\n")))
+                            .orElse(Component.empty())
+                            .append(costText(CostList.parse(s.stepCost()))))).build();
+            step.active = s.built() > 0 && s.stepDone() == 0;
+            addRenderableWidget(step);
+        }
+    }
+
     private void press(int id) {
         if (minecraft != null && minecraft.gameMode != null) {
             minecraft.gameMode.handleInventoryButtonClick(menu.containerId, id);
@@ -210,6 +256,17 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
     @Override
     protected void renderLabels(GuiGraphics g, int mouseX, int mouseY) {
         g.drawString(font, title, 10, 7, TEXT, false);
+        if (tab == 3) {
+            g.drawWordWrap(font, Component.translatable("adept_core.table.singles.hint"), 10, 26, 260, MUTED);
+            Single[] rows = singles();
+            for (int i = 0; i < rows.length; i++) {
+                if (rows[i].stepDone() > 0) {
+                    g.drawString(font, Component.translatable("adept_core.table.done"), 134, 78 + i * 34, 0xFF60D060, false);
+                }
+            }
+            drawResult(g);
+            return;
+        }
         Tab info = tabInfo();
         if (choice() == 0) {
             g.drawWordWrap(font, Component.translatable("adept_core.table.choose.hint." + tab), 10, 26, 220, MUTED);
@@ -230,6 +287,10 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
                 g.drawWordWrap(font, Component.translatable("adept_core.table." + info.later() + ".later"), 10, 106, 220, MUTED);
             }
         }
+        drawResult(g);
+    }
+
+    private void drawResult(GuiGraphics g) {
         int result = menu.lastResult.get();
         if (result > 1) {
             TableActions.Result r = TableActions.Result.values()[result - 1];

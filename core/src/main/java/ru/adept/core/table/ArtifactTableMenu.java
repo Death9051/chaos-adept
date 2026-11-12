@@ -31,6 +31,11 @@ public class ArtifactTableMenu extends AbstractContainerMenu {
     public static final int BTN_GAUSS_PROTOTYPE = 22;
     public static final int BTN_HEAVY_BASTION = 31;
     public static final int BTN_GAUSS_TEMPO = 32;
+    // Срез 3: одиночные артефакты
+    public static final int BTN_ACCUMULATOR = 23;
+    public static final int BTN_CAULDRON = 24;
+    public static final int BTN_ACCUMULATOR_CAPACITY = 33;
+    public static final int BTN_CAULDRON_YIELD = 34;
 
     /** 0 — пара не выбрана, 1 — клинок, 2 — молот. */
     public final DataSlot choice = DataSlot.standalone();
@@ -44,6 +49,10 @@ public class ArtifactTableMenu extends AbstractContainerMenu {
     public final DataSlot rangedChoice = DataSlot.standalone();
     public final DataSlot gaussBuilt = DataSlot.standalone();
     public final DataSlot gaussTempo = DataSlot.standalone();
+    public final DataSlot accumulatorBuilt = DataSlot.standalone();
+    public final DataSlot accumulatorCapacity = DataSlot.standalone();
+    public final DataSlot cauldronBuilt = DataSlot.standalone();
+    public final DataSlot cauldronYield = DataSlot.standalone();
     /** Итог последнего действия: 0 — нет, иначе ordinal {@link TableActions.Result} + 1. */
     public final DataSlot lastResult = DataSlot.standalone();
 
@@ -68,6 +77,10 @@ public class ArtifactTableMenu extends AbstractContainerMenu {
         addDataSlot(rangedChoice);
         addDataSlot(gaussBuilt);
         addDataSlot(gaussTempo);
+        addDataSlot(accumulatorBuilt);
+        addDataSlot(accumulatorCapacity);
+        addDataSlot(cauldronBuilt);
+        addDataSlot(cauldronYield);
         refresh();
     }
 
@@ -88,6 +101,10 @@ public class ArtifactTableMenu extends AbstractContainerMenu {
         rangedChoice.set(TableActions.GAUSS.equals(ranged) ? 1 : TableActions.RAIL.equals(ranged) ? 2 : 0);
         gaussBuilt.set(p.step(TableActions.GAUSS_BUILT));
         gaussTempo.set(p.step(TableActions.GAUSS_TEMPO));
+        accumulatorBuilt.set(p.step(TableActions.ACCUMULATOR_BUILT));
+        accumulatorCapacity.set(p.step(TableActions.ACCUMULATOR_CAPACITY));
+        cauldronBuilt.set(p.step(TableActions.CAULDRON_BUILT));
+        cauldronYield.set(p.step(TableActions.CAULDRON_YIELD));
     }
 
     @Override
@@ -125,6 +142,14 @@ public class ArtifactTableMenu extends AbstractContainerMenu {
             result = TableActions.upgradeHeavyBastion(player);
         } else if (id == BTN_GAUSS_TEMPO) {
             result = TableActions.upgradeGaussTempo(player);
+        } else if (id == BTN_ACCUMULATOR) {
+            result = TableActions.craftAccumulator(player);
+        } else if (id == BTN_CAULDRON) {
+            result = TableActions.craftCauldron(player);
+        } else if (id == BTN_ACCUMULATOR_CAPACITY) {
+            result = TableActions.upgradeAccumulatorCapacity(player);
+        } else if (id == BTN_CAULDRON_YIELD) {
+            result = TableActions.upgradeCauldronYield(player);
         } else {
             return false;
         }
