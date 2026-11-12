@@ -1,0 +1,8 @@
+build=success servertest=success clienttest=success fullpack=cancelled
+branch=models/sprites-review pr=32 sha=11de867c084c6b06880f407eecb621436a7b59b4 run=86
+fullpack: lock=ok
+fullpack: gametest=failure
+fullpack: client=success
+fullpack: shaders=success
+fullpack: componentcommandgives failed at -4149167, -60, -14055242! Payload curios:sync_data may not be sent to the client!
+fullpack: 1 required tests failed :(

@@ -1,2 +1,0 @@
-build=success servertest=success clienttest=success
-branch=core/slice2-armor-gauss pr=19 sha=82365af6d4d6c44730c0e53c37dba9918d2fc9fe run=44
