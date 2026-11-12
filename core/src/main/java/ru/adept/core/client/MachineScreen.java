@@ -33,8 +33,8 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
     @Override
     protected void init() {
         super.init();
-        if (menu.kind == MachineMenu.Kind.ALLOYER || menu.kind == MachineMenu.Kind.CASTER) {
-            int count = menu.kind == MachineMenu.Kind.ALLOYER ? 2 : 3;
+        if (menu.kind == MachineMenu.Kind.ALLOYER || menu.kind == MachineMenu.Kind.CASTER || menu.kind == MachineMenu.Kind.CUTTER) {
+            int count = menu.kind == MachineMenu.Kind.ALLOYER ? 2 : menu.kind == MachineMenu.Kind.CASTER ? 3 : ru.adept.core.focus.FocusCut.values().length;
             modeButton = addRenderableWidget(net.minecraft.client.gui.components.Button.builder(modeText(),
                     b -> {
                         if (minecraft != null && minecraft.gameMode != null) {
@@ -45,6 +45,10 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
     }
 
     private Component modeText() {
+        if (menu.kind == MachineMenu.Kind.CUTTER) {
+            return Component.translatable("adept_core.cutter.cut",
+                    Component.translatable("adept_core.focus.cut." + ru.adept.core.focus.FocusCut.byIndex(menu.data(6)).id()));
+        }
         String key = menu.kind == MachineMenu.Kind.ALLOYER ? "adept_core.alloyer.recipe." : "adept_core.caster.form.";
         return Component.translatable(key + menu.data(6));
     }
@@ -98,6 +102,28 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
         }
     }
 
+    /** Что делает ограночная машина, а если стоит — почему (текстом, не только цветом). */
+    private Component cutterStatus() {
+        int job = menu.data(7);
+        if (job == 1) {
+            return Component.translatable("adept_core.cutter.status.cut");
+        }
+        if (job == 2) {
+            return Component.translatable("adept_core.cutter.status.repair", ru.adept.core.config.FocusConfig.CUTTER_REPAIR_MANA.get());
+        }
+        net.minecraft.world.item.ItemStack in = menu.slots.get(0).getItem();
+        if (!menu.slots.get(1).getItem().isEmpty()) {
+            return Component.translatable("adept_core.cutter.status.take");
+        }
+        if (in.isEmpty()) {
+            return Component.translatable("adept_core.cutter.status.empty");
+        }
+        if (ru.adept.core.focus.FocusItem.is(in)) {
+            return Component.translatable("adept_core.cutter.status.whole");
+        }
+        return Component.translatable("adept_core.cutter.status.crystals", ru.adept.core.config.FocusConfig.CUTTER_CRYSTALS.get());
+    }
+
     private void bar(GuiGraphics g, int x, int y, int w, int h, int value, int max, int color) {
         g.fill(leftPos + x, topPos + y, leftPos + x + w, topPos + y + h, SLOT);
         int filled = (int) ((long) h * Math.max(0, Math.min(value, max)) / max);
@@ -113,6 +139,9 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
             Component material = m <= 0 ? Component.translatable("adept_core.caster.no_material")
                     : Component.translatable("adept_core.molten." + ru.adept.core.base.Molten.values()[m - 1].id());
             g.drawString(font, material, 28, 18, 0xFFFF8A2A, false);
+        }
+        if (menu.kind == MachineMenu.Kind.CUTTER) {
+            g.drawString(font, cutterStatus(), 28, 18, menu.data(7) == 0 ? 0xFFFF8060 : 0xFF8FB8FF, false);
         }
     }
 }

@@ -22,6 +22,7 @@ public class HeroRenderer extends HumanoidMobRenderer<HeroEntity, PlayerModel<He
         super(ctx, new PlayerModel<>(ctx.bakeLayer(ModelLayers.PLAYER), false), 0.5f);
         addLayer(new HumanoidArmorLayer<>(this, new HumanoidModel<>(ctx.bakeLayer(ModelLayers.PLAYER_INNER_ARMOR)),
                 new HumanoidModel<>(ctx.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR)), ctx.getModelManager()));
+        addLayer(new HeroRankLayer(this, new HumanoidModel<>(ctx.bakeLayer(HeroRankLayer.LAYER))));
     }
 
     @Override

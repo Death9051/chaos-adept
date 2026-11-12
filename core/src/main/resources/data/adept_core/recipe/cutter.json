@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["GAG", "WSW", "III"],
+  "key": {"G": {"item": "minecraft:glass"}, "A": {"item": "minecraft:amethyst_shard"}, "W": {"item": "adept_core:crude_wiring"}, "S": {"item": "minecraft:grindstone"}, "I": {"item": "minecraft:iron_ingot"}},
+  "result": {"id": "adept_core:cutter", "count": 1}
+}

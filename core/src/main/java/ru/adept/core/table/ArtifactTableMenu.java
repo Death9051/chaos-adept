@@ -36,6 +36,9 @@ public class ArtifactTableMenu extends AbstractContainerMenu {
     public static final int BTN_CAULDRON = 24;
     public static final int BTN_ACCUMULATOR_CAPACITY = 33;
     public static final int BTN_CAULDRON_YIELD = 34;
+    // Срез 3, часть 2: лёгкий экзокостюм
+    public static final int BTN_LIGHT_PROTOTYPE = 25;
+    public static final int BTN_LIGHT_CAPACITY = 35;
 
     /** 0 — пара не выбрана, 1 — клинок, 2 — молот. */
     public final DataSlot choice = DataSlot.standalone();
@@ -53,6 +56,8 @@ public class ArtifactTableMenu extends AbstractContainerMenu {
     public final DataSlot accumulatorCapacity = DataSlot.standalone();
     public final DataSlot cauldronBuilt = DataSlot.standalone();
     public final DataSlot cauldronYield = DataSlot.standalone();
+    public final DataSlot lightBuilt = DataSlot.standalone();
+    public final DataSlot lightCapacity = DataSlot.standalone();
     /** Итог последнего действия: 0 — нет, иначе ordinal {@link TableActions.Result} + 1. */
     public final DataSlot lastResult = DataSlot.standalone();
 
@@ -81,6 +86,8 @@ public class ArtifactTableMenu extends AbstractContainerMenu {
         addDataSlot(accumulatorCapacity);
         addDataSlot(cauldronBuilt);
         addDataSlot(cauldronYield);
+        addDataSlot(lightBuilt);
+        addDataSlot(lightCapacity);
         refresh();
     }
 
@@ -105,6 +112,8 @@ public class ArtifactTableMenu extends AbstractContainerMenu {
         accumulatorCapacity.set(p.step(TableActions.ACCUMULATOR_CAPACITY));
         cauldronBuilt.set(p.step(TableActions.CAULDRON_BUILT));
         cauldronYield.set(p.step(TableActions.CAULDRON_YIELD));
+        lightBuilt.set(p.step(TableActions.LIGHT_BUILT));
+        lightCapacity.set(p.step(TableActions.LIGHT_CAPACITY));
     }
 
     @Override
@@ -150,6 +159,10 @@ public class ArtifactTableMenu extends AbstractContainerMenu {
             result = TableActions.upgradeAccumulatorCapacity(player);
         } else if (id == BTN_CAULDRON_YIELD) {
             result = TableActions.upgradeCauldronYield(player);
+        } else if (id == BTN_LIGHT_PROTOTYPE) {
+            result = TableActions.craftLightPrototype(player);
+        } else if (id == BTN_LIGHT_CAPACITY) {
+            result = TableActions.upgradeLightCapacity(player);
         } else {
             return false;
         }
