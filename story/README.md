@@ -45,6 +45,11 @@
 | `raid_won` | `RaidEvent.Ended`, отряд разгромлен | `level` (ступень угрозы) |
 | `village_ruins_entered` | `VillageEvent.RuinsEntered` | — |
 | `npc_met` | `VillageEvent.NpcNoticedPlayer` | `npc` (роль: `villager`, `elder`, позже `refugee`) |
+| `soul_burned` | `SoulEvent.Burned`, горнило сожгло душу | `strength` (`normal`, `strong`, `guardian`) |
+| `soul_core_obtained` | `SoulEvent.CoreObtained` | `strength` |
+| `trader_deal` | `TraderEvent.Deal` | `currency` (`node_cluster`, `soul_core`) |
+
+Котёл собран — `artifact_prototype_crafted` с `artifact` = `cauldron`.
 
 Остальные типы в данных (опоры, герои, руины, финал и т. п.) ждут событий следующих срезов; при загрузке они перечислены в логе.
 
@@ -53,6 +58,7 @@
 - Реплики торговца: `trader/TraderTalk.java`, тексты `adept_story.trader.*`.
 - Появление: первый ритуал — свои реплики по ветке; первый ритуал на новом уровне узлов — веха (реплика и запись на странице «Торговец»); иначе случайное приветствие.
 - Открытие счёта, особые продажи (`trophy`, `pillar_material`), прощание при уходе.
+- Ядра душ: первая сделка ядрами — реплика `soul_core` и условие на странице «Торговец» (`trader/soul_cores`). Первое появление после первой сожжённой души — реплика о котле `cauldron` вместо приветствия (отметка `trader:cauldron`).
 
 ## Реплики героев и жителей
 

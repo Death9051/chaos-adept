@@ -23,6 +23,7 @@ import ru.adept.core.api.event.BaseEvent;
 import ru.adept.core.api.event.BiomeAbsorbedEvent;
 import ru.adept.core.api.event.NodeEvent;
 import ru.adept.core.api.event.RaidEvent;
+import ru.adept.core.api.event.SoulEvent;
 import ru.adept.core.api.event.VillageEvent;
 import ru.adept.core.api.event.WorldProgressEvent;
 import ru.adept.story.AdeptStory;
@@ -132,6 +133,20 @@ public final class StoryTriggers {
     @SubscribeEvent
     public static void onRuinsEntered(VillageEvent.RuinsEntered event) {
         Journal.fire(event.getServer(), "village_ruins_entered");
+    }
+
+    // --- Срез 3: котёл душ ---
+
+    /** Горнило сожгло душу (первая — запись «первая душа в котле»). */
+    @SubscribeEvent
+    public static void onSoulBurned(SoulEvent.Burned event) {
+        Journal.fire(event.getServer(), "soul_burned", Map.of("strength", event.getStrength()));
+    }
+
+    /** Горнило выдало ядро души (первое — своя запись). */
+    @SubscribeEvent
+    public static void onSoulCore(SoulEvent.CoreObtained event) {
+        Journal.fire(event.getServer(), "soul_core_obtained", Map.of("strength", event.getStrength()));
     }
 
     // --- Ванильные триггеры ---
