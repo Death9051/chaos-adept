@@ -1,0 +1,6 @@
+build=success servertest=success clienttest=success fullpack=success
+branch=core/slice3-focus pr=34 sha=8521d2330342a23355d92a04be091e3c8e502b33 run=95
+fullpack: lock=ok
+fullpack: gametest=success
+fullpack: client=success
+fullpack: shaders=success

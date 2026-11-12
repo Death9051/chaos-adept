@@ -1,6 +1,0 @@
-build=success servertest=success clienttest=success fullpack=success
-branch=main pr= sha=b5a28c34906134b7057e8cf2d859be7efe527516 run=53
-fullpack: lock=ok
-fullpack: gametest=success
-fullpack: client=success
-fullpack: shaders=success
