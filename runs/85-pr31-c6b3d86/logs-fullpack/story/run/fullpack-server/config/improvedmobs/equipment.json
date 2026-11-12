@@ -1,0 +1,565 @@
+{
+  "version": 2,
+  "__comment": [
+    "Mobs will be able to equip items declared here",
+    "Value is the item. It also accepts item components. The default config has an example with a harming potion",
+    "Weight is the weight of an item. Higher weight means that the item is more likely to get choosen",
+    "Quality is a modifier applied to the weight. The final weight used is weight + quality * current difficulty"
+  ],
+  "MAINHAND": [
+    {
+      "value": "minecraft:crossbow",
+      "weight": 309.0,
+      "quality": 3.184748649597168
+    },
+    {
+      "value": "minecraft:diamond_axe",
+      "weight": 668.0,
+      "quality": 2.464555025100708
+    },
+    {
+      "value": "minecraft:diamond_sword",
+      "weight": 668.0,
+      "quality": 2.464529275894165
+    },
+    {
+      "value": "minecraft:enchanted_book",
+      "weight": 200.0,
+      "quality": 3.6840314865112305
+    },
+    {
+      "value": "minecraft:fishing_rod",
+      "weight": 613.0,
+      "quality": 2.5351791381835938
+    },
+    {
+      "value": "minecraft:golden_axe",
+      "weight": 2380.0,
+      "quality": 1.6135056018829346
+    },
+    {
+      "value": "minecraft:golden_sword",
+      "weight": 2380.0,
+      "quality": 1.613447904586792
+    },
+    {
+      "value": "minecraft:iron_axe",
+      "weight": 1430.0,
+      "quality": 1.912132740020752
+    },
+    {
+      "value": "minecraft:iron_sword",
+      "weight": 1430.0,
+      "quality": 1.9120733737945557
+    },
+    {
+      "value": "minecraft:lava_bucket",
+      "weight": 247.0,
+      "quality": 3.432752847671509
+    },
+    {
+      "value": "minecraft:netherite_axe",
+      "weight": 573.0,
+      "quality": 2.5930190086364746
+    },
+    {
+      "value": "minecraft:netherite_sword",
+      "weight": 573.0,
+      "quality": 2.5929925441741943
+    },
+    {
+      "value": "minecraft:stone_axe",
+      "weight": 2198.0,
+      "quality": 1.6567730903625488
+    },
+    {
+      "value": "minecraft:stone_sword",
+      "weight": 2199.0,
+      "quality": 1.6566758155822754
+    },
+    {
+      "value": "minecraft:trident",
+      "weight": 676.0,
+      "quality": 2.45422625541687
+    },
+    {
+      "value": "minecraft:wooden_axe",
+      "weight": 2371.0,
+      "quality": 1.6155126094818115
+    },
+    {
+      "value": "minecraft:wooden_sword",
+      "weight": 2372.0,
+      "quality": 1.615455150604248
+    },
+    {
+      "value": "born_in_chaos_v1:birch_branches",
+      "weight": 1294.0,
+      "quality": 1.9767124652862549
+    },
+    {
+      "value": "born_in_chaos_v1:carrot_sword",
+      "weight": 888.0,
+      "quality": 2.2414164543151855
+    },
+    {
+      "value": "born_in_chaos_v1:dark_ritual_dagger",
+      "weight": 880.0,
+      "quality": 2.2476229667663574
+    },
+    {
+      "value": "born_in_chaos_v1:darkwarblade",
+      "weight": 415.0,
+      "quality": 2.887169122695923
+    },
+    {
+      "value": "born_in_chaos_v1:frostbitten_blade",
+      "weight": 744.0,
+      "quality": 2.376769781112671
+    },
+    {
+      "value": "born_in_chaos_v1:great_reaper_axe",
+      "weight": 744.0,
+      "quality": 2.3768250942230225
+    },
+    {
+      "value": "born_in_chaos_v1:icy_sweetness",
+      "weight": 571.0,
+      "quality": 2.5968308448791504
+    },
+    {
+      "value": "born_in_chaos_v1:intoxicating_dagger",
+      "weight": 744.0,
+      "quality": 2.376769781112671
+    },
+    {
+      "value": "born_in_chaos_v1:nightmare_scythe",
+      "weight": 904.0,
+      "quality": 2.2276947498321533
+    },
+    {
+      "value": "born_in_chaos_v1:nut_hammer",
+      "weight": 1410.0,
+      "quality": 1.9211339950561523
+    },
+    {
+      "value": "born_in_chaos_v1:sharpened_dark_metal_sword",
+      "weight": 744.0,
+      "quality": 2.3767807483673096
+    },
+    {
+      "value": "born_in_chaos_v1:shell_mace",
+      "weight": 1102.0,
+      "quality": 2.0856072902679443
+    },
+    {
+      "value": "born_in_chaos_v1:skullbreaker_hammer",
+      "weight": 614.0,
+      "quality": 2.534406900405884
+    },
+    {
+      "value": "born_in_chaos_v1:soul_cutlass",
+      "weight": 904.0,
+      "quality": 2.2276511192321777
+    },
+    {
+      "value": "born_in_chaos_v1:soulbane",
+      "weight": 463.0,
+      "quality": 2.783531665802002
+    },
+    {
+      "value": "born_in_chaos_v1:spider_bite_sword",
+      "weight": 728.0,
+      "quality": 2.3943417072296143
+    },
+    {
+      "value": "born_in_chaos_v1:spiritual_sword",
+      "weight": 1063.0,
+      "quality": 2.110900402069092
+    },
+    {
+      "value": "born_in_chaos_v1:supreme_measure",
+      "weight": 100.0,
+      "quality": 4.6415886878967285
+    },
+    {
+      "value": "born_in_chaos_v1:sweet_axe",
+      "weight": 887.0,
+      "quality": 2.2414538860321045
+    },
+    {
+      "value": "born_in_chaos_v1:sweet_sword",
+      "weight": 888.0,
+      "quality": 2.2414164543151855
+    },
+    {
+      "value": "born_in_chaos_v1:trident_hayfork",
+      "weight": 1559.0,
+      "quality": 1.8576544523239136
+    },
+    {
+      "value": "born_in_chaos_v1:wood_splitter_axe",
+      "weight": 1331.0,
+      "quality": 1.9583752155303955
+    },
+    {
+      "value": "mowziesmobs:wrought_axe",
+      "weight": 378.0,
+      "quality": 2.9776618480682373
+    }
+  ],
+  "OFFHAND": [
+    {
+      "value": "minecraft:bow",
+      "weight": 333.0,
+      "quality": 3.1072325706481934
+    },
+    {
+      "value": "minecraft:ender_pearl",
+      "weight": 250.0,
+      "quality": 3.4171993732452393
+    },
+    {
+      "value": "minecraft:flint_and_steel",
+      "weight": 358.0,
+      "quality": 3.031371593475342
+    },
+    {
+      "value": {
+        "id": "minecraft:lingering_potion",
+        "components": {
+          "minecraft:potion_contents": {
+            "potion": "minecraft:harming"
+          }
+        }
+      },
+      "weight": 268.0,
+      "quality": 3.3375840187072754
+    },
+    {
+      "value": "minecraft:shield",
+      "weight": 317.0,
+      "quality": 3.1580545902252197
+    },
+    {
+      "value": "minecraft:snowball",
+      "weight": 773.0,
+      "quality": 2.3470499515533447
+    },
+    {
+      "value": {
+        "id": "minecraft:splash_potion",
+        "components": {
+          "minecraft:potion_contents": {
+            "potion": "minecraft:harming"
+          }
+        }
+      },
+      "weight": 268.0,
+      "quality": 3.3375840187072754
+    },
+    {
+      "value": "minecraft:tnt",
+      "weight": 83.0,
+      "quality": 4.932424068450928
+    },
+    {
+      "value": "minecraft:wind_charge",
+      "weight": 210.0,
+      "quality": 3.6235711574554443
+    },
+    {
+      "value": "mowziesmobs:blowgun",
+      "weight": 367.0,
+      "quality": 3.0077927112579346
+    }
+  ],
+  "FEET": [
+    {
+      "value": "minecraft:chainmail_boots",
+      "weight": 690.0,
+      "quality": 2.4376168251037598
+    },
+    {
+      "value": "minecraft:diamond_boots",
+      "weight": 104.0,
+      "quality": 4.573387145996094
+    },
+    {
+      "value": "minecraft:golden_boots",
+      "weight": 703.0,
+      "quality": 2.4221675395965576
+    },
+    {
+      "value": "minecraft:iron_boots",
+      "weight": 323.0,
+      "quality": 3.1373603343963623
+    },
+    {
+      "value": "minecraft:leather_boots",
+      "weight": 1032.0,
+      "quality": 2.1314163208007812
+    },
+    {
+      "value": "minecraft:netherite_boots",
+      "weight": 86.0,
+      "quality": 4.8798980712890625
+    },
+    {
+      "value": "born_in_chaos_v1:dark_metal_armor_boots",
+      "weight": 70.0,
+      "quality": 5.208286285400391
+    },
+    {
+      "value": "born_in_chaos_v1:nightmare_mantleofthe_night_boots",
+      "weight": 209.0,
+      "quality": 3.6249465942382812
+    },
+    {
+      "value": "mowziesmobs:geomancer_sandals",
+      "weight": 240.0,
+      "quality": 3.464709520339966
+    }
+  ],
+  "LEGS": [
+    {
+      "value": "minecraft:chainmail_leggings",
+      "weight": 534.0,
+      "quality": 2.6549577713012695
+    },
+    {
+      "value": "minecraft:diamond_leggings",
+      "weight": 166.0,
+      "quality": 3.916159152984619
+    },
+    {
+      "value": "minecraft:golden_leggings",
+      "weight": 884.0,
+      "quality": 2.2445871829986572
+    },
+    {
+      "value": "minecraft:iron_leggings",
+      "weight": 312.0,
+      "quality": 3.174149513244629
+    },
+    {
+      "value": "minecraft:leather_leggings",
+      "weight": 1666.0,
+      "quality": 1.8172460794448853
+    },
+    {
+      "value": "minecraft:netherite_leggings",
+      "weight": 126.0,
+      "quality": 4.2967681884765625
+    },
+    {
+      "value": "adept_core:heavy_leggings",
+      "weight": 148.0,
+      "quality": 4.065585613250732
+    },
+    {
+      "value": "born_in_chaos_v1:dark_metal_armor_leggings",
+      "weight": 79.0,
+      "quality": 5.000676155090332
+    },
+    {
+      "value": "born_in_chaos_v1:nightmare_mantleofthe_night_leggings",
+      "weight": 153.0,
+      "quality": 4.025462627410889
+    },
+    {
+      "value": "mowziesmobs:geomancer_belt",
+      "weight": 166.0,
+      "quality": 3.9129674434661865
+    }
+  ],
+  "CHEST": [
+    {
+      "value": "minecraft:chainmail_chestplate",
+      "weight": 398.0,
+      "quality": 2.9288229942321777
+    },
+    {
+      "value": "minecraft:diamond_chestplate",
+      "weight": 165.0,
+      "quality": 3.9217023849487305
+    },
+    {
+      "value": "minecraft:elytra",
+      "weight": 1360.0,
+      "quality": 1.944161295890808
+    },
+    {
+      "value": "minecraft:golden_chestplate",
+      "weight": 384.0,
+      "quality": 2.961707353591919
+    },
+    {
+      "value": "minecraft:iron_chestplate",
+      "weight": 311.0,
+      "quality": 3.179835796356201
+    },
+    {
+      "value": "minecraft:leather_chestplate",
+      "weight": 810.0,
+      "quality": 2.3107035160064697
+    },
+    {
+      "value": "minecraft:netherite_chestplate",
+      "weight": 125.0,
+      "quality": 4.301645278930664
+    },
+    {
+      "value": "adept_core:heavy_chestplate",
+      "weight": 115.0,
+      "quality": 4.42764949798584
+    },
+    {
+      "value": "born_in_chaos_v1:dark_metal_armor_chestplate",
+      "weight": 79.0,
+      "quality": 5.0053277015686035
+    },
+    {
+      "value": "born_in_chaos_v1:nightmare_mantleofthe_night_chestplate",
+      "weight": 185.0,
+      "quality": 3.778609275817871
+    },
+    {
+      "value": "born_in_chaos_v1:spiny_shell_armor_chestplate",
+      "weight": 199.0,
+      "quality": 3.6886188983917236
+    },
+    {
+      "value": "mowziesmobs:geomancer_robe",
+      "weight": 205.0,
+      "quality": 3.6504833698272705
+    }
+  ],
+  "HEAD": [
+    {
+      "value": "minecraft:chainmail_helmet",
+      "weight": 686.0,
+      "quality": 2.4425323009490967
+    },
+    {
+      "value": "minecraft:diamond_helmet",
+      "weight": 220.0,
+      "quality": 3.567106008529663
+    },
+    {
+      "value": "minecraft:golden_helmet",
+      "weight": 636.0,
+      "quality": 2.5051305294036865
+    },
+    {
+      "value": "minecraft:iron_helmet",
+      "weight": 715.0,
+      "quality": 2.4088826179504395
+    },
+    {
+      "value": "minecraft:leather_helmet",
+      "weight": 1796.0,
+      "quality": 1.7721858024597168
+    },
+    {
+      "value": "minecraft:netherite_helmet",
+      "weight": 154.0,
+      "quality": 4.012281894683838
+    },
+    {
+      "value": "minecraft:turtle_helmet",
+      "weight": 654.0,
+      "quality": 2.481808662414551
+    },
+    {
+      "value": "adept_core:heavy_helmet",
+      "weight": 136.0,
+      "quality": 4.181458473205566
+    },
+    {
+      "value": "born_in_chaos_v1:damned_demomans_hat_helmet",
+      "weight": 528.0,
+      "quality": 2.6646716594696045
+    },
+    {
+      "value": "born_in_chaos_v1:dark_metal_armor_helmet",
+      "weight": 80.0,
+      "quality": 4.980197906494141
+    },
+    {
+      "value": "born_in_chaos_v1:killer_rabbit_ears_helmet",
+      "weight": 504.0,
+      "quality": 2.7064321041107178
+    },
+    {
+      "value": "born_in_chaos_v1:lord_pumpkinheads_hat_helmet",
+      "weight": 149.0,
+      "quality": 4.061817169189453
+    },
+    {
+      "value": "born_in_chaos_v1:missionary_hat_helmet",
+      "weight": 208.0,
+      "quality": 3.6339898109436035
+    },
+    {
+      "value": "born_in_chaos_v1:nightmare_mantleofthe_night_helmet",
+      "weight": 108.0,
+      "quality": 4.5105085372924805
+    },
+    {
+      "value": "born_in_chaos_v1:spiny_shell_armor_helmet",
+      "weight": 219.0,
+      "quality": 3.5697743892669678
+    },
+    {
+      "value": "born_in_chaos_v1:spiritual_guide_sombrero_helmet",
+      "weight": 208.0,
+      "quality": 3.631795644760132
+    },
+    {
+      "value": "mowziesmobs:geomancer_beads",
+      "weight": 557.0,
+      "quality": 2.618082046508789
+    },
+    {
+      "value": "mowziesmobs:sol_visage",
+      "weight": 240.0,
+      "quality": 3.463721990585327
+    },
+    {
+      "value": "mowziesmobs:umvuthana_mask_bliss",
+      "weight": 1778.0,
+      "quality": 1.7781327962875366
+    },
+    {
+      "value": "mowziesmobs:umvuthana_mask_faith",
+      "weight": 1778.0,
+      "quality": 1.7781327962875366
+    },
+    {
+      "value": "mowziesmobs:umvuthana_mask_fear",
+      "weight": 1778.0,
+      "quality": 1.7781327962875366
+    },
+    {
+      "value": "mowziesmobs:umvuthana_mask_fury",
+      "weight": 1778.0,
+      "quality": 1.7781327962875366
+    },
+    {
+      "value": "mowziesmobs:umvuthana_mask_misery",
+      "weight": 1778.0,
+      "quality": 1.7781327962875366
+    },
+    {
+      "value": "mowziesmobs:umvuthana_mask_rage",
+      "weight": 1778.0,
+      "quality": 1.7781327962875366
+    },
+    {
+      "value": "mowziesmobs:wrought_helmet",
+      "weight": 183.0,
+      "quality": 3.792217493057251
+    }
+  ]
+}
