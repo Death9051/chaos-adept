@@ -16,6 +16,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import ru.adept.core.AdeptCore;
+import ru.adept.core.hero.HeroClass;
 
 import java.util.List;
 
@@ -56,6 +57,7 @@ public final class ClientSmokeTest {
             new Scene("node_camp", 6.5, 2.0, 1.0, 0, 20, false),
             new Scene("machines", -5.5, 2.0, 1.0, 0, 20, false),
             new Scene("mobs", 0.5, 2.5, 3.0, 0, 12, false),
+            new Scene("heroes", 0.5, 1.5, -1.0, 180, -3, false),
             new Scene("blade_hand", 0.5, 1.0, 1.5, 0, 0, true));
 
     private static Stage stage = Stage.WAIT_TITLE;
@@ -166,6 +168,28 @@ public final class ClientSmokeTest {
         };
         for (String command : commands) {
             run(server, command);
+        }
+        buildHeroes(server, x, y, z);
+    }
+
+    /**
+     * Скины героев (docs/skins.md): ступенчатая трибуна позади стола, ряд — вариант скина, колонка — класс.
+     * Без снаряжения, чтобы скин было видно; вариант задаётся UUID (HeroRenderer берёт его по hashCode).
+     */
+    private static void buildHeroes(MinecraftServer server, int x, int y, int z) {
+        run(server, fill(x - 10, y - 1, z - 13, x + 10, y - 1, z - 3, "minecraft:smooth_stone"));
+        run(server, fill(x - 10, y, z - 13, x + 10, y + 8, z - 3, "minecraft:air"));
+        run(server, fill(x - 7, y, z - 9, x + 7, y + 1, z - 8, "minecraft:smooth_stone"));
+        run(server, fill(x - 7, y, z - 12, x + 7, y + 3, z - 10, "minecraft:smooth_stone"));
+        HeroClass[] classes = HeroClass.values();
+        for (int variant = 0; variant < 3; variant++) {
+            for (int c = 0; c < classes.length; c++) {
+                double hx = x + 0.5 + (c - (classes.length - 1) / 2.0) * 1.5;
+                int k = 3 + c * 3 + variant;
+                run(server, String.format(java.util.Locale.ROOT,
+                        "summon adept_core:hero %.2f %d %.1f {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],UUID:[I;0,0,0,%d],adept_class:\"%s\"}",
+                        hx, y + variant * 2, z - 5.5 - variant * 2.5, k, classes[c].id()));
+            }
         }
     }
 

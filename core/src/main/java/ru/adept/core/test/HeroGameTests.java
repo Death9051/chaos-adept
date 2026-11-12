@@ -56,6 +56,18 @@ public final class HeroGameTests {
         helper.succeed();
     }
 
+    /** У каждого класса три скина (HeroRenderer, docs/skins.md): новый класс без скинов рисовался бы чёрно-фиолетовым. */
+    @GameTest(template = "empty")
+    public static void heroSkinsForEveryClass(GameTestHelper helper) {
+        for (HeroClass c : HeroClass.values()) {
+            for (int n = 1; n <= 3; n++) {
+                String path = "/assets/" + AdeptCore.MOD_ID + "/textures/entity/hero/" + c.id() + "_" + n + ".png";
+                helper.assertTrue(HeroGameTests.class.getResource(path) != null, "Нет скина героя " + path);
+            }
+        }
+        helper.succeed();
+    }
+
     @GameTest(template = "empty")
     public static void warriorShieldBlocksFront(GameTestHelper helper) {
         HeroEntity warrior = HeroSpawner.spawnHero(helper.getLevel(), helper.absolutePos(new BlockPos(2, 2, 2)), HeroClass.WARRIOR, HeroRank.APPRENTICE, null);
