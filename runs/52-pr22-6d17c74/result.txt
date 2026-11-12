@@ -1,6 +1,0 @@
-build=success servertest=success clienttest=success fullpack=success
-branch=docs/migrate-to-claude-code pr=22 sha=6d17c74bdbf6a073cf33cff669ddca37e6eb5509 run=52
-fullpack: lock=ok
-fullpack: gametest=success
-fullpack: client=success
-fullpack: shaders=success
