@@ -91,6 +91,13 @@ public class GaussModel {
         final double x, y, z;
         final int w, h, d;
         double inflate;
+        /** Поворот вокруг центра куба: ось (0 — нет, 1 — X, 3 — Z) и угол в градусах, как в файле geo. */
+        int axis;
+        double deg;
+        /** Часть восьмигранника: торцы красятся ровно, без обводки. */
+        boolean round;
+        /** Торцы смотрят вдоль X (диск поперёк оружия). */
+        boolean capX;
         int u, v;
 
         Cube(String bone, Mat mat, double x, double y, double z, int w, int h, int d) {
@@ -108,6 +115,18 @@ public class GaussModel {
             this.inflate = v;
             return this;
         }
+
+        Cube rotX(double deg) {
+            this.axis = 1;
+            this.deg = deg;
+            return this;
+        }
+
+        Cube rotZ(double deg) {
+            this.axis = 3;
+            this.deg = deg;
+            return this;
+        }
     }
 
     record Bone(String name, String parent, double px, double py, double pz) {
@@ -116,7 +135,6 @@ public class GaussModel {
     static final Map<String, Bone> BONES = new LinkedHashMap<>();
     static final List<Cube> CUBES = new ArrayList<>();
     static final String[] SEGMENTS = {"barrel", "coils", "cooler", "battery", "magazine", "scope"};
-    static final String[] SEGMENT_NAMES = {"Ствол", "Катушки", "Охладитель", "Аккумулятор", "Магазин", "Прицел"};
 
     static String cur;
 
@@ -148,147 +166,354 @@ public class GaussModel {
         box(m, -x - w, y, z, w, h, d);
     }
 
-    // ================= модель =================
-
-    static void build(boolean full) {
-        bone("gun", null, 0, 16, 4);
-        // Рама: ствольная коробка, рукоять, спуск, хребет приклада. Не меняется.
-        bone("frame", "gun", 0, 16, 4);
-        c(Mat.GUNMETAL, 6, 15, 8, -6, 20);
-        c(Mat.STEEL, 2, 23, 1, -4, 16);
-        c(Mat.LEATHER, 4, 9, 6, 9, 4);
-        c(Mat.LEATHER, 4, 5, 4, 10, 4);
-        c(Mat.STEEL, 2, 11, 1, 3, 6);
-        c(Mat.STEEL, 2, 12, 3, 3, 1);
-        c(Mat.BRASS, 2, 12, 3, 7, 1);
-        c(Mat.GUNMETAL, 4, 17, 3, 14, 12);
-        c(Mat.STEEL, 4, 10, 10, 26, 2);
-        c(Mat.STEEL, 2, 16, 1, -20, 14);
-
-        barrel(full);
-        coils(full);
-        cooler(full);
-        battery(full);
-        magazine(full);
-        scope(full);
+    /**
+     * Восьмигранник вдоль Z: четыре бруска D×a, повёрнутые на 0, 45, 90 и 135°. Для правильного
+     * восьмигранника a ≈ 0,41·D: пары (3,1), (5,2), (7,3), (8,3), (10,4). Бруски сдвинуты на сотые,
+     * чтобы торцы не лежали в одной плоскости.
+     */
+    static void oct(Mat m, int D, int a, double cx, double cy, double z, int len) {
+        for (int k = 0; k < 4; k++) {
+            Cube q = box(m, cx - D / 2.0, cy - a / 2.0, z + k * 0.01, D, a, len);
+            q.round = true;
+            if (k > 0) {
+                q.rotZ(45 * k);
+            }
+        }
     }
 
-    static void barrel(boolean full) {
-        bone("barrel", "gun", 0, 20, -6);
+    static void oct(Mat m, int D, int a, double cy, double z, int len) {
+        oct(m, D, a, 0, cy, z, len);
+    }
+
+    /** Восьмигранный диск поперёк оружия (ось X): толщина t от x. */
+    static void octX(Mat m, int D, int a, double x, double cy, double cz, int t) {
+        for (int k = 0; k < 4; k++) {
+            Cube q = box(m, x + k * 0.01, cy - a / 2.0, cz - D / 2.0, t, a, D);
+            q.round = true;
+            q.capX = true;
+            if (k > 0) {
+                q.rotX(45 * k);
+            }
+        }
+    }
+
+    // ================= модель =================
+    // Зоны сегментов не пересекаются: ствол z −47…−22, катушки z −21…−7 вокруг оси, охладитель под ними
+    // (y 7…14), магазин под коробкой z −6…2, прицел над коробкой (y от 24), аккумулятор под хребтом приклада.
+    // Навесные детали стоят в зоне своего сегмента.
+
+    static void build() {
+        bone("gun", null, 0, 16, 4);
+        // Рама: ствольная коробка со скошенным верхом, рукоять с наклоном, спуск, хребет приклада, затыльник.
+        bone("frame", "gun", 0, 16, 4);
+        c(Mat.GUNMETAL, 6, 15, 6, -6, 20);
+        c(Mat.GUNMETAL, 4, 21, 2, -6, 20);
+        c(Mat.STEEL, 2, 23, 1, -4, 16);
+        oct(Mat.BRASS, 7, 3, 20, -7, 1);
+        oct(Mat.STEEL, 3, 1, 20, -22, 15);
+        c(Mat.STEEL, 2, 14, 1, -21, 15);
+        c(Mat.LEATHER, 4, 5, 10, 9, 4).rotX(15);
+        c(Mat.STEEL, 2, 10, 1, 3, 7);
+        c(Mat.STEEL, 2, 11, 4, 3, 1);
+        c(Mat.BRASS, 2, 12, 3, 6, 1);
+        c(Mat.GUNMETAL, 4, 16, 2, 14, 2);
+        c(Mat.GUNMETAL, 4, 18, 3, 14, 13);
+        c(Mat.STEEL, 4, 9, 13, 27, 1);
+        c(Mat.LEATHER, 4, 10, 11, 28, 1);
+
+        barrel();
+        coils();
+        cooler();
+        battery();
+        magazine();
+        scope();
+    }
+
+    static void barrel() {
+        bone("barrel", "gun", 0, 20, -22);
         // Прототип: тонкий стержень на рунных кольцах, кристаллы сверху.
         part("barrel", "base0");
-        c(Mat.STEEL, 2, 19, 2, -32, 26);
-        for (int z : new int[]{-31, -27, -23}) {
-            c(Mat.RUNE, 4, 18, 4, z, 1);
+        c(Mat.STEEL, 2, 19, 2, -38, 16).rotZ(45);
+        for (int z : new int[]{-37, -32, -27}) {
+            oct(Mat.RUNE, 5, 2, 20, z, 1);
         }
-        c(Mat.CRYSTAL, 2, 21, 3, -30, 2);
-        c(Mat.CRYSTAL, 2, 21, 3, -26, 2);
-        c(Mat.LEATHER, 2, 19, 2, -22, 1).inflate(0.4);
+        c(Mat.CRYSTAL, 2, 22, 3, -35.5, 2);
+        c(Mat.CRYSTAL, 2, 22, 3, -30.5, 2);
+        c(Mat.LEATHER, 2, 19, 2, -24, 1).inflate(0.6);
         // Переход I: настоящий ствол, короткий кожух, руна на стыке.
         part("barrel", "base1");
-        c(Mat.STEEL, 4, 18, 4, -33, 27);
-        c(Mat.VENT, 6, 17, 6, -28, 7);
-        c(Mat.RUNE, 6, 17, 6, -29, 1);
-        c(Mat.BRASS, 4, 18, 4, -34, 1).inflate(0.5);
+        oct(Mat.STEEL, 5, 2, 20, -39, 17);
+        oct(Mat.VENT, 7, 3, 20, -29, 7);
+        oct(Mat.RUNE, 7, 3, 20, -30.5, 1);
+        oct(Mat.BRASS, 7, 3, 20, -38.5, 1);
         // Переход II: кожух на всю длину, руна только у дула.
         part("barrel", "base2");
-        c(Mat.STEEL, 4, 18, 4, -34, 28);
-        c(Mat.VENT, 6, 17, 6, -32, 11);
-        c(Mat.RUNE, 6, 17, 6, -33, 1);
-        c(Mat.STEEL, 4, 18, 4, -35, 1).inflate(0.5);
-        // Финал: цельный ускоритель, длиннее, дульный тормоз.
+        oct(Mat.STEEL, 5, 2, 20, -40, 18);
+        oct(Mat.VENT, 7, 3, 20, -36, 14);
+        oct(Mat.RUNE, 7, 3, 20, -37.5, 1);
+        oct(Mat.STEEL, 7, 3, 20, -39.5, 1);
+        // Финал: длинный цельный ускоритель с латунными поясами и дульным тормозом.
         part("barrel", "base3");
-        c(Mat.STEEL, 4, 18, 4, -37, 31);
-        c(Mat.VENT, 6, 17, 6, -34, 13);
-        c(Mat.STEEL, 2, 23, 1, -34, 13);
-        c(Mat.BRASS, 8, 16, 8, -35, 1);
-        c(Mat.GUNMETAL, 6, 17, 6, -38, 2);
-        // «Темп»: навесные детали на правом борту коробки.
+        oct(Mat.STEEL, 5, 2, 20, -43, 21);
+        oct(Mat.VENT, 7, 3, 20, -38, 16);
+        for (double z : new double[]{-37.5, -30.5, -23.5}) {
+            oct(Mat.BRASS, 8, 3, 20, z, 1);
+        }
+        oct(Mat.GUNMETAL, 7, 3, 20, -42, 3);
+        // «Темп»: детали под стволом.
         part("barrel", "add1");                      // привод подачи
-        box(Mat.BRASS, 3, 18, -5, 2, 3, 6);
-        box(Mat.STEEL, 3, 19, -8, 1, 1, 3);
-        part("barrel", "add2");                      // автоматика спуска
-        box(Mat.LAMPS, 3, 18, 2, 1, 3, 5);
+        c(Mat.BRASS, 3, 13.5, 3, -27, 5);
+        c(Mat.STEEL, 1, 16.5, 3, -25, 1);
+        part("barrel", "add2");                      // тяга и блок автоматики
+        c(Mat.STEEL, 1, 14.5, 1, -36, 9);
+        c(Mat.LAMPS, 3, 13.5, 3, -38, 2);
+        c(Mat.STEEL, 1, 16.5, 3, -37.5, 1);
         part("barrel", "add3");                      // маховик раскрутки
-        box(Mat.BRASS, 3, 17, 8, 1, 5, 5);
-        box(Mat.STEEL, 4, 19, 10, 1, 1, 1);
-        // Вершина «Разрядная дуга»: вилка разрядника у дула.
+        octX(Mat.BRASS, 5, 2, 1.5, 15, -24.5, 1);
+        box(Mat.STEEL, 2.5, 14.5, -25, 1, 1, 1);
+        // Вершина «Разрядная дуга»: хомут и вилка разрядника у дула.
         part("barrel", "apex");
-        c(Mat.BRASS, 8, 19, 2, -33, 1);
-        both(Mat.STEEL, 3, 19, -40, 1, 2, 7);
-        both(Mat.ARC, 3, 19, -41, 1, 2, 1);
+        oct(Mat.BRASS, 10, 4, 20, -38.3, 1);
+        both(Mat.STEEL, 4, 19, -46, 1, 2, 8);
+        both(Mat.ARC, 4, 19, -47, 1, 2, 1);
     }
 
-    static void coils(boolean full) {
-        bone("coils", "gun", 0, 20, -13);
+    static void coils() {
+        bone("coils", "gun", 0, 20, -14);
         // Прототип: три сырые намотки разного размера, провод поверху.
         part("coils", "base0");
-        c(Mat.COIL_RAW, 6, 17, 6, -19, 3);
-        c(Mat.COIL_RAW, 5, 17.5, 5, -14, 3);
-        c(Mat.COIL_RAW, 6, 17, 6, -9, 3);
-        c(Mat.COPPER, 1, 23, 1, -17, 9);
-        if (!full) {
-            return;
+        oct(Mat.COIL_RAW, 7, 3, 20, -20.5, 3);
+        oct(Mat.COIL_RAW, 5, 2, 20, -15.5, 3);
+        oct(Mat.COIL_RAW, 7, 3, 20, -10.5, 3);
+        c(Mat.COPPER, 1, 23.5, 1, -18.5, 9);
+        // Переход I: ровные катушки в латунных щёчках, руны на стыках.
+        part("coils", "base1");
+        for (int z : new int[]{-21, -16, -11}) {
+            oct(Mat.BRASS, 8, 3, 20, z, 1);
+            oct(Mat.COIL, 7, 3, 20, z + 1, 2);
+            oct(Mat.BRASS, 8, 3, 20, z + 3, 1);
         }
+        oct(Mat.RUNE, 5, 2, 20, -17, 1);
+        oct(Mat.RUNE, 5, 2, 20, -12, 1);
+        // Переход II: стальные щёчки, шина поверху, руна только на одном стыке.
+        part("coils", "base2");
+        for (int z : new int[]{-21, -16, -11}) {
+            oct(Mat.STEEL, 8, 3, 20, z, 1);
+            oct(Mat.COIL, 7, 3, 20, z + 1, 2);
+            oct(Mat.STEEL, 8, 3, 20, z + 3, 1);
+        }
+        oct(Mat.RUNE, 5, 2, 20, -17, 1);
+        oct(Mat.STEEL, 5, 2, 20, -12, 1);
+        c(Mat.STEEL, 2, 24, 1, -21, 14);
+        // Финал: единый блок, медные пояса в корпусе, шины по бокам.
+        part("coils", "base3");
+        oct(Mat.GUNMETAL, 8, 3, 20, -21, 1);
+        oct(Mat.COIL, 7, 3, 20, -20, 2);
+        oct(Mat.GUNMETAL, 8, 3, 20, -18, 3);
+        oct(Mat.COIL, 7, 3, 20, -15, 2);
+        oct(Mat.GUNMETAL, 8, 3, 20, -13, 3);
+        oct(Mat.COIL, 7, 3, 20, -10, 2);
+        oct(Mat.GUNMETAL, 8, 3, 20, -8, 1);
+        c(Mat.STEEL, 2, 24, 1, -21, 14);
+        both(Mat.STEEL, 4, 19.5, -21, 1, 1, 14);
+        // «Экономия»: конденсаторы слева снизу, плата справа снизу.
+        part("coils", "add1");
+        oct(Mat.CAP, 3, 1, -5, 16.2, -20, 4);
+        part("coils", "add2");
+        oct(Mat.CAP, 3, 1, -5, 16.2, -13, 4);
+        part("coils", "add3");
+        box(Mat.PCB, 4.2, 15, -18, 1, 3, 8);
+        box(Mat.LAMP, 5.2, 16, -12, 1, 1, 1);
+        // Вершина «Импульс»: большое головное кольцо с голубой полосой.
+        part("coils", "apex");
+        oct(Mat.PULSE, 10, 4, 20, -22, 1);
     }
 
-    static void cooler(boolean full) {
-        bone("cooler", "gun", 0, 14, -13);
-        // Прототип: медная трубка и ледяной кристалл в латунном хомуте.
+    static void cooler() {
+        bone("cooler", "gun", 0, 12, -14);
+        // Прототип: медная трубка на латунных хомутах, под ней ледяной кристалл.
         part("cooler", "base0");
-        c(Mat.COPPER, 2, 14, 2, -20, 14);
-        c(Mat.CRYSTAL, 2, 11, 3, -15, 3);
-        c(Mat.BRASS, 2, 13, 3, -11, 1).inflate(0.5);
-        c(Mat.BRASS, 2, 13, 3, -17, 1).inflate(0.5);
-        if (!full) {
-            return;
+        c(Mat.COPPER, 2, 12, 2, -21, 14).rotZ(45);
+        c(Mat.BRASS, 4, 11, 3, -18, 1);
+        c(Mat.BRASS, 4, 11, 3, -11, 1);
+        c(Mat.CRYSTAL, 2, 8.5, 3, -16, 4);
+        // Переход I: плита и пять рёбер.
+        part("cooler", "base1");
+        c(Mat.STEEL, 4, 13, 1, -21, 14);
+        for (int z : new int[]{-20, -17, -14, -11, -8}) {
+            c(Mat.STEEL, 4, 10, 3, z, 1);
         }
+        // Переход II: шире, семь рёбер, медная тепловая трубка снизу.
+        part("cooler", "base2");
+        c(Mat.STEEL, 6, 13, 1, -21, 14);
+        for (int i = 0; i < 7; i++) {
+            c(Mat.STEEL, 6, 10, 3, -20.5 + i * 2, 1);
+        }
+        c(Mat.COPPER, 2, 9, 1, -21, 14);
+        // Финал: закрытый кожух с прорезями и воздухозаборником.
+        part("cooler", "base3");
+        c(Mat.VENT, 6, 10, 4, -21, 14);
+        c(Mat.GUNMETAL, 4, 9, 1, -20, 12);
+        c(Mat.BRASS, 2, 8, 1, -19, 3);
+        // «Сброс»: клапан справа, сопла пара спереди, баллон слева.
+        part("cooler", "add1");
+        box(Mat.STEEL, 3, 10.5, -11, 2, 2, 3);
+        box(Mat.RED_PAINT, 5, 11, -10, 1, 1, 1);
+        part("cooler", "add2");
+        both(Mat.BRASS, 3, 10.5, -20, 2, 2, 2);
+        part("cooler", "add3");
+        oct(Mat.CAP, 3, 1, -4.6, 11.5, -15, 6);
+        // Вершина «Контур маны»: светящаяся трубка под охладителем с кристаллами на концах.
+        part("cooler", "apex");
+        c(Mat.MANA_TUBE, 1, 6.5, 1, -19, 10);
+        c(Mat.CRYSTAL, 2, 6, 2, -21, 2);
+        c(Mat.CRYSTAL, 2, 6, 2, -9, 2);
+        c(Mat.BRASS, 1, 7.5, 3, -14.5, 1);
     }
 
-    static void battery(boolean full) {
+    static void battery() {
         bone("battery", "gun", 0, 14, 20);
-        // Прототип: кристалл в клетке из латуни под хребтом приклада.
+        // Прототип: кристалл в латунной клетке под хребтом приклада.
         part("battery", "base0");
-        c(Mat.BRASS, 4, 11, 1, 17, 7);
-        c(Mat.CRYSTAL, 2, 12, 5, 19, 3);
-        both(Mat.STEEL, 1, 12, 17, 1, 5, 1);
-        both(Mat.STEEL, 1, 12, 23, 1, 5, 1);
-        c(Mat.COPPER, 1, 14, 1, 14, 3);
-        if (!full) {
-            return;
-        }
+        c(Mat.BRASS, 4, 10, 1, 16, 9);
+        c(Mat.CRYSTAL, 2, 11, 6, 19, 3);
+        both(Mat.STEEL, 1, 11, 16, 1, 7, 1);
+        both(Mat.STEEL, 1, 11, 24, 1, 7, 1);
+        // Переход I: круглая ячейка с окном.
+        part("battery", "base1");
+        oct(Mat.CELL, 7, 3, 14.5, 16, 9);
+        // Переход II: ячейка длиннее, стальной поддон.
+        part("battery", "base2");
+        oct(Mat.CELL, 7, 3, 14.5, 15, 11);
+        c(Mat.STEEL, 3, 10, 1, 16, 9);
+        // Финал: цельный приклад-батарея, кристалл виден только в окне сердечника.
+        part("battery", "base3");
+        c(Mat.CORE, 6, 11, 7, 15, 12);
+        c(Mat.GUNMETAL, 4, 10, 1, 15, 12);
+        c(Mat.GUNMETAL, 2, 9, 1, 16, 10);
+        // «Рекуперация»: шина и катушка-уловитель на хребте, кристалл преобразователя на борту.
+        part("battery", "add1");
+        c(Mat.BRASS, 2, 21, 1, 15, 10);
+        part("battery", "add2");
+        oct(Mat.COIL, 3, 1, 23.5, 17, 4);
+        part("battery", "add3");
+        box(Mat.CRYSTAL, 3.6, 13, 19, 1, 3, 3);
+        box(Mat.BRASS, 2, 14, 20, 2, 1, 1);
+        // Вершина «Шоковый разряд»: рамка разрядника вокруг затыльника.
+        part("battery", "apex");
+        c(Mat.BRASS, 6, 22.2, 1, 27.5, 1);
+        c(Mat.BRASS, 6, 7.8, 1, 27.5, 1);
+        both(Mat.BRASS, 3, 8.8, 27.5, 1, 13, 1);
+        both(Mat.ARC, 3, 22.2, 27.5, 1, 1, 1);
+        both(Mat.ARC, 3, 7.8, 27.5, 1, 1, 1);
     }
 
-    static void magazine(boolean full) {
-        bone("magazine", "gun", 0, 15, 2);
+    static void magazine() {
+        bone("magazine", "gun", 0, 15, -1.5);
         // Прототип: короткий короб на 30 игл с кожаной стяжкой.
         part("magazine", "base0");
-        c(Mat.MAG, 4, 9, 6, -1, 5);
-        c(Mat.LEATHER, 4, 10, 1, -1, 5).inflate(0.4);
-        if (!full) {
-            return;
-        }
+        c(Mat.MAG, 4, 9, 6, -4, 5);
+        c(Mat.LEATHER, 4, 10, 1, -4, 5).inflate(0.4);
+        // Переход I: короб длиннее, латунная пятка.
+        part("magazine", "base1");
+        c(Mat.MAG, 4, 6, 9, -4, 5);
+        c(Mat.BRASS, 4, 5, 1, -4, 5);
+        // Переход II: ещё длиннее, широкая стальная пятка.
+        part("magazine", "base2");
+        c(Mat.MAG, 4, 3, 12, -4, 5);
+        c(Mat.STEEL, 6, 2, 1, -5, 7);
+        // Финал: барабан на 80 игл.
+        part("magazine", "base3");
+        c(Mat.MAG, 4, 12.5, 3, -4, 5);
+        octX(Mat.STEEL, 8, 3, -3, 9, -1.5, 6);
+        both(Mat.BRASS, 3.04, 8, -2.5, 1, 2, 2);
+        // «Шаблон»: селектор слева, лампы режима справа, возвратный лоток сзади.
+        part("magazine", "add1");
+        box(Mat.BRASS, -3, 13, -3, 1, 2, 3);
+        box(Mat.STEEL, -4, 13.5, -2, 1, 1, 1);
+        part("magazine", "add2");
+        box(Mat.LAMPS, 2, 13, -4, 1, 2, 5);
+        part("magazine", "add3");
+        c(Mat.BRASS, 2, 11, 4, 1, 1);
+        // Вершина «Быстрая смена»: рычаг сброса перед магазином.
+        part("magazine", "apex");
+        c(Mat.BRASS, 2, 13.5, 1, -5.5, 2);
+        c(Mat.BRASS, 2, 9.5, 4, -6, 1);
+        c(Mat.ARC, 2, 8.5, 1, -6, 1);
     }
 
-    static void scope(boolean full) {
+    static void scope() {
         bone("scope", "gun", 0, 24, 3);
-        // Прототип: кольцо-мушка с кристаллом и открытый целик.
+        // Прототип: диск-мушка с кристаллом и открытый целик.
         part("scope", "base0");
-        c(Mat.STEEL, 4, 24, 1, 9, 1);
-        both(Mat.STEEL, 1, 25, 9, 1, 1, 1);
-        c(Mat.BRASS, 4, 24, 1, -3, 1);
-        c(Mat.BRASS, 4, 27, 1, -3, 1);
-        both(Mat.BRASS, 1, 25, -3, 1, 2, 1);
-        c(Mat.CRYSTAL, 2, 25, 2, -3, 1);
-        if (!full) {
-            return;
-        }
+        c(Mat.STEEL, 4, 24, 1, 10, 1);
+        both(Mat.STEEL, 1, 25, 10, 1, 1, 1);
+        oct(Mat.BRASS, 5, 2, 27, -3, 1);
+        c(Mat.CRYSTAL, 2, 26, 2, -3.5, 2);
+        // Переход I: короткая труба на двух кронштейнах.
+        part("scope", "base1");
+        oct(Mat.SCOPE, 5, 2, 27.5, -2, 9);
+        c(Mat.STEEL, 2, 24, 1, 0, 1);
+        c(Mat.STEEL, 2, 24, 1, 5, 1);
+        // Переход II: труба длиннее, бленда.
+        part("scope", "base2");
+        oct(Mat.SCOPE, 5, 2, 27.5, -5, 13);
+        oct(Mat.STEEL, 7, 3, 27.5, -4.5, 2);
+        c(Mat.STEEL, 2, 24, 1, 0, 1);
+        c(Mat.STEEL, 2, 24, 1, 5, 1);
+        // Финал: полная оптика с блендой, окуляром и барабанчиками.
+        part("scope", "base3");
+        oct(Mat.SCOPE, 5, 2, 27.5, -5, 15);
+        oct(Mat.GUNMETAL, 7, 3, 27.5, -4.5, 3);
+        oct(Mat.GUNMETAL, 7, 3, 27.5, 7.5, 2);
+        c(Mat.BRASS, 2, 30, 1, 3.5, 2);
+        box(Mat.BRASS, 2.5, 27, 3.5, 1, 1, 2);
+        c(Mat.STEEL, 2, 24, 1, 0, 1);
+        c(Mat.STEEL, 2, 24, 1, 5, 1);
+        // «Сканер»: сенсор слева, антенна на нём, проектор справа.
+        part("scope", "add1");
+        box(Mat.GUNMETAL, -5.6, 26, 0, 2, 3, 4);
+        box(Mat.ARC, -5.1, 27, -0.5, 1, 1, 1);
+        box(Mat.STEEL, -3.6, 24, 1.5, 3, 2, 1);
+        part("scope", "add2");
+        box(Mat.STEEL, -5.1, 29, 3, 1, 5, 1);
+        box(Mat.LAMP, -5.1, 34, 3, 1, 1, 1);
+        part("scope", "add3");
+        box(Mat.BRASS, 3.6, 26.5, -1, 2, 2, 4);
+        box(Mat.ARC, 4.1, 27, -1.5, 1, 1, 1);
+        box(Mat.STEEL, 0.6, 24, 0.2, 3, 2, 1);
+        // Вершина «Метка»: излучатель над прицелом.
+        part("scope", "apex");
+        c(Mat.BRASS, 2, 30.2, 2, -3, 5);
+        c(Mat.ARC, 1, 30.7, 1, -3.5, 1);
+        c(Mat.STEEL, 1, 25, 6, 1, 1);
     }
 
     // ================= текстура =================
 
     static int tone(int[] pal, int i) {
         return pal[Math.max(0, Math.min(pal.length - 1, i))];
+    }
+
+    /** Торец бруска восьмигранника: грань поперёк его оси. */
+    static boolean isCap(Cube q, Face f) {
+        return q.capX ? (f == Face.EAST || f == Face.WEST) : (f == Face.NORTH || f == Face.SOUTH);
+    }
+
+    /** Поворот точки вокруг центра куба по правилам файла geo (как экспортирует Blockbench). */
+    static double[] turn(Cube q, double x, double y, double z, boolean point) {
+        if (q.axis == 0) {
+            return new double[]{x, y, z};
+        }
+        double cx = point ? q.x + q.w / 2.0 : 0, cy = point ? q.y + q.h / 2.0 : 0, cz = point ? q.z + q.d / 2.0 : 0;
+        double t = Math.toRadians(-q.deg), c = Math.cos(t), s = Math.sin(t);
+        x -= cx;
+        y -= cy;
+        z -= cz;
+        if (q.axis == 1) {
+            return new double[]{x + cx, y * c - z * s + cy, y * s + z * c + cz};
+        }
+        return new double[]{x * c - y * s + cx, x * s + y * c + cy, z + cz};
     }
 
     /** Цвет текселя; glow[0] — светится ли он. Координаты — место текселя в кубе. */
@@ -307,7 +532,8 @@ public class GaussModel {
             case EAST, WEST -> { a = z; b = y; A = d; B = h; }
             default -> { a = x; b = y; A = w; B = h; }
         }
-        boolean edge = Math.min(A, B) >= 3 && (a == 0 || b == 0 || a == A - 1 || b == B - 1);
+        boolean capFace = q.round && (isCap(q, f));
+        boolean edge = !capFace && Math.min(A, B) >= 3 && (a == 0 || b == 0 || a == A - 1 || b == B - 1);
         int t = base + (edge ? 1 : 0);
         boolean side = f != Face.UP && f != Face.DOWN;
         boolean midA = A % 2 == 1 ? a == A / 2 : (a == A / 2 || a == A / 2 - 1);
@@ -341,7 +567,7 @@ public class GaussModel {
                     glow[0] = true;
                     return MANA[1];
                 }
-                if (side && Math.min(A, B) < 3 && midB && a % 2 == 1) {
+                if (side && Math.min(A, B) < 3 && (A == 1 ? (B < 3 || midB) : (midB && a % 2 == 1))) {
                     glow[0] = true;
                     return MANA[1];
                 }
@@ -525,6 +751,11 @@ public class GaussModel {
                     if (q.inflate != 0) {
                         s.append(", \"inflate\": ").append(num(q.inflate));
                     }
+                    if (q.axis != 0) {
+                        s.append(", \"pivot\": [").append(num(q.x + q.w / 2.0)).append(", ").append(num(q.y + q.h / 2.0)).append(", ")
+                                .append(num(q.z + q.d / 2.0)).append("], \"rotation\": [")
+                                .append(q.axis == 1 ? num(q.deg) : "0").append(", 0, ").append(q.axis == 3 ? num(q.deg) : "0").append("]");
+                    }
                     s.append(", \"uv\": [").append(q.u).append(", ").append(q.v).append("]}")
                             .append(i < own.size() - 1 ? ",\n" : "\n");
                 }
@@ -589,7 +820,7 @@ public class GaussModel {
         double cy = Math.cos(Math.toRadians(yaw)), sy = Math.sin(Math.toRadians(yaw));
         double cp = Math.cos(Math.toRadians(pitch)), sp = Math.sin(Math.toRadians(pitch));
         // Центр кадра — середина модели.
-        double mx = 0, my = 17, mz = -5;
+        double mx = 0, my = 18, mz = -9;
         boolean[] glow = new boolean[1];
         for (Cube q : CUBES) {
             if (!look.visible(q.bone)) {
@@ -605,6 +836,7 @@ public class GaussModel {
                     case NORTH -> new double[]{0, 0, -1};
                     case SOUTH -> new double[]{0, 0, 1};
                 };
+                nrm = turn(q, nrm[0], nrm[1], nrm[2], false);
                 double[] rn = rot(nrm[0], nrm[1], nrm[2], cy, sy, cp, sp);
                 if (rn[2] <= 0.001) {
                     continue;
@@ -631,10 +863,9 @@ public class GaussModel {
                                 case NORTH -> { lx = p[0] + da; ly = p[1] + db; lz = 0; }
                                 default -> { lx = p[0] + da; ly = p[1] + db; lz = q.d; }
                             }
-                            double wx = q.x - k + lx * (q.w + 2 * k) / q.w - mx;
-                            double wy = q.y - k + ly * (q.h + 2 * k) / q.h - my;
-                            double wz = q.z - k + lz * (q.d + 2 * k) / q.d - mz;
-                            double[] v = rot(wx, wy, wz, cy, sy, cp, sp);
+                            double[] wp = turn(q, q.x - k + lx * (q.w + 2 * k) / q.w, q.y - k + ly * (q.h + 2 * k) / q.h,
+                                    q.z - k + lz * (q.d + 2 * k) / q.d, true);
+                            double[] v = rot(wp[0] - mx, wp[1] - my, wp[2] - mz, cy, sy, cp, sp);
                             corners[cnr] = new double[]{W / 2.0 + v[0] * scale, H / 2.0 - v[1] * scale, v[2]};
                         }
                         fill(img, depth, corners, rgb);
@@ -727,7 +958,7 @@ public class GaussModel {
         for (int i = 0; i < CUBES.size(); i++) {
             for (int j = i + 1; j < CUBES.size(); j++) {
                 Cube p = CUBES.get(i), q = CUBES.get(j);
-                if (!together(p.bone, q.bone)) {
+                if (!together(p.bone, q.bone) || p.axis != 0 || q.axis != 0 || p.round || q.round) {
                     continue;
                 }
                 double[] a = bounds(p), b = bounds(q);
@@ -769,7 +1000,7 @@ public class GaussModel {
     public static void main(String[] args) throws IOException {
         Path assets = Path.of(args.length > 0 ? args[0] : "core/src/main/resources/assets/adept_core");
         Path preview = args.length > 1 ? Path.of(args[1]) : null;
-        build(true);
+        build();
         pack();
         paintTextures();
         checkCoplanar();
@@ -782,19 +1013,19 @@ public class GaussModel {
         if (preview != null) {
             Files.createDirectories(preview);
             Look proto = Look.of(0, 0, false);
-            ImageIO.write(sheet("Гаусс-пушка — прототип (сегменты не тронуты)", List.of(new Shot("Прототип", proto))),
-                    "png", preview.resolve("gauss-prototype.png").toFile());
-            ImageIO.write(sheet("Ствол: «Разгон» меняет основу", List.of(
-                    new Shot("Разгон 0 — прототип", proto),
-                    new Shot("Разгон I — переход", proto.with(0, 1, 0, false)),
-                    new Shot("Разгон II — переход", proto.with(0, 2, 0, false)),
-                    new Shot("Разгон III — финал", proto.with(0, 3, 0, false)))),
-                    "png", preview.resolve("gauss-barrel-base.png").toFile());
-            ImageIO.write(sheet("Ствол: «Темп» добавляет детали, вершина «Разрядная дуга»", List.of(
-                    new Shot("Темп I — привод подачи", proto.with(0, 0, 1, false)),
-                    new Shot("Темп III — привод, автоматика, маховик", proto.with(0, 0, 3, false)),
-                    new Shot("Разгон III + Темп III + вершина", proto.with(0, 3, 3, true)))),
-                    "png", preview.resolve("gauss-barrel-add.png").toFile());
+            ImageIO.write(sheet("Гаусс-пушка: облик по ступеням (все сегменты разом)", List.of(
+                    new Shot("Прототип — сегменты не тронуты", proto),
+                    new Shot("Оба пути I — переход, первая деталь", Look.of(1, 1, false)),
+                    new Shot("Оба пути II — переход, две детали", Look.of(2, 2, false)),
+                    new Shot("Оба пути III и вершины — финал", Look.of(3, 3, true)))),
+                    "png", preview.resolve("gauss-stages.png").toFile());
+            ImageIO.write(sheet("Гаусс-пушка: пути по отдельности", List.of(
+                    new Shot("Только пути основы III — детали не тронуты", Look.of(3, 0, false)),
+                    new Shot("Только пути деталей III — основа прототипа", Look.of(0, 3, false)),
+                    new Shot("Прототип с вершинами", Look.of(0, 0, true)),
+                    new Shot("Частичная прокачка: ствол III/I, катушки I/III, прицел II/II, остальное — прототип",
+                            proto.with(0, 3, 1, true).with(1, 1, 3, false).with(5, 2, 2, false)))),
+                    "png", preview.resolve("gauss-mix.png").toFile());
             ImageIO.write(texture, "png", preview.resolve("gauss-texture.png").toFile());
         }
     }
