@@ -1,6 +1,13 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "adept_core:item/stub"
+  "parent": "minecraft:builtin/entity",
+  "gui_light": "front",
+  "display": {
+    "thirdperson_righthand": {"rotation": [90, 0, 0], "translation": [0, 5.5, -5], "scale": [0.5, 0.5, 0.5]},
+    "thirdperson_lefthand": {"rotation": [90, 0, 0], "translation": [0, 5.5, -5], "scale": [0.5, 0.5, 0.5]},
+    "firstperson_righthand": {"rotation": [0, 0, 0], "translation": [0, -5, -2], "scale": [0.5, 0.5, 0.5]},
+    "firstperson_lefthand": {"rotation": [0, 0, 0], "translation": [0, -5, -2], "scale": [0.5, 0.5, 0.5]},
+    "gui": {"rotation": [20, 110, 0], "translation": [1.8, -3.6, 0], "scale": [0.2, 0.2, 0.2]},
+    "ground": {"rotation": [0, 0, 0], "translation": [0, -2, 0], "scale": [0.25, 0.25, 0.25]},
+    "fixed": {"rotation": [0, 90, 0], "translation": [3, -6.3, 0], "scale": [0.35, 0.35, 0.35]}
   }
 }

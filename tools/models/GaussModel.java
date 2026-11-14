@@ -721,6 +721,54 @@ public class GaussModel {
         }
     }
 
+    // ================= анимации =================
+    // Кости: gun — всё оружие (отдача, наклон), magazine — магазин (уходит вниз при перезарядке),
+    // cooler — охладитель (дрожит при перегреве). Длительности совпадают с конфигом: перезарядка 2 с, перегрев 3 с.
+
+    static final String ANIMATIONS = """
+            {
+              "format_version": "1.8.0",
+              "animations": {
+                "fire": {
+                  "animation_length": 0.15,
+                  "bones": {
+                    "gun": {
+                      "rotation": {"0.0": [0, 0, 0], "0.04": [-3, 0, 0], "0.15": [0, 0, 0]},
+                      "position": {"0.0": [0, 0, 0], "0.04": [0, 0.3, 2], "0.15": [0, 0, 0]}
+                    },
+                    "coils": {
+                      "scale": {"0.0": [1, 1, 1], "0.03": [1.06, 1.06, 1], "0.12": [1, 1, 1]}
+                    }
+                  }
+                },
+                "reload": {
+                  "animation_length": 2.0,
+                  "bones": {
+                    "gun": {
+                      "rotation": {"0.0": [0, 0, 0], "0.3": [8, 0, -22], "1.6": [8, 0, -22], "2.0": [0, 0, 0]}
+                    },
+                    "magazine": {
+                      "position": {"0.0": [0, 0, 0], "0.3": [0, 0, 0], "0.6": [0, -12, 0], "1.1": [0, -12, 0], "1.45": [0, 0.6, 0], "1.55": [0, 0, 0]}
+                    }
+                  }
+                },
+                "overheat": {
+                  "animation_length": 3.0,
+                  "bones": {
+                    "gun": {
+                      "rotation": {"0.0": [0, 0, 0], "0.25": [7, 0, 0], "2.5": [7, 0, 0], "3.0": [0, 0, 0]}
+                    },
+                    "cooler": {
+                      "position": {"0.0": [0, 0, 0], "0.1": [0.4, 0, 0], "0.2": [-0.4, 0, 0], "0.3": [0.4, 0, 0], "0.4": [-0.4, 0, 0],
+                        "0.5": [0.3, 0, 0], "0.7": [-0.3, 0, 0], "0.9": [0.2, 0, 0], "1.2": [-0.2, 0, 0], "1.6": [0.1, 0, 0], "2.0": [0, 0, 0]},
+                      "scale": {"0.0": [1, 1, 1], "0.3": [1.08, 1.08, 1], "2.4": [1.08, 1.08, 1], "3.0": [1, 1, 1]}
+                    }
+                  }
+                }
+              }
+            }
+            """;
+
     // ================= geo.json =================
 
     static String num(double v) {
@@ -1007,6 +1055,8 @@ public class GaussModel {
         Files.createDirectories(assets.resolve("geo/item"));
         Files.createDirectories(assets.resolve("textures/artifact"));
         Files.writeString(assets.resolve("geo/item/gauss_gun.geo.json"), geoJson(), StandardCharsets.UTF_8);
+        Files.createDirectories(assets.resolve("animations/item"));
+        Files.writeString(assets.resolve("animations/item/gauss_gun.animation.json"), ANIMATIONS, StandardCharsets.UTF_8);
         ImageIO.write(texture, "png", assets.resolve("textures/artifact/gauss_gun.png").toFile());
         ImageIO.write(glowmask, "png", assets.resolve("textures/artifact/gauss_gun_glowmask.png").toFile());
         System.out.println("Кубов: " + CUBES.size() + ", костей: " + BONES.size() + ", текстура " + texW + "×" + texH);
