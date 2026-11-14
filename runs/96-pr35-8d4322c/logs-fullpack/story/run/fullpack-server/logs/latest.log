@@ -1,0 +1,255 @@
+[14Nov2026 13:47:34.578] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeserverdev, --gameDir, ., --fml.fmlVersion, 4.0.45, --fml.mcVersion, 1.21.1, --fml.neoForgeVersion, 21.1.264, --fml.neoFormVersion, 20240808.144430]
+[14Nov2026 13:47:34.581] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: JVM identified as Eclipse Adoptium OpenJDK 64-Bit Server VM 21.0.13+9-LTS
+[14Nov2026 13:47:34.583] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 11.0.5+main.901c6ea8 starting: java version 21.0.13 by Eclipse Adoptium; OS Linux arch amd64 version 7.0.0-1019-azure
+[14Nov2026 13:47:34.792] [main/INFO] [net.neoforged.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgeserverdev
+[14Nov2026 13:47:34.835] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.7 Source=union:/home/runner/.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.16.4+mixin.0.8.7/26d01f0567ab46e9ca0d2ed89d0ecc11aadbd433/sponge-mixin-0.16.4+mixin.0.8.7.jar%2394!/ Service=ModLauncher Env=SERVER
+[14Nov2026 13:47:35.472] [main/INFO] [net.neoforged.fml.loading.moddiscovery.locators.JarInJarDependencyLocator/]: Found 18 dependencies adding them to mods collection
+[14Nov2026 13:47:35.475] [main/INFO] [net.neoforged.fml.loading.moddiscovery.ModDiscoverer/]: 
+     Mod List:
+		Name Version (Mod Id)
+
+		AdoraBuild: Structures 2.11.0 (adorabuild_structures)
+		Apollib 1.2.0 (apollib)
+		AppleSkin 3.0.9+mc1.21 (appleskin)
+		Born in Chaos  1.7.6 (born_in_chaos_v1)
+		Bosses of Mass Destruction 1.3.3 (bosses_of_mass_destruction)
+		Cerbons API 1.3.0 (cerbons_api)
+		Cloth Config v15 API 15.0.140 (cloth_config)
+		Curios API 9.5.1+1.21.1 (curios)
+		EMI 1.1.24+1.21.1+neoforge (emi)
+		Ferrite Core 7.0.3 (ferritecore)
+		GeckoLib 4 4.9.3 (geckolib)
+		Improved Mobs Mod 1.21.1-1.16.0.b-neoforge (improvedmobs)
+		Jade 15.10.6+neoforge (jade)
+		Kotlin For Forge 5.12.0 (kotlinforforge)
+		Lithium 0.15.4+mc1.21.1 (lithium)
+		Lithostitched 1.8.1 (lithostitched)
+		Minecraft 1.21.1 (minecraft)
+		ModernFix 5.27.27+mc1.21.1 (modernfix)
+		Mowzie's Mobs 1.8.2 (mowziesmobs)
+		Naturalist 2.0.7 (naturalist)
+		NeoForge 21.1.264 (neoforge)
+		Player Animation Library 1.1.6+mc.1.21.1 (player_animation_library)
+		spark 1.10.124 (spark)
+		Tectonic 3.0.28 (tectonic)
+		TenshiLib 1.21.1-2.3.1-neoforge (tenshilib)
+		Terralith 2.6.2 (terralith)
+		Xaero's Minimap 26.6.0 (xaerominimap)
+		Xaero's World Map 1.47.0 (xaeroworldmap)
+		XaeroLib 1.7.3 (xaerolib)
+		YUNG's API 1.21.1-NeoForge-5.1.9 (yungsapi)
+		YUNG's Better Desert Temples 1.21.1-NeoForge-4.1.5 (betterdeserttemples)
+		YUNG's Better Dungeons 1.21.1-NeoForge-5.1.4 (betterdungeons)
+		YUNG's Better Jungle Temples 1.21.1-NeoForge-3.1.2 (betterjungletemples)
+		YUNG's Better Mineshafts 1.21.1-NeoForge-5.1.1 (bettermineshafts)
+		YUNG's Better Nether Fortresses 1.21.1-NeoForge-3.1.5 (betterfortresses)
+		YUNG's Better Ocean Monuments 1.21.1-NeoForge-4.1.2 (betteroceanmonuments)
+		YUNG's Better Strongholds 1.21.1-NeoForge-5.1.3 (betterstrongholds)
+		YUNG's Better Witch Huts 1.21.1-NeoForge-4.1.1 (betterwitchhuts)
+		Сюжет 0.1.0 (adept_story)
+		Ядро 0.1.0 (adept_core)
+[14Nov2026 13:47:35.819] [main/INFO] [net.neoforged.fml.loading.FMLServiceProvider/CORE]: Loading coremod script-engine for [xaerominimap, xaeroworldmap]
+[14Nov2026 13:47:37.415] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
+[14Nov2026 13:47:37.421] [main/INFO] [mixin/]: Compatibility level set to JAVA_21
+[14Nov2026 13:47:37.500] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgeserverdev' with arguments [--gameDir, .]
+[14Nov2026 13:47:37.553] [main/WARN] [mixin/]: Reference map 'betterdungeons.refmap.json' for betterdungeons.mixins.json could not be read. If this is a development environment you can ignore this message
+[14Nov2026 13:47:37.555] [main/WARN] [mixin/]: Reference map 'mowziesmobs.refmap.json' for mowziesmobs.mixins.json could not be read. If this is a development environment you can ignore this message
+[14Nov2026 13:47:37.556] [main/WARN] [mixin/]: Reference map 'betterwitchhuts.refmap.json' for betterwitchhuts.mixins.json could not be read. If this is a development environment you can ignore this message
+[14Nov2026 13:47:37.557] [main/WARN] [mixin/]: Reference map 'geckolib.refmap.json' for geckolib.mixins.json could not be read. If this is a development environment you can ignore this message
+[14Nov2026 13:47:37.593] [main/INFO] [LithiumConfig/]: Option 'mixin.experimental.entity.block_caching.suffocation' requires 'mixin.util.block_tracking=true' but found 'false'. Setting 'mixin.experimental.entity.block_caching.suffocation=false'.
+[14Nov2026 13:47:37.594] [main/INFO] [LithiumConfig/]: Option 'mixin.experimental.entity.block_caching.block_support' requires 'mixin.util.block_tracking=true' but found 'false'. Setting 'mixin.experimental.entity.block_caching.block_support=false'.
+[14Nov2026 13:47:37.595] [main/INFO] [LithiumConfig/]: Option 'mixin.experimental.entity.block_caching.block_touching' requires 'mixin.util.block_tracking=true' but found 'false'. Setting 'mixin.experimental.entity.block_caching.block_touching=false'.
+[14Nov2026 13:47:37.596] [main/INFO] [LithiumConfig/]: Option 'mixin.experimental.entity.block_caching' requires 'mixin.util.block_tracking=true' but found 'false'. Setting 'mixin.experimental.entity.block_caching=false'.
+[14Nov2026 13:47:37.596] [main/INFO] [Lithium/]: Loaded configuration file for Lithium: 148 options available, 0 override(s) found
+[14Nov2026 13:47:37.602] [main/WARN] [mixin/]: Reference map 'xaerolib.refmap.json' for xaerolib.mixins.json could not be read. If this is a development environment you can ignore this message
+[14Nov2026 13:47:37.603] [main/WARN] [mixin/]: Reference map 'betteroceanmonuments.refmap.json' for betteroceanmonuments.mixins.json could not be read. If this is a development environment you can ignore this message
+[14Nov2026 13:47:37.604] [main/WARN] [mixin/]: Reference map 'curios.refmap.json' for curios.neoforge.mixins.json could not be read. If this is a development environment you can ignore this message
+[14Nov2026 13:47:37.606] [main/WARN] [mixin/]: Reference map 'curios.refmap.json' for curios.mixins.json could not be read. If this is a development environment you can ignore this message
+[14Nov2026 13:47:37.607] [main/WARN] [mixin/]: Reference map 'xaerominimap.refmap.json' for xaerohud.mixins.json could not be read. If this is a development environment you can ignore this message
+[14Nov2026 13:47:37.609] [main/WARN] [mixin/]: Reference map 'xaerominimap.refmap.json' for xaerominimap.mixins.json could not be read. If this is a development environment you can ignore this message
+[14Nov2026 13:47:37.611] [main/WARN] [mixin/]: Reference map 'xaeroworldmap.refmap.json' for xaeroworldmap.mixins.json could not be read. If this is a development environment you can ignore this message
+[14Nov2026 13:47:37.740] [main/INFO] [ModernFix/]: Loaded configuration file for ModernFix 5.27.27+mc1.21.1: 89 options available, 0 override(s) found
+[14Nov2026 13:47:37.742] [main/INFO] [ModernFix/]: Applying Nashorn fix
+[14Nov2026 13:47:37.748] [main/WARN] [mixin/]: Reference map 'yungsapi.refmap.json' for yungsapi.mixins.json could not be read. If this is a development environment you can ignore this message
+[14Nov2026 13:47:37.750] [main/WARN] [mixin/]: Reference map 'betterstrongholds.refmap.json' for betterstrongholds.mixins.json could not be read. If this is a development environment you can ignore this message
+[14Nov2026 13:47:37.751] [main/WARN] [mixin/]: Reference map 'betterdeserttemples.refmap.json' for betterdeserttemples.mixins.json could not be read. If this is a development environment you can ignore this message
+[14Nov2026 13:47:37.771] [main/WARN] [mixin/]: Reference map '${refmap_target}refmap.json' for ferritecore.predicates.mixin.json could not be read. If this is a development environment you can ignore this message
+[14Nov2026 13:47:37.773] [main/WARN] [mixin/]: Reference map '${refmap_target}refmap.json' for ferritecore.fastmap.mixin.json could not be read. If this is a development environment you can ignore this message
+[14Nov2026 13:47:37.775] [main/WARN] [mixin/]: Reference map '${refmap_target}refmap.json' for ferritecore.mrl.mixin.json could not be read. If this is a development environment you can ignore this message
+[14Nov2026 13:47:37.776] [main/WARN] [mixin/]: Reference map '${refmap_target}refmap.json' for ferritecore.dedupmultipart.mixin.json could not be read. If this is a development environment you can ignore this message
+[14Nov2026 13:47:37.778] [main/WARN] [mixin/]: Reference map '${refmap_target}refmap.json' for ferritecore.blockstatecache.mixin.json could not be read. If this is a development environment you can ignore this message
+[14Nov2026 13:47:37.779] [main/WARN] [mixin/]: Reference map '${refmap_target}refmap.json' for ferritecore.dedupbakedquad.mixin.json could not be read. If this is a development environment you can ignore this message
+[14Nov2026 13:47:37.780] [main/WARN] [mixin/]: Reference map '${refmap_target}refmap.json' for ferritecore.threaddetec.mixin.json could not be read. If this is a development environment you can ignore this message
+[14Nov2026 13:47:37.781] [main/WARN] [mixin/]: Reference map '${refmap_target}refmap.json' for ferritecore.modelsides.mixin.json could not be read. If this is a development environment you can ignore this message
+[14Nov2026 13:47:37.782] [main/WARN] [mixin/]: Reference map '${refmap_target}refmap.json' for ferritecore.datacomponents.mixin.json could not be read. If this is a development environment you can ignore this message
+[14Nov2026 13:47:37.783] [main/WARN] [mixin/]: Reference map '${refmap_target}refmap.json' for ferritecore.accessors.mixin.json could not be read. If this is a development environment you can ignore this message
+[14Nov2026 13:47:37.785] [main/WARN] [mixin/]: Reference map 'betterfortresses.refmap.json' for betterfortresses.mixins.json could not be read. If this is a development environment you can ignore this message
+[14Nov2026 13:47:37.786] [main/WARN] [mixin/]: Reference map 'bettermineshafts.refmap.json' for bettermineshafts.mixins.json could not be read. If this is a development environment you can ignore this message
+[14Nov2026 13:47:37.787] [main/WARN] [mixin/]: Reference map 'betterjungletemples.refmap.json' for betterjungletemples.mixins.json could not be read. If this is a development environment you can ignore this message
+[14Nov2026 13:47:38.912] [main/INFO] [MixinExtras|Service/]: Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.5.5).
+[14Nov2026 13:47:39.968] [main/INFO] [net.minecraft.server.Bootstrap/]: ModernFix reached bootstrap stage (7.134 s after launch)
+[14Nov2026 13:47:41.939] [main/WARN] [mixin/]: Method overwrite conflict for getTemperature in modernfix-modernfix.mixins.json:perf.remove_biome_temperature_cache.BiomeMixin from mod modernfix, previously written by net.caffeinemc.mods.lithium.mixin.world.temperature_cache.BiomeMixin. Skipping method.
+[14Nov2026 13:47:45.298] [main/INFO] [net.minecraft.server.Bootstrap/]: Vanilla bootstrap took 5326 milliseconds
+[14Nov2026 13:47:46.179] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, location] and [teleport, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
+[14Nov2026 13:47:46.181] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, location] and [teleport, targets] with inputs: [0.1 -0.5 .9, 0 0 0]
+[14Nov2026 13:47:46.184] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, destination] and [teleport, targets] with inputs: [Player, 0123, @e, dd12be42-52a9-4a91-a8a1-11c01849e498]
+[14Nov2026 13:47:46.185] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, targets] and [teleport, destination] with inputs: [Player, 0123, dd12be42-52a9-4a91-a8a1-11c01849e498]
+[14Nov2026 13:47:46.187] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, targets, location] and [teleport, targets, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
+[14Nov2026 13:47:46.417] [modloading-worker-0/INFO] [xaero.lib.XaeroLib/]: Registering common data for channel xaerolib:main!
+[14Nov2026 13:47:46.446] [modloading-worker-0/INFO] [xaero.lib.XaeroLib/]: Loading primary common config for channel xaerolib:main!
+[14Nov2026 13:47:46.448] [modloading-worker-0/INFO] [xaero.lib.XaeroLib/]: Loading server config profiles for channel xaerolib:main!
+[14Nov2026 13:47:46.683] [modloading-worker-0/INFO] [ru.adept.core.AdeptCore/]: Ядро загружено, версия 0.1.0
+[14Nov2026 13:47:46.971] [modloading-worker-0/INFO] [xaero.common.HudMod/]: Registering common data for channel xaerominimap:main!
+[14Nov2026 13:47:47.012] [modloading-worker-0/INFO] [net.neoforged.neoforge.common.NeoForgeMod/NEOFORGE-MOD]: NeoForge mod loading, version 21.1.264, for MC 1.21.1
+[14Nov2026 13:47:47.065] [modloading-worker-0/INFO] [xaero.common.HudMod/]: Loading primary common config for channel xaerominimap:main!
+[14Nov2026 13:47:47.066] [modloading-worker-0/INFO] [xaero.common.HudMod/]: Loading server config profiles for channel xaerominimap:main!
+[14Nov2026 13:47:47.067] [modloading-worker-0/INFO] [xaero.map.WorldMap/]: Registering common data for channel xaeroworldmap:main!
+[14Nov2026 13:47:47.094] [modloading-worker-0/INFO] [xaero.map.WorldMap/]: Loading primary common config for channel xaeroworldmap:main!
+[14Nov2026 13:47:47.094] [modloading-worker-0/INFO] [xaero.map.WorldMap/]: Loading server config profiles for channel xaeroworldmap:main!
+[14Nov2026 13:47:47.113] [modloading-worker-0/INFO] [betterstrongholds/]: Creating directory for additional Better Strongholds configuration at /home/runner/work/chaos-adept/chaos-adept/story/run/fullpack-server/config/betterstrongholds/neoforge-1_21
+[14Nov2026 13:47:47.231] [modloading-worker-0/INFO] [betterdeserttemples/]: Creating directory for additional Better Desert Temples configuration at /home/runner/work/chaos-adept/chaos-adept/story/run/fullpack-server/config/betterdeserttemples/neoforge-1_21
+[14Nov2026 13:47:47.285] [modloading-worker-0/INFO] [thedarkcolour.kotlinforforge.neoforge.test.KotlinForForge/]: Kotlin For Forge Enabled!
+[14Nov2026 13:47:47.302] [modloading-worker-0/INFO] [betterfortresses/]: Creating directory for additional Better Nether Fortresses configuration at /home/runner/work/chaos-adept/chaos-adept/story/run/fullpack-server/config/betterfortresses/neoforge-1_21
+[14Nov2026 13:47:47.304] [modloading-worker-0/INFO] [ru.adept.story.AdeptStory/]: Сюжет загружен, версия 0.1.0
+[14Nov2026 13:47:48.312] [modloading-sync-worker/WARN] [net.neoforged.fml.config.ConfigTracker/CONFIG]: Configuration file /home/runner/work/chaos-adept/chaos-adept/story/run/fullpack-server/config/mowziesmobs-common.toml is not correct. Correcting
+[14Nov2026 13:47:48.356] [modloading-sync-worker/WARN] [net.neoforged.fml.config.ConfigTracker/CONFIG]: Configuration file /home/runner/work/chaos-adept/chaos-adept/story/run/fullpack-server/config/improvedmobs/common.toml is not correct. Correcting
+[14Nov2026 13:47:48.365] [modloading-worker-0/INFO] [xaero.lib.XaeroLib/]: Loading XaeroLib common 1/2!
+[14Nov2026 13:47:48.403] [modloading-worker-0/INFO] [xaero.lib.XaeroLib/]: Loading XaeroLib server 1/2!
+[14Nov2026 13:47:48.404] [modloading-worker-0/INFO] [xaero.map.server.WorldMapServer/]: Loading Xaero's World Map - Stage 1/2 (Server)
+[14Nov2026 13:47:48.403] [modloading-worker-0/INFO] [xaero.minimap.XaeroMinimap/]: Loading Xaero's Minimap - Stage 1/2 (Server)
+[14Nov2026 13:47:48.405] [modloading-sync-worker/INFO] [xaero.lib.XaeroLib/]: Loading XaeroLib common 2/2!
+[14Nov2026 13:47:48.406] [modloading-sync-worker/INFO] [xaero.lib.XaeroLib/]: Loading XaeroLib server 2/2!
+[14Nov2026 13:47:48.406] [modloading-sync-worker/INFO] [xaero.map.server.WorldMapServer/]: Loading Xaero's World Map - Stage 2/2 (Server)
+[14Nov2026 13:47:48.406] [modloading-sync-worker/INFO] [xaero.minimap.XaeroMinimap/]: Loading Xaero's Minimap - Stage 2/2 (Server)
+[14Nov2026 13:47:48.494] [modloading-worker-0/INFO] [snownee.jade.Jade/]: Start loading plugin from snownee.jade.addon.vanilla.VanillaPlugin
+[14Nov2026 13:47:48.517] [modloading-worker-0/INFO] [snownee.jade.Jade/]: Loaded plugin from snownee.jade.addon.vanilla.VanillaPlugin in 19.68 ms
+[14Nov2026 13:47:48.518] [modloading-worker-0/INFO] [snownee.jade.Jade/]: Start loading plugin from snownee.jade.addon.universal.UniversalPlugin
+[14Nov2026 13:47:48.523] [modloading-worker-0/INFO] [snownee.jade.Jade/]: Loaded plugin from snownee.jade.addon.universal.UniversalPlugin in 4.251 ms
+[14Nov2026 13:47:48.523] [modloading-worker-0/INFO] [snownee.jade.Jade/]: Start loading plugin from snownee.jade.addon.debug.DebugPlugin
+[14Nov2026 13:47:48.524] [modloading-worker-0/INFO] [snownee.jade.Jade/]: Loaded plugin from snownee.jade.addon.debug.DebugPlugin in 6.502 μs
+[14Nov2026 13:47:48.524] [modloading-worker-0/INFO] [snownee.jade.Jade/]: Start loading plugin from snownee.jade.addon.core.CorePlugin
+[14Nov2026 13:47:48.525] [modloading-worker-0/INFO] [snownee.jade.Jade/]: Loaded plugin from snownee.jade.addon.core.CorePlugin in 43.37 μs
+[14Nov2026 13:47:48.525] [modloading-worker-0/INFO] [snownee.jade.Jade/]: Start loading plugin from snownee.jade.addon.access.AccessibilityPlugin
+[14Nov2026 13:47:48.526] [modloading-worker-0/INFO] [snownee.jade.Jade/]: Loaded plugin from snownee.jade.addon.access.AccessibilityPlugin in 5.460 μs
+[14Nov2026 13:47:48.644] [main/ERROR] [net.minecraft.server.dedicated.Settings/]: Failed to load properties from file: server.properties
+java.nio.file.NoSuchFileException: server.properties
+	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92) ~[?:?]
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106) ~[?:?]
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111) ~[?:?]
+	at java.base/sun.nio.fs.UnixFileSystemProvider.newByteChannel(UnixFileSystemProvider.java:261) ~[?:?]
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:380) ~[?:?]
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:432) ~[?:?]
+	at java.base/java.nio.file.spi.FileSystemProvider.newInputStream(FileSystemProvider.java:420) ~[?:?]
+	at java.base/java.nio.file.Files.newInputStream(Files.java:160) ~[?:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.dedicated.Settings.loadFromFile(Settings.java:38) ~[neoforge-21.1.264.jar%23157!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.dedicated.DedicatedServerProperties.fromFile(DedicatedServerProperties.java:132) ~[neoforge-21.1.264.jar%23157!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.dedicated.DedicatedServerSettings.<init>(DedicatedServerSettings.java:12) ~[neoforge-21.1.264.jar%23157!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.Main.main(Main.java:125) ~[neoforge-21.1.264.jar%23157!/:?]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[?:?]
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:136) ~[loader-4.0.45.jar%23102!/:4.0]
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.serverService(CommonLaunchHandler.java:128) ~[loader-4.0.45.jar%23102!/:4.0]
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.NeoForgeServerDevLaunchHandler.runService(NeoForgeServerDevLaunchHandler.java:23) ~[loader-4.0.45.jar%23102!/:4.0]
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.lambda$launchService$4(CommonLaunchHandler.java:118) ~[loader-4.0.45.jar%23102!/:4.0]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) [modlauncher-11.0.5.jar%2382!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) [modlauncher-11.0.5.jar%2382!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) [modlauncher-11.0.5.jar%2382!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.Launcher.run(Launcher.java:103) [modlauncher-11.0.5.jar%2382!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.Launcher.main(Launcher.java:74) [modlauncher-11.0.5.jar%2382!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) [modlauncher-11.0.5.jar%2382!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) [modlauncher-11.0.5.jar%2382!/:?]
+	at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.run(BootstrapLauncher.java:210) [bootstraplauncher-2.0.2.jar:?]
+	at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:69) [bootstraplauncher-2.0.2.jar:?]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[?:?]
+	at net.neoforged.devlaunch.Main.main(Main.java:57) [DevLaunch-1.0.2.jar:?]
+[14Nov2026 13:47:48.674] [main/INFO] [com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService/]: Environment: Environment[sessionHost=https://sessionserver.mojang.com, servicesHost=https://api.minecraftservices.com, name=PROD]
+[14Nov2026 13:47:48.727] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/home/runner/work/chaos-adept/chaos-adept/story/build/moddev/artifacts/neoforge-21.1.264.jar%23157!/assets/.mcassetsroot' uses unexpected schema
+[14Nov2026 13:47:48.727] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/home/runner/work/chaos-adept/chaos-adept/story/build/moddev/artifacts/neoforge-21.1.264.jar%23157!/data/.mcassetsroot' uses unexpected schema
+[14Nov2026 13:47:48.769] [main/INFO] [net.neoforged.neoforge.gametest.GameTestHooks/]: Enabled Gametest Namespaces: [adept_core, adept_story]
+[14Nov2026 13:47:51.228] [Worker-Main-1/ERROR] [improvedmobs/]: Error during default entity config for EntityType ResourceKey[minecraft:entity_type / bosses_of_mass_destruction:obsidilith], skipping this type. Cause: Cannot read field "eventScheduler" because "levelEventScheduler" is null
+[14Nov2026 13:47:51.239] [Worker-Main-1/ERROR] [improvedmobs/]: Error during default entity config for EntityType ResourceKey[minecraft:entity_type / bosses_of_mass_destruction:gauntlet], skipping this type. Cause: Cannot read field "eventScheduler" because "levelEventScheduler" is null
+[14Nov2026 13:47:51.335] [main/INFO] [net.minecraft.world.item.crafting.RecipeManager/]: Loaded 1586 recipes
+[14Nov2026 13:47:51.523] [main/INFO] [net.minecraft.advancements.AdvancementTree/]: Loaded 1575 advancements
+[14Nov2026 13:47:51.525] [main/INFO] [ru.adept.core.AdeptCore/]: Пулы имён: деревень 32, командиров 24
+[14Nov2026 13:47:51.531] [main/INFO] [Curios API/]: Loaded 10 curio slots
+[14Nov2026 13:47:51.533] [main/INFO] [Curios API/]: Loaded 1 curio entities
+[14Nov2026 13:47:51.535] [main/INFO] [ru.adept.story.AdeptStory/]: Журнал: 44 записей; ждут событий следующих срезов: [final_outcome, pillar_defeated, pillar_materials_collected, soul_burned, transport_built]
+[14Nov2026 13:47:51.777] [main/WARN] [ModernFix/]: Initial datapack load took 2.918 s
+[14Nov2026 13:47:51.926] [Server thread/ERROR] [net.neoforged.neoforge.server.ServerLifecycleHooks/]: The following entities have not registered to the RegisterSpawnPlacementsEvent, but a spawn entry was found. This will mean that the entity doesn't have restrictions on its spawn location, please register a spawn placement for the entity, you can register with NO_RESTRICTIONS if you don't want any restrictions.
+	 - minecraft:camel
+[14Nov2026 13:47:52.011] [Server thread/INFO] [spark/]: Starting background profiler...
+[14Nov2026 13:47:52.915] [Server thread/WARN] [mixin/]: Method overwrite conflict for removeIf in modernfix-modernfix.mixins.json:bugfix.paper_chunk_patches.SortedArraySetMixin from mod modernfix, previously written by net.caffeinemc.mods.lithium.mixin.collections.chunk_tickets.SortedArraySetMixin. Skipping method.
+[14Nov2026 13:47:53.473] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Preparing start region for dimension minecraft:overworld
+[14Nov2026 13:47:53.522] [worldgen/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 2%
+[14Nov2026 13:47:53.808] [Server thread/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Time elapsed: 334 ms
+[14Nov2026 13:47:53.821] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestServer/]: Started game test server
+[14Nov2026 13:47:53.872] [Server thread/INFO] [net.neoforged.neoforge.server.permission.PermissionAPI/]: Successfully initialized permission handler neoforge:default_handler
+[14Nov2026 13:47:53.878] [Server thread/WARN] [net.neoforged.neoforge.common.TagConventionLogWarning/]: 
+   Dev warning - Legacy Tags detected. Please migrate your 'forge' namespace tags to the 'c' namespace! See net.neoforged.neoforge.common.Tags.java for all tags.
+   NOTE: Many tags have been moved around or renamed. Some new ones were added so please review the new tags.
+    And make sure you follow tag conventions for new tags! The convention is `c` with nouns generally being plural and adjectives being singular.
+   You can disable this message in NeoForge's common config by setting `logLegacyTagWarnings` to "SILENCED" or see individual tags with "DEV_VERBOSE".
+
+[14Nov2026 13:47:53.880] [Server thread/INFO] [ru.adept.core.AdeptCore/]: Создание мира: «gamerule seasonalEvents false» (результат 0)
+[14Nov2026 13:47:53.881] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Ветка сюжета для этого мира: PUBLIC
+[14Nov2026 13:47:53.881] [Server thread/WARN] [ModernFix/]: Dedicated server took 21.049 seconds to load
+[14Nov2026 13:47:53.970] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestServer/]: 74 tests are now running at position -7513651, -59, -13083207!
+[14Nov2026 13:47:54.500] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestRunner/]: Running test batch 'defaultBatch:0' (50 tests)...
+[14Nov2026 13:47:54.711] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestServer/]: [                                                                          ]
+[14Nov2026 13:47:54.811] [Server thread/INFO] [STDOUT/]: [net.caffeinemc.mods.lithium.common.block.TrackedBlockStatePredicate:<clinit>:13]: Lithium Cached BlockState Flags are disabled!
+[14Nov2026 13:47:54.836] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись firsts/first_threat
+[14Nov2026 13:47:54.836] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись nodes/tier_2
+[14Nov2026 13:47:54.837] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись firsts/first_heroes
+[14Nov2026 13:47:54.844] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись firsts/first_ruins
+[14Nov2026 13:47:54.862] [Server thread/INFO] [ru.adept.core.AdeptCore/]: Броненосец в тесте: масштаб 1.0
+[14Nov2026 13:47:54.866] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись firsts/first_pair
+[14Nov2026 13:47:54.922] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись firsts/first_prototype
+[14Nov2026 13:47:54.928] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись nodes/first
+[14Nov2026 13:47:54.929] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись nodes/level_1_repeat
+[14Nov2026 13:47:54.929] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись nodes/level_1_repeat
+[14Nov2026 13:47:54.929] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись nodes/level_1_repeat
+[14Nov2026 13:47:54.946] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись firsts/first_threat
+[14Nov2026 13:47:54.958] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись nodes/first
+[14Nov2026 13:47:54.958] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись nodes/level_1_repeat
+[14Nov2026 13:47:54.959] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись nodes/level_2_first
+[14Nov2026 13:47:54.959] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись nodes/level_2_repeat
+[14Nov2026 13:47:54.969] [Server thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager ResidentEntity['entity.adept_core.resident.none'/400, l='ServerLevel[Test Level]', x=-7513649.50, y=-58.00, z=-13083170.50] died, message: 'entity.adept_core.resident.none was slain by test-mock-player'
+[14Nov2026 13:47:54.974] [Server thread/INFO] [ru.adept.core.AdeptCore/]: Уровень узлов 2: сложность Improved Mobs 50 (результат 1)
+[14Nov2026 13:47:54.974] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись nodes/tier_2
+[14Nov2026 13:47:54.974] [Server thread/INFO] [ru.adept.core.AdeptCore/]: Уровень узлов 1: сложность Improved Mobs 0 (результат 1)
+[14Nov2026 13:47:54.975] [Server thread/INFO] [ru.adept.core.AdeptCore/]: Уровень узлов 2: сложность Improved Mobs 50 (результат 1)
+[14Nov2026 13:47:54.975] [Server thread/INFO] [ru.adept.core.AdeptCore/]: Уровень узлов 1: сложность Improved Mobs 0 (результат 1)
+[14Nov2026 13:47:55.077] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestServer/]: [+++++++++++++++++++++++++++_++++++++++++++++++++++                        ]
+[14Nov2026 13:47:55.160] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestServer/]: [+++++++++++++++++++++++++++_++++++++++++++++++++++                        ]
+[14Nov2026 13:47:55.290] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestServer/]: [+++++++++++++++++++++++++++_++++++++++++++++++++++                        ]
+[14Nov2026 13:47:55.415] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestServer/]: [+++++++++++++++++++++++++++_++++++++++++++++++++++                        ]
+[14Nov2026 13:47:55.727] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestServer/]: [+++++++++++++++++++++++++++_++++++++++++++++++++++                        ]
+[14Nov2026 13:47:55.794] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestRunner/]: Running test batch 'defaultBatch:1' (24 tests)...
+[14Nov2026 13:47:56.328] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestServer/]: [++++++++++++++++++++++++++++++++++++++++++++++++++                        ]
+[14Nov2026 13:47:56.335] [Server thread/INFO] [ru.adept.core.AdeptCore/]: Уровень узлов 1: сложность Improved Mobs 0 (результат 1)
+[14Nov2026 13:47:56.352] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись prologue/artifact_table
+[14Nov2026 13:47:56.355] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись ritual/first
+[14Nov2026 13:47:56.356] [Server thread/INFO] [ru.adept.core.AdeptCore/]: Уровень узлов 3: сложность Improved Mobs 100 (результат 1)
+[14Nov2026 13:47:56.356] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись trader/level_3
+[14Nov2026 13:47:56.356] [Server thread/INFO] [ru.adept.core.AdeptCore/]: Уровень узлов 1: сложность Improved Mobs 0 (результат 1)
+[14Nov2026 13:47:56.362] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestServer/]: [++++++++++++++++++++++++++++++++++++++++++++++++++++++  ++++++            ]
+[14Nov2026 13:47:56.467] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись firsts/first_prototype
+[14Nov2026 13:47:56.468] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись firsts/first_apex
+[14Nov2026 13:47:56.469] [Server thread/WARN] [ru.adept.core.AdeptCore/]: Неизвестный товар у торговца: minecraft:nope
+[14Nov2026 13:47:56.477] [Server thread/INFO] [ru.adept.story.AdeptStory/]: Журнал: запись firsts/first_pair
+[14Nov2026 13:47:56.483] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestServer/]: [++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]
+[14Nov2026 13:47:56.483] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestServer/]: ========= 74 GAME TESTS COMPLETE IN 2.512 s ======================
+[14Nov2026 13:47:56.484] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestServer/]: All 74 required tests passed :)
+[14Nov2026 13:47:56.484] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestServer/]: ====================================================
+[14Nov2026 13:47:56.518] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Stopping server
+[14Nov2026 13:47:56.519] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving players
+[14Nov2026 13:47:56.519] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving worlds
+[14Nov2026 13:47:56.783] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:overworld
+[14Nov2026 13:47:58.652] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:the_end
+[14Nov2026 13:47:58.655] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:the_nether
+[14Nov2026 13:47:58.666] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (world): All chunks are saved
+[14Nov2026 13:47:58.667] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[14Nov2026 13:47:58.667] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[14Nov2026 13:47:58.667] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage: All dimensions are saved
+[14Nov2026 13:47:58.695] [Server thread/INFO] [net.minecraft.gametest.framework.GameTestServer/]: Game test server shutting down
