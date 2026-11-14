@@ -82,7 +82,11 @@ public class GaussModel {
         /** Труба прицела: тёмный металл, линзы на торцах. */
         SCOPE,
         /** Плата. */
-        PCB
+        PCB,
+        /** Силовое поле лезвия: светится целиком, середина ярче. */
+        FIELD,
+        /** Сырое поле: неровное, с тёмными провалами. */
+        FIELD_RAW
     }
 
     static final class Cube {
@@ -98,6 +102,8 @@ public class GaussModel {
         boolean round;
         /** Торцы смотрят вдоль X (диск поперёк оружия). */
         boolean capX;
+        /** Торцы смотрят вдоль Y (диск вокруг вертикальной оси). */
+        boolean capY;
         int u, v;
 
         Cube(String bone, Mat mat, double x, double y, double z, int w, int h, int d) {
@@ -122,6 +128,12 @@ public class GaussModel {
             return this;
         }
 
+        Cube rotY(double deg) {
+            this.axis = 2;
+            this.deg = deg;
+            return this;
+        }
+
         Cube rotZ(double deg) {
             this.axis = 3;
             this.deg = deg;
@@ -134,7 +146,11 @@ public class GaussModel {
 
     static final Map<String, Bone> BONES = new LinkedHashMap<>();
     static final List<Cube> CUBES = new ArrayList<>();
-    static final String[] SEGMENTS = {"barrel", "coils", "cooler", "battery", "magazine", "scope"};
+    static String[] SEGMENTS = {"barrel", "coils", "cooler", "battery", "magazine", "scope"};
+
+    /** Имя модели в файле geo; центр кадра предпросмотра. Другие артефакты (BladeModel) задают свои. */
+    static String NAME = "gauss_gun";
+    static double[] CENTER = {0, 18, -9};
 
     static String cur;
 
@@ -183,6 +199,18 @@ public class GaussModel {
 
     static void oct(Mat m, int D, int a, double cy, double z, int len) {
         oct(m, D, a, 0, cy, z, len);
+    }
+
+    /** Восьмигранник вокруг вертикальной оси (Y): высота h от y. */
+    static void octY(Mat m, int D, int a, double cx, double y, double cz, int h) {
+        for (int k = 0; k < 4; k++) {
+            Cube q = box(m, cx - D / 2.0, y + k * 0.01, cz - a / 2.0, D, h, a);
+            q.round = true;
+            q.capY = true;
+            if (k > 0) {
+                q.rotY(45 * k);
+            }
+        }
     }
 
     /** Восьмигранный диск поперёк оружия (ось X): толщина t от x. */
@@ -497,7 +525,8 @@ public class GaussModel {
 
     /** Торец бруска восьмигранника: грань поперёк его оси. */
     static boolean isCap(Cube q, Face f) {
-        return q.capX ? (f == Face.EAST || f == Face.WEST) : (f == Face.NORTH || f == Face.SOUTH);
+        return q.capY ? (f == Face.UP || f == Face.DOWN)
+                : q.capX ? (f == Face.EAST || f == Face.WEST) : (f == Face.NORTH || f == Face.SOUTH);
     }
 
     /** Поворот точки вокруг центра куба по правилам файла geo (как экспортирует Blockbench). */
@@ -512,6 +541,9 @@ public class GaussModel {
         z -= cz;
         if (q.axis == 1) {
             return new double[]{x + cx, y * c - z * s + cy, y * s + z * c + cz};
+        }
+        if (q.axis == 2) {
+            return new double[]{x * c + z * s + cx, y + cy, -x * s + z * c + cz};
         }
         return new double[]{x * c - y * s + cx, x * s + y * c + cy, z + cz};
     }
@@ -643,6 +675,12 @@ public class GaussModel {
                     return ARC[2];
                 }
                 return tone(GUNMETAL, t);
+            case FIELD:
+                glow[0] = true;
+                return ARC[(f == Face.NORTH || f == Face.SOUTH) && midA ? 0 : 1];
+            case FIELD_RAW:
+                glow[0] = true;
+                return ARC[(y + x) % 3 == 0 ? 3 : (f == Face.NORTH || f == Face.SOUTH) && midA ? 1 : 2];
             case PCB:
                 if (side && midB && a % 3 == 1) {
                     return BRASS[1];
@@ -792,7 +830,7 @@ public class GaussModel {
     static String geoJson() {
         StringBuilder s = new StringBuilder();
         s.append("{\n  \"format_version\": \"1.12.0\",\n  \"minecraft:geometry\": [\n    {\n");
-        s.append("      \"description\": {\n        \"identifier\": \"geometry.gauss_gun\",\n");
+        s.append("      \"description\": {\n        \"identifier\": \"geometry." + NAME + "\",\n");
         s.append("        \"texture_width\": ").append(texW).append(",\n        \"texture_height\": ").append(texH).append(",\n");
         s.append("        \"visible_bounds_width\": 6,\n        \"visible_bounds_height\": 4,\n        \"visible_bounds_offset\": [0, 1, 0]\n      },\n");
         s.append("      \"bones\": [\n");
@@ -816,7 +854,7 @@ public class GaussModel {
                     if (q.axis != 0) {
                         s.append(", \"pivot\": [").append(num(q.x + q.w / 2.0)).append(", ").append(num(q.y + q.h / 2.0)).append(", ")
                                 .append(num(q.z + q.d / 2.0)).append("], \"rotation\": [")
-                                .append(q.axis == 1 ? num(q.deg) : "0").append(", 0, ").append(q.axis == 3 ? num(q.deg) : "0").append("]");
+                                .append(q.axis == 1 ? num(q.deg) : "0").append(", ").append(q.axis == 2 ? num(q.deg) : "0").append(", ").append(q.axis == 3 ? num(q.deg) : "0").append("]");
                     }
                     s.append(", \"uv\": [").append(q.u).append(", ").append(q.v).append("]}")
                             .append(i < own.size() - 1 ? ",\n" : "\n");
@@ -882,7 +920,7 @@ public class GaussModel {
         double cy = Math.cos(Math.toRadians(yaw)), sy = Math.sin(Math.toRadians(yaw));
         double cp = Math.cos(Math.toRadians(pitch)), sp = Math.sin(Math.toRadians(pitch));
         // Центр кадра — середина модели.
-        double mx = 0, my = 18, mz = -9;
+        double mx = CENTER[0], my = CENTER[1], mz = CENTER[2];
         boolean[] glow = new boolean[1];
         for (Cube q : CUBES) {
             if (!look.visible(q.bone)) {
