@@ -49,6 +49,9 @@ public class ArtifactTableMenu extends AbstractContainerMenu {
     public final DataSlot rangedChoice = DataSlot.standalone();
     public final DataSlot gaussBuilt = DataSlot.standalone();
     public final DataSlot gaussTempo = DataSlot.standalone();
+    /** Облик гаусс-пушки по прогрессу ({@link ru.adept.core.artifact.GaussLook}) двумя половинами: слот передаёт 16 бит. */
+    public final DataSlot gaussLookLow = DataSlot.standalone();
+    public final DataSlot gaussLookHigh = DataSlot.standalone();
     public final DataSlot accumulatorBuilt = DataSlot.standalone();
     public final DataSlot accumulatorCapacity = DataSlot.standalone();
     public final DataSlot cauldronBuilt = DataSlot.standalone();
@@ -77,6 +80,8 @@ public class ArtifactTableMenu extends AbstractContainerMenu {
         addDataSlot(rangedChoice);
         addDataSlot(gaussBuilt);
         addDataSlot(gaussTempo);
+        addDataSlot(gaussLookLow);
+        addDataSlot(gaussLookHigh);
         addDataSlot(accumulatorBuilt);
         addDataSlot(accumulatorCapacity);
         addDataSlot(cauldronBuilt);
@@ -101,6 +106,9 @@ public class ArtifactTableMenu extends AbstractContainerMenu {
         rangedChoice.set(TableActions.GAUSS.equals(ranged) ? 1 : TableActions.RAIL.equals(ranged) ? 2 : 0);
         gaussBuilt.set(p.step(TableActions.GAUSS_BUILT));
         gaussTempo.set(p.step(TableActions.GAUSS_TEMPO));
+        int look = ru.adept.core.artifact.GaussLook.pack(p);
+        gaussLookLow.set(look & 0x7FFF);
+        gaussLookHigh.set(look >> 15);
         accumulatorBuilt.set(p.step(TableActions.ACCUMULATOR_BUILT));
         accumulatorCapacity.set(p.step(TableActions.ACCUMULATOR_CAPACITY));
         cauldronBuilt.set(p.step(TableActions.CAULDRON_BUILT));
@@ -109,6 +117,11 @@ public class ArtifactTableMenu extends AbstractContainerMenu {
 
     @Override
     public boolean clickMenuButton(Player player, int id) {
+        if (GaussUpgrades.isButton(id)) {
+            lastResult.set(GaussUpgrades.unlock(player, GaussUpgrades.node(id)).ordinal() + 1);
+            refresh();
+            return true;
+        }
         TableActions.Result result;
         if (id == BTN_CHOOSE_BLADE) {
             result = TableActions.choosePair(player, TableActions.BLADE);
@@ -162,6 +175,11 @@ public class ArtifactTableMenu extends AbstractContainerMenu {
     public void broadcastChanges() {
         refresh();
         super.broadcastChanges();
+    }
+
+    /** Облик гаусс-пушки по прогрессу игрока, как его видит клиент. */
+    public int gaussLook() {
+        return gaussLookLow.get() | (gaussLookHigh.get() << 15);
     }
 
     @Override

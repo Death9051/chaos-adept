@@ -54,6 +54,14 @@ public final class ClientSmokeTest {
 
     private static final List<Scene> SCENES = List.of(
             new Scene("table", 0.5, 1.6, 1.5, 0, 25, false),
+            // Гаусс-пушка: модель в трёх состояниях, в руке, от третьего лица, экран прокачки (GaussScenes).
+            new Scene("gauss_proto", 22.5, 1.2, 2.5, 0, 0, false),
+            new Scene("gauss_partial", 22.5, 1.2, 2.5, 0, 0, false),
+            new Scene("gauss_final", 22.5, 1.2, 2.5, 0, 0, false),
+            new Scene("gauss_hand", 22.5, 1.0, 2.5, 0, 0, true),
+            new Scene("gauss_third", 22.5, 1.0, 2.5, 0, 0, false),
+            new Scene("gauss_table", 22.5, 1.0, 2.5, 0, 0, true),
+            new Scene("gauss_table_apex", 22.5, 1.0, 2.5, 0, 0, true),
             new Scene("node_camp", 6.5, 2.0, 1.0, 0, 20, false),
             new Scene("machines", -5.5, 2.0, 1.0, 0, 20, false),
             new Scene("mobs", 0.5, 2.5, 3.0, 0, 12, false),
@@ -105,12 +113,14 @@ public final class ClientSmokeTest {
                     mc.options.hideGui = !scene.gui();
                     run(mc.getSingleplayerServer(), String.format(java.util.Locale.ROOT, "tp @p %.1f %.1f %.1f %.1f %.1f",
                             origin.getX() + scene.x(), origin.getY() + scene.y(), origin.getZ() + scene.z(), scene.yaw(), scene.pitch()));
+                    GaussScenes.start(mc, scene.name(), origin);
                 }
                 ticks++;
                 if (ticks == SCENE_SETUP) {
                     AdeptCore.LOG.info("[clienttest] {}{}", SCENE_PREFIX, scene.name());
                 }
                 if (ticks >= SCENE_SETUP + SCENE_HOLD) {
+                    GaussScenes.end(mc, scene.name());
                     ticks = 0;
                     if (++sceneIndex >= SCENES.size()) {
                         mc.options.hideGui = false;
@@ -170,6 +180,7 @@ public final class ClientSmokeTest {
             run(server, command);
         }
         buildHeroes(server, x, y, z);
+        GaussScenes.build(server, o);
     }
 
     /**

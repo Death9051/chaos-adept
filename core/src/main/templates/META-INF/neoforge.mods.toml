@@ -23,3 +23,11 @@ description='''
     versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"
+
+# Модели и анимации артефактов.
+[[dependencies.adept_core]]
+    modId="geckolib"
+    type="required"
+    versionRange="[4.9,)"
+    ordering="AFTER"
+    side="BOTH"
