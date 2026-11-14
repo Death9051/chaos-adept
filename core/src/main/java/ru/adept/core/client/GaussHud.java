@@ -33,7 +33,7 @@ public final class GaussHud {
     private static final int HEAT_HIGH = 0xFFFF5030;
     private static final int TEXT = 0xFFE8E0D0;
     private static final int WARN = 0xFFFF7060;
-    private static final int W = 78;
+    private static final int W = 86;
     private static final int H = 32;
 
     private GaussHud() {

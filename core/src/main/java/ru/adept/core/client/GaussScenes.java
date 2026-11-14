@@ -103,7 +103,7 @@ final class GaussScenes {
                 "summon minecraft:item_display %.1f %.1f %.1f {item:{id:\"adept_core:gauss_gun\",count:1,"
                         + "components:{\"minecraft:custom_data\":{look:%d}}},item_display:\"none\",Rotation:[110f,0f],"
                         + "transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],"
-                        + "scale:[0.9f,0.9f,0.9f]},brightness:{sky:15,block:15},Tags:[\"gauss_show\"]}",
+                        + "scale:[0.8f,0.8f,0.8f]},brightness:{sky:15,block:15},Tags:[\"gauss_show\"]}",
                 o.getX() + 22.5, o.getY() + 1.8, o.getZ() + 6.0, look));
     }
 
