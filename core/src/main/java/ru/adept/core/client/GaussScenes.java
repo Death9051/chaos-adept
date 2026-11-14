@@ -56,8 +56,10 @@ final class GaussScenes {
                 run(server, "gamemode survival @p");
                 run(server, "give @p adept_core:coil_2_tech 2");
                 run(server, "give @p adept_core:frame_2 3");
+                run(server, "item replace entity @p hotbar.8 with adept_core:gauss_gun"
+                        + "[minecraft:custom_data={charge:260,magazine:[\"iron\",\"iron\",\"steel\",\"steel\",\"iron\"]}]");
                 mc.setScreen(new GaussUpgradeScreen(null, () -> PARTIAL, id -> {
-                }).select(Segment.BARREL, 1, 2));
+                }).select(Segment.BARREL, 1, 2).tryOn());
             }
             case "gauss_table_apex" -> {
                 run(server, "give @p adept_core:lens_3_magic 1");
