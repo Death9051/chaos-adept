@@ -86,7 +86,9 @@ public class GaussModel {
         /** Силовое поле лезвия: светится целиком, середина ярче. */
         FIELD,
         /** Сырое поле: неровное, с тёмными провалами. */
-        FIELD_RAW
+        FIELD_RAW,
+        /** Манекен для предпросмотра брони, в модель не попадает. */
+        DUMMY
     }
 
     static final class Cube {
@@ -675,6 +677,8 @@ public class GaussModel {
                     return ARC[2];
                 }
                 return tone(GUNMETAL, t);
+            case DUMMY:
+                return f == Face.UP ? 0x6A6E7C : f == Face.DOWN ? 0x3A3D48 : side && (f == Face.EAST || f == Face.WEST) ? 0x555966 : 0x4A4E5A;
             case FIELD:
                 glow[0] = true;
                 return ARC[(f == Face.NORTH || f == Face.SOUTH) && midA ? 0 : 1];
