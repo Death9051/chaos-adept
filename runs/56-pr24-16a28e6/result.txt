@@ -1,6 +1,0 @@
-build=success servertest=success clienttest=success fullpack=success
-branch=claude/story-slice2 pr=24 sha=16a28e6921f45878cf8aaee9851cc22b53d1abf1 run=56
-fullpack: lock=ok
-fullpack: gametest=success
-fullpack: client=success
-fullpack: shaders=success

@@ -1,0 +1,6 @@
+build=success servertest=success clienttest=success fullpack=success
+branch=claude/gauss-model-ui-1e0611 pr=35 sha=901703ec6ecdc42b0ce4cd9cbe948ccd0cb9cd3b run=98
+fullpack: lock=ok
+fullpack: gametest=success
+fullpack: client=success
+fullpack: shaders=success
