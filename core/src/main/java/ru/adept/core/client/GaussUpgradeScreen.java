@@ -71,8 +71,8 @@ public class GaussUpgradeScreen extends Screen {
 
     /** Центр и размер сегмента в модели (единицы модели): на них наезжает камера. Порядок — {@link GaussLook#SEGMENTS}. */
     private static final float[][] FOCUS = {
-            {0, 19, -33, 2.3f}, {0, 20, -14, 2.6f}, {0, 11, -14, 2.6f},
-            {0, 15, 21, 2.4f}, {0, 9, -1.5f, 2.6f}, {0, 28, 3, 2.4f}};
+            {0, 19, -30, 1.55f}, {0, 19, -14, 1.9f}, {0, 12, -14, 1.9f},
+            {0, 15, 19, 1.8f}, {0, 10, -1.5f, 1.9f}, {0, 26, 3, 1.8f}};
     private static final float[] WHOLE = {0, 18, -9, 1.0f};
 
     private final Screen parent;
@@ -455,7 +455,7 @@ public class GaussUpgradeScreen extends Screen {
         int cy = r[1] + r[3] / 2 + 4;
 
         // Площадка: три кольца и золотые метки по кругу; гаснет, когда камера наезжает на сегмент.
-        float whole = Mth.clamp(1f - (camera[3] - 1f) / 0.6f, 0f, 1f);
+        float whole = Mth.clamp(1f - (camera[3] - 1f) / 0.5f, 0f, 1f);
         if (whole > 0.05f) {
             int alpha = (int) (whole * 0x70);
             float a = r[2] * 0.36f;

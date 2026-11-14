@@ -95,7 +95,8 @@ public class GaussGunRenderer extends GeoItemRenderer<GaussGunItem> {
         if (focus >= 0) {
             GaussLook.Segment segment = GaussLook.segmentOf(bone.getName());
             if (segment == null || segment.ordinal() != focus) {
-                tint = DIMMED;
+                // Свечение затемнённых частей почти гасим: слой eyes складывается с фоном и иначе горит пятном.
+                tint = isReRender ? 0xFF16161A : DIMMED;
             } else {
                 tint = 0xFFFFFFFF;
             }
