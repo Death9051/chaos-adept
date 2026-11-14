@@ -1,2 +1,0 @@
-build=success servertest=cancelled clienttest=cancelled fullpack=cancelled
-branch=claude/story-slice2 pr=24 sha=8dd55dc3f787bc91c538703fe58af231024378f3 run=55
