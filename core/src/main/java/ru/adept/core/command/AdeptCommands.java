@@ -169,6 +169,21 @@ public final class AdeptCommands {
                                     setProgress(ctx, progress(ctx).withStep(key, value));
                                     return reply(ctx, key + " = " + value);
                                 })))))
+                // gauss <игрок> <основа 0–3> <детали 0–3> <вершины 0–1> — все сегменты гаусс-пушки разом (облик модели).
+                .then(Commands.literal("gauss").then(Commands.argument("player", EntityArgument.player())
+                        .then(Commands.argument("base", IntegerArgumentType.integer(0, 3))
+                                .then(Commands.argument("add", IntegerArgumentType.integer(0, 3))
+                                        .then(Commands.argument("apex", IntegerArgumentType.integer(0, 1)).executes(ctx -> {
+                                            int base = IntegerArgumentType.getInteger(ctx, "base");
+                                            int add = IntegerArgumentType.getInteger(ctx, "add");
+                                            int apex = IntegerArgumentType.getInteger(ctx, "apex");
+                                            ArtifactProgress p = progress(ctx).withStep(ru.adept.core.table.TableActions.GAUSS_BUILT, 1);
+                                            for (ru.adept.core.artifact.GaussLook.Segment s : ru.adept.core.artifact.GaussLook.SEGMENTS) {
+                                                p = p.withStep(s.key(0), base).withStep(s.key(1), add).withStep(s.apexKey(), apex);
+                                            }
+                                            setProgress(ctx, p);
+                                            return reply(ctx, "Гаусс: основа " + base + ", детали " + add + ", вершины " + apex);
+                                        }))))))
                 .then(Commands.literal("reset").then(Commands.argument("player", EntityArgument.player())
                         .executes(ctx -> {
                             setProgress(ctx, ArtifactProgress.EMPTY);

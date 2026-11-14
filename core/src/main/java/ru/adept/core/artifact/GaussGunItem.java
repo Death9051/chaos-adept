@@ -10,6 +10,7 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -31,22 +32,90 @@ import net.minecraft.world.phys.Vec3;
 import ru.adept.core.base.Molten;
 import ru.adept.core.config.BalanceConfig;
 import ru.adept.core.table.TableActions;
+import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
+import software.bernie.geckolib.animatable.client.GeoRenderProvider;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.PlayState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Гаусс-пушка, прототип. Стреляет иглами из магазина (выстрел — мгновенный луч до 48 блоков с разбросом),
  * материал иглы задаёт урон и бонус. Магазин заряжается по шаблону: выбранный материал или «любые» иглы
  * из инвентаря; при нехватке недостающие пропускаются. Каждый выстрел тратит электричество и греет ствол,
  * при 100% нагрева пушка молчит. Иглы не подбираются. Shift + ПКМ — сменить шаблон и перезарядить.
+ *
+ * Модель — GeckoLib (генератор tools/models/GaussModel.java): облик по прокачке лежит в данных предмета
+ * ({@link GaussLook}), сервер обновляет его из прогресса игрока; выстрел, перезарядка и перегрев запускают анимации.
  */
-public class GaussGunItem extends Item {
+public class GaussGunItem extends Item implements GeoItem {
     public static final String ANY = "";
+    public static final String CONTROLLER = "main";
+    public static final String ANIM_FIRE = "fire";
+    public static final String ANIM_RELOAD = "reload";
+    public static final String ANIM_OVERHEAT = "overheat";
+
+    private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
     public GaussGunItem(Properties properties) {
         super(properties);
+        SingletonGeoAnimatable.registerSyncedAnimatable(this);
+    }
+
+    // ---- модель и анимации ----
+
+    @Override
+    public void createGeoRenderer(Consumer<GeoRenderProvider> consumer) {
+        consumer.accept(new GeoRenderProvider() {
+            private net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer renderer;
+
+            @Override
+            public net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer getGeoItemRenderer() {
+                if (renderer == null) {
+                    renderer = new ru.adept.core.client.GaussGunRenderer();
+                }
+                return renderer;
+            }
+        });
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, CONTROLLER, 0, state -> PlayState.STOP)
+                .triggerableAnim(ANIM_FIRE, RawAnimation.begin().thenPlay(ANIM_FIRE))
+                .triggerableAnim(ANIM_RELOAD, RawAnimation.begin().thenPlay(ANIM_RELOAD))
+                .triggerableAnim(ANIM_OVERHEAT, RawAnimation.begin().thenPlay(ANIM_OVERHEAT)));
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return geoCache;
+    }
+
+    /** Запустить анимацию у всех, кто видит игрока. Вне сервера и у тестовых игроков ничего не делает. */
+    private static void animate(Player player, ItemStack stack, String animation) {
+        if (player instanceof ServerPlayer && player.level() instanceof ServerLevel level && stack.getItem() instanceof GaussGunItem gun) {
+            gun.triggerAnim(player, GeoItem.getOrAssignId(stack, level), CONTROLLER, animation);
+        }
+    }
+
+    /** Облик по прокачке ({@link GaussLook}), записанный в предмет. */
+    public static int look(ItemStack stack) {
+        return stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).getUnsafe().getInt(GaussLook.TAG);
+    }
+
+    public static void setLook(ItemStack stack, int look) {
+        CompoundTag tag = data(stack);
+        tag.putInt(GaussLook.TAG, look);
+        save(stack, tag);
     }
 
     // ---- данные ----
@@ -99,7 +168,8 @@ public class GaussGunItem extends Item {
 
     /** Выстрелов в секунду с учётом «Темпа». */
     public static double fireRate(Player player) {
-        int tempo = TableActions.progress(player).step(TableActions.GAUSS_TEMPO);
+        // Прибавку темпа даёт только ступень I; II и III — новые свойства (срез 4).
+        int tempo = Math.min(1, TableActions.progress(player).step(TableActions.GAUSS_TEMPO));
         return BalanceConfig.GAUSS_FIRE_RATE.get() * (1.0 + tempo * BalanceConfig.GAUSS_TEMPO_PER_STEP.get());
     }
 
@@ -125,6 +195,7 @@ public class GaussGunItem extends Item {
         if (player.isShiftKeyDown()) {
             cycleTemplate(player, stack);
             startReload(stack, now);
+            animate(player, stack, ANIM_RELOAD);
             return InteractionResultHolder.consume(stack);
         }
         fire((ServerLevel) level, player, stack, now);
@@ -161,6 +232,10 @@ public class GaussGunItem extends Item {
             return;
         }
         CompoundTag tag = data(stack);
+        int look = GaussLook.pack(TableActions.progress(player));
+        if (tag.getInt(GaussLook.TAG) != look) {
+            setLook(stack, look);
+        }
         long until = tag.getLong("reload_until");
         if (until > 0 && level.getGameTime() >= until) {
             finishReload(player, stack);
@@ -220,6 +295,7 @@ public class GaussGunItem extends Item {
         List<String> mag = new ArrayList<>(magazine(stack));
         if (mag.isEmpty()) {
             startReload(stack, now);
+            animate(player, stack, ANIM_RELOAD);
             return false;
         }
         int cost = BalanceConfig.GAUSS_SHOT_COST.get();
@@ -242,6 +318,7 @@ public class GaussGunItem extends Item {
         tag.putDouble("next_shot", Math.max(tag.getDouble("next_shot"), now) + 20.0 / fireRate(player));
         shoot(level, player, material, tag);
         save(stack, tag);
+        animate(player, stack, heat >= 1.0 ? ANIM_OVERHEAT : ANIM_FIRE);
         return true;
     }
 

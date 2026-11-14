@@ -174,6 +174,16 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
                             .append(costText(CostList.parse(info.stepCost()))))).build();
             step.active = built() > 0 && stepDone() == 0;
             addRenderableWidget(step);
+            if (tab == 2) {
+                // Гаусс-пушка прокачивается по сегментам на отдельном экране с 3D-превью.
+                step.visible = false;
+                Button upgrades = Button.builder(Component.translatable("adept_core.gauss_table.open"),
+                                b -> minecraft.setScreen(new GaussUpgradeScreen(this, menu::gaussLook, this::press)))
+                        .bounds(x, y + 120, 220, 20)
+                        .tooltip(Tooltip.create(Component.translatable("adept_core.gauss_table.open.desc"))).build();
+                upgrades.active = built() > 0;
+                addRenderableWidget(upgrades);
+            }
         }
     }
 
