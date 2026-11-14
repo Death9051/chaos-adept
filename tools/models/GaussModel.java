@@ -525,6 +525,19 @@ public class GaussModel {
             case EAST, WEST -> 2;
             default -> 3;
         };
+        // Повёрнутый брусок: тон по тому, куда грань смотрит на самом деле, а не по её имени.
+        // Иначе «нижняя» грань бруска восьмигранника оказывается сбоку и даёт чёрные полосы в стыках.
+        if (q.axis != 0 && !(q.round && isCap(q, f))) {
+            double[] n = switch (f) {
+                case UP -> turn(q, 0, 1, 0, false);
+                case DOWN -> turn(q, 0, -1, 0, false);
+                case EAST -> turn(q, 1, 0, 0, false);
+                case WEST -> turn(q, -1, 0, 0, false);
+                case NORTH -> turn(q, 0, 0, -1, false);
+                case SOUTH -> turn(q, 0, 0, 1, false);
+            };
+            base = n[1] > 0.9 ? 1 : n[1] > -0.3 ? 2 : n[1] > -0.9 ? 3 : 4;
+        }
         // Место на грани: a — по горизонтали, b — по вертикали.
         int a, b, A, B;
         switch (f) {
@@ -533,8 +546,9 @@ public class GaussModel {
             default -> { a = x; b = y; A = w; B = h; }
         }
         boolean capFace = q.round && (isCap(q, f));
-        boolean edge = !capFace && Math.min(A, B) >= 3 && (a == 0 || b == 0 || a == A - 1 || b == B - 1);
-        int t = base + (edge ? 1 : 0);
+        boolean edge = !q.round && q.axis == 0 && Math.min(A, B) >= 3 && (a == 0 || b == 0 || a == A - 1 || b == B - 1);
+        // Обводка грани не темнее тона 4: тон 5 на стыках соседних деталей читался чёрными пикселями.
+        int t = edge ? Math.min(4, base + 1) : base;
         boolean side = f != Face.UP && f != Face.DOWN;
         boolean midA = A % 2 == 1 ? a == A / 2 : (a == A / 2 || a == A / 2 - 1);
         boolean midB = B % 2 == 1 ? b == B / 2 : (b == B / 2 || b == B / 2 - 1);
