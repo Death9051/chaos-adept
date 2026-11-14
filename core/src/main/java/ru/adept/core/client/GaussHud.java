@@ -64,6 +64,11 @@ public final class GaussHud {
 
         int x = g.guiWidth() / 2 + 91 + 34;
         int y = g.guiHeight() - H - 2;
+        // На узком экране справа от панели места нет: прижимаем к правому краю над полосами здоровья и голода.
+        if (x + W > g.guiWidth() - 2) {
+            x = Math.max(2, g.guiWidth() - W - 2);
+            y = g.guiHeight() - H - 52;
+        }
         g.fill(x, y, x + W, y + H, BACK);
         g.renderOutline(x, y, W, H, FRAME);
 
