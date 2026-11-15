@@ -1,0 +1,6 @@
+build=success servertest=success clienttest=success fullpack=success
+branch=claude/story-journal-paper pr=39 sha=e672677ba2dd44846deb34417c9f631821b472fb run=112
+fullpack: lock=ok
+fullpack: gametest=success
+fullpack: client=success
+fullpack: shaders=success
