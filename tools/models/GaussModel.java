@@ -106,6 +106,8 @@ public class GaussModel {
         boolean capX;
         /** Торцы смотрят вдоль Y (диск вокруг вертикальной оси). */
         boolean capY;
+        /** Дополнительный поворот вокруг Y после основного (градусы): наклонная плита, развёрнутая по кругу. */
+        double yaw;
         int u, v;
 
         Cube(String bone, Mat mat, double x, double y, double z, int w, int h, int d) {
@@ -133,6 +135,11 @@ public class GaussModel {
         Cube rotY(double deg) {
             this.axis = 2;
             this.deg = deg;
+            return this;
+        }
+
+        Cube yaw(double deg) {
+            this.yaw = deg;
             return this;
         }
 
@@ -537,6 +544,17 @@ public class GaussModel {
 
     /** Поворот точки вокруг центра куба по правилам файла geo (как экспортирует Blockbench). */
     static double[] turn(Cube q, double x, double y, double z, boolean point) {
+        double[] r = turnAxis(q, x, y, z, point);
+        if (q.yaw == 0) {
+            return r;
+        }
+        double cx = point ? q.x + q.w / 2.0 : 0, cz = point ? q.z + q.d / 2.0 : 0;
+        double t = Math.toRadians(-q.yaw), c = Math.cos(t), s = Math.sin(t);
+        double px = r[0] - cx, pz = r[2] - cz;
+        return new double[]{px * c - pz * s + cx, r[1], px * s + pz * c + cz};
+    }
+
+    static double[] turnAxis(Cube q, double x, double y, double z, boolean point) {
         if (q.axis == 0) {
             return new double[]{x, y, z};
         }
@@ -566,7 +584,7 @@ public class GaussModel {
         };
         // Повёрнутый брусок: тон по тому, куда грань смотрит на самом деле, а не по её имени.
         // Иначе «нижняя» грань бруска восьмигранника оказывается сбоку и даёт чёрные полосы в стыках.
-        if (q.axis != 0 && !(q.round && isCap(q, f))) {
+        if ((q.axis != 0 || q.yaw != 0) && !(q.round && isCap(q, f))) {
             double[] n = switch (f) {
                 case UP -> turn(q, 0, 1, 0, false);
                 case DOWN -> turn(q, 0, -1, 0, false);
@@ -585,7 +603,7 @@ public class GaussModel {
             default -> { a = x; b = y; A = w; B = h; }
         }
         boolean capFace = q.round && (isCap(q, f));
-        boolean edge = !q.round && q.axis == 0 && Math.min(A, B) >= 3 && (a == 0 || b == 0 || a == A - 1 || b == B - 1);
+        boolean edge = !q.round && q.axis == 0 && q.yaw == 0 && Math.min(A, B) >= 3 && (a == 0 || b == 0 || a == A - 1 || b == B - 1);
         // Обводка грани не темнее тона 4: тон 5 на стыках соседних деталей читался чёрными пикселями.
         int t = edge ? Math.min(4, base + 1) : base;
         boolean side = f != Face.UP && f != Face.DOWN;
@@ -875,10 +893,10 @@ public class GaussModel {
                     if (q.inflate != 0) {
                         s.append(", \"inflate\": ").append(num(q.inflate * k));
                     }
-                    if (q.axis != 0) {
+                    if (q.axis != 0 || q.yaw != 0) {
                         s.append(", \"pivot\": [").append(num((q.x + q.w / 2.0) * k)).append(", ").append(num((q.y + q.h / 2.0) * k)).append(", ")
                                 .append(num((q.z + q.d / 2.0) * k)).append("], \"rotation\": [")
-                                .append(q.axis == 1 ? num(q.deg) : "0").append(", ").append(q.axis == 2 ? num(q.deg) : "0").append(", ").append(q.axis == 3 ? num(q.deg) : "0").append("]");
+                                .append(q.axis == 1 ? num(q.deg) : "0").append(", ").append(num((q.axis == 2 ? q.deg : 0) + q.yaw)).append(", ").append(q.axis == 3 ? num(q.deg) : "0").append("]");
                     }
                     s.append(", \"uv\": ").append(k == 1 ? "[" + q.u + ", " + q.v + "]" : faceUv(q)).append("}")
                             .append(i < own.size() - 1 ? ",\n" : "\n");
@@ -1082,7 +1100,7 @@ public class GaussModel {
         for (int i = 0; i < CUBES.size(); i++) {
             for (int j = i + 1; j < CUBES.size(); j++) {
                 Cube p = CUBES.get(i), q = CUBES.get(j);
-                if (!together(p.bone, q.bone) || p.axis != 0 || q.axis != 0 || p.round || q.round) {
+                if (!together(p.bone, q.bone) || p.axis != 0 || q.axis != 0 || p.yaw != 0 || q.yaw != 0 || p.round || q.round) {
                     continue;
                 }
                 double[] a = bounds(p), b = bounds(q);

@@ -123,28 +123,39 @@ public class ArmorModel extends GaussModel {
         }
     }
 
-    /** Плотная оболочка шлема по голове и плоское темя. */
-    static void skull(Mat top) {
-        box(Mat.GUNMETAL, -8, 48, -8, 16, 16, 16).inflate(0.4);
-        c(top, 12, 64.5, 2, -6, 12);
+    /**
+     * Кольцо из восьми наклонных плит вокруг вертикальной оси шлема. w — ширина плиты, h — длина вдоль наклона,
+     * r и cy — расстояние от оси и высота середины плиты, tilt — наклон от вертикали в градусах: плюс — верх
+     * плиты уходит к оси, минус — низ.
+     */
+    static void petals(Mat m, int w, int h, double r, double cy, double tilt) {
+        for (int k = 0; k < 8; k++) {
+            double a = Math.toRadians(-45.0 * k);
+            double x = r * Math.sin(a), z = -r * Math.cos(a);
+            box(m, x - w / 2.0, cy - h / 2.0 + k * 0.01, z - 1, w, h, 2).rotX(-tilt).yaw(45 * k);
+        }
     }
 
     /**
-     * Скаты шлема: четыре плиты от темени вниз и наружу под 30°, как поля. start — отступ от края темени
-     * вдоль ската, len — длина плиты.
+     * Закрытый шлем — гранёный сфероид без ступеней: пояс на уровне глаз, выше два кольца плит (крутое и пологое)
+     * и плоское темя, ниже кольцо плит, сходящееся к шее. Под плитами сердечник того же материала закрывает щели
+     * на стыках. Шлем чуть больше головы и скруглён сильнее её углов, поэтому под закрытым шлемом ядро голову
+     * игрока не рисует.
      */
-    static void slopes(Mat m, double start, int len) {
-        double along = start + len / 2.0;
-        double r = 6 + along * 0.866;
-        double y = 64.6 - along * 0.5 - 0.6;
-        c(m, 14, y, 2, -r - len / 2.0, len).rotX(30);
-        c(m, 14, y, 2, r - len / 2.0, len).rotX(-30);
-        sym(box(m, r - len / 2.0, y, -7, len, 2, 14).rotZ(30));
+    static void spheroid(Mat m) {
+        octY(m, 20, 8, 0, 53, 0, 6);
+        petals(m, 8, 5, 8.1, 60.55, 26.6);
+        petals(m, 4, 5, 5.4, 63.7, 53.1);
+        octY(m, 8, 3, 0, 65.6, 0, 1);
+        petals(m, 8, 5, 8.09, 51.2, -24.4);
+        octY(m, 14, 6, 0, 59, 0, 4);
+        octY(m, 8, 3, 0, 63, 0, 2);
+        octY(m, 14, 6, 0, 48.6, 0, 4);
     }
 
     /** Лицевая маска клином: две плиты сходятся к середине лица, внешние края уходят назад. */
     static void beak(Mat m, double y, int h) {
-        sym(box(m, 0.2, y, -11.4, 7, h, 1).rotY(-32));
+        sym(box(m, 0.2, y, -11.6, 6, h, 1).rotY(-32));
     }
 
     static void helmet() {
@@ -152,49 +163,42 @@ public class ArmorModel extends GaussModel {
         on("armorHead", "helmet_base0");
         c(Mat.STEEL, 14, 57, 6, -9.6, 1).rotX(-12);
         c(Mat.STEEL, 12, 52, 10, 8.8, 1).rotX(10);
-        sym(box(Mat.STEEL, 8.6, 49.5, -5, 1, 7, 9).rotZ(-8));
+        sym(box(Mat.STEEL, 8.9, 49.5, -5, 1, 7, 9).rotZ(8));
         sym(box(Mat.RUNE, 6.5, 62.4, -9.4, 1, 2, 1));
         sym(box(Mat.RUNE, 8.6, 57.5, -1, 1, 2, 2));
-        // Переход I: закрытый шлем со скатами, смотровая щель, рунная полоса на лбу.
+        // Переход I: закрытый скруглённый шлем, смотровая щель, рунная полоса на лбу.
         on("armorHead", "helmet_base1");
-        skull(Mat.STEEL);
-        slopes(Mat.STEEL, 0, 5);
-        c(Mat.ARC, 10, 54.4, 2, -8.9, 1);
-        c(Mat.RUNE, 10, 58.4, 1, -8.9, 1);
-        // Переход II: лицевая маска клином и наклонные щёки, руны только у висков.
+        spheroid(Mat.STEEL);
+        c(Mat.ARC, 8, 55.2, 2, -10.5, 1);
+        c(Mat.RUNE, 8, 57.8, 1, -10.5, 1);
+        // Переход II: лицевая маска клином, руны только у висков.
         on("armorHead", "helmet_base2");
-        skull(Mat.STEEL);
-        slopes(Mat.STEEL, 0, 5);
-        c(Mat.ARC, 12, 54.4, 2, -8.9, 1);
-        beak(Mat.STEEL, 48.4, 6);
-        sym(box(Mat.STEEL, 8.5, 48.6, -6, 1, 6, 9).rotZ(-10));
-        sym(box(Mat.RUNE, 8.6, 57.5, -2, 1, 2, 4));
-        // Финал: длинные скаты с латунной кромкой, высокая маска с переносицей, наклонные щёки,
-        // диски на ушах, гребень, затыльник.
+        spheroid(Mat.STEEL);
+        c(Mat.ARC, 8, 55.2, 2, -10.5, 1);
+        beak(Mat.GUNMETAL, 48.6, 5);
+        sym(box(Mat.RUNE, 9.6, 55, -2, 1, 2, 4));
+        // Финал: маска с переносицей, диски на ушах, латунный гребень, затыльник.
         on("armorHead", "helmet_base3");
-        skull(Mat.GUNMETAL);
-        slopes(Mat.STEEL, 0, 6);
-        slopes(Mat.BRASS, 6.1, 2);
-        c(Mat.ARC, 12, 54.6, 2, -8.9, 1);
-        beak(Mat.STEEL, 48.2, 7);
-        c(Mat.GUNMETAL, 2, 48.4, 9, -12.2, 2).rotX(-8);
-        sym(box(Mat.STEEL, 8.5, 48.6, -6, 2, 7, 10).rotZ(-10));
-        octX(Mat.GUNMETAL, 5, 2, 9.6, 56, 1, 1);
-        octX(Mat.GUNMETAL, 5, 2, -10.6, 56, 1, 1);
-        c(Mat.BRASS, 2, 66.5, 1, -5, 10);
-        c(Mat.STEEL, 12, 47.4, 3, 8.8, 1).rotX(-22);
+        spheroid(Mat.STEEL);
+        c(Mat.ARC, 8, 55.2, 2, -10.5, 1);
+        beak(Mat.GUNMETAL, 48.4, 6);
+        c(Mat.STEEL, 2, 48.6, 9, -12.4, 1).rotX(-10);
+        octX(Mat.GUNMETAL, 5, 2, 10, 56, 0, 1);
+        octX(Mat.GUNMETAL, 5, 2, -11, 56, 0, 1);
+        c(Mat.BRASS, 2, 66.6, 1, -3, 6);
+        c(Mat.GUNMETAL, 10, 46.8, 3, 7.6, 1).rotX(-22);
         // «Очистка»: фильтры по бокам маски и блок на затылке.
         on("armorHead", "helmet_add1");
-        oct(Mat.BRASS, 3, 1, 7.4, 50, -11, 3);
+        oct(Mat.BRASS, 3, 1, 7.4, 50, -10.4, 3);
         on("armorHead", "helmet_add2");
-        oct(Mat.BRASS, 3, 1, -7.4, 50, -11, 3);
+        oct(Mat.BRASS, 3, 1, -7.4, 50, -10.4, 3);
         on("armorHead", "helmet_add3");
-        c(Mat.GUNMETAL, 6, 53, 4, 9.4, 2);
-        box(Mat.LAMP, -1, 57.2, 9.8, 2, 1, 1);
+        c(Mat.GUNMETAL, 6, 54, 4, 10, 2);
+        box(Mat.LAMP, -1, 58.2, 10.4, 2, 1, 1);
         // Вершина «Аварийный режим»: красный маяк на макушке.
         on("armorHead", "helmet_apex");
-        octY(Mat.BRASS, 5, 2, 0, 67.6, 0, 1);
-        box(Mat.LAMP, -1, 68.6, -1, 2, 2, 2);
+        octY(Mat.BRASS, 5, 2, 0, 67.7, 0, 1);
+        box(Mat.LAMP, -1, 68.7, -1, 2, 2, 2);
     }
 
     /** Грудные плиты: две половины с наклоном вперёд и скосом к плечу. d — толщина, w — ширина половины. */
@@ -477,8 +481,10 @@ public class ArmorModel extends GaussModel {
 
     /** Манекен игрока для предпросмотра; добавляется после записи модели и в файлы не попадает. */
     static void mannequin() {
-        bone("dummy", null, 0, 0, 0);
+        // Голова видна только с открытым шлемом прототипа: под закрытым ядро её не рисует.
+        bone("helmet_base0_dummy", null, 0, 0, 0);
         box(Mat.DUMMY, -8, 48, -8, 16, 16, 16);
+        bone("dummy", null, 0, 0, 0);
         box(Mat.DUMMY, -8, 24, -4, 16, 24, 8);
         both(Mat.DUMMY, 8, 24, -4, 8, 24, 8);
         both(Mat.DUMMY, 0, 0, -4, 8, 24, 8);
