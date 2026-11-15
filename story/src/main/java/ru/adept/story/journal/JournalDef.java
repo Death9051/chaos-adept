@@ -17,13 +17,14 @@ import java.util.Map;
  *   "page": "entries" | "trader" | "epilogue",   (по умолчанию entries)
  *   "repeat": "once" | "pool",                    (по умолчанию once)
  *   "popup": true,                                (всплывающее сообщение, по умолчанию нет)
+ *   "note": { "public": ключ, "streamer": ключ } или { "common": ключ },  (пометка на полях, можно не писать)
  *   "text": { "public": [ключи], "streamer": [ключи] } или { "common": [ключи] }
  * }
  * </pre>
  * once — ключи являются абзацами одной записи; pool — вариантами, из которых берётся один неиспользованный.
  */
 public record JournalDef(String id, String type, Map<String, String> params, String page, boolean pool,
-                         boolean popup, Map<String, List<String>> text) {
+                         boolean popup, Map<String, List<String>> text, Map<String, String> note) {
 
     public static final String PAGE_ENTRIES = "entries";
     public static final String PAGE_TRADER = "trader";
@@ -54,7 +55,13 @@ public record JournalDef(String id, String type, Map<String, String> params, Str
             e.getValue().getAsJsonArray().forEach(k -> keys.add(k.getAsString()));
             text.put(e.getKey(), List.copyOf(keys));
         }
-        return new JournalDef(id, trigger.get("type").getAsString(), Map.copyOf(params), page, pool, popup, Map.copyOf(text));
+        Map<String, String> note = new LinkedHashMap<>();
+        JsonObject noteJson = json.getAsJsonObject("note");
+        if (noteJson != null) {
+            noteJson.entrySet().forEach(e -> note.put(e.getKey(), e.getValue().getAsString()));
+        }
+        return new JournalDef(id, trigger.get("type").getAsString(), Map.copyOf(params), page, pool, popup, Map.copyOf(text),
+                Map.copyOf(note));
     }
 
     /** Подходит ли запись к событию: тип совпадает и все параметры записи совпадают с атрибутами события. */
@@ -80,5 +87,17 @@ public record JournalDef(String id, String type, Map<String, String> params, Str
             keys = text.getOrDefault("public", List.of());
         }
         return keys;
+    }
+
+    /** Ключ пометки на полях для ветки (своя ветка → common → public), пустая строка — пометки нет. */
+    public String noteFor(String branch) {
+        String key = note.get(branch);
+        if (key == null) {
+            key = note.get("common");
+        }
+        if (key == null) {
+            key = note.getOrDefault("public", "");
+        }
+        return key;
     }
 }

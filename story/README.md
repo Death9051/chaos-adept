@@ -12,11 +12,12 @@
   "page": "entries | trader | epilogue",
   "repeat": "once | pool",
   "popup": true,
+  "note": { "public": "ключ", "streamer": "ключ" },
   "text": { "public": ["ключ"], "streamer": ["ключ"] }
 }
 ```
 
-  `page`, `repeat`, `popup` можно не писать (по умолчанию `entries`, `once`, нет). Вместо `public`/`streamer` можно `common`.
+  `page`, `repeat`, `popup`, `note` можно не писать (по умолчанию `entries`, `once`, нет). Вместо `public`/`streamer` можно `common`.
   В `once` ключи — абзацы одной записи; в `pool` — варианты, берётся случайный неиспользованный, когда кончатся — записи нет.
 - Запись срабатывает, если тип события совпал и все параметры `trigger` совпали с атрибутами события.
 - Хранение: данные мира `adept_story_journal` (игра одиночная, журнал один на мир).
@@ -48,6 +49,11 @@
 | `soul_burned` | `SoulEvent.Burned`, горнило сожгло душу | `strength` (`normal`, `strong`, `guardian`) |
 | `soul_core_obtained` | `SoulEvent.CoreObtained` | `strength` |
 | `trader_deal` | `TraderEvent.Deal` | `currency` (`node_cluster`, `soul_core`) |
+| `rune_engraved` | `RuneEvent.Engraved` | `material`, `item` (`needle`, `bolt`, `plate`), `has_word` (`true`/`false`) |
+| `rune_erased` | `RuneEvent.Erased` | `material`, `item` |
+| `focus_cut` | `FocusEvent.Cut` | `cut`, `crystal` |
+| `focus_cracked` | `FocusEvent.Cracked` | `cut`, `crystal`, `segment` |
+| `shield_broken` | `ShieldEvent.Broken` | — |
 
 Котёл собран — `artifact_prototype_crafted` с `artifact` = `cauldron`.
 
@@ -75,6 +81,7 @@
 
 ## Клиент
 
+- Журнал — потёртая бумага (`textures/gui/sprites/journal/paper.png`, nine-slice), почерк записей — шрифт `adept_story:journal` (Bad Script), пометки на полях — `adept_story:journal_note` (Caveat), оба OFL, лицензии в `assets/adept_story/font/`. Записи — не квесты: без целей и галочек.
 - Журнал: клавиша `J` (меняется в настройках, раздел «Сюжет») и кнопка «Ж» над окном инвентаря.
 - Субтитры внизу экрана по очереди; всплывающие записи (вехи) — сверху; о новой записи — уведомление справа сверху.
 

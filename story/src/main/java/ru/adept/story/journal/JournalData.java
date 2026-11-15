@@ -66,7 +66,8 @@ public final class JournalData extends SavedData {
             for (Tag k : e.getList("keys", Tag.TAG_STRING)) {
                 keys.add(k.getAsString());
             }
-            data.entries.add(new EntryView(e.getString("id"), e.getInt("day"), e.getString("page"), keys, e.getBoolean("popup")));
+            data.entries.add(new EntryView(e.getString("id"), e.getInt("day"), e.getString("page"), keys, e.getBoolean("popup"),
+                    e.getString("note")));
         }
         readSet(tag, "done", data.done);
         readSet(tag, "used", data.usedKeys);
@@ -89,6 +90,9 @@ public final class JournalData extends SavedData {
             e.keys().forEach(k -> keys.add(StringTag.valueOf(k)));
             c.put("keys", keys);
             c.putBoolean("popup", e.popup());
+            if (e.hasNote()) {
+                c.putString("note", e.note());
+            }
             list.add(c);
         }
         tag.put("entries", list);
