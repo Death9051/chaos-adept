@@ -124,38 +124,61 @@ public class ArmorModel extends GaussModel {
     }
 
     /**
-     * Кольцо из восьми наклонных плит вокруг вертикальной оси шлема. w — ширина плиты, h — длина вдоль наклона,
-     * r и cy — расстояние от оси и высота середины плиты, tilt — наклон от вертикали в градусах: плюс — верх
-     * плиты уходит к оси, минус — низ.
+     * Очертание шлема в плане: расстояние от оси до каждой из восьми граней, по кругу от лица (0) через бок (2)
+     * к затылку (4) и обратно. Шлем вытянут спереди назад: лицо узкое, бока плоские, затылок шире и дальше.
      */
-    static void petals(Mat m, int w, int h, double r, double cy, double tilt) {
+    static final double[] HEAD = {11, 9.6, 8.6, 10.4, 12.4, 10.4, 8.6, 9.6};
+
+    /**
+     * Пояс из наклонных плит по очертанию {@link #HEAD}: от уровня y0 с отступом внутрь in0 до уровня y1
+     * с отступом in1. Ширина каждой плиты — по длине её грани, поэтому плиты сходятся в рёбра без ступеней.
+     * {@code skip} — номера граней, которые не ставятся (открытая лицевая часть).
+     */
+    static void facets(Mat m, double y0, double in0, double y1, double in1, int... skip) {
+        double rise = y1 - y0, run = in1 - in0;
+        double tilt = Math.toDegrees(Math.atan2(run, Math.abs(rise))) * Math.signum(rise);
+        int h = (int) Math.ceil(Math.hypot(rise, run));
+        double mid = (in0 + in1) / 2, cy = (y0 + y1) / 2;
+        // Плита толщиной 2 стоит внутрь от поверхности: середина сдвинута по нормали на 1.
+        double nr = Math.cos(Math.toRadians(Math.abs(tilt))), ny = Math.sin(Math.toRadians(tilt));
+        outer:
         for (int k = 0; k < 8; k++) {
+            for (int s : skip) {
+                if (s == k) {
+                    continue outer;
+                }
+            }
+            double r = HEAD[k] - mid, prev = HEAD[(k + 7) % 8] - mid, next = HEAD[(k + 1) % 8] - mid;
+            double toNext = next * 1.4142 - r, toPrev = prev * 1.4142 - r;
+            int w = Math.max(1, (int) Math.round(toNext + toPrev));
+            double off = (toNext - toPrev) / 2;
             double a = Math.toRadians(-45.0 * k);
-            double x = r * Math.sin(a), z = -r * Math.cos(a);
-            box(m, x - w / 2.0, cy - h / 2.0 + k * 0.01, z - 1, w, h, 2).rotX(-tilt).yaw(45 * k);
+            double rc = r - nr;
+            double x = rc * Math.sin(a) - off * Math.cos(a), z = -rc * Math.cos(a) - off * Math.sin(a);
+            box(m, x - w / 2.0, cy - ny - h / 2.0 + k * 0.01, z - 1, w, h, 2).rotX(-tilt).yaw(45 * k);
         }
     }
 
     /**
-     * Закрытый шлем — гранёный сфероид без ступеней: пояс на уровне глаз, выше два кольца плит (крутое и пологое)
-     * и плоское темя, ниже кольцо плит, сходящееся к шее. Под плитами сердечник того же материала закрывает щели
-     * на стыках. Шлем чуть больше головы и скруглён сильнее её углов, поэтому под закрытым шлемом ядро голову
-     * игрока не рисует.
+     * Закрытый шлем из наклонных плит, без ступеней и без круговой симметрии: пояс на уровне глаз, выше два
+     * пояса плит (крутой и пологий) и плоское темя, ниже пояс к шее с открытой лицевой частью — её закрывает
+     * маска. Под плитами сердечник того же материала закрывает щели на стыках. Шлем скруглён сильнее углов
+     * кубической головы игрока, поэтому под закрытым шлемом ядро голову не рисует.
      */
-    static void spheroid(Mat m) {
-        octY(m, 20, 8, 0, 53, 0, 6);
-        petals(m, 8, 5, 8.1, 60.55, 26.6);
-        petals(m, 4, 5, 5.4, 63.7, 53.1);
-        octY(m, 8, 3, 0, 65.6, 0, 1);
-        petals(m, 8, 5, 8.09, 51.2, -24.4);
-        octY(m, 14, 6, 0, 59, 0, 4);
-        octY(m, 8, 3, 0, 63, 0, 2);
-        octY(m, 14, 6, 0, 48.6, 0, 4);
+    static void shell(Mat m) {
+        facets(m, 53, 0, 59, 0);
+        facets(m, 59, 0, 63, 2);
+        facets(m, 63, 2, 66, 6);
+        c(m, 6, 65.6, 1, -4.5, 10);
+        facets(m, 53, 0, 48.6, 2, 0, 1, 7);
+        octY(m, 14, 6, 0, 59, 0.5, 4);
+        octY(m, 5, 2, 0, 63, 0.5, 3);
+        octY(m, 14, 6, 0, 48.6, 0.5, 4);
     }
 
     /** Лицевая маска клином: две плиты сходятся к середине лица, внешние края уходят назад. */
     static void beak(Mat m, double y, int h) {
-        sym(box(m, 0.2, y, -11.6, 6, h, 1).rotY(-32));
+        sym(box(m, 0.2, y, -12.2, 7, h, 1).rotY(-34));
     }
 
     static void helmet() {
@@ -166,39 +189,42 @@ public class ArmorModel extends GaussModel {
         sym(box(Mat.STEEL, 8.9, 49.5, -5, 1, 7, 9).rotZ(8));
         sym(box(Mat.RUNE, 6.5, 62.4, -9.4, 1, 2, 1));
         sym(box(Mat.RUNE, 8.6, 57.5, -1, 1, 2, 2));
-        // Переход I: закрытый скруглённый шлем, смотровая щель, рунная полоса на лбу.
+        // Переход I: закрытый шлем, смотровая щель, рунная полоса на лбу, простая маска.
         on("armorHead", "helmet_base1");
-        spheroid(Mat.STEEL);
-        c(Mat.ARC, 8, 55.2, 2, -10.5, 1);
-        c(Mat.RUNE, 8, 57.8, 1, -10.5, 1);
-        // Переход II: лицевая маска клином, руны только у висков.
+        shell(Mat.STEEL);
+        c(Mat.ARC, 6, 55.2, 2, -11.5, 1);
+        c(Mat.RUNE, 6, 57.8, 1, -11.5, 1);
+        beak(Mat.GUNMETAL, 49, 4);
+        // Переход II: высокая маска, гребень вдоль темени, руны только у висков.
         on("armorHead", "helmet_base2");
-        spheroid(Mat.STEEL);
-        c(Mat.ARC, 8, 55.2, 2, -10.5, 1);
+        shell(Mat.STEEL);
+        c(Mat.ARC, 6, 55.2, 2, -11.5, 1);
         beak(Mat.GUNMETAL, 48.6, 5);
-        sym(box(Mat.RUNE, 9.6, 55, -2, 1, 2, 4));
-        // Финал: маска с переносицей, диски на ушах, латунный гребень, затыльник.
+        c(Mat.STEEL, 2, 66.6, 1, -4, 9);
+        sym(box(Mat.RUNE, 8.6, 57, -1, 1, 1, 4));
+        // Финал: маска с переносицей, латунный гребень, диски на ушах, затыльник в два слоя.
         on("armorHead", "helmet_base3");
-        spheroid(Mat.STEEL);
-        c(Mat.ARC, 8, 55.2, 2, -10.5, 1);
+        shell(Mat.STEEL);
+        c(Mat.ARC, 6, 55.2, 2, -11.5, 1);
         beak(Mat.GUNMETAL, 48.4, 6);
-        c(Mat.STEEL, 2, 48.6, 9, -12.4, 1).rotX(-10);
-        octX(Mat.GUNMETAL, 5, 2, 10, 56, 0, 1);
-        octX(Mat.GUNMETAL, 5, 2, -11, 56, 0, 1);
-        c(Mat.BRASS, 2, 66.6, 1, -3, 6);
-        c(Mat.GUNMETAL, 10, 46.8, 3, 7.6, 1).rotX(-22);
+        c(Mat.STEEL, 2, 48.6, 9, -13.2, 1).rotX(-10);
+        c(Mat.BRASS, 2, 66.6, 1, -4, 9);
+        octX(Mat.GUNMETAL, 5, 2, 9, 56, 1, 1);
+        octX(Mat.GUNMETAL, 5, 2, -10, 56, 1, 1);
+        c(Mat.STEEL, 10, 47.4, 3, 10.6, 1).rotX(-22);
+        c(Mat.GUNMETAL, 12, 45.4, 3, 11.4, 1).rotX(-22);
         // «Очистка»: фильтры по бокам маски и блок на затылке.
         on("armorHead", "helmet_add1");
-        oct(Mat.BRASS, 3, 1, 7.4, 50, -10.4, 3);
+        oct(Mat.BRASS, 3, 1, 7.6, 50, -10.2, 3);
         on("armorHead", "helmet_add2");
-        oct(Mat.BRASS, 3, 1, -7.4, 50, -10.4, 3);
+        oct(Mat.BRASS, 3, 1, -7.6, 50, -10.2, 3);
         on("armorHead", "helmet_add3");
-        c(Mat.GUNMETAL, 6, 54, 4, 10, 2);
-        box(Mat.LAMP, -1, 58.2, 10.4, 2, 1, 1);
+        c(Mat.GUNMETAL, 6, 54, 4, 12.4, 2);
+        box(Mat.LAMP, -1, 58.2, 12.8, 2, 1, 1);
         // Вершина «Аварийный режим»: красный маяк на макушке.
         on("armorHead", "helmet_apex");
-        octY(Mat.BRASS, 5, 2, 0, 67.7, 0, 1);
-        box(Mat.LAMP, -1, 68.7, -1, 2, 2, 2);
+        octY(Mat.BRASS, 5, 2, 0, 67.7, 2, 1);
+        box(Mat.LAMP, -1, 68.7, 1, 2, 2, 2);
     }
 
     /** Грудные плиты: две половины с наклоном вперёд и скосом к плечу. d — толщина, w — ширина половины. */
