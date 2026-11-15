@@ -167,12 +167,12 @@ public class ArmorModel extends GaussModel {
      */
     static void shell(Mat m) {
         facets(m, 53, 0, 59, 0);
-        facets(m, 59, 0, 63, 2);
-        facets(m, 63, 2, 66, 6);
-        c(m, 6, 65.6, 1, -4.5, 10);
+        facets(m, 59, 0, 62.4, 2);
+        facets(m, 62.4, 2, 64.4, 6);
+        c(m, 7, 64.2, 1, -5, 11);
         facets(m, 53, 0, 48.6, 2, 0, 1, 7);
-        octY(m, 14, 6, 0, 59, 0.5, 4);
-        octY(m, 5, 2, 0, 63, 0.5, 3);
+        octY(m, 14, 6, 0, 59, 0.5, 3);
+        octY(m, 5, 2, 0, 62, 0.5, 2);
         octY(m, 14, 6, 0, 48.6, 0.5, 4);
     }
 
@@ -181,23 +181,33 @@ public class ArmorModel extends GaussModel {
         sym(box(m, 0.2, y, -12.2, 7, h, 1).rotY(-34));
     }
 
-    /** Забрало: большая светящаяся панель на лице; {@code wrap} — с заходом на скошенные боковые грани. */
+    /** Забрало: большое тёмное стекло на лице, светится только нижняя кромка; {@code wrap} — с заходом на бока. */
     static void visor(boolean wrap) {
-        c(Mat.ARC, 7, 53.2, 5, -11.5, 1);
+        c(Mat.GLASS, 7, 53.2, 5, -11.3, 1);
         if (wrap) {
-            sym(box(Mat.ARC, 4.7, 53.6, -8.1, 5, 4, 1).rotY(-45));
+            sym(box(Mat.GLASS, 4.7, 53.2, -7.9, 5, 5, 1).rotY(-45));
         }
     }
 
-    /** Надбровье: плита над забралом, выступает вперёд и чуть опущена. */
-    static void brow(Mat m, int w) {
-        c(m, w, 58.2, 2, -13.4, 4).rotX(14);
+    /**
+     * Козырёк над забралом: плита от лба вперёд, чуть опущена; len — вылет. С {@code ridge} — ребро посередине.
+     */
+    static void brow(Mat m, int w, int len, boolean ridge) {
+        c(m, w, 58.4, 2, -10.4 - len, len).rotX(12);
+        if (ridge) {
+            c(Mat.GUNMETAL, 4, 59.8, 1, -10.6 - len, len).rotX(12);
+        }
     }
 
-    /** Щёчные щитки по сторонам забрала: толстые плиты, развёрнутые вперёд, и подбородок между ними. */
-    static void jaw(Mat m, int h) {
-        sym(box(m, 4.4, 48.4, -13, 2, h, 5).rotY(-18));
-        c(Mat.GUNMETAL, 6, 48.4, 3, -12.2, 2);
+    /**
+     * Нижний пояс шлема: подбородок и щёки, отведённые назад к ушам; h — высота. С {@code vents} — отдушины на щеках.
+     */
+    static void jaw(Mat m, int h, boolean vents) {
+        c(m, 8, 48.4, h, -13.2, 2);
+        sym(box(m, 3.6, 48.4, -12, 7, h, 2).rotY(-42));
+        if (vents) {
+            sym(box(Mat.GUNMETAL, 5.6, 49.6, -12.2, 3, 2, 1).rotY(-42));
+        }
     }
 
     static void helmet() {
@@ -208,29 +218,28 @@ public class ArmorModel extends GaussModel {
         sym(box(Mat.STEEL, 8.9, 49.5, -5, 1, 7, 9).rotZ(8));
         sym(box(Mat.RUNE, 6.5, 62.4, -9.4, 1, 2, 1));
         sym(box(Mat.RUNE, 8.6, 57.5, -1, 1, 2, 2));
-        // Переход I: закрытый шлем, забрало на лице, надбровье, рунная полоса на лбу.
+        // Переход I: закрытый шлем, тёмное забрало, короткий козырёк, руны у висков.
         on("armorHead", "helmet_base1");
         shell(Mat.STEEL);
         visor(false);
-        brow(Mat.STEEL, 8);
-        c(Mat.RUNE, 6, 60.4, 1, -10.6, 1);
-        // Переход II: забрало заходит на бока, щёчные щитки и подбородок, руны только у висков.
+        brow(Mat.STEEL, 10, 3, false);
+        sym(box(Mat.RUNE, 8.6, 57, 1, 1, 1, 4));
+        // Переход II: забрало заходит на бока, козырёк длиннее, нижний пояс из подбородка и щёк.
         on("armorHead", "helmet_base2");
         shell(Mat.STEEL);
         visor(true);
-        brow(Mat.STEEL, 10);
-        jaw(Mat.STEEL, 5);
+        brow(Mat.STEEL, 12, 5, false);
+        jaw(Mat.STEEL, 4, false);
         sym(box(Mat.RUNE, 8.6, 57, 1, 1, 1, 4));
-        // Финал: высокие щёчные щитки, продольное ребро от лба до затылка с латунной кромкой,
+        // Финал: длинный козырёк с ребром, высокий нижний пояс с отдушинами, ребро вдоль темени с латунной кромкой,
         // короба на ушах, затыльник в два слоя.
         on("armorHead", "helmet_base3");
         shell(Mat.STEEL);
         visor(true);
-        brow(Mat.GUNMETAL, 10);
-        jaw(Mat.STEEL, 6);
-        c(Mat.GUNMETAL, 4, 66.6, 1, -5, 11);
-        c(Mat.BRASS, 2, 67.6, 1, -4, 9);
-        c(Mat.GUNMETAL, 4, 61.4, 2, -10.4, 5).rotX(-38);
+        brow(Mat.STEEL, 12, 6, true);
+        jaw(Mat.STEEL, 5, true);
+        c(Mat.GUNMETAL, 4, 65.2, 1, -5, 11);
+        c(Mat.BRASS, 2, 66.2, 1, -3, 8);
         sym(box(Mat.GUNMETAL, 8.2, 53.4, -1, 2, 5, 6));
         c(Mat.STEEL, 10, 47.4, 3, 10.6, 1).rotX(-22);
         c(Mat.GUNMETAL, 12, 45.4, 3, 11.4, 1).rotX(-22);
@@ -244,8 +253,8 @@ public class ArmorModel extends GaussModel {
         box(Mat.LAMP, -1, 58.2, 12.8, 2, 1, 1);
         // Вершина «Аварийный режим»: красный маяк на затылочной части темени.
         on("armorHead", "helmet_apex");
-        octY(Mat.BRASS, 5, 2, 0, 66.7, 7.5, 1);
-        box(Mat.LAMP, -1, 67.7, 6.5, 2, 2, 2);
+        octY(Mat.BRASS, 5, 2, 0, 65.3, 8.5, 1);
+        box(Mat.LAMP, -1, 66.3, 7.5, 2, 2, 2);
     }
 
     /** Грудные плиты: две половины с наклоном вперёд и скосом к плечу. d — толщина, w — ширина половины. */

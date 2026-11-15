@@ -88,7 +88,9 @@ public class GaussModel {
         /** Сырое поле: неровное, с тёмными провалами. */
         FIELD_RAW,
         /** Манекен для предпросмотра брони, в модель не попадает. */
-        DUMMY
+        DUMMY,
+        /** Тёмное стекло забрала: блик наискось, светится только нижняя кромка. */
+        GLASS
     }
 
     static final class Cube {
@@ -700,6 +702,12 @@ public class GaussModel {
                     return ARC[2];
                 }
                 return tone(GUNMETAL, t);
+            case GLASS:
+                if (side && b == 0) {
+                    glow[0] = true;
+                    return ARC[1];
+                }
+                return a + b == B || a + b == B + 1 ? 0x4F7C96 : b >= B / 2 ? 0x24384A : 0x182634;
             case DUMMY:
                 return f == Face.UP ? 0x6A6E7C : f == Face.DOWN ? 0x3A3D48 : side && (f == Face.EAST || f == Face.WEST) ? 0x555966 : 0x4A4E5A;
             case FIELD:
