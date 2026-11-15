@@ -1,0 +1,2 @@
+build=cancelled servertest=cancelled clienttest=cancelled fullpack=cancelled
+branch=claude/story-journal-paper pr=39 sha=f900b2db855384fbd159896c1ad3b3d2f7852626 run=110
