@@ -1,0 +1,6 @@
+build=success servertest=success clienttest=success fullpack=success
+branch=docs/seed-table pr=37 sha=b0707d234d907ad5d0d6a809d33934d6641ef4a5 run=108
+fullpack: lock=ok
+fullpack: gametest=success
+fullpack: client=success
+fullpack: shaders=success
