@@ -17,7 +17,7 @@
       "item": "minecraft:glass"
     },
     "T": {
-      "item": "minecraft:crafting_table"
+      "item": "adept_core:seed"
     }
   },
   "result": {

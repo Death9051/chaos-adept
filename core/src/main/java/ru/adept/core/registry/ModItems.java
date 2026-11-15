@@ -96,6 +96,10 @@ public final class ModItems {
     public static final DeferredItem<ru.adept.core.artifact.RailGunItem> RAIL_GUN = ITEMS.register("rail_gun",
             () -> new ru.adept.core.artifact.RailGunItem(new Item.Properties().stacksTo(1)));
 
+    // Старт: «Зачаток» — единственный предмет на старте, из него собирается стол артефактов
+    public static final DeferredItem<ru.adept.core.seed.SeedItem> SEED = ITEMS.register("seed",
+            () -> new ru.adept.core.seed.SeedItem(new Item.Properties()));
+
     private ModItems() {
     }
 

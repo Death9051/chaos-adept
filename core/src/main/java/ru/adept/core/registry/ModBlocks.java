@@ -107,7 +107,7 @@ public final class ModBlocks {
         ITEMS.registerSimpleBlockItem(RESERVOIR);
         ITEMS.registerSimpleBlockItem(ALLOYER);
         ITEMS.registerSimpleBlockItem(CASTER);
-        ITEMS.registerSimpleBlockItem(ARTIFACT_TABLE);
+        ITEMS.register("artifact_table", () -> new ru.adept.core.seed.TableItem(ARTIFACT_TABLE.get(), new net.minecraft.world.item.Item.Properties()));
     }
 
     private ModBlocks() {
