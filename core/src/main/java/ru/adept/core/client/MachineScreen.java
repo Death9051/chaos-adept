@@ -33,8 +33,16 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
     @Override
     protected void init() {
         super.init();
-        if (menu.kind == MachineMenu.Kind.ALLOYER || menu.kind == MachineMenu.Kind.CASTER) {
-            int count = menu.kind == MachineMenu.Kind.ALLOYER ? 2 : 3;
+        if (menu.kind == MachineMenu.Kind.CARVER) {
+            firstRune = addRenderableWidget(net.minecraft.client.gui.components.Button.builder(Component.empty(), b -> press(0))
+                    .bounds(leftPos + 28, topPos + 58, 72, 16).build());
+            secondRune = addRenderableWidget(net.minecraft.client.gui.components.Button.builder(Component.empty(), b -> press(1))
+                    .bounds(leftPos + 102, topPos + 58, 70, 16).build());
+            updateRuneButtons();
+            return;
+        }
+        if (menu.kind == MachineMenu.Kind.ALLOYER || menu.kind == MachineMenu.Kind.CASTER || menu.kind == MachineMenu.Kind.CUTTER) {
+            int count = menu.kind == MachineMenu.Kind.ALLOYER ? 2 : menu.kind == MachineMenu.Kind.CASTER ? ru.adept.core.base.CasterBlockEntity.Form.values().length : ru.adept.core.focus.FocusCut.values().length;
             modeButton = addRenderableWidget(net.minecraft.client.gui.components.Button.builder(modeText(),
                     b -> {
                         if (minecraft != null && minecraft.gameMode != null) {
@@ -44,7 +52,64 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
         }
     }
 
+    private net.minecraft.client.gui.components.Button firstRune;
+    private net.minecraft.client.gui.components.Button secondRune;
+    private int shownRunes = -1;
+
+    private void press(int id) {
+        if (minecraft != null && minecraft.gameMode != null) {
+            minecraft.gameMode.handleInventoryButtonClick(menu.containerId, id);
+        }
+    }
+
+    /** Кнопки рун высекателя: вторая без «Точности» I выключена и говорит почему. */
+    private void updateRuneButtons() {
+        shownRunes = menu.data(6) * 1000 + menu.data(7);
+        String first = ru.adept.core.rune.Rune.byIndex(menu.data(6)).id();
+        firstRune.setMessage(Component.translatable("adept_core.carver.first", Component.translatable("adept_core.rune." + first)));
+        int second = menu.data(7) % 16;
+        boolean precise = menu.data(7) / 16 >= 2;
+        secondRune.active = precise;
+        if (!precise) {
+            secondRune.setMessage(Component.translatable("adept_core.carver.second_locked"));
+            secondRune.setTooltip(net.minecraft.client.gui.components.Tooltip.create(Component.translatable("adept_core.carver.second_locked.hint")));
+        } else {
+            secondRune.setMessage(Component.translatable("adept_core.carver.second", second == 0
+                    ? Component.translatable("adept_core.carver.none")
+                    : Component.translatable("adept_core.rune." + ru.adept.core.rune.Rune.byIndex(second - 1).id())));
+            secondRune.setTooltip(null);
+        }
+    }
+
+    /** Что делает высекатель или почему стоит. */
+    private Component carverStatus() {
+        if (menu.data(3) > 0) {
+            return Component.translatable("adept_core.carver.status.work");
+        }
+        if (!menu.slots.get(1).getItem().isEmpty()) {
+            return Component.translatable("adept_core.carver.status.take");
+        }
+        net.minecraft.world.item.ItemStack in = menu.slots.get(0).getItem();
+        if (in.isEmpty()) {
+            return Component.translatable("adept_core.carver.status.empty");
+        }
+        net.minecraft.world.item.ItemStack mat = menu.slots.get(2).getItem();
+        var material = ru.adept.core.rune.RuneMaterial.of(mat);
+        if (material.isEmpty()) {
+            return Component.translatable("adept_core.carver.status.material");
+        }
+        int need = ru.adept.core.base.CarverBlockEntity.materialCost(in, material.get());
+        if (mat.getCount() < need) {
+            return Component.translatable("adept_core.carver.status.more", need);
+        }
+        return Component.translatable("adept_core.carver.status.energy", ru.adept.core.config.RuneConfig.CARVER_MANA.get() * in.getCount());
+    }
+
     private Component modeText() {
+        if (menu.kind == MachineMenu.Kind.CUTTER) {
+            return Component.translatable("adept_core.cutter.cut",
+                    Component.translatable("adept_core.focus.cut." + ru.adept.core.focus.FocusCut.byIndex(menu.data(6)).id()));
+        }
         String key = menu.kind == MachineMenu.Kind.ALLOYER ? "adept_core.alloyer.recipe." : "adept_core.caster.form.";
         return Component.translatable(key + menu.data(6));
     }
@@ -52,6 +117,9 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
     @Override
     protected void containerTick() {
         super.containerTick();
+        if (firstRune != null && menu.data(6) * 1000 + menu.data(7) != shownRunes) {
+            updateRuneButtons();
+        }
         if (modeButton != null && menu.data(6) != shownMode) {
             shownMode = menu.data(6);
             modeButton.setMessage(modeText());
@@ -98,6 +166,28 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
         }
     }
 
+    /** Что делает ограночная машина, а если стоит — почему (текстом, не только цветом). */
+    private Component cutterStatus() {
+        int job = menu.data(7);
+        if (job == 1) {
+            return Component.translatable("adept_core.cutter.status.cut");
+        }
+        if (job == 2) {
+            return Component.translatable("adept_core.cutter.status.repair", ru.adept.core.config.FocusConfig.CUTTER_REPAIR_MANA.get());
+        }
+        net.minecraft.world.item.ItemStack in = menu.slots.get(0).getItem();
+        if (!menu.slots.get(1).getItem().isEmpty()) {
+            return Component.translatable("adept_core.cutter.status.take");
+        }
+        if (in.isEmpty()) {
+            return Component.translatable("adept_core.cutter.status.empty");
+        }
+        if (ru.adept.core.focus.FocusItem.is(in)) {
+            return Component.translatable("adept_core.cutter.status.whole");
+        }
+        return Component.translatable("adept_core.cutter.status.crystals", ru.adept.core.config.FocusConfig.CUTTER_CRYSTALS.get());
+    }
+
     private void bar(GuiGraphics g, int x, int y, int w, int h, int value, int max, int color) {
         g.fill(leftPos + x, topPos + y, leftPos + x + w, topPos + y + h, SLOT);
         int filled = (int) ((long) h * Math.max(0, Math.min(value, max)) / max);
@@ -113,6 +203,12 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
             Component material = m <= 0 ? Component.translatable("adept_core.caster.no_material")
                     : Component.translatable("adept_core.molten." + ru.adept.core.base.Molten.values()[m - 1].id());
             g.drawString(font, material, 28, 18, 0xFFFF8A2A, false);
+        }
+        if (menu.kind == MachineMenu.Kind.CARVER) {
+            g.drawString(font, carverStatus(), 28, 18, menu.data(3) > 0 ? 0xFF8FB8FF : 0xFFFF8060, false);
+        }
+        if (menu.kind == MachineMenu.Kind.CUTTER) {
+            g.drawString(font, cutterStatus(), 28, 18, menu.data(7) == 0 ? 0xFFFF8060 : 0xFF8FB8FF, false);
         }
     }
 }

@@ -627,6 +627,11 @@ public final class BalanceConfig {
                 .defineInRange("improvedMobsPerTier", 50, 0, 10_000);
         b.pop();
 
+        ManaConfig.define(b);
+        FocusConfig.define(b);
+        RuneConfig.define(b);
+        HeroConfig.define(b);
+
         SPEC = b.build();
     }
 

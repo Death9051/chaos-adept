@@ -1,0 +1,17 @@
+{
+  "trigger": {
+    "type": "focus_cracked"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.firsts.first_cracked_focus.public"
+    ],
+    "streamer": [
+      "adept_story.journal.firsts.first_cracked_focus.streamer"
+    ]
+  },
+  "note": {
+    "public": "adept_story.journal.firsts.first_cracked_focus.note.public",
+    "streamer": "adept_story.journal.firsts.first_cracked_focus.note.streamer"
+  }
+}

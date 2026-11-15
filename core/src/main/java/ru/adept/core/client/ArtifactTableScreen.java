@@ -26,7 +26,7 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
     private static final int TEXT = 0xFFE8E0D0;
     private static final int MUTED = 0xFF9A9080;
 
-    /** Вкладки: 0 — ближний бой, 1 — броня, 2 — дальний бой. */
+    /** Вкладки: 0 — ближний бой, 1 — броня, 2 — дальний бой, 3 — одиночные артефакты (срез 3). */
     private int tab;
     private int shownState = -1;
     /** Выбранный, но ещё не подтверждённый вариант пары: -1 — нет. */
@@ -36,7 +36,7 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
 
     public ArtifactTableScreen(ArtifactTableMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
-        this.imageWidth = 240;
+        this.imageWidth = 280;
         this.imageHeight = 180;
     }
 
@@ -46,6 +46,16 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
     }
 
     private Tab tabInfo() {
+        if (tab == 2 && menu.rangedChoice.get() == 2) {
+            return new Tab("gauss", "rail", ArtifactTableMenu.BTN_CHOOSE_GAUSS, ArtifactTableMenu.BTN_CHOOSE_RAIL,
+                    ArtifactTableMenu.BTN_RAIL_PROTOTYPE, ArtifactTableMenu.BTN_RAIL_PIERCE, TableActions.RAIL_PIERCE,
+                    ru.adept.core.config.RuneConfig.TABLE_RAIL_PROTOTYPE.get(), ru.adept.core.config.RuneConfig.TABLE_RAIL_PIERCE_1.get(), "rail");
+        }
+        if (tab == 1 && menu.armorChoice.get() == 1) {
+            return new Tab("light", "heavy", ArtifactTableMenu.BTN_CHOOSE_LIGHT, ArtifactTableMenu.BTN_CHOOSE_HEAVY,
+                    ArtifactTableMenu.BTN_LIGHT_PROTOTYPE, ArtifactTableMenu.BTN_LIGHT_CAPACITY, TableActions.LIGHT_CAPACITY,
+                    ru.adept.core.config.FocusConfig.TABLE_LIGHT_PROTOTYPE.get(), ru.adept.core.config.FocusConfig.TABLE_LIGHT_CAPACITY_1.get(), "light");
+        }
         return switch (tab) {
             case 1 -> new Tab("light", "heavy", ArtifactTableMenu.BTN_CHOOSE_LIGHT, ArtifactTableMenu.BTN_CHOOSE_HEAVY,
                     ArtifactTableMenu.BTN_HEAVY_PROTOTYPE, ArtifactTableMenu.BTN_HEAVY_BASTION, TableActions.HEAVY_BASTION,
@@ -68,23 +78,32 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
         };
     }
 
+    /** У выбранного варианта вкладки есть прототип в срезе (броня — оба варианта, остальное — первый). */
+    private boolean hasPrototype() {
+        return choice() == 1 || (tab != 0 && choice() == 2);
+    }
+
     private int built() {
         return switch (tab) {
-            case 1 -> menu.heavyBuilt.get();
-            case 2 -> menu.gaussBuilt.get();
+            case 1 -> menu.armorChoice.get() == 1 ? menu.lightBuilt.get() : menu.heavyBuilt.get();
+            case 2 -> menu.rangedChoice.get() == 2 ? menu.railBuilt.get() : menu.gaussBuilt.get();
             default -> menu.bladeBuilt.get();
         };
     }
 
     private int stepDone() {
         return switch (tab) {
-            case 1 -> menu.heavyBastion.get();
-            case 2 -> menu.gaussTempo.get();
+            case 1 -> menu.armorChoice.get() == 1 ? menu.lightCapacity.get() : menu.heavyBastion.get();
+            case 2 -> menu.rangedChoice.get() == 2 ? menu.railPierce.get() : menu.gaussTempo.get();
             default -> menu.bladeEdge.get();
         };
     }
 
     private int state() {
+        if (tab == 3) {
+            return 3000 + menu.carverPrecision.get() * 500 + menu.accumulatorBuilt.get() * 100 + menu.accumulatorCapacity.get() * 10
+                    + menu.cauldronBuilt.get() * 5 + menu.cauldronYield.get() + 7;
+        }
         return tab * 1000 + choice() * 100 + built() * 10 + stepDone();
     }
 
@@ -92,7 +111,7 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
     protected void init() {
         super.init();
         shownState = state();
-        String[] tabs = {"melee", "armor", "ranged"};
+        String[] tabs = {"melee", "armor", "ranged", "singles"};
         for (int i = 0; i < tabs.length; i++) {
             int index = i;
             Button t = Button.builder(Component.translatable("adept_core.table.tab." + tabs[i]), b -> {
@@ -102,6 +121,10 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
             }).bounds(leftPos + 96 + i * 46, topPos + 4, 44, 12).build();
             t.active = tab != i;
             addRenderableWidget(t);
+        }
+        if (tab == 3) {
+            initSingles(leftPos + 10, topPos + 26);
+            return;
         }
         Tab info = tabInfo();
         int x = leftPos + 10;
@@ -149,8 +172,9 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
                         b -> press(ArtifactTableMenu.BTN_CAMP))
                 .bounds(x + 74, y + 56, 72, 18)
                 .tooltip(Tooltip.create(costText(CostList.parse(BalanceConfig.TABLE_CAMP.get())))).build());
-        if (choice() == 1) {
-            String variant = tab == 1 ? "heavy" : info.first();
+        if (hasPrototype()) {
+            String variant = tab == 1 ? (menu.armorChoice.get() == 1 ? "light" : "heavy")
+                    : tab == 2 ? (menu.rangedChoice.get() == 2 ? "rail" : "gauss") : info.first();
             addRenderableWidget(Button.builder(Component.translatable(built() > 0
                             ? "adept_core.table." + variant + ".rebuild" : "adept_core.table." + variant + ".build"),
                             b -> press(info.prototype()))
@@ -165,6 +189,56 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
                             .orElse(Component.empty())
                             .append(costText(CostList.parse(info.stepCost()))))).build();
             step.active = built() > 0 && stepDone() == 0;
+            addRenderableWidget(step);
+        }
+    }
+
+    /** Строка одиночного артефакта: сборка и первая ступень. */
+    private record Single(String id, int build, int step, String stepKey, String buildCost, String stepCost, int built, int stepDone) {
+    }
+
+    private Single[] singles() {
+        return new Single[]{
+                new Single("accumulator", ArtifactTableMenu.BTN_ACCUMULATOR, ArtifactTableMenu.BTN_ACCUMULATOR_CAPACITY,
+                        TableActions.ACCUMULATOR_CAPACITY, ru.adept.core.config.ManaConfig.TABLE_ACCUMULATOR.get(),
+                        ru.adept.core.config.ManaConfig.TABLE_ACCUMULATOR_CAPACITY_1.get(),
+                        menu.accumulatorBuilt.get(), menu.accumulatorCapacity.get()),
+                new Single("soul_cauldron", ArtifactTableMenu.BTN_CAULDRON, ArtifactTableMenu.BTN_CAULDRON_YIELD,
+                        TableActions.CAULDRON_YIELD, ru.adept.core.config.ManaConfig.TABLE_CAULDRON.get(),
+                        ru.adept.core.config.ManaConfig.TABLE_CAULDRON_YIELD_1.get(),
+                        menu.cauldronBuilt.get(), menu.cauldronYield.get()),
+                new Single("rune_carver", -1, ArtifactTableMenu.BTN_CARVER_PRECISION,
+                        TableActions.CARVER_PRECISION, "", ru.adept.core.config.RuneConfig.TABLE_CARVER_PRECISION_1.get(),
+                        1, menu.carverPrecision.get())};
+    }
+
+    private void initSingles(int x, int y) {
+        Single[] rows = singles();
+        for (int i = 0; i < rows.length; i++) {
+            Single s = rows[i];
+            int rowY = y + 30 + i * 34;
+            if (s.build() < 0) {
+                // Машина базы строится на верстаке, здесь только её ступени: кнопка выключена, причина — в подсказке.
+                Button machine = Button.builder(Component.translatable("block.adept_core." + s.id()), b -> { })
+                        .bounds(x, rowY, 118, 20)
+                        .tooltip(Tooltip.create(Component.translatable("adept_core.table." + s.id() + ".desc"))).build();
+                machine.active = false;
+                addRenderableWidget(machine);
+            } else {
+                addRenderableWidget(Button.builder(Component.translatable("item.adept_core." + s.id()), b -> press(s.build()))
+                        .bounds(x, rowY, 118, 20)
+                        .tooltip(Tooltip.create(Component.translatable("adept_core.table." + s.id() + ".desc")
+                                .append(Component.literal("\n\n")).append(costText(CostList.parse(s.buildCost()))))).build());
+            }
+            Button step = Button.builder(Component.translatable("adept_core.table.open",
+                            StepTexts.find(s.stepKey(), 1).map(StepTexts.Step::name).orElse(Component.empty())),
+                            b -> press(s.step()))
+                    .bounds(x + 124, rowY, 136, 20)
+                    .tooltip(Tooltip.create(StepTexts.find(s.stepKey(), 1)
+                            .map(st -> StepTexts.tooltip(st).append(Component.literal("\n\n")))
+                            .orElse(Component.empty())
+                            .append(costText(CostList.parse(s.stepCost()))))).build();
+            step.active = s.built() > 0 && s.stepDone() == 0;
             addRenderableWidget(step);
         }
     }
@@ -210,6 +284,17 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
     @Override
     protected void renderLabels(GuiGraphics g, int mouseX, int mouseY) {
         g.drawString(font, title, 10, 7, TEXT, false);
+        if (tab == 3) {
+            g.drawWordWrap(font, Component.translatable("adept_core.table.singles.hint"), 10, 26, 260, MUTED);
+            Single[] rows = singles();
+            for (int i = 0; i < rows.length; i++) {
+                if (rows[i].stepDone() > 0) {
+                    g.drawString(font, Component.translatable("adept_core.table.done"), 134, 78 + i * 34, 0xFF60D060, false);
+                }
+            }
+            drawResult(g);
+            return;
+        }
         Tab info = tabInfo();
         if (choice() == 0) {
             g.drawWordWrap(font, Component.translatable("adept_core.table.choose.hint." + tab), 10, 26, 220, MUTED);
@@ -219,7 +304,7 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
             }
         } else {
             g.drawString(font, Component.translatable("adept_core.table.components"), 10, 26, MUTED, false);
-            if (choice() == 1) {
+            if (hasPrototype()) {
                 MutableComponent label = Component.translatable("adept_core.table.segment." + tab);
                 StepTexts.find(info.stepKey(), 1).ifPresent(step -> label.append(": ").append(step.name()));
                 g.drawString(font, label, 10, 136, MUTED, false);
@@ -230,6 +315,10 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
                 g.drawWordWrap(font, Component.translatable("adept_core.table." + info.later() + ".later"), 10, 106, 220, MUTED);
             }
         }
+        drawResult(g);
+    }
+
+    private void drawResult(GuiGraphics g) {
         int result = menu.lastResult.get();
         if (result > 1) {
             TableActions.Result r = TableActions.Result.values()[result - 1];

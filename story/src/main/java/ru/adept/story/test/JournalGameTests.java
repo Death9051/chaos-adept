@@ -112,6 +112,136 @@ public final class JournalGameTests {
         helper.succeed();
     }
 
+    /** Срез 3: котёл собран, первая душа, первое ядро души — по одной записи, повтор пустой. */
+    @GameTest(template = "empty")
+    public static void soulCauldronEntries(GameTestHelper helper) {
+        MinecraftServer server = reset(helper);
+        List<EntryView> cauldron = Journal.fire(server, "artifact_prototype_crafted", Map.of("artifact", "cauldron"));
+        helper.assertTrue(cauldron.stream().anyMatch(e -> e.id().equals("firsts/cauldron")),
+                "Нет записи о котле: " + cauldron.stream().map(EntryView::id).toList());
+        helper.assertTrue(Journal.fire(server, "artifact_prototype_crafted", Map.of("artifact", "gauss")).stream()
+                .noneMatch(e -> e.id().equals("firsts/cauldron")), "Запись о котле сработала на другой прототип");
+
+        expectIds(helper, Journal.fire(server, "soul_burned", Map.of("strength", "normal")), "firsts/first_soul");
+        helper.assertTrue(Journal.fire(server, "soul_burned", Map.of("strength", "strong")).isEmpty(),
+                "Запись о первой душе повторилась");
+        expectIds(helper, Journal.fire(server, "soul_core_obtained", Map.of("strength", "normal")), "firsts/first_soul_core");
+        helper.assertTrue(Journal.fire(server, "soul_core_obtained", Map.of("strength", "guardian")).isEmpty(),
+                "Запись о первом ядре повторилась");
+        helper.succeed();
+    }
+
+    /** Торговец: первая сделка ядрами — реплика и условие на его странице; сгустки и повтор — без них. */
+    @GameTest(template = "empty")
+    public static void traderSoulCores(GameTestHelper helper) {
+        MinecraftServer server = reset(helper);
+        helper.assertTrue(TraderTalk.dealLines(server, "purchase", "node_cluster").isEmpty(),
+                "Сделка сгустками не должна давать реплику");
+        List<String> first = TraderTalk.dealLines(server, "purchase", "soul_core");
+        helper.assertTrue(first.equals(List.of(AdeptStory.MOD_ID + ".trader.soul_core")), "Первая сделка ядрами: " + first);
+        helper.assertTrue(JournalData.get(server).entries.stream().anyMatch(e -> e.id().equals("trader/soul_cores")
+                && e.page().equals(JournalDef.PAGE_TRADER)), "Условие о ядрах не попало на страницу торговца");
+        helper.assertTrue(TraderTalk.dealLines(server, "purchase", "soul_core").isEmpty(), "Реплика о ядрах повторилась");
+        helper.assertTrue(TraderTalk.dealLines(server, "trophy", "soul_core").equals(List.of(AdeptStory.MOD_ID + ".trader.trophy")),
+                "Трофей за ядра: должна остаться только реплика о трофее");
+        helper.succeed();
+    }
+
+    /** Торговец вспоминает котёл в первое появление после первой сожжённой души, один раз. */
+    @GameTest(template = "empty")
+    public static void traderCauldronLine(GameTestHelper helper) {
+        MinecraftServer server = reset(helper);
+        WorldProgress progress = WorldProgress.get(server);
+        int oldTier = progress.nodeTier();
+        try {
+            progress.setNodeTier(server, 1);
+            helper.assertTrue(TraderTalk.arrivalLines(server, false).get(0).contains(".greet."), "До котла — приветствие");
+            Journal.fire(server, "soul_burned", Map.of("strength", "normal"));
+            List<String> lines = TraderTalk.arrivalLines(server, false);
+            helper.assertTrue(lines.equals(List.of(AdeptStory.MOD_ID + ".trader.cauldron")), "Реплика о котле: " + lines);
+            helper.assertTrue(TraderTalk.arrivalLines(server, false).get(0).contains(".greet."), "Реплика о котле повторилась");
+        } finally {
+            progress.setNodeTier(server, oldTier);
+        }
+        helper.succeed();
+    }
+
+    /** Срез 3, часть 2: первая руна, первое слово, стёртая руна, первый фокус, трещина, щит — по одному разу. */
+    @GameTest(template = "empty")
+    public static void runeFocusShieldEntries(GameTestHelper helper) {
+        MinecraftServer server = reset(helper);
+        Map<String, String> plain = Map.of("material", "copper", "item", "needle", "has_word", "false");
+        Map<String, String> word = Map.of("material", "iron", "item", "bolt", "has_word", "true");
+        expectIds(helper, Journal.fire(server, "rune_engraved", plain), "firsts/first_rune");
+        helper.assertTrue(Journal.fire(server, "rune_engraved", plain).isEmpty(), "Запись о первой руне повторилась");
+        expectIds(helper, Journal.fire(server, "rune_engraved", word), "firsts/first_word");
+        helper.assertTrue(Journal.fire(server, "rune_engraved", word).isEmpty(), "Запись о первом слове повторилась");
+        expectIds(helper, Journal.fire(server, "rune_erased", Map.of("material", "copper", "item", "bolt")), "firsts/rune_erased");
+        expectIds(helper, Journal.fire(server, "focus_cut", Map.of("cut", "flash", "crystal", "quartz")), "firsts/first_focus");
+        expectIds(helper, Journal.fire(server, "focus_cracked", Map.of("cut", "flash", "crystal", "quartz", "segment", "light/chest")),
+                "firsts/first_cracked_focus");
+        expectIds(helper, Journal.fire(server, "shield_broken"), "firsts/first_shield_broken");
+        helper.assertTrue(Journal.fire(server, "shield_broken").isEmpty(), "Запись о щите повторилась");
+        helper.succeed();
+    }
+
+    /** Пометка на полях: ключ своей ветки попадает в запись и переживает сохранение мира. */
+    @GameTest(template = "empty")
+    public static void marginNotes(GameTestHelper helper) {
+        MinecraftServer server = reset(helper);
+        List<EntryView> added = Journal.fire(server, "shield_broken");
+        helper.assertTrue(added.size() == 1 && added.get(0).note().equals("adept_story.journal.firsts.first_shield_broken.note.public"),
+                "Пометка публичной ветки: " + added);
+        EntryView plain = Journal.fire(server, "focus_cut", Map.of("cut", "flash", "crystal", "quartz")).get(0);
+        helper.assertTrue(!plain.hasNote(), "У записи без пометки появилась пометка");
+        for (JournalDef def : JournalDefs.all()) {
+            String note = def.noteFor("streamer");
+            helper.assertTrue(note.isEmpty() || !def.noteFor("public").isEmpty(), "У " + def.id() + " пометка только в одной ветке");
+        }
+        net.minecraft.nbt.CompoundTag saved = JournalData.get(server).save(new net.minecraft.nbt.CompoundTag(), server.registryAccess());
+        helper.assertTrue(saved.getList("entries", net.minecraft.nbt.Tag.TAG_COMPOUND).getCompound(0).getString("note")
+                .equals(added.get(0).note()), "Пометка не сохранилась в данных мира");
+        helper.succeed();
+    }
+
+    /** У записей с рабочими триггерами все ключи текста и пометок есть в lang-файле. */
+    @GameTest(template = "empty")
+    public static void journalKeysInLang(GameTestHelper helper) {
+        com.google.gson.JsonObject lang;
+        try (java.io.InputStream in = AdeptStory.class.getResourceAsStream("/assets/adept_story/lang/ru_ru.json")) {
+            helper.assertTrue(in != null, "Нет lang-файла сюжета");
+            lang = com.google.gson.JsonParser.parseReader(
+                    new java.io.InputStreamReader(in, java.nio.charset.StandardCharsets.UTF_8)).getAsJsonObject();
+        } catch (java.io.IOException e) {
+            throw new IllegalStateException(e);
+        }
+        for (JournalDef def : JournalDefs.all()) {
+            if (!JournalDefs.SUPPORTED.contains(def.type())) {
+                continue;
+            }
+            for (String branch : List.of("public", "streamer")) {
+                for (String key : def.keysFor(branch)) {
+                    helper.assertTrue(lang.has(key), "Нет строки " + key);
+                }
+                String note = def.noteFor(branch);
+                helper.assertTrue(note.isEmpty() || lang.has(note), "Нет пометки " + note);
+            }
+        }
+        helper.succeed();
+    }
+
+    /** Зачаток в инвентаре — запись пролога с пометкой своей ветки, один раз. */
+    @GameTest(template = "empty")
+    public static void seedEntry(GameTestHelper helper) {
+        MinecraftServer server = reset(helper);
+        List<EntryView> added = Journal.fire(server, "item_obtained", Map.of("item", "adept_core:seed"));
+        expectIds(helper, added, "prologue/seed");
+        helper.assertTrue(added.get(0).keys().equals(List.of("adept_story.journal.prologue.seed.public"))
+                && added.get(0).note().equals("adept_story.journal.prologue.seed.note.public"), "Текст зачатка: " + added.get(0));
+        helper.assertTrue(Journal.fire(server, "item_obtained", Map.of("item", "adept_core:seed")).isEmpty(), "Запись о зачатке повторилась");
+        helper.succeed();
+    }
+
     private static void expectIds(GameTestHelper helper, List<EntryView> added, String... ids) {
         List<String> got = added.stream().map(EntryView::id).toList();
         helper.assertTrue(got.equals(List.of(ids)), "Ожидались записи " + List.of(ids) + ", получены " + got);

@@ -39,6 +39,20 @@ public enum Molten {
         return ModItems.PLATES.get(ordinal()).get();
     }
 
+    /** Цельный болт рельсы из литейной. */
+    public Item bolt() {
+        return ModItems.BOLTS.get(ordinal()).get();
+    }
+
+    public static Optional<Molten> ofBolt(ItemStack stack) {
+        for (Molten m : values()) {
+            if (stack.is(m.bolt())) {
+                return Optional.of(m);
+            }
+        }
+        return Optional.empty();
+    }
+
     public static Optional<Molten> byId(String id) {
         for (Molten m : values()) {
             if (m.id().equals(id)) {

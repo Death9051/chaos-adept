@@ -37,6 +37,23 @@ public final class TableActions {
     public static final String GAUSS_BUILT = "gauss/base";
     public static final String GAUSS_TEMPO = "gauss/barrel/tempo";
 
+    // Срез 3: одиночные артефакты — накопитель и котёл душ
+    public static final String ACCUMULATOR = "accumulator";
+    public static final String ACCUMULATOR_BUILT = "accumulator/base";
+    public static final String ACCUMULATOR_CAPACITY = "accumulator/core/capacity";
+    public static final String CAULDRON = "cauldron";
+    public static final String CAULDRON_BUILT = "cauldron/base";
+    public static final String CAULDRON_YIELD = "cauldron/furnace/yield";
+
+    // Срез 3, часть 2: лёгкий экзокостюм (нагрудник — генератор щита)
+    public static final String LIGHT_BUILT = "light/base";
+    public static final String LIGHT_CAPACITY = "light/chest/capacity";
+
+    // Срез 3, часть 3: рельса и высекатель рун
+    public static final String RAIL_BUILT = "rail/base";
+    public static final String RAIL_PIERCE = "rail/barrel/pierce";
+    public static final String CARVER_PRECISION = ru.adept.core.base.CarverBlockEntity.PRECISION;
+
     /** Грубые компоненты, которые делаются на столе вручную. Порядок = порядок кнопок. */
     public static final List<Craft> CRUDE = List.of(
             new Craft("crude_wiring", () -> ModItems.CRUDE_WIRING.get(), BalanceConfig.TABLE_CRUDE_WIRING::get),
@@ -121,6 +138,84 @@ public final class TableActions {
         return Result.OK;
     }
 
+    /** Прототип лёгкого экзокостюма: нагрудник (генератор щита) с полным запасом маны и щитом, фокус ставится отдельно. */
+    public static Result craftLightPrototype(Player player) {
+        ArtifactProgress p = progress(player);
+        if (!p.choice(ARMOR).filter(LIGHT::equals).isPresent()) {
+            return Result.NOT_CHOSEN;
+        }
+        CostList cost = CostList.parse(ru.adept.core.config.FocusConfig.TABLE_LIGHT_PROTOTYPE.get());
+        if (!cost.canPay(player)) {
+            return Result.NOT_ENOUGH;
+        }
+        cost.pay(player);
+        ItemStack chest = new ItemStack(ModItems.LIGHT_CHESTPLATE.get());
+        ru.adept.core.artifact.LightArmorItem.setMana(chest, ru.adept.core.config.FocusConfig.LIGHT_MANA_CAPACITY.get());
+        int cap = ru.adept.core.config.FocusConfig.shieldCapacity(p.step(LIGHT_CAPACITY));
+        ru.adept.core.artifact.LightArmorItem.setShield(chest, cap, cap);
+        give(player, chest);
+        boolean first = p.step(LIGHT_BUILT) == 0;
+        if (first) {
+            player.setData(ModRegistries.ARTIFACT_PROGRESS, p.withStep(LIGHT_BUILT, 1));
+        }
+        post(player, new ArtifactEvent.PrototypeCrafted(player, LIGHT, first));
+        return Result.OK;
+    }
+
+    /** Ступень I «Ёмкости» (нагрудник лёгкого экзокостюма). */
+    public static Result upgradeLightCapacity(Player player) {
+        return upgradeStep(player, LIGHT_BUILT, LIGHT_CAPACITY, ru.adept.core.config.FocusConfig.TABLE_LIGHT_CAPACITY_1.get());
+    }
+
+    /** Прототип рельсы (с полным зарядом), болты отливает литейная. */
+    public static Result craftRailPrototype(Player player) {
+        ArtifactProgress p = progress(player);
+        if (!p.choice(RANGED).filter(RAIL::equals).isPresent()) {
+            return Result.NOT_CHOSEN;
+        }
+        CostList cost = CostList.parse(ru.adept.core.config.RuneConfig.TABLE_RAIL_PROTOTYPE.get());
+        if (!cost.canPay(player)) {
+            return Result.NOT_ENOUGH;
+        }
+        cost.pay(player);
+        ItemStack gun = new ItemStack(ModItems.RAIL_GUN.get());
+        ru.adept.core.artifact.RailGunItem.setCharge(gun, ru.adept.core.artifact.RailGunItem.capacity());
+        give(player, gun);
+        boolean first = p.step(RAIL_BUILT) == 0;
+        if (first) {
+            player.setData(ModRegistries.ARTIFACT_PROGRESS, p.withStep(RAIL_BUILT, 1));
+        }
+        post(player, new ArtifactEvent.PrototypeCrafted(player, RAIL, first));
+        return Result.OK;
+    }
+
+    /** Ступень I «Пробоя» (ствол рельсы). */
+    public static Result upgradeRailPierce(Player player) {
+        return upgradeStep(player, RAIL_BUILT, RAIL_PIERCE, ru.adept.core.config.RuneConfig.TABLE_RAIL_PIERCE_1.get());
+    }
+
+    /**
+     * Ступень I «Точности» высекателя рун: вторая руна на литом изделии. Ступени машин общие на базу
+     * (данные базы), событие — как у ступени артефакта, ключ {@code carver/precision}.
+     */
+    public static Result upgradeCarverPrecision(Player player) {
+        if (player.getServer() == null) {
+            return Result.NOT_AVAILABLE;
+        }
+        ru.adept.core.base.BaseData base = ru.adept.core.base.BaseData.get(player.getServer());
+        if (base.machineStep(CARVER_PRECISION) >= 1) {
+            return Result.ALREADY_DONE;
+        }
+        CostList cost = CostList.parse(ru.adept.core.config.RuneConfig.TABLE_CARVER_PRECISION_1.get());
+        if (!cost.canPay(player)) {
+            return Result.NOT_ENOUGH;
+        }
+        cost.pay(player);
+        base.setMachineStep(CARVER_PRECISION, 1);
+        post(player, new ArtifactEvent.StepUnlocked(player, CARVER_PRECISION, 1));
+        return Result.OK;
+    }
+
     /** Ступень I «Бастиона» (нагрудник тяжёлой брони). */
     public static Result upgradeHeavyBastion(Player player) {
         return upgradeStep(player, HEAVY_BUILT, HEAVY_BASTION, BalanceConfig.TABLE_HEAVY_BASTION_1.get());
@@ -129,6 +224,44 @@ public final class TableActions {
     /** Ступень I «Темпа» (ствол гаусс-пушки). */
     public static Result upgradeGaussTempo(Player player) {
         return upgradeStep(player, GAUSS_BUILT, GAUSS_TEMPO, BalanceConfig.TABLE_GAUSS_TEMPO_1.get());
+    }
+
+    /** Накопитель — одиночный артефакт, можно собрать заново, если потерян. */
+    public static Result craftAccumulator(Player player) {
+        return craftSingle(player, ACCUMULATOR, ACCUMULATOR_BUILT, ru.adept.core.config.ManaConfig.TABLE_ACCUMULATOR.get(),
+                () -> new ItemStack(ModItems.ACCUMULATOR.get()));
+    }
+
+    /** Котёл душ — одиночный артефакт. */
+    public static Result craftCauldron(Player player) {
+        return craftSingle(player, CAULDRON, CAULDRON_BUILT, ru.adept.core.config.ManaConfig.TABLE_CAULDRON.get(),
+                () -> new ItemStack(ModItems.SOUL_CAULDRON.get()));
+    }
+
+    /** Ступень I «Ёмкости» (ядро накопителя). */
+    public static Result upgradeAccumulatorCapacity(Player player) {
+        return upgradeStep(player, ACCUMULATOR_BUILT, ACCUMULATOR_CAPACITY, ru.adept.core.config.ManaConfig.TABLE_ACCUMULATOR_CAPACITY_1.get());
+    }
+
+    /** Ступень I «Выхода» (горнило котла душ). */
+    public static Result upgradeCauldronYield(Player player) {
+        return upgradeStep(player, CAULDRON_BUILT, CAULDRON_YIELD, ru.adept.core.config.ManaConfig.TABLE_CAULDRON_YIELD_1.get());
+    }
+
+    private static Result craftSingle(Player player, String id, String built, String price, Supplier<ItemStack> result) {
+        CostList cost = CostList.parse(price);
+        if (!cost.canPay(player)) {
+            return Result.NOT_ENOUGH;
+        }
+        cost.pay(player);
+        give(player, result.get());
+        ArtifactProgress p = progress(player);
+        boolean first = p.step(built) == 0;
+        if (first) {
+            player.setData(ModRegistries.ARTIFACT_PROGRESS, p.withStep(built, 1));
+        }
+        post(player, new ArtifactEvent.PrototypeCrafted(player, id, first));
+        return Result.OK;
     }
 
     private static Result upgradeStep(Player player, String built, String step, String price) {

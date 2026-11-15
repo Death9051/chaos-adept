@@ -52,7 +52,10 @@ public final class ComponentGameTests {
 
     @GameTest(template = "empty")
     public static void componentCommandGives(GameTestHelper helper) {
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        // FakePlayer не входит в мир: моды вроде Curios не шлют ему пакеты синхронизации (в fullpack мок-игрок в мире падал).
+        ServerPlayer player = net.neoforged.neoforge.common.util.FakePlayerFactory.get(helper.getLevel(),
+                new com.mojang.authlib.GameProfile(java.util.UUID.nameUUIDFromBytes("adept_component_test".getBytes()), "adept_component_test"));
+        player.getInventory().clearContent();
         CommandSourceStack source = helper.getLevel().getServer().createCommandSourceStack()
                 .withEntity(player).withPermission(4).withSuppressedOutput();
         var commands = helper.getLevel().getServer().getCommands();

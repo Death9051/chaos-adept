@@ -1,0 +1,18 @@
+{
+  "trigger": {
+    "type": "item_obtained",
+    "item": "adept_core:seed"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.prologue.seed.public"
+    ],
+    "streamer": [
+      "adept_story.journal.prologue.seed.streamer"
+    ]
+  },
+  "note": {
+    "public": "adept_story.journal.prologue.seed.note.public",
+    "streamer": "adept_story.journal.prologue.seed.note.streamer"
+  }
+}

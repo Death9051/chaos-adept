@@ -42,7 +42,25 @@ public final class StepTexts {
                     format(100 * BalanceConfig.HEAVY_PLATE_ABSORB.get())}),
             new Step(TableActions.GAUSS_TEMPO, 1, () -> new Object[]{
                     format(BalanceConfig.GAUSS_FIRE_RATE.get() * (1 + BalanceConfig.GAUSS_TEMPO_PER_STEP.get())),
-                    format(BalanceConfig.GAUSS_FIRE_RATE.get())})
+                    format(BalanceConfig.GAUSS_FIRE_RATE.get())}),
+            new Step(TableActions.ACCUMULATOR_CAPACITY, 1, () -> new Object[]{
+                    format(ru.adept.core.config.ManaConfig.accumulatorCapacity(1)),
+                    format(ru.adept.core.config.ManaConfig.accumulatorCapacity(0))}),
+            new Step(TableActions.CAULDRON_YIELD, 1, () -> new Object[]{
+                    format(100 * ru.adept.core.config.ManaConfig.CAULDRON_YIELD_PER_STEP.get()),
+                    format(Math.round(ru.adept.core.config.ManaConfig.SOUL_MANA_NORMAL.get() * (1 + ru.adept.core.config.ManaConfig.CAULDRON_YIELD_PER_STEP.get()))),
+                    format(Math.round(ru.adept.core.config.ManaConfig.SOUL_MANA_STRONG.get() * (1 + ru.adept.core.config.ManaConfig.CAULDRON_YIELD_PER_STEP.get()))),
+                    format(Math.round(ru.adept.core.config.ManaConfig.SOUL_MANA_GUARDIAN.get() * (1 + ru.adept.core.config.ManaConfig.CAULDRON_YIELD_PER_STEP.get())))}),
+            new Step(TableActions.RAIL_PIERCE, 1, () -> new Object[]{
+                    format(100 * ru.adept.core.config.RuneConfig.PIERCE_DAMAGE.get()),
+                    format(ru.adept.core.config.RuneConfig.RAIL_PIERCE.get()),
+                    format(ru.adept.core.config.RuneConfig.RAIL_PIERCE.get() + ru.adept.core.config.RuneConfig.PIERCE_TARGETS.get()),
+                    format(100 * ru.adept.core.config.RuneConfig.PIERCE_ARMOR.get())}),
+            new Step(TableActions.CARVER_PRECISION, 1, () -> new Object[]{format(2)}),
+            new Step(TableActions.LIGHT_CAPACITY, 1, () -> new Object[]{
+                    format(ru.adept.core.config.FocusConfig.shieldCapacity(1)),
+                    format(ru.adept.core.config.FocusConfig.shieldCapacity(0)),
+                    format(ru.adept.core.config.FocusConfig.LIGHT_MANA_PER_UNIT.get())})
     );
 
     private static final Map<String, Step> BY_ID = STEPS.stream()

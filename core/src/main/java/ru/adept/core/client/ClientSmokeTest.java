@@ -58,6 +58,9 @@ public final class ClientSmokeTest {
             new Scene("machines", -5.5, 2.0, 1.0, 0, 20, false),
             new Scene("mobs", 0.5, 2.5, 3.0, 0, 12, false),
             new Scene("heroes", 0.5, 1.5, -1.0, 180, -3, false),
+            new Scene("hero_ranks", 9.5, 1.6, -1.2, 180, 5, false),
+            new Scene("cutter_light_armor", -7.5, 1.7, 4.5, 0, 15, false),
+            new Scene("rune_carver_rail", 8.5, 1.7, 4.5, 0, 15, false),
             new Scene("blade_hand", 0.5, 1.0, 1.5, 0, 0, true));
 
     private static Stage stage = Stage.WAIT_TITLE;
@@ -157,6 +160,13 @@ public final class ClientSmokeTest {
                 set(x - 7, y, z + 4, "adept_core:generator"),
                 set(x - 5, y, z + 4, "adept_core:crusher"),
                 set(x - 3, y, z + 4, "adept_core:smelter"),
+                set(x - 9, y, z + 7, "adept_core:cutter"),
+                set(x + 9, y, z + 7, "adept_core:rune_carver"),
+                "summon minecraft:armor_stand " + (x + 8) + " " + y + " " + (z + 7)
+                        + " {NoGravity:1b,ShowArms:1b,Rotation:[180f,0f],HandItems:[{id:\"adept_core:rail_gun\",count:1},{}],"
+                        + "ArmorItems:[{},{},{id:\"adept_core:heavy_chestplate\",count:1},{}]}",
+                "summon minecraft:armor_stand " + (x - 7) + " " + y + " " + (z + 7)
+                        + " {NoGravity:1b,Rotation:[180f,0f],ArmorItems:[{},{},{id:\"adept_core:light_chestplate\",count:1},{}]}",
                 set(x + 6, y - 1, z + 7, "adept_core:ash"),
                 summon("adept_core:hornet", x - 4, y + 1, z + 10),
                 summon("adept_core:wisp", x - 2, y + 1, z + 10),
@@ -181,6 +191,13 @@ public final class ClientSmokeTest {
         run(server, fill(x - 10, y, z - 13, x + 10, y + 8, z - 3, "minecraft:air"));
         run(server, fill(x - 7, y, z - 9, x + 7, y + 1, z - 8, "minecraft:smooth_stone"));
         run(server, fill(x - 7, y, z - 12, x + 7, y + 3, z - 10, "minecraft:smooth_stone"));
+        // Знак ранга: маг-ученик, ветеран и мастер в ряд справа от трибуны (сцена hero_ranks).
+        String[] ranks = {"apprentice", "veteran", "master"};
+        for (int i = 0; i < ranks.length; i++) {
+            run(server, String.format(java.util.Locale.ROOT,
+                    "summon adept_core:hero %.2f %d %.1f {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],UUID:[I;0,0,1,%d],adept_class:\"mage\",adept_rank:\"%s\"}",
+                    x + 8.5 + i * 1.2, y, z - 4.0, i, ranks[i]));
+        }
         HeroClass[] classes = HeroClass.values();
         for (int variant = 0; variant < 3; variant++) {
             for (int c = 0; c < classes.length; c++) {

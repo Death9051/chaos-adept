@@ -62,7 +62,7 @@ public class TraderEntity extends AbstractVillager {
         traded = true;
         if (getTradingPlayer() instanceof ServerPlayer player) {
             AdeptEvents.post(new TraderEvent.Deal(player, BuiltInRegistries.ITEM.getKey(offer.getResult().getItem()).toString(),
-                    "purchase", offer.getResult().getCount()));
+                    "purchase", offer.getResult().getCount(), ru.adept.core.trader.TraderOffers.currency(offer)));
         }
     }
 

@@ -28,7 +28,9 @@ public final class TraderGameTests {
         int fixed = TraderOffers.parse(BalanceConfig.TRADER_FIXED_OFFERS.get()).size();
         for (int i = 0; i < 20; i++) {
             MerchantOffers offers = TraderOffers.roll(random);
-            int extra = offers.size() - fixed;
+            // Срез 3: у каждой позиции есть вариант за ядра душ — считаем только позиции за сгустки.
+            long clusters = offers.stream().filter(o -> !TraderOffers.currency(o).equals("soul_core")).count();
+            int extra = (int) clusters - fixed;
             helper.assertTrue(extra >= BalanceConfig.TRADER_OFFERS_MIN.get() && extra <= BalanceConfig.TRADER_OFFERS_MAX.get(),
                     "Число случайных позиций вне диапазона: " + extra);
         }

@@ -7,7 +7,7 @@ import java.util.UUID;
 
 /**
  * Боевые события героев для реплик сюжета. В каждом — герой, его класс ({@code tracker}, {@code warrior},
- * {@code archer}, {@code commander}; позже {@code mage}, {@code healer}), ранг ({@code apprentice}, {@code veteran})
+ * {@code archer}, {@code commander}, {@code mage}, {@code healer}), ранг ({@code apprentice}, {@code veteran}, {@code master})
  * и отряд. Ядро шлёт все события, частоту реплик регулирует сюжет.
  */
 public abstract class HeroEvent extends AdeptEvent {
@@ -76,11 +76,25 @@ public abstract class HeroEvent extends AdeptEvent {
         }
     }
 
-    /** Герой вылечил союзника (целители — в следующих срезах). */
+    /** Целитель вылечил союзника ({@code hero} — целитель, {@code ally} — вылеченный). */
     public static final class AllyHealed extends HeroEvent {
         private final Mob ally;
 
         public AllyHealed(Mob hero, String c, String r, UUID s, Player p, Mob ally) {
+            super(hero, c, r, s, p);
+            this.ally = ally;
+        }
+
+        public Mob getAlly() {
+            return ally;
+        }
+    }
+
+    /** Целитель-мастер поднял павшего бойца (раз за бой): {@code hero} — целитель, {@code ally} — поднятый. */
+    public static final class AllyRevived extends HeroEvent {
+        private final Mob ally;
+
+        public AllyRevived(Mob hero, String c, String r, UUID s, Player p, Mob ally) {
             super(hero, c, r, s, p);
             this.ally = ally;
         }

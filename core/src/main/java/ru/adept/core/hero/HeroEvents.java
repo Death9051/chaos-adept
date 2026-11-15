@@ -21,8 +21,36 @@ public final class HeroEvents {
     @SubscribeEvent
     public static void onDeath(LivingDeathEvent event) {
         if (event.getEntity() instanceof HeroEntity hero && hero.level() instanceof ServerLevel level) {
+            if (tryRevive(level, hero)) {
+                event.setCanceled(true);
+                return;
+            }
             HeroSquads.get(level.getServer()).onMemberDied(level, hero);
         }
+    }
+
+    /**
+     * Целитель-мастер того же отряда рядом поднимает павшего (раз за бой): смерть отменяется,
+     * боец встаёт с долей здоровья {@code reviveHealth}. Вернёт true, если подъём случился.
+     */
+    public static boolean tryRevive(ServerLevel level, HeroEntity fallen) {
+        if (fallen.squad() == null) {
+            return false;
+        }
+        double r = ru.adept.core.config.HeroConfig.REVIVE_RADIUS.get();
+        for (HeroEntity healer : level.getEntitiesOfClass(HeroEntity.class, fallen.getBoundingBox().inflate(r),
+                h -> h != fallen && h.canRevive() && fallen.squad().equals(h.squad()))) {
+            healer.markReviveUsed();
+            fallen.setHealth(Math.max(1.0f, fallen.getMaxHealth() * ru.adept.core.config.HeroConfig.REVIVE_HEALTH.get().floatValue()));
+            fallen.removeAllEffects();
+            fallen.clearFire();
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.TOTEM_OF_UNDYING, fallen.getX(), fallen.getY() + 1, fallen.getZ(), 40, 0.4, 0.8, 0.4, 0.3);
+            fallen.playSound(net.minecraft.sounds.SoundEvents.TOTEM_USE, 0.8f, 1.2f);
+            Player target = fallen.getTarget() instanceof Player p ? p : null;
+            healer.post(h -> new HeroEvent.AllyRevived(h, h.heroClass().id(), h.rank().id(), h.squad(), target, fallen));
+            return true;
+        }
+        return false;
     }
 
     @SubscribeEvent

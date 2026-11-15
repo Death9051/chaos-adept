@@ -12,8 +12,10 @@ import java.util.Map;
 /**
  * Генератор 2D-спрайтов компонентов (16×16) и моделей предметов.
  * Каждое семейство нарисовано вручную пиксельной картой в components.txt, свет сверху-слева.
- * Материал ранга красит тона 1–5 (совпадает с названиями из ComponentNames),
- * вариация — акцент: у рунной синий кристалл и руны, у литой красный индикатор и болты.
+ * Правила (docs/context/models.md, «Спрайты предметов»): семейство читается по силуэту;
+ * материал ранга красит тона 1–5 (совпадает с названиями из ComponentNames);
+ * вариация видна по форме, а не только по цвету: у рунной заострённый кристалл маны выступает
+ * за контур и есть руны, у литой — прямоугольные клеммы, ножки, болты и красная лампа в оправе.
  *
  * Запуск из корня репозитория (нужна Java 17+):
  *   java tools/sprites/ComponentSprites.java core/src/main/resources/assets/adept_core [лист.png]
@@ -27,7 +29,8 @@ import java.util.Map;
  *   W M m n    мана: блик, свет, середина, контур; R r — руны (светлая, тусклая)
  *   P p        текстолит платы
  *   w          белый блик
- * После карты — строки «magic:» и «tech:» с правками вариации вида «x,y,символ».
+ * «== id» — общая карта семейства, «== id@magic» / «== id@tech» — карта вариации целиком.
+ * После карты можно дать строки «magic:» и «tech:» с правками вида «x,y,символ».
  */
 public class ComponentSprites {
     static final int N = 16;
@@ -54,19 +57,19 @@ public class ComponentSprites {
     static final Map<String, int[]> MATERIALS = Map.of(
             "copper", new int[]{0xFBB08C, 0xE5825A, 0xBF5C3C, 0x91432E, 0x66302A, 0x3E1D1C},
             "bronze", new int[]{0xF6D488, 0xDCA850, 0xB47C36, 0x875828, 0x5E3B1E, 0x392313},
-            "steel", new int[]{0xE6EBF0, 0xB6BEC8, 0x87909D, 0x5E6672, 0x41474F, 0x25282E},
+            "steel", new int[]{0xD5DCE4, 0x9EA8B4, 0x6F7986, 0x4C5560, 0x333A43, 0x1C2026},
             "silver", new int[]{0xFFFFFF, 0xDDE8F0, 0xAFC0CE, 0x8091A3, 0x586575, 0x30394A},
-            "dural", new int[]{0xF0F5F2, 0xC5D2CC, 0x99AAA6, 0x6E807E, 0x4A5A5A, 0x2A3536},
-            "titanium", new int[]{0xF5F1FF, 0xCFCBEA, 0xA29FC8, 0x73719C, 0x4D4B72, 0x2B2A47},
+            "dural", new int[]{0xFBFFFC, 0xD8E8DF, 0xAEC6BB, 0x7F9A90, 0x566E68, 0x2F403D},
+            "titanium", new int[]{0xF4F0FF, 0xCDC6F5, 0x9D94DC, 0x6E65B0, 0x48417E, 0x28244C},
             "electrum", new int[]{0xFFFACC, 0xF7E47E, 0xDCBC4E, 0xAC8A32, 0x775C24, 0x473515},
             "quartz", new int[]{0xFFFFFF, 0xF4E8E2, 0xDFCAC2, 0xB99F99, 0x8A7074, 0x54434C},
             "amethyst", new int[]{0xF5DAFF, 0xD3A0F4, 0xAA6FDA, 0x7B49AE, 0x52307E, 0x2E1A4D},
             "diamond", new int[]{0xF2FFFF, 0xAAF5F0, 0x62DCDA, 0x32AAB4, 0x1F7284, 0x123F52});
 
     static final int[] GUN = {0x7C818D, 0x555964, 0x353740, 0x1E1F26};            // K k j o
-    static final int[] MANA = {0xF0FDFF, 0x8CE8FF, 0x38AEFF, 0x1B55B8};           // W M m n
+    static final int[] MANA = {0xE6F6FF, 0x7CC4FF, 0x2F8CFF, 0x153F9E};           // W M m n
     static final int[] RED = {0xFF9A86, 0xF03A2C, 0x8E1418};
-    static final int[] BOARD = {0x3C8A5C, 0x275F40};
+    static final int[] BOARD = {0x2F6B4C, 0x1F4A36};
 
     static int color(char ch, int[] mat, boolean magic) {
         return switch (ch) {
@@ -117,7 +120,7 @@ public class ComponentSprites {
     }
 
     static char[][] canvas(String id, String variant) {
-        List<String> rows = TEMPLATES.get(id);
+        List<String> rows = TEMPLATES.getOrDefault(id + "@" + variant, TEMPLATES.get(id));
         if (rows == null || rows.size() != N) {
             throw new IllegalStateException(id + ": строк " + (rows == null ? 0 : rows.size()));
         }
@@ -158,8 +161,8 @@ public class ComponentSprites {
         Path models = assets.resolve("models/item");
         Files.createDirectories(tex);
         Files.createDirectories(models);
-        int scale = 6, cell = N * scale + 12, cols = 12;
-        BufferedImage sheet = new BufferedImage(cols * cell, 6 * cell + 40, BufferedImage.TYPE_INT_RGB);
+        int scale = 6, cell = N * scale + 12, cols = 12, small = 36, perRow = cols * cell / small;
+        BufferedImage sheet = new BufferedImage(cols * cell, 6 * cell + 2 * small + 4, BufferedImage.TYPE_INT_RGB);
         for (int y = 0; y < sheet.getHeight(); y++) {
             for (int x = 0; x < sheet.getWidth(); x++) {
                 sheet.setRGB(x, y, 0xC6C6C6);
@@ -187,7 +190,7 @@ public class ComponentSprites {
                             """.formatted(id), StandardCharsets.UTF_8);
                     paste(sheet, img, (count % cols) * cell, (count / cols) * cell, cell, scale);
                     // нижняя полоса листа — в настоящем размере ×2, как в инвентаре
-                    paste(sheet, img, count * 36 % (cols * cell), 6 * cell + (count * 36 / (cols * cell)) * 0 + 2, 36, 2);
+                    paste(sheet, img, (count % perRow) * small, 6 * cell + 4 + (count / perRow) * small, small, 2);
                     count++;
                 }
             }
