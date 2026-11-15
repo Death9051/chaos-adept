@@ -71,12 +71,12 @@ public final class StoryCommands {
                         .then(Commands.literal("hero")
                                 .then(Commands.argument("event", StringArgumentType.word())
                                         .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(List.of("spotted", "wounded", "missed",
-                                                "player_lost", "ally_fell", "squad_retreating", "ally_healed"), builder))
+                                                "player_lost", "ally_fell", "squad_retreating", "ally_healed", "ally_revived"), builder))
                                         .then(Commands.argument("class", StringArgumentType.word())
                                                 .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(List.of("tracker", "warrior",
                                                         "archer", "commander", "mage", "healer"), builder))
                                                 .then(Commands.argument("rank", StringArgumentType.word())
-                                                        .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(List.of("apprentice", "veteran"), builder))
+                                                        .suggests((ctx, builder) -> SharedSuggestionProvider.suggest(List.of("apprentice", "veteran", "master"), builder))
                                                         .executes(StoryCommands::talkHero)))))
                         .then(Commands.literal("village")
                                 .then(Commands.argument("role", StringArgumentType.word())
