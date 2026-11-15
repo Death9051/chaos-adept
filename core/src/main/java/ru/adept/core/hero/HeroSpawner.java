@@ -55,18 +55,23 @@ public final class HeroSpawner {
                 }
             }
             case SQUADS -> {
+                // Следопыт, затем по кругу: воин, лучник, маг, целитель.
                 int size = 3 + random.nextInt(3);
                 out.add(HeroClass.TRACKER);
+                HeroClass[] line = {HeroClass.WARRIOR, HeroClass.ARCHER, HeroClass.MAGE, HeroClass.HEALER};
                 for (int i = 1; i < size; i++) {
-                    out.add(i % 2 == 1 ? HeroClass.WARRIOR : HeroClass.ARCHER);
+                    out.add(line[(i - 1) % line.length]);
                 }
             }
             case WARBANDS -> {
+                // Командир, следопыт, целитель, затем по кругу: воин, лучник, маг.
                 int size = 5 + random.nextInt(3);
                 out.add(HeroClass.COMMANDER);
                 out.add(HeroClass.TRACKER);
-                for (int i = 2; i < size; i++) {
-                    out.add(i % 2 == 0 ? HeroClass.WARRIOR : HeroClass.ARCHER);
+                out.add(HeroClass.HEALER);
+                HeroClass[] line = {HeroClass.WARRIOR, HeroClass.ARCHER, HeroClass.MAGE};
+                for (int i = 3; i < size; i++) {
+                    out.add(line[(i - 3) % line.length]);
                 }
             }
         }
@@ -79,8 +84,22 @@ public final class HeroSpawner {
         return (float) Mth.clamp(base, 0.0, 0.9);
     }
 
+    /** Шанс мастера: при угрозе выше 75 и с уровнем узлов выше второго, не больше 60%. */
+    public static float masterChance(int threat, int tier) {
+        double base = (threat - 75) / 50.0 + (tier - 2) * ru.adept.core.config.HeroConfig.MASTER_PER_TIER.get();
+        return (float) Mth.clamp(base, 0.0, 0.6);
+    }
+
+    /** Ранг рядового или командира по шансам (командир не ниже ветерана). */
+    public static HeroRank rollRank(HeroClass c, float veteran, float master, RandomSource random) {
+        if (random.nextFloat() < (c == HeroClass.COMMANDER ? Math.min(1f, master * 2) : master)) {
+            return HeroRank.MASTER;
+        }
+        return c == HeroClass.COMMANDER || random.nextFloat() < veteran ? HeroRank.VETERAN : HeroRank.APPRENTICE;
+    }
+
     /**
-     * Отряд вокруг точки (в кольце 12–20 блоков). Командир всегда ветеран и именной;
+     * Отряд вокруг точки (в кольце 12–20 блоков). Командир не ниже ветерана и именной;
      * у крупных отрядов командир и один воин — верхом.
      */
     public static HeroSquads.Squad spawnSquad(ServerLevel level, BlockPos around, Player target, ThreatLevel threat, VillageRecord village) {
@@ -93,6 +112,7 @@ public final class HeroSpawner {
         }
         int tier = WorldProgress.get(level.getServer()).nodeTier();
         float veteran = veteranChance(WorldProgress.get(level.getServer()).threat(), tier);
+        float master = masterChance(WorldProgress.get(level.getServer()).threat(), tier);
         double angle = random.nextDouble() * Math.PI * 2;
         boolean mountedWarrior = false;
         for (HeroClass c : composition(threat, random)) {
@@ -101,7 +121,7 @@ public final class HeroSpawner {
             int x = around.getX() + Mth.floor(Math.cos(a) * r);
             int z = around.getZ() + Mth.floor(Math.sin(a) * r);
             BlockPos pos = new BlockPos(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z), z);
-            HeroRank rank = c == HeroClass.COMMANDER || random.nextFloat() < veteran ? HeroRank.VETERAN : HeroRank.APPRENTICE;
+            HeroRank rank = rollRank(c, veteran, master, random);
             HeroEntity hero = spawnHero(level, pos, c, rank, squad);
             if (hero == null) {
                 continue;

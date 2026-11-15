@@ -275,13 +275,14 @@ public final class AdeptCommands {
                 }));
     }
 
-    // /adept hero <tracker|warrior|archer|commander> [veteran] — одиночный герой рядом (без отряда)
+    // /adept hero <tracker|warrior|archer|commander|mage|healer> [veteran|master] — одиночный герой рядом (без отряда)
     private static LiteralArgumentBuilder<CommandSourceStack> hero() {
         LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("hero");
         for (ru.adept.core.hero.HeroClass c : ru.adept.core.hero.HeroClass.values()) {
             root.then(Commands.literal(c.id())
                     .executes(ctx -> spawnHero(ctx, c, ru.adept.core.hero.HeroRank.APPRENTICE))
-                    .then(Commands.literal("veteran").executes(ctx -> spawnHero(ctx, c, ru.adept.core.hero.HeroRank.VETERAN))));
+                    .then(Commands.literal("veteran").executes(ctx -> spawnHero(ctx, c, ru.adept.core.hero.HeroRank.VETERAN)))
+                    .then(Commands.literal("master").executes(ctx -> spawnHero(ctx, c, ru.adept.core.hero.HeroRank.MASTER))));
         }
         return root;
     }

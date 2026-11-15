@@ -101,6 +101,7 @@
   "entity.adept_core.resident": "Житель",
   "entity.adept_core.elder": "Старейшина",
   "entity.adept_core.hero": "Герой",
+  "entity.adept_core.hero_spell": "Снаряд стихии",
   "item.adept_core.hero_emblem": "Эмблема героя",
   "item.adept_core.hero_banner": "Знамя отряда",
   "item.adept_core.commander_order": "Приказ командира",
