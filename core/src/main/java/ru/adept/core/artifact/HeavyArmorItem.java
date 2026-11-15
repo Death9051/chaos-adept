@@ -109,6 +109,7 @@ public class HeavyArmorItem extends ArmorItem {
                 CompoundTag p = new CompoundTag();
                 p.putString("material", material.get().id());
                 p.putDouble("durability", plateDurability(material.get()));
+                ru.adept.core.rune.RuneSet.of(plateItem).write(p);
                 setPlate(armor, i, p);
                 plateItem.shrink(1);
                 return true;
@@ -150,6 +151,10 @@ public class HeavyArmorItem extends ArmorItem {
                 tooltip.add(Component.translatable("adept_core.heavy.plate", part,
                         Component.translatable("adept_core.molten." + p.getString("material")),
                         StepTexts.format(Math.ceil(p.getDouble("durability")))).withStyle(ChatFormatting.GRAY));
+                ru.adept.core.rune.RuneSet runes = ru.adept.core.rune.RuneSet.read(p);
+                if (!runes.isEmpty()) {
+                    tooltip.add(Component.literal("  ").append(ru.adept.core.rune.Runes.title(runes, true)).withStyle(ChatFormatting.LIGHT_PURPLE));
+                }
             } else {
                 tooltip.add(Component.translatable("adept_core.heavy.no_plate", part).withStyle(ChatFormatting.DARK_RED));
             }

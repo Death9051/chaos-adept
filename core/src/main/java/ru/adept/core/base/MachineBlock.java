@@ -129,6 +129,19 @@ public abstract class MachineBlock extends BaseEntityBlock {
         }
     }
 
+    public static final class Carver extends MachineBlock {
+        public static final MapCodec<Carver> CODEC = simpleCodec(Carver::new);
+
+        public Carver(Properties properties) {
+            super(properties, ModBlockEntities.CARVER, CarverBlockEntity::new);
+        }
+
+        @Override
+        protected MapCodec<? extends BaseEntityBlock> codec() {
+            return CODEC;
+        }
+    }
+
     public static final class Smelter extends MachineBlock {
         public static final MapCodec<Smelter> CODEC = simpleCodec(Smelter::new);
 

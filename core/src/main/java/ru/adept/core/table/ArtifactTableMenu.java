@@ -39,6 +39,10 @@ public class ArtifactTableMenu extends AbstractContainerMenu {
     // Срез 3, часть 2: лёгкий экзокостюм
     public static final int BTN_LIGHT_PROTOTYPE = 25;
     public static final int BTN_LIGHT_CAPACITY = 35;
+    // Срез 3, часть 3: рельса и высекатель рун
+    public static final int BTN_RAIL_PROTOTYPE = 26;
+    public static final int BTN_RAIL_PIERCE = 36;
+    public static final int BTN_CARVER_PRECISION = 37;
 
     /** 0 — пара не выбрана, 1 — клинок, 2 — молот. */
     public final DataSlot choice = DataSlot.standalone();
@@ -58,6 +62,9 @@ public class ArtifactTableMenu extends AbstractContainerMenu {
     public final DataSlot cauldronYield = DataSlot.standalone();
     public final DataSlot lightBuilt = DataSlot.standalone();
     public final DataSlot lightCapacity = DataSlot.standalone();
+    public final DataSlot railBuilt = DataSlot.standalone();
+    public final DataSlot railPierce = DataSlot.standalone();
+    public final DataSlot carverPrecision = DataSlot.standalone();
     /** Итог последнего действия: 0 — нет, иначе ordinal {@link TableActions.Result} + 1. */
     public final DataSlot lastResult = DataSlot.standalone();
 
@@ -88,6 +95,9 @@ public class ArtifactTableMenu extends AbstractContainerMenu {
         addDataSlot(cauldronYield);
         addDataSlot(lightBuilt);
         addDataSlot(lightCapacity);
+        addDataSlot(railBuilt);
+        addDataSlot(railPierce);
+        addDataSlot(carverPrecision);
         refresh();
     }
 
@@ -114,6 +124,9 @@ public class ArtifactTableMenu extends AbstractContainerMenu {
         cauldronYield.set(p.step(TableActions.CAULDRON_YIELD));
         lightBuilt.set(p.step(TableActions.LIGHT_BUILT));
         lightCapacity.set(p.step(TableActions.LIGHT_CAPACITY));
+        railBuilt.set(p.step(TableActions.RAIL_BUILT));
+        railPierce.set(p.step(TableActions.RAIL_PIERCE));
+        carverPrecision.set(player.getServer() == null ? 0 : ru.adept.core.base.BaseData.get(player.getServer()).machineStep(TableActions.CARVER_PRECISION));
     }
 
     @Override
@@ -163,6 +176,12 @@ public class ArtifactTableMenu extends AbstractContainerMenu {
             result = TableActions.craftLightPrototype(player);
         } else if (id == BTN_LIGHT_CAPACITY) {
             result = TableActions.upgradeLightCapacity(player);
+        } else if (id == BTN_RAIL_PROTOTYPE) {
+            result = TableActions.craftRailPrototype(player);
+        } else if (id == BTN_RAIL_PIERCE) {
+            result = TableActions.upgradeRailPierce(player);
+        } else if (id == BTN_CARVER_PRECISION) {
+            result = TableActions.upgradeCarverPrecision(player);
         } else {
             return false;
         }

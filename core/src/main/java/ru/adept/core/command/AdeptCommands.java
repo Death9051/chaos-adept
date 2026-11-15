@@ -73,7 +73,10 @@ public final class AdeptCommands {
                 .then(soul())
                 .then(cauldron())
                 .then(FocusCommands.focus())
-                .then(FocusCommands.shield()));
+                .then(FocusCommands.shield())
+                .then(RuneCommands.rune())
+                .then(RuneCommands.rail())
+                .then(RuneCommands.carver()));
     }
 
     // /adept flag get|set|remove <key> [value]

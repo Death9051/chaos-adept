@@ -177,27 +177,32 @@ public class GaussGunItem extends Item {
         var inv = player.getInventory();
         while (mag.size() < size) {
             Molten found = null;
+            int slotIndex = -1;
             for (Molten m : Molten.values()) {
-                if ((template.isEmpty() || template.equals(m.id())) && inv.countItem(m.needle()) > 0) {
-                    found = m;
+                if (!template.isEmpty() && !template.equals(m.id())) {
+                    continue;
+                }
+                for (int i = 0; i < inv.getContainerSize(); i++) {
+                    if (inv.getItem(i).is(m.needle())) {
+                        found = m;
+                        slotIndex = i;
+                        break;
+                    }
+                }
+                if (found != null) {
                     break;
                 }
             }
             if (found == null) {
                 break;
             }
-            int take = Math.min(size - mag.size(), inv.countItem(found.needle()));
-            int left = take;
-            for (int i = 0; i < inv.getContainerSize() && left > 0; i++) {
-                ItemStack s = inv.getItem(i);
-                if (s.is(found.needle())) {
-                    int n = Math.min(left, s.getCount());
-                    s.shrink(n);
-                    left -= n;
-                }
-            }
+            ItemStack s = inv.getItem(slotIndex);
+            int take = Math.min(size - mag.size(), s.getCount());
+            String runes = ru.adept.core.rune.RuneSet.of(s).encode();
+            String entry = runes.isEmpty() ? found.id() : found.id() + "#" + runes;
+            s.shrink(take);
             for (int i = 0; i < take; i++) {
-                mag.add(found.id());
+                mag.add(entry);
             }
         }
         putMagazine(tag, mag);
@@ -227,7 +232,10 @@ public class GaussGunItem extends Item {
             level.playSound(null, player.blockPosition(), SoundEvents.DISPENSER_FAIL, SoundSource.PLAYERS, 0.6f, 1.4f);
             return false;
         }
-        Molten material = Molten.byId(mag.remove(0)).orElse(Molten.IRON);
+        String entry = mag.remove(0);
+        int hash = entry.indexOf('#');
+        Molten material = Molten.byId(hash < 0 ? entry : entry.substring(0, hash)).orElse(Molten.IRON);
+        ru.adept.core.rune.RuneSet runes = hash < 0 ? ru.adept.core.rune.RuneSet.EMPTY : ru.adept.core.rune.RuneSet.decode(entry.substring(hash + 1));
         putMagazine(tag, mag);
         if (!player.isCreative()) {
             tag.putInt("charge", tag.getInt("charge") - cost);
@@ -240,13 +248,13 @@ public class GaussGunItem extends Item {
         tag.putDouble("heat", heat);
         tag.putLong("heat_time", now);
         tag.putDouble("next_shot", Math.max(tag.getDouble("next_shot"), now) + 20.0 / fireRate(player));
-        shoot(level, player, material, tag);
+        shoot(level, player, material, tag, runes);
         save(stack, tag);
         return true;
     }
 
     /** Луч иглы: разброс, урон по материалу, сталь прошивает вторую цель, красное золото копит прибавку по одной цели. */
-    private static void shoot(ServerLevel level, Player player, Molten material, CompoundTag tag) {
+    private static void shoot(ServerLevel level, Player player, Molten material, CompoundTag tag, ru.adept.core.rune.RuneSet runes) {
         double range = BalanceConfig.GAUSS_RANGE.get();
         double spread = Math.toRadians(BalanceConfig.GAUSS_SPREAD.get());
         Vec3 eye = player.getEyePosition();
@@ -282,7 +290,11 @@ public class GaussGunItem extends Item {
             target.hurt(player.damageSources().playerAttack(player), (float) damage);
             if (i == 0) {
                 to = target.position().add(0, target.getBbHeight() / 2, 0);
+                ru.adept.core.rune.RuneEffects.onHit(level, player, target, to, dir, runes, damage);
             }
+        }
+        if (hits.isEmpty() && block.getType() != HitResult.Type.MISS) {
+            ru.adept.core.rune.RuneEffects.onHit(level, player, null, rayEnd, dir, runes, needleDamage(material));
         }
         int steps = (int) Math.max(2, from.distanceTo(to) * 2);
         for (int s = 1; s <= steps; s += 2) {

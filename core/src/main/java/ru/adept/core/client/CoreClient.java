@@ -25,6 +25,7 @@ public final class CoreClient {
         event.register(ModMenus.ALLOYER.get(), MachineScreen::new);
         event.register(ModMenus.CASTER.get(), MachineScreen::new);
         event.register(ModMenus.CUTTER.get(), MachineScreen::new);
+        event.register(ModMenus.CARVER.get(), MachineScreen::new);
         event.register(ModMenus.TRANSITION.get(), TransitionScreen::new);
     }
 

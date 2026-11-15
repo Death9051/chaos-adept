@@ -15,11 +15,11 @@ import ru.adept.core.registry.ModBlockEntities;
 import java.util.Optional;
 
 /**
- * Литейная (нулевой уровень): отливает из расплава в соседнем резервуаре слитки, иглы гаусс-пушки
+ * Литейная (нулевой уровень): отливает из расплава в соседнем резервуаре слитки, иглы гаусс-пушки, болты рельсы
  * (материал иглы задаёт урон) и пластины тяжёлой брони. Быстро и массово; рун в срезе 2 нет.
  */
 public class CasterBlockEntity extends MachineBlockEntity {
-    public enum Form { INGOT, NEEDLE, PLATE }
+    public enum Form { INGOT, NEEDLE, PLATE, BOLT }
 
     private Form form = Form.NEEDLE;
 
@@ -42,6 +42,7 @@ public class CasterBlockEntity extends MachineBlockEntity {
             case INGOT -> BalanceConfig.SMELTER_MB_PER_INGOT.get();
             case NEEDLE -> BalanceConfig.CAST_NEEDLE_MB.get();
             case PLATE -> BalanceConfig.CAST_PLATE_MB.get();
+            case BOLT -> ru.adept.core.config.RuneConfig.CAST_BOLT_MB.get();
         };
     }
 
@@ -50,6 +51,7 @@ public class CasterBlockEntity extends MachineBlockEntity {
             case INGOT -> new ItemStack(m.ingot());
             case NEEDLE -> new ItemStack(m.needle(), BalanceConfig.CAST_NEEDLES_PER_CAST.get());
             case PLATE -> new ItemStack(m.plate());
+            case BOLT -> new ItemStack(m.bolt());
         };
     }
 

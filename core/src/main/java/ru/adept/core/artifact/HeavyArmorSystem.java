@@ -51,9 +51,21 @@ public final class HeavyArmorSystem {
      * Пластины теряют прочность на погашенную часть.
      */
     public static float absorbDamage(Player player, float amount) {
+        return absorbDamage(player, amount, null);
+    }
+
+    /**
+     * То же с источником урона — для оберегов рун: Тяга и Пустота гасят часть урона от снарядов и магии,
+     * Узы передают часть урона пластины соседней целой, Эхо один раз поднимает разбитую пластину,
+     * Разлом при разрушении пластины замедляет врагов вокруг.
+     */
+    public static float absorbDamage(Player player, float amount, net.minecraft.world.damagesource.DamageSource source) {
         double absorb = absorb(player);
         double passed = 0;
         double covered = 0;
+        boolean projectile = ru.adept.core.rune.RuneWards.projectile(source);
+        boolean magic = ru.adept.core.rune.RuneWards.magic(source);
+        double reduce = ru.adept.core.config.RuneConfig.WARD_REDUCE.get();
         for (EquipmentSlot slot : new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS}) {
             ItemStack stack = player.getItemBySlot(slot);
             if (!(stack.getItem() instanceof HeavyArmorItem armor)) {
@@ -68,8 +80,25 @@ public final class HeavyArmorSystem {
                     passed += share;
                     continue;
                 }
+                var runes = ru.adept.core.rune.RuneSet.read(plate);
+                if (projectile) {
+                    share *= Math.max(0, 1 - reduce * ru.adept.core.rune.RuneWards.strength(runes, ru.adept.core.rune.Rune.PULL));
+                }
+                if (magic) {
+                    share *= Math.max(0, 1 - reduce * ru.adept.core.rune.RuneWards.strength(runes, ru.adept.core.rune.Rune.VOID));
+                }
                 double absorbed = share * absorb;
-                plate.putDouble("durability", plate.getDouble("durability") - absorbed);
+                double bond = ru.adept.core.rune.RuneWards.strength(runes, ru.adept.core.rune.Rune.BOND);
+                double moved = bond > 0 ? absorbed * Math.min(1, ru.adept.core.config.RuneConfig.WARD_SHARE.get() * bond) : 0;
+                if (moved > 0 && !shiftToNeighbour(player, stack, i, moved)) {
+                    moved = 0;
+                }
+                double before = plate.getDouble("durability");
+                plate = HeavyArmorItem.plate(stack, i);
+                plate.putDouble("durability", plate.getDouble("durability") - (absorbed - moved));
+                if (before > 0 && plate.getDouble("durability") <= 0) {
+                    onPlateBroken(player, plate, runes);
+                }
                 HeavyArmorItem.setPlate(stack, i, plate);
                 passed += share - absorbed;
             }
@@ -78,13 +107,54 @@ public final class HeavyArmorSystem {
         return (float) passed;
     }
 
+    /** Узы: часть урона уходит на другую целую пластину того же игрока. */
+    private static boolean shiftToNeighbour(Player player, ItemStack from, int fromIndex, double amount) {
+        for (EquipmentSlot slot : new EquipmentSlot[]{EquipmentSlot.CHEST, EquipmentSlot.HEAD, EquipmentSlot.LEGS}) {
+            ItemStack stack = player.getItemBySlot(slot);
+            if (!(stack.getItem() instanceof HeavyArmorItem armor)) {
+                continue;
+            }
+            for (int i = 0; i < armor.parts().size(); i++) {
+                if (stack == from && i == fromIndex) {
+                    continue;
+                }
+                CompoundTag p = HeavyArmorItem.plate(stack, i);
+                if (HeavyArmorItem.intact(p) && p.getDouble("durability") > amount) {
+                    p.putDouble("durability", p.getDouble("durability") - amount);
+                    HeavyArmorItem.setPlate(stack, i, p);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /** Разрушение пластины: Эхо один раз поднимает её на треть, Разлом замедляет врагов вокруг. */
+    private static void onPlateBroken(Player player, CompoundTag plate, ru.adept.core.rune.RuneSet runes) {
+        double echo = ru.adept.core.rune.RuneWards.strength(runes, ru.adept.core.rune.Rune.ECHO);
+        if (echo > 0 && !plate.getBoolean("echoed")) {
+            ru.adept.core.base.Molten.byId(plate.getString("material")).ifPresent(m -> {
+                plate.putDouble("durability", HeavyArmorItem.plateDurability(m) * Math.min(1.0, ru.adept.core.config.RuneConfig.WARD_ECHO_RESTORE.get() * echo));
+                plate.putBoolean("echoed", true);
+            });
+        }
+        double rift = ru.adept.core.rune.RuneWards.strength(runes, ru.adept.core.rune.Rune.RIFT);
+        if (rift > 0) {
+            int ticks = (int) Math.round(ru.adept.core.config.RuneConfig.WARD_SLOW_TICKS.get() * rift);
+            for (var e : player.level().getEntitiesOfClass(net.minecraft.world.entity.LivingEntity.class, player.getBoundingBox().inflate(4),
+                    e -> e != player && e.isAlive() && !(e instanceof Player))) {
+                e.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN, ticks, 2), player);
+            }
+        }
+    }
+
     @SubscribeEvent
     public static void onDamage(LivingDamageEvent.Pre event) {
         if (!(event.getEntity() instanceof Player player) || player.level().isClientSide || !wearsAny(player)
                 || event.getSource().is(DamageTypeTags.BYPASSES_ARMOR) || event.getNewDamage() <= 0) {
             return;
         }
-        event.setNewDamage(absorbDamage(player, event.getNewDamage()));
+        event.setNewDamage(absorbDamage(player, event.getNewDamage(), event.getSource()));
     }
 
     @SubscribeEvent
@@ -130,6 +200,12 @@ public final class HeavyArmorSystem {
                 int need = Math.min(rate, GaussGunItem.capacity() - GaussGunItem.charge(stack));
                 if (need > 0 && base.useElectricity(need)) {
                     GaussGunItem.setCharge(stack, GaussGunItem.charge(stack) + need);
+                }
+            }
+            if (stack.getItem() instanceof RailGunItem) {
+                int need = Math.min(rate, RailGunItem.capacity() - RailGunItem.charge(stack));
+                if (need > 0 && base.useElectricity(need)) {
+                    RailGunItem.setCharge(stack, RailGunItem.charge(stack) + need);
                 }
             }
         }
