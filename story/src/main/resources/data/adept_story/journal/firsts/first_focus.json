@@ -1,0 +1,13 @@
+{
+  "trigger": {
+    "type": "focus_cut"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.firsts.first_focus.public"
+    ],
+    "streamer": [
+      "adept_story.journal.firsts.first_focus.streamer"
+    ]
+  }
+}

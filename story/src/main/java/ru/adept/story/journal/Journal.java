@@ -108,7 +108,8 @@ public final class Journal {
             AdeptStory.LOG.warn("Запись журнала {} без текста для ветки {}", def.id(), branch(server));
             return null;
         }
-        EntryView entry = new EntryView(def.id(), day(server), def.page(), List.copyOf(keys), def.popup());
+        EntryView entry = new EntryView(def.id(), day(server), def.page(), List.copyOf(keys), def.popup(),
+                def.noteFor(branch(server)));
         data.entries.add(entry);
         data.setDirty();
         AdeptStory.LOG.info("Журнал: запись {}", def.id());

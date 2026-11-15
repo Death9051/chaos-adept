@@ -23,7 +23,10 @@ import ru.adept.core.api.event.BaseEvent;
 import ru.adept.core.api.event.BiomeAbsorbedEvent;
 import ru.adept.core.api.event.NodeEvent;
 import ru.adept.core.api.event.RaidEvent;
+import ru.adept.core.api.event.RuneEvent;
+import ru.adept.core.api.event.ShieldEvent;
 import ru.adept.core.api.event.SoulEvent;
+import ru.adept.core.api.event.FocusEvent;
 import ru.adept.core.api.event.VillageEvent;
 import ru.adept.core.api.event.WorldProgressEvent;
 import ru.adept.story.AdeptStory;
@@ -149,6 +152,37 @@ public final class StoryTriggers {
         Journal.fire(event.getServer(), "soul_core_obtained", Map.of("strength", event.getStrength()));
     }
 
+    // --- Срез 3: руны, фокусы, щит из маны ---
+
+    /** Гравировка забрана из высекателя (первая — «первая руна», первая со словом — «первое слово»). */
+    @SubscribeEvent
+    public static void onEngraved(RuneEvent.Engraved event) {
+        String word = nz(event.getWord());
+        Journal.fire(event.getServer(), "rune_engraved", Map.of("material", nz(event.getMaterial()), "item", nz(event.getItem()),
+                "has_word", Boolean.toString(!word.isEmpty())));
+    }
+
+    @SubscribeEvent
+    public static void onErased(RuneEvent.Erased event) {
+        Journal.fire(event.getServer(), "rune_erased", Map.of("material", nz(event.getMaterial()), "item", nz(event.getItem())));
+    }
+
+    @SubscribeEvent
+    public static void onFocusCut(FocusEvent.Cut event) {
+        Journal.fire(event.getServer(), "focus_cut", Map.of("cut", nz(event.getCut()), "crystal", nz(event.getCrystal())));
+    }
+
+    @SubscribeEvent
+    public static void onFocusCracked(FocusEvent.Cracked event) {
+        Journal.fire(event.getServer(), "focus_cracked", Map.of("cut", nz(event.getCut()), "crystal", nz(event.getCrystal()),
+                "segment", nz(event.getSegment())));
+    }
+
+    @SubscribeEvent
+    public static void onShieldBroken(ShieldEvent.Broken event) {
+        Journal.fire(event.getServer(), "shield_broken");
+    }
+
     // --- Ванильные триггеры ---
 
     @SubscribeEvent
@@ -210,6 +244,10 @@ public final class StoryTriggers {
     @SubscribeEvent
     public static void onServerStopped(ServerStoppedEvent event) {
         CLEANSED_LEVELS.clear();
+    }
+
+    private static String nz(String value) {
+        return value == null ? "" : value;
     }
 
     private static boolean isTable(ItemStack stack) {

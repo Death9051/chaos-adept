@@ -166,6 +166,70 @@ public final class JournalGameTests {
         helper.succeed();
     }
 
+    /** Срез 3, часть 2: первая руна, первое слово, стёртая руна, первый фокус, трещина, щит — по одному разу. */
+    @GameTest(template = "empty")
+    public static void runeFocusShieldEntries(GameTestHelper helper) {
+        MinecraftServer server = reset(helper);
+        Map<String, String> plain = Map.of("material", "copper", "item", "needle", "has_word", "false");
+        Map<String, String> word = Map.of("material", "iron", "item", "bolt", "has_word", "true");
+        expectIds(helper, Journal.fire(server, "rune_engraved", plain), "firsts/first_rune");
+        helper.assertTrue(Journal.fire(server, "rune_engraved", plain).isEmpty(), "Запись о первой руне повторилась");
+        expectIds(helper, Journal.fire(server, "rune_engraved", word), "firsts/first_word");
+        helper.assertTrue(Journal.fire(server, "rune_engraved", word).isEmpty(), "Запись о первом слове повторилась");
+        expectIds(helper, Journal.fire(server, "rune_erased", Map.of("material", "copper", "item", "bolt")), "firsts/rune_erased");
+        expectIds(helper, Journal.fire(server, "focus_cut", Map.of("cut", "flash", "crystal", "quartz")), "firsts/first_focus");
+        expectIds(helper, Journal.fire(server, "focus_cracked", Map.of("cut", "flash", "crystal", "quartz", "segment", "light/chest")),
+                "firsts/first_cracked_focus");
+        expectIds(helper, Journal.fire(server, "shield_broken"), "firsts/first_shield_broken");
+        helper.assertTrue(Journal.fire(server, "shield_broken").isEmpty(), "Запись о щите повторилась");
+        helper.succeed();
+    }
+
+    /** Пометка на полях: ключ своей ветки попадает в запись и переживает сохранение мира. */
+    @GameTest(template = "empty")
+    public static void marginNotes(GameTestHelper helper) {
+        MinecraftServer server = reset(helper);
+        List<EntryView> added = Journal.fire(server, "shield_broken");
+        helper.assertTrue(added.size() == 1 && added.get(0).note().equals("adept_story.journal.firsts.first_shield_broken.note.public"),
+                "Пометка публичной ветки: " + added);
+        EntryView plain = Journal.fire(server, "focus_cut", Map.of("cut", "flash", "crystal", "quartz")).get(0);
+        helper.assertTrue(!plain.hasNote(), "У записи без пометки появилась пометка");
+        for (JournalDef def : JournalDefs.all()) {
+            String note = def.noteFor("streamer");
+            helper.assertTrue(note.isEmpty() || !def.noteFor("public").isEmpty(), "У " + def.id() + " пометка только в одной ветке");
+        }
+        net.minecraft.nbt.CompoundTag saved = JournalData.get(server).save(new net.minecraft.nbt.CompoundTag(), server.registryAccess());
+        helper.assertTrue(saved.getList("entries", net.minecraft.nbt.Tag.TAG_COMPOUND).getCompound(0).getString("note")
+                .equals(added.get(0).note()), "Пометка не сохранилась в данных мира");
+        helper.succeed();
+    }
+
+    /** У записей с рабочими триггерами все ключи текста и пометок есть в lang-файле. */
+    @GameTest(template = "empty")
+    public static void journalKeysInLang(GameTestHelper helper) {
+        com.google.gson.JsonObject lang;
+        try (java.io.InputStream in = AdeptStory.class.getResourceAsStream("/assets/adept_story/lang/ru_ru.json")) {
+            helper.assertTrue(in != null, "Нет lang-файла сюжета");
+            lang = com.google.gson.JsonParser.parseReader(
+                    new java.io.InputStreamReader(in, java.nio.charset.StandardCharsets.UTF_8)).getAsJsonObject();
+        } catch (java.io.IOException e) {
+            throw new IllegalStateException(e);
+        }
+        for (JournalDef def : JournalDefs.all()) {
+            if (!JournalDefs.SUPPORTED.contains(def.type())) {
+                continue;
+            }
+            for (String branch : List.of("public", "streamer")) {
+                for (String key : def.keysFor(branch)) {
+                    helper.assertTrue(lang.has(key), "Нет строки " + key);
+                }
+                String note = def.noteFor(branch);
+                helper.assertTrue(note.isEmpty() || lang.has(note), "Нет пометки " + note);
+            }
+        }
+        helper.succeed();
+    }
+
     private static void expectIds(GameTestHelper helper, List<EntryView> added, String... ids) {
         List<String> got = added.stream().map(EntryView::id).toList();
         helper.assertTrue(got.equals(List.of(ids)), "Ожидались записи " + List.of(ids) + ", получены " + got);
