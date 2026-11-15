@@ -1,0 +1,2 @@
+build=cancelled servertest=cancelled clienttest=cancelled fullpack=cancelled
+branch=core/seed pr=40 sha=ae1404ff0e12a01a9e497f7d933ad8157e305b63 run=117
