@@ -1,0 +1,8 @@
+build=success servertest=failure clienttest=success fullpack=success
+branch=core/slice3-heroes pr=38 sha=c32112a0178e7ec986c354d17159a6df58854681 run=111
+fullpack: lock=ok
+fullpack: gametest=failure
+fullpack: client=success
+fullpack: shaders=success
+fullpack: healerhealsandmasterrevivesonce failed at 3166329, -60, -12868169! Второй подъём за бой
+fullpack: 1 required tests failed :(

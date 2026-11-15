@@ -1,0 +1,6 @@
+lock=ok
+gametest=failure
+client=success
+shaders=success
+healerhealsandmasterrevivesonce failed at 3166329, -60, -12868169! Второй подъём за бой
+1 required tests failed :(
