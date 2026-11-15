@@ -45,6 +45,10 @@ public final class TableActions {
     public static final String CAULDRON_BUILT = "cauldron/base";
     public static final String CAULDRON_YIELD = "cauldron/furnace/yield";
 
+    // Срез 3, часть 2: лёгкий экзокостюм (нагрудник — генератор щита)
+    public static final String LIGHT_BUILT = "light/base";
+    public static final String LIGHT_CAPACITY = "light/chest/capacity";
+
     /** Грубые компоненты, которые делаются на столе вручную. Порядок = порядок кнопок. */
     public static final List<Craft> CRUDE = List.of(
             new Craft("crude_wiring", () -> ModItems.CRUDE_WIRING.get(), BalanceConfig.TABLE_CRUDE_WIRING::get),
@@ -127,6 +131,35 @@ public final class TableActions {
         }
         post(player, new ArtifactEvent.PrototypeCrafted(player, GAUSS, first));
         return Result.OK;
+    }
+
+    /** Прототип лёгкого экзокостюма: нагрудник (генератор щита) с полным запасом маны и щитом, фокус ставится отдельно. */
+    public static Result craftLightPrototype(Player player) {
+        ArtifactProgress p = progress(player);
+        if (!p.choice(ARMOR).filter(LIGHT::equals).isPresent()) {
+            return Result.NOT_CHOSEN;
+        }
+        CostList cost = CostList.parse(ru.adept.core.config.FocusConfig.TABLE_LIGHT_PROTOTYPE.get());
+        if (!cost.canPay(player)) {
+            return Result.NOT_ENOUGH;
+        }
+        cost.pay(player);
+        ItemStack chest = new ItemStack(ModItems.LIGHT_CHESTPLATE.get());
+        ru.adept.core.artifact.LightArmorItem.setMana(chest, ru.adept.core.config.FocusConfig.LIGHT_MANA_CAPACITY.get());
+        int cap = ru.adept.core.config.FocusConfig.shieldCapacity(p.step(LIGHT_CAPACITY));
+        ru.adept.core.artifact.LightArmorItem.setShield(chest, cap, cap);
+        give(player, chest);
+        boolean first = p.step(LIGHT_BUILT) == 0;
+        if (first) {
+            player.setData(ModRegistries.ARTIFACT_PROGRESS, p.withStep(LIGHT_BUILT, 1));
+        }
+        post(player, new ArtifactEvent.PrototypeCrafted(player, LIGHT, first));
+        return Result.OK;
+    }
+
+    /** Ступень I «Ёмкости» (нагрудник лёгкого экзокостюма). */
+    public static Result upgradeLightCapacity(Player player) {
+        return upgradeStep(player, LIGHT_BUILT, LIGHT_CAPACITY, ru.adept.core.config.FocusConfig.TABLE_LIGHT_CAPACITY_1.get());
     }
 
     /** Ступень I «Бастиона» (нагрудник тяжёлой брони). */

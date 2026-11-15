@@ -116,6 +116,19 @@ public abstract class MachineBlock extends BaseEntityBlock {
         }
     }
 
+    public static final class Cutter extends MachineBlock {
+        public static final MapCodec<Cutter> CODEC = simpleCodec(Cutter::new);
+
+        public Cutter(Properties properties) {
+            super(properties, ModBlockEntities.CUTTER, CutterBlockEntity::new);
+        }
+
+        @Override
+        protected MapCodec<? extends BaseEntityBlock> codec() {
+            return CODEC;
+        }
+    }
+
     public static final class Smelter extends MachineBlock {
         public static final MapCodec<Smelter> CODEC = simpleCodec(Smelter::new);
 

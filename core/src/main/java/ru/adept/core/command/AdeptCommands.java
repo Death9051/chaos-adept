@@ -71,7 +71,9 @@ public final class AdeptCommands {
                 .then(component())
                 .then(accumulator())
                 .then(soul())
-                .then(cauldron()));
+                .then(cauldron())
+                .then(FocusCommands.focus())
+                .then(FocusCommands.shield()));
     }
 
     // /adept flag get|set|remove <key> [value]

@@ -628,6 +628,7 @@ public final class BalanceConfig {
         b.pop();
 
         ManaConfig.define(b);
+        FocusConfig.define(b);
 
         SPEC = b.build();
     }

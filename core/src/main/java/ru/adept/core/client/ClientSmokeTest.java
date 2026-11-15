@@ -58,6 +58,7 @@ public final class ClientSmokeTest {
             new Scene("machines", -5.5, 2.0, 1.0, 0, 20, false),
             new Scene("mobs", 0.5, 2.5, 3.0, 0, 12, false),
             new Scene("heroes", 0.5, 1.5, -1.0, 180, -3, false),
+            new Scene("cutter_light_armor", -7.5, 1.7, 4.5, 0, 15, false),
             new Scene("blade_hand", 0.5, 1.0, 1.5, 0, 0, true));
 
     private static Stage stage = Stage.WAIT_TITLE;
@@ -157,6 +158,9 @@ public final class ClientSmokeTest {
                 set(x - 7, y, z + 4, "adept_core:generator"),
                 set(x - 5, y, z + 4, "adept_core:crusher"),
                 set(x - 3, y, z + 4, "adept_core:smelter"),
+                set(x - 9, y, z + 7, "adept_core:cutter"),
+                "summon minecraft:armor_stand " + (x - 7) + " " + y + " " + (z + 7)
+                        + " {NoGravity:1b,Rotation:[180f,0f],ArmorItems:[{},{},{id:\"adept_core:light_chestplate\",count:1},{}]}",
                 set(x + 6, y - 1, z + 7, "adept_core:ash"),
                 summon("adept_core:hornet", x - 4, y + 1, z + 10),
                 summon("adept_core:wisp", x - 2, y + 1, z + 10),

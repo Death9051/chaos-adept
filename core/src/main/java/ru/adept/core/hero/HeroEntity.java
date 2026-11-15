@@ -49,6 +49,9 @@ import java.util.UUID;
 public class HeroEntity extends Monster implements RangedAttackMob {
     private static final net.minecraft.network.syncher.EntityDataAccessor<Integer> CLASS =
             net.minecraft.network.syncher.SynchedEntityData.defineId(HeroEntity.class, net.minecraft.network.syncher.EntityDataSerializers.INT);
+    /** Ранг для клиента: знак ранга на облике героя (HeroRenderer). */
+    private static final net.minecraft.network.syncher.EntityDataAccessor<Integer> RANK =
+            net.minecraft.network.syncher.SynchedEntityData.defineId(HeroEntity.class, net.minecraft.network.syncher.EntityDataSerializers.INT);
     private HeroClass heroClass = HeroClass.WARRIOR;
     private HeroRank rank = HeroRank.APPRENTICE;
     private UUID squad;
@@ -73,6 +76,7 @@ public class HeroEntity extends Monster implements RangedAttackMob {
     protected void defineSynchedData(net.minecraft.network.syncher.SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(CLASS, HeroClass.WARRIOR.ordinal());
+        builder.define(RANK, HeroRank.APPRENTICE.ordinal());
     }
 
     public static AttributeSupplier.Builder attributes() {
@@ -92,6 +96,7 @@ public class HeroEntity extends Monster implements RangedAttackMob {
         this.rank = rank;
         this.squad = squad;
         entityData.set(CLASS, heroClass.ordinal());
+        entityData.set(RANK, rank.ordinal());
         double health = switch (heroClass) {
             case WARRIOR -> BalanceConfig.HERO_WARRIOR_HEALTH.get();
             case ARCHER -> BalanceConfig.HERO_ARCHER_HEALTH.get();
@@ -161,8 +166,13 @@ public class HeroEntity extends Monster implements RangedAttackMob {
         return level().isClientSide ? HeroClass.values()[Math.floorMod(entityData.get(CLASS), HeroClass.values().length)] : heroClass;
     }
 
+    /** Ранг в синхронизированных данных (то, что видит клиент). */
+    public int syncedRank() {
+        return entityData.get(RANK);
+    }
+
     public HeroRank rank() {
-        return rank;
+        return level().isClientSide ? HeroRank.values()[Math.floorMod(entityData.get(RANK), HeroRank.values().length)] : rank;
     }
 
     public UUID squad() {
@@ -431,6 +441,7 @@ public class HeroEntity extends Monster implements RangedAttackMob {
         heroClass = HeroClass.byId(tag.getString("adept_class"));
         entityData.set(CLASS, heroClass.ordinal());
         rank = HeroRank.byId(tag.getString("adept_rank"));
+        entityData.set(RANK, rank.ordinal());
         squad = tag.hasUUID("adept_squad") ? tag.getUUID("adept_squad") : null;
         spotted = tag.getBoolean("adept_spotted");
         wounded = tag.getBoolean("adept_wounded");

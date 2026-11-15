@@ -24,7 +24,14 @@ public final class CoreClient {
         event.register(ModMenus.SMELTER.get(), MachineScreen::new);
         event.register(ModMenus.ALLOYER.get(), MachineScreen::new);
         event.register(ModMenus.CASTER.get(), MachineScreen::new);
+        event.register(ModMenus.CUTTER.get(), MachineScreen::new);
         event.register(ModMenus.TRANSITION.get(), TransitionScreen::new);
+    }
+
+    /** Слой знака ранга героя. */
+    @SubscribeEvent
+    public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(HeroRankLayer.LAYER, HeroRankLayer::createLayer);
     }
 
     /** Заглушки до моделей из «Моделей и анимаций»: мобы рисуются цветными блоками своего размера. */

@@ -69,6 +69,17 @@ public final class HeroGameTests {
     }
 
     @GameTest(template = "empty")
+    public static void heroRankMarkForEveryRank(GameTestHelper helper) {
+        for (HeroRank rank : HeroRank.values()) {
+            String path = "/assets/" + AdeptCore.MOD_ID + "/textures/entity/hero/rank_" + rank.id() + ".png";
+            helper.assertTrue(HeroGameTests.class.getResource(path) != null, "Нет знака ранга " + path);
+        }
+        HeroEntity hero = HeroSpawner.spawnHero(helper.getLevel(), helper.absolutePos(new BlockPos(2, 2, 2)), HeroClass.ARCHER, HeroRank.VETERAN, null);
+        helper.assertTrue(hero.syncedRank() == HeroRank.VETERAN.ordinal(), "Ранг не уходит на клиент");
+        helper.succeed();
+    }
+
+    @GameTest(template = "empty")
     public static void warriorShieldBlocksFront(GameTestHelper helper) {
         HeroEntity warrior = HeroSpawner.spawnHero(helper.getLevel(), helper.absolutePos(new BlockPos(2, 2, 2)), HeroClass.WARRIOR, HeroRank.APPRENTICE, null);
         warrior.setNoAi(true);
