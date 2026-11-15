@@ -1,5 +1,5 @@
 {
-  "spec_sha256": "bbcae1226c5b9c855323bc78b81d35b632ed824ce93670f55fe7951466bd94ae",
+  "spec_sha256": "c969792aadd05d166f933515d0e2158dc43f7baa2240d0befa7f1e75ed214639",
   "minecraft": "1.21.1",
   "loader": "neoforge",
   "resolved_at": "2026-11-05T07:29:58Z",
@@ -325,7 +325,9 @@
       "version_number": "4.9.3",
       "version_type": "release",
       "license": "MIT",
-      "flags": [],
+      "flags": [
+        "dev"
+      ],
       "required_by": [
         "mowzies-mobs",
         "bosses-of-mass-destruction-forge",

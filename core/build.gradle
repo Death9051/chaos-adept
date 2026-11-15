@@ -26,3 +26,23 @@ neoForge {
 // Датапак сборки (pack/datapack): правки сторонних модов, которые делаются только данными.
 // Едет в jar ядра; файлы с условием neoforge:mod_loaded без нужного мода пропускаются.
 sourceSets.main.resources.srcDir rootProject.file('pack/datapack')
+
+repositories {
+    // GeckoLib берём с Modrinth — тот же файл, что в составе сборки (pack/modrinth.lock.json).
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'Modrinth'
+                url = 'https://api.modrinth.com/maven'
+            }
+        }
+        filter {
+            includeGroup 'maven.modrinth'
+        }
+    }
+}
+
+dependencies {
+    // Модели и анимации артефактов. Версия — id сборки NeoForge 1.21.1 на Modrinth (номер общий с Fabric).
+    implementation "maven.modrinth:geckolib:${geckolib_version}"
+}

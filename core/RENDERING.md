@@ -25,5 +25,7 @@
 | Заглушки мобов (`client/StubEntityRenderer`) | блок через `BlockRenderDispatcher` | работает |
 | Стол, машины, кристалл узла | обычные модели блоков | работает |
 | Экраны стола, машин, перехода | `GuiGraphics` | работает |
+| Гаусс-пушка (`client/GaussGunRenderer`) | GeckoLib, `entityCutoutNoCull`; свечение — второй проход с маской `gauss_gun_glowmask.png` и `RenderType.eyes` | в игре не проверено |
+| Превью на столе (`client/GaussUpgradeScreen`), шкалы гаусса (`client/GaussHud`) | `GuiGraphics`, модель — обычный рендер предмета | в игре не проверено |
 
 В игре с шейдерпаком не проверено — это за пользователем.

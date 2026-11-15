@@ -30,7 +30,7 @@ mod borninchaos
 mod improved-mobs
 
 ## Библиотеки
-mod geckolib
+mod geckolib 4.9.3 dev
 mod curios
 
 ## Удобства
