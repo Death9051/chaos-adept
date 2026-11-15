@@ -1,0 +1,2 @@
+build=success servertest=cancelled clienttest=cancelled fullpack=cancelled
+branch=claude/story-heroes-seed pr=41 sha=a913df4ce1d3b9aa652b4c7309b89a5d68a2e6d5 run=120
