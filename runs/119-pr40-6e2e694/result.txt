@@ -1,0 +1,6 @@
+build=success servertest=success clienttest=success fullpack=success
+branch=core/seed pr=40 sha=6e2e694a11e879fc8a8d849a9512b5925d2e1bfe run=119
+fullpack: lock=ok
+fullpack: gametest=success
+fullpack: client=success
+fullpack: shaders=success
