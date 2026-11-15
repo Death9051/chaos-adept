@@ -1,0 +1,6 @@
+build=success servertest=success clienttest=success fullpack=success
+branch=claude/story-heroes-seed pr=41 sha=f01a86d086f5569e50d86cbd6ce416acd01f0938 run=123
+fullpack: lock=ok
+fullpack: gametest=success
+fullpack: client=success
+fullpack: shaders=success
