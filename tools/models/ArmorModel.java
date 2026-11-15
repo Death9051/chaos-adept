@@ -181,6 +181,25 @@ public class ArmorModel extends GaussModel {
         sym(box(m, 0.2, y, -12.2, 7, h, 1).rotY(-34));
     }
 
+    /** Забрало: большая светящаяся панель на лице; {@code wrap} — с заходом на скошенные боковые грани. */
+    static void visor(boolean wrap) {
+        c(Mat.ARC, 7, 53.2, 5, -11.5, 1);
+        if (wrap) {
+            sym(box(Mat.ARC, 4.7, 53.6, -8.1, 5, 4, 1).rotY(-45));
+        }
+    }
+
+    /** Надбровье: плита над забралом, выступает вперёд и чуть опущена. */
+    static void brow(Mat m, int w) {
+        c(m, w, 58.2, 2, -13.4, 4).rotX(14);
+    }
+
+    /** Щёчные щитки по сторонам забрала: толстые плиты, развёрнутые вперёд, и подбородок между ними. */
+    static void jaw(Mat m, int h) {
+        sym(box(m, 4.4, 48.4, -13, 2, h, 5).rotY(-18));
+        c(Mat.GUNMETAL, 6, 48.4, 3, -12.2, 2);
+    }
+
     static void helmet() {
         // Прототип: лобовая и затылочная пластины с наклоном, щитки на щеках, рунные скобы; темя открыто.
         on("armorHead", "helmet_base0");
@@ -189,42 +208,44 @@ public class ArmorModel extends GaussModel {
         sym(box(Mat.STEEL, 8.9, 49.5, -5, 1, 7, 9).rotZ(8));
         sym(box(Mat.RUNE, 6.5, 62.4, -9.4, 1, 2, 1));
         sym(box(Mat.RUNE, 8.6, 57.5, -1, 1, 2, 2));
-        // Переход I: закрытый шлем, смотровая щель, рунная полоса на лбу, простая маска.
+        // Переход I: закрытый шлем, забрало на лице, надбровье, рунная полоса на лбу.
         on("armorHead", "helmet_base1");
         shell(Mat.STEEL);
-        c(Mat.ARC, 6, 55.2, 2, -11.5, 1);
-        c(Mat.RUNE, 6, 57.8, 1, -11.5, 1);
-        beak(Mat.GUNMETAL, 49, 4);
-        // Переход II: высокая маска, гребень вдоль темени, руны только у висков.
+        visor(false);
+        brow(Mat.STEEL, 8);
+        c(Mat.RUNE, 6, 60.4, 1, -10.6, 1);
+        // Переход II: забрало заходит на бока, щёчные щитки и подбородок, руны только у висков.
         on("armorHead", "helmet_base2");
         shell(Mat.STEEL);
-        c(Mat.ARC, 6, 55.2, 2, -11.5, 1);
-        beak(Mat.GUNMETAL, 48.6, 5);
-        c(Mat.STEEL, 2, 66.6, 1, -4, 9);
-        sym(box(Mat.RUNE, 8.6, 57, -1, 1, 1, 4));
-        // Финал: маска с переносицей, латунный гребень, диски на ушах, затыльник в два слоя.
+        visor(true);
+        brow(Mat.STEEL, 10);
+        jaw(Mat.STEEL, 5);
+        sym(box(Mat.RUNE, 8.6, 57, 1, 1, 1, 4));
+        // Финал: высокие щёчные щитки, продольное ребро от лба до затылка с латунной кромкой,
+        // короба на ушах, затыльник в два слоя.
         on("armorHead", "helmet_base3");
         shell(Mat.STEEL);
-        c(Mat.ARC, 6, 55.2, 2, -11.5, 1);
-        beak(Mat.GUNMETAL, 48.4, 6);
-        c(Mat.STEEL, 2, 48.6, 9, -13.2, 1).rotX(-10);
-        c(Mat.BRASS, 2, 66.6, 1, -4, 9);
-        octX(Mat.GUNMETAL, 5, 2, 9, 56, 1, 1);
-        octX(Mat.GUNMETAL, 5, 2, -10, 56, 1, 1);
+        visor(true);
+        brow(Mat.GUNMETAL, 10);
+        jaw(Mat.STEEL, 6);
+        c(Mat.GUNMETAL, 4, 66.6, 1, -5, 11);
+        c(Mat.BRASS, 2, 67.6, 1, -4, 9);
+        c(Mat.GUNMETAL, 4, 61.4, 2, -10.4, 5).rotX(-38);
+        sym(box(Mat.GUNMETAL, 8.2, 53.4, -1, 2, 5, 6));
         c(Mat.STEEL, 10, 47.4, 3, 10.6, 1).rotX(-22);
         c(Mat.GUNMETAL, 12, 45.4, 3, 11.4, 1).rotX(-22);
         // «Очистка»: фильтры по бокам маски и блок на затылке.
         on("armorHead", "helmet_add1");
-        oct(Mat.BRASS, 3, 1, 7.6, 50, -10.2, 3);
+        oct(Mat.BRASS, 3, 1, 8.4, 50, -9.6, 3);
         on("armorHead", "helmet_add2");
-        oct(Mat.BRASS, 3, 1, -7.6, 50, -10.2, 3);
+        oct(Mat.BRASS, 3, 1, -8.4, 50, -9.6, 3);
         on("armorHead", "helmet_add3");
         c(Mat.GUNMETAL, 6, 54, 4, 12.4, 2);
         box(Mat.LAMP, -1, 58.2, 12.8, 2, 1, 1);
-        // Вершина «Аварийный режим»: красный маяк на макушке.
+        // Вершина «Аварийный режим»: красный маяк на затылочной части темени.
         on("armorHead", "helmet_apex");
-        octY(Mat.BRASS, 5, 2, 0, 67.7, 2, 1);
-        box(Mat.LAMP, -1, 68.7, 1, 2, 2, 2);
+        octY(Mat.BRASS, 5, 2, 0, 66.7, 7.5, 1);
+        box(Mat.LAMP, -1, 67.7, 6.5, 2, 2, 2);
     }
 
     /** Грудные плиты: две половины с наклоном вперёд и скосом к плечу. d — толщина, w — ширина половины. */
