@@ -69,16 +69,36 @@ public class GaussUpgradeScreen extends Screen {
     private static final int NODE_W = 18;
     private static final int NODE_H = 14;
 
-    /** Центр и размер сегмента в модели (единицы модели): на них наезжает камера. Порядок — {@link GaussLook#SEGMENTS}. */
-    private static final float[][] FOCUS = {
-            {0, 19, -30, 1.55f}, {0, 19, -14, 1.9f}, {0, 12, -14, 1.9f},
-            {0, 15, 19, 1.8f}, {0, 10, -1.5f, 1.9f}, {0, 26, 3, 1.8f}};
-    private static final float[] WHOLE = {0, 18, -9, 1.0f};
+    /**
+     * Что показывает мастерская: сегменты артефакта, предмет для проекции и камера.
+     * {@code focus} — по сегменту: центр в единицах модели (x, y, z), приближение и поворот камеры;
+     * {@code whole} — то же для артефакта целиком; {@code roll} кладёт модель набок (клинок);
+     * {@code spanX}, {@code spanY} — размер модели в блоках по ширине и высоте кадра.
+     */
+    public record Subject(String artifact, Segment[] segments, java.util.function.Supplier<ItemStack> item,
+                          float[][] focus, float[] whole, float roll, float spanX, float spanY) {
+        public static final Subject GAUSS = new Subject("gauss", segments, () -> new ItemStack(ModItems.GAUSS_GUN.get()),
+                new float[][]{{0, 19, -30, 1.55f, 118}, {0, 19, -14, 1.9f, 118}, {0, 12, -14, 1.9f, 118},
+                        {0, 15, 19, 1.8f, 118}, {0, 10, -1.5f, 1.9f, 118}, {0, 26, 3, 1.8f, 118}},
+                new float[]{0, 18, -9, 1.0f, 118}, 0f, 5.4f, 2.6f);
+        public static final Subject BLADE = new Subject("blade", GaussLook.BLADE, () -> new ItemStack(ModItems.ENERGY_BLADE.get()),
+                new float[][]{{0, 46, 0, 1.5f, 200}, {0, 21, 0, 2.6f, 200}, {0, 3, 0, 2.8f, 200},
+                        {0, 26, 0, 2.8f, 200}, {0, 11, 3, 2.8f, 20}, {0, 17.5f, 0, 2.8f, 200}},
+                new float[]{0, 34, 0, 1.0f, 200}, 90f, 5.4f, 1.6f);
+        public static final Subject HEAVY = new Subject("heavy", GaussLook.HEAVY, () -> new ItemStack(ModItems.HEAVY_ARMOR_DISPLAY.get()),
+                new float[][]{{0, 29, 0, 2.1f, 160}, {0, 20, -2, 1.9f, 160}, {0, 18, 0, 1.4f, 160},
+                        {0, 6, 0, 1.8f, 160}, {0, 19, 6, 1.9f, -20}, {0, 13.5f, -3, 2.3f, 160}},
+                new float[]{0, 17.5f, 0, 1.0f, 160}, 0f, 3.4f, 2.7f);
+    }
 
     private final Screen parent;
     private final IntSupplier look;
     private final IntConsumer press;
-    private final ItemStack preview = new ItemStack(ModItems.GAUSS_GUN.get());
+    private final Subject subject;
+    private final Segment[] segments;
+    /** Начало ключей перевода названий артефакта, сегментов и путей. */
+    private final String texts;
+    private final ItemStack preview;
 
     // Раскладка, считается в init().
     private int w;
@@ -100,25 +120,42 @@ public class GaussUpgradeScreen extends Screen {
     private Node node;
     /** Примерка: выбранная ступень показана на модели, хотя ещё не открыта. */
     private boolean tryOn;
-    private float yaw = 118f;
+    /** Поворот камеры: к нему добавляется поворот, набранный мышью. */
+    private float yaw;
+    private float userYaw;
     private float pitch = 14f;
     private float userZoom = 1f;
-    private final float[] camera = WHOLE.clone();
+    private final float[] camera = new float[4];
     private long lastFrame;
     private boolean dragging;
 
     public GaussUpgradeScreen(Screen parent, IntSupplier look, IntConsumer press) {
-        super(Component.translatable("adept_core.gauss_table.title"));
+        this(Subject.GAUSS, parent, look, press);
+    }
+
+    public GaussUpgradeScreen(Subject subject, Screen parent, IntSupplier look, IntConsumer press) {
+        super(Component.translatable("adept_core." + subject.artifact() + "_table.name"));
+        this.subject = subject;
+        this.segments = subject.segments();
+        this.texts = "adept_core." + subject.artifact() + "_table.";
+        this.preview = subject.item().get();
         this.parent = parent;
         this.look = look;
         this.press = press;
+        System.arraycopy(subject.whole(), 0, camera, 0, 4);
+        this.yaw = subject.whole()[4];
+    }
+
+    private boolean hasMagazine() {
+        return subject == Subject.GAUSS;
     }
 
     /** Открыть сразу на сегменте и узле (для сцен автотеста). */
     public GaussUpgradeScreen select(Segment s, int path, int step) {
         segment = s.ordinal();
         node = path == GaussUpgrades.APEX ? GaussUpgrades.apex(s) : new Node(s, path, step);
-        System.arraycopy(FOCUS[segment], 0, camera, 0, 4);
+        System.arraycopy(subject.focus()[segment], 0, camera, 0, 4);
+        yaw = subject.focus()[segment][4];
         return this;
     }
 
@@ -140,7 +177,7 @@ public class GaussUpgradeScreen extends Screen {
         lw = (w - 22) * 56 / 100;
         rx = lx + lw + 6;
         rw = w - 22 - lw;
-        projH = bodyH - 34 - 34 - 8;
+        projH = bodyH - 34 - 4 - (hasMagazine() ? 38 : 0);
         showLore = bodyH >= 250;
         descLines = bodyH >= 250 ? 5 : bodyH >= 205 ? 3 : 2;
     }
@@ -251,7 +288,7 @@ public class GaussUpgradeScreen extends Screen {
     }
 
     private Node nodeAt(int index) {
-        Segment s = GaussLook.SEGMENTS[segment];
+        Segment s = segments[segment];
         return index == 6 ? GaussUpgrades.apex(s) : new Node(s, index / 3, index % 3 + 1);
     }
 
@@ -274,7 +311,7 @@ public class GaussUpgradeScreen extends Screen {
             onClose();
             return true;
         }
-        for (int i = 0; i < GaussLook.SEGMENTS.length; i++) {
+        for (int i = 0; i < segments.length; i++) {
             if (inside(segmentRect(i), mouseX, mouseY)) {
                 segment = segment == i ? -1 : i;
                 node = null;
@@ -326,7 +363,7 @@ public class GaussUpgradeScreen extends Screen {
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
         if (dragging) {
-            yaw += (float) dragX * 1.2f;
+            userYaw += (float) dragX * 1.2f;
             pitch = Mth.clamp(pitch + (float) dragY * 0.8f, -70f, 70f);
             return true;
         }
@@ -357,7 +394,9 @@ public class GaussUpgradeScreen extends Screen {
         drawFrame(g, current, mouseX, mouseY);
         drawPreview(g, current);
         drawSegments(g, current, mouseX, mouseY);
-        drawMagazine(g);
+        if (hasMagazine()) {
+            drawMagazine(g);
+        }
         drawPanel(g, current, mouseX, mouseY);
     }
 
@@ -391,13 +430,13 @@ public class GaussUpgradeScreen extends Screen {
         pose.pushPose();
         pose.translate(left + 36, top + 7, 0);
         pose.scale(1.5f, 1.5f, 1f);
-        g.drawString(font, Component.translatable("adept_core.gauss_table.name"), 0, 0, TITLE, false);
+        g.drawString(font, Component.translatable(texts + "name"), 0, 0, TITLE, false);
         pose.popPose();
         int total = 0;
-        for (Segment s : GaussLook.SEGMENTS) {
+        for (Segment s : segments) {
             total += done(current, s);
         }
-        g.drawString(font, upper(Component.translatable("adept_core.gauss_table.subtitle", total, GaussLook.SEGMENTS.length * 7)),
+        g.drawString(font, upper(Component.translatable("adept_core.gauss_table.subtitle", total, segments.length * 7)),
                 left + 36, top + 23, MUTED, false);
         int[] b = backRect();
         boolean hover = inside(b, mouseX, mouseY);
@@ -420,7 +459,8 @@ public class GaussUpgradeScreen extends Screen {
     }
 
     private ItemStack previewStack(int shown) {
-        var tag = GaussGunItem.data(preview);
+        var tag = preview.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA,
+                net.minecraft.world.item.component.CustomData.EMPTY).copyTag();
         if (tag.getInt(GaussLook.TAG) != shown || tag.getInt(GaussGunRenderer.FOCUS_TAG) != segment + 1) {
             tag.putInt(GaussLook.TAG, shown);
             tag.putInt(GaussGunRenderer.FOCUS_TAG, segment + 1);
@@ -446,10 +486,11 @@ public class GaussUpgradeScreen extends Screen {
         long now = Util.getMillis();
         float dt = lastFrame == 0 ? 1f : Math.min(1f, (now - lastFrame) / 220f);
         lastFrame = now;
-        float[] target = segment >= 0 ? FOCUS[segment] : WHOLE;
+        float[] target = segment >= 0 ? subject.focus()[segment] : subject.whole();
         for (int i = 0; i < 4; i++) {
             camera[i] += (target[i] - camera[i]) * dt;
         }
+        yaw += Mth.wrapDegrees(target[4] - yaw) * dt;
         float seconds = (now % 3_600_000L) / 1000f;
         int cx = r[0] + r[2] / 2;
         int cy = r[1] + r[3] / 2 + 4;
@@ -467,7 +508,9 @@ public class GaussUpgradeScreen extends Screen {
         }
 
         if (minecraft != null) {
-            float zoom = r[2] * 0.185f * camera[3] * userZoom;
+            // Целиком артефакт вписан в кадр по ширине и высоте.
+            float fit = Math.min(r[2] / subject.spanX(), (r[3] - 26) / subject.spanY());
+            float zoom = fit * camera[3] * userZoom;
             float sway = dragging ? 0f : Mth.sin(seconds * 0.35f) * 12f;
             g.enableScissor(r[0] + 1, r[1] + 1, r[0] + r[2] - 1, r[1] + r[3] - 1);
             PoseStack pose = g.pose();
@@ -476,7 +519,11 @@ public class GaussUpgradeScreen extends Screen {
             pose.scale(zoom, zoom, -zoom);
             pose.mulPose(Axis.ZP.rotationDegrees(180f));
             pose.mulPose(Axis.XP.rotationDegrees(pitch));
-            pose.mulPose(Axis.YP.rotationDegrees(yaw + sway));
+            if (subject.roll() != 0f) {
+                // Клинок лежит набок: вращение мышью идёт вокруг его длинной оси.
+                pose.mulPose(Axis.ZP.rotationDegrees(subject.roll()));
+            }
+            pose.mulPose(Axis.YP.rotationDegrees(yaw + userYaw + sway));
             // Начало модели в предмете — середина блока по X и Z, низ блока по Y.
             pose.translate(-camera[0] / 16f, -camera[1] / 16f - 0.01f, -camera[2] / 16f);
             Lighting.setupForEntityInInventory();
@@ -499,9 +546,9 @@ public class GaussUpgradeScreen extends Screen {
         if (trying) {
             chip = upper(Component.translatable("adept_core.gauss_table.chip.try", stepName(node)));
         } else if (segment >= 0) {
-            Segment s = GaussLook.SEGMENTS[segment];
+            Segment s = segments[segment];
             chip = upper(Component.translatable("adept_core.gauss_table.chip.focus",
-                    Component.translatable("adept_core.gauss_table.segment." + s.id()), done(current, s), 7));
+                    Component.translatable(texts + "segment." + s.id()), done(current, s), 7));
         } else {
             chip = upper(Component.translatable("adept_core.gauss_table.chip.whole"));
         }
@@ -526,14 +573,14 @@ public class GaussUpgradeScreen extends Screen {
 
     /** Вкладки сегментов: название и семь отметок прогресса (три ступени основы, три ступени деталей, вершина). */
     private void drawSegments(GuiGraphics g, int current, int mouseX, int mouseY) {
-        for (int i = 0; i < GaussLook.SEGMENTS.length; i++) {
-            Segment s = GaussLook.SEGMENTS[i];
+        for (int i = 0; i < segments.length; i++) {
+            Segment s = segments[i];
             int[] r = segmentRect(i);
             boolean selected = segment == i;
             boolean hover = inside(r, mouseX, mouseY);
             g.fill(r[0], r[1], r[0] + r[2], r[1] + r[3], selected ? ACCENT_BG : PANEL);
             g.renderOutline(r[0], r[1], r[2], r[3], selected ? ACCENT : hover ? BORDER_LIGHT : BORDER);
-            g.drawString(font, Component.translatable("adept_core.gauss_table.segment." + s.id()), r[0] + 5, r[1] + 2,
+            g.drawString(font, Component.translatable(texts + "segment." + s.id()), r[0] + 5, r[1] + 2,
                     selected ? TEXT : hover ? TEXT : MUTED, false);
             int base = GaussLook.base(current, s);
             int add = GaussLook.add(current, s);
@@ -607,15 +654,15 @@ public class GaussUpgradeScreen extends Screen {
             }
             return;
         }
-        Segment s = GaussLook.SEGMENTS[segment];
-        g.drawString(font, upper(Component.translatable("adept_core.gauss_table.segment." + s.id())), px, bodyY + 7, TITLE, false);
+        Segment s = segments[segment];
+        g.drawString(font, upper(Component.translatable(texts + "segment." + s.id())), px, bodyY + 7, TITLE, false);
         int progress = done(current, s);
         for (int k = 0; k < 7; k++) {
             int x = px + pw - 7 * 9 + k * 9;
             g.fill(x, bodyY + 9, x + 7, bodyY + 12, k < progress ? ACCENT : BORDER_LIGHT);
         }
         if (showLore) {
-            List<FormattedCharSequence> lore = font.split(Component.translatable("adept_core.gauss_table.lore." + s.id()), pw);
+            List<FormattedCharSequence> lore = font.split(Component.translatable(texts + "lore." + s.id()), pw);
             for (int i = 0; i < Math.min(2, lore.size()); i++) {
                 g.drawString(font, lore.get(i), px, bodyY + 20 + i * 10, LORE, false);
             }
@@ -632,7 +679,7 @@ public class GaussUpgradeScreen extends Screen {
             int steps = GaussLook.step(current, s, column);
             int[] first = nodeRect(column * 3);
             int cx = first[0] + NODE_W / 2;
-            Component name = Component.translatable("adept_core.gauss_table.path." + s.id() + "." + s.path(column));
+            Component name = Component.translatable(texts + "path." + s.id() + "." + s.path(column));
             int headerY = treeTop();
             g.drawCenteredString(font, name, cx, headerY, TEXT);
             if (treeHeader() >= 20) {
@@ -731,7 +778,9 @@ public class GaussUpgradeScreen extends Screen {
         State st = state(current);
         g.drawString(font, upper(Component.translatable("adept_core.gauss_table.card." + st.name().toLowerCase(Locale.ROOT))),
                 x, c[1] + 5, LORE, false);
-        if (!TableActions.GAUSS_TEMPO.equals(node.key()) || node.step() != 1) {
+        boolean works = node.step() == 1 && (TableActions.GAUSS_TEMPO.equals(node.key())
+                || TableActions.BLADE_EDGE.equals(node.key()) || TableActions.HEAVY_BASTION.equals(node.key()));
+        if (!works) {
             Component pending = Component.translatable("adept_core.gauss_table.pending");
             if (font.width(pending) < inner - 110) {
                 g.drawString(font, pending, x + inner - font.width(pending), c[1] + 5, DIM, false);

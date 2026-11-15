@@ -30,12 +30,56 @@ import java.util.List;
  * доля разбитой или пустой пластины проходит целиком. Пластины ставятся из второй руки: броня в основной, ПКМ.
  * Сервоприводы питаются электричеством нагрудника. Не ломается и не зачаровывается.
  */
-public class HeavyArmorItem extends ArmorItem {
+public class HeavyArmorItem extends ArmorItem implements software.bernie.geckolib.animatable.GeoItem {
+    private final software.bernie.geckolib.animatable.instance.AnimatableInstanceCache geoCache =
+            software.bernie.geckolib.util.GeckoLibUtil.createInstanceCache(this);
+
     /** Части тела и их доли урона. Порядок в нагруднике: корпус, руки. */
     public enum Part { HEAD, TORSO, ARMS, LEGS }
 
     public HeavyArmorItem(Holder<ArmorMaterial> material, Type type, Properties properties) {
         super(material, type, properties);
+    }
+
+    /** Модель брони на игроке — GeckoLib; облик по сегментам лежит в данных предмета ({@link GaussLook}). */
+    @Override
+    public void createGeoRenderer(java.util.function.Consumer<software.bernie.geckolib.animatable.client.GeoRenderProvider> consumer) {
+        consumer.accept(new software.bernie.geckolib.animatable.client.GeoRenderProvider() {
+            private software.bernie.geckolib.renderer.GeoArmorRenderer<?> renderer;
+
+            @Override
+            public <T extends net.minecraft.world.entity.LivingEntity> net.minecraft.client.model.HumanoidModel<?> getGeoArmorRenderer(
+                    T entity, ItemStack stack, net.minecraft.world.entity.EquipmentSlot slot,
+                    net.minecraft.client.model.HumanoidModel<T> original) {
+                if (renderer == null) {
+                    renderer = new ru.adept.core.client.HeavyArmorRenderer();
+                }
+                return renderer;
+            }
+        });
+    }
+
+    @Override
+    public void registerControllers(software.bernie.geckolib.animation.AnimatableManager.ControllerRegistrar controllers) {
+    }
+
+    @Override
+    public software.bernie.geckolib.animatable.instance.AnimatableInstanceCache getAnimatableInstanceCache() {
+        return geoCache;
+    }
+
+    /** Сервер держит облик в данных предмета равным прогрессу игрока: так его видят рендер и другие игроки. */
+    @Override
+    public void inventoryTick(ItemStack stack, Level level, net.minecraft.world.entity.Entity entity, int slot, boolean selected) {
+        if (level.isClientSide || !(entity instanceof Player player)) {
+            return;
+        }
+        int look = GaussLook.pack(GaussLook.HEAVY, ru.adept.core.table.TableActions.progress(player));
+        CompoundTag tag = data(stack);
+        if (tag.getInt(GaussLook.TAG) != look) {
+            tag.putInt(GaussLook.TAG, look);
+            save(stack, tag);
+        }
     }
 
     public List<Part> parts() {
