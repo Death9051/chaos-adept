@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["EGA", "WSW", "III"],
+  "key": {"E": {"item": "adept_core:crude_emitter"}, "G": {"item": "minecraft:gold_ingot"}, "A": {"item": "minecraft:amethyst_shard"}, "W": {"item": "adept_core:crude_wiring"}, "S": {"item": "minecraft:stonecutter"}, "I": {"item": "minecraft:iron_ingot"}},
+  "result": {"id": "adept_core:rune_carver", "count": 1}
+}

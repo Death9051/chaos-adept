@@ -21,6 +21,8 @@ public final class ModBlockEntities {
             BLOCK_ENTITIES.register("caster", () -> BlockEntityType.Builder.of(ru.adept.core.base.CasterBlockEntity::new, ModBlocks.CASTER.get()).build(null));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ru.adept.core.base.CutterBlockEntity>> CUTTER =
             BLOCK_ENTITIES.register("cutter", () -> BlockEntityType.Builder.of(ru.adept.core.base.CutterBlockEntity::new, ModBlocks.CUTTER.get()).build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ru.adept.core.base.CarverBlockEntity>> CARVER =
+            BLOCK_ENTITIES.register("rune_carver", () -> BlockEntityType.Builder.of(ru.adept.core.base.CarverBlockEntity::new, ModBlocks.CARVER.get()).build(null));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SmelterBlockEntity>> SMELTER =
             BLOCK_ENTITIES.register("smelter", () -> BlockEntityType.Builder.of(SmelterBlockEntity::new, ModBlocks.SMELTER.get()).build(null));
 

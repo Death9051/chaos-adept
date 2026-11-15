@@ -629,6 +629,7 @@ public final class BalanceConfig {
 
         ManaConfig.define(b);
         FocusConfig.define(b);
+        RuneConfig.define(b);
 
         SPEC = b.build();
     }

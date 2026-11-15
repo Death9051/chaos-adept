@@ -58,6 +58,10 @@ public final class ArtifactPower {
                 out.add(new Consumer(stack, Resource.ELECTRICITY, () -> GaussGunItem.charge(stack),
                         v -> GaussGunItem.setCharge(stack, v), GaussGunItem.capacity()));
             }
+            if (stack.getItem() instanceof ru.adept.core.artifact.RailGunItem) {
+                out.add(new Consumer(stack, Resource.ELECTRICITY, () -> ru.adept.core.artifact.RailGunItem.charge(stack),
+                        v -> ru.adept.core.artifact.RailGunItem.setCharge(stack, v), ru.adept.core.artifact.RailGunItem.capacity()));
+            }
         }
         return out;
     }

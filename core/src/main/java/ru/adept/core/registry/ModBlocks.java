@@ -91,8 +91,14 @@ public final class ModBlocks {
             () -> new MachineBlock.Cutter(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.METAL).strength(3.0f).sound(SoundType.METAL).noOcclusion()));
 
+    /** Высекатель рун (нулевой уровень): гравировка литых изделий. Заглушка 1×1×1: станина, стойка и излучатель. */
+    public static final DeferredBlock<MachineBlock.Carver> CARVER = BLOCKS.register("rune_carver",
+            () -> new MachineBlock.Carver(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.METAL).strength(3.0f).sound(SoundType.METAL).noOcclusion().lightLevel(s -> 3)));
+
     static {
         ITEMS.registerSimpleBlockItem(NODE_CRYSTAL);
+        ITEMS.registerSimpleBlockItem(CARVER);
         ITEMS.registerSimpleBlockItem(CUTTER);
         ITEMS.registerSimpleBlockItem(ASH);
         ITEMS.registerSimpleBlockItem(GENERATOR);

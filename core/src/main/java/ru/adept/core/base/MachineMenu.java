@@ -18,7 +18,7 @@ import ru.adept.core.registry.ModMenus;
  * сервер синхронизирует слоты и {@link ContainerData}. Слот 0 — вход, слот 1 (если есть) — выход.
  */
 public class MachineMenu extends AbstractContainerMenu {
-    public enum Kind { GENERATOR, CRUSHER, SMELTER, ALLOYER, CASTER, CUTTER }
+    public enum Kind { GENERATOR, CRUSHER, SMELTER, ALLOYER, CASTER, CUTTER, CARVER }
 
     public final Kind kind;
     private final Container container;
@@ -48,6 +48,9 @@ public class MachineMenu extends AbstractContainerMenu {
                     if (kind == Kind.CUTTER) {
                         return ru.adept.core.focus.FocusItem.is(stack) || ru.adept.core.focus.FocusCrystal.of(stack).isPresent();
                     }
+                    if (kind == Kind.CARVER) {
+                        return ru.adept.core.rune.Runes.engravable(stack);
+                    }
                     return kind == Kind.ALLOYER ? AlloyerBlockEntity.isAdditive(stack) : kind != Kind.CASTER;
                 }
             });
@@ -62,9 +65,20 @@ public class MachineMenu extends AbstractContainerMenu {
                     if (kind == Kind.CUTTER) {
                         ru.adept.core.focus.Focuses.onTaken(player, stack);
                     }
+                    if (kind == Kind.CARVER) {
+                        ru.adept.core.rune.Runes.onTaken(player, stack);
+                    }
                     super.onTake(player, stack);
                 }
             });
+            if (kind == Kind.CARVER) {
+                addSlot(new Slot(container, 2, 34, 35) {
+                    @Override
+                    public boolean mayPlace(ItemStack stack) {
+                        return ru.adept.core.rune.RuneMaterial.of(stack).isPresent();
+                    }
+                });
+            }
         }
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 9; col++) {
@@ -131,6 +145,16 @@ public class MachineMenu extends AbstractContainerMenu {
         return menu;
     }
 
+    public static MachineMenu carver(int id, Inventory inventory) {
+        return new MachineMenu(ModMenus.CARVER.get(), Kind.CARVER, id, inventory, new SimpleContainer(3), new SimpleContainerData(MachineBlockEntity.DATA_SIZE));
+    }
+
+    public static MachineMenu carver(int id, Inventory inventory, Container c, ContainerData d, ContainerLevelAccess access, java.util.function.IntConsumer buttons) {
+        MachineMenu menu = new MachineMenu(ModMenus.CARVER.get(), Kind.CARVER, id, inventory, c, d);
+        menu.buttons = buttons;
+        return menu;
+    }
+
     @Override
     public boolean clickMenuButton(Player player, int id) {
         buttons.accept(id);
@@ -151,12 +175,19 @@ public class MachineMenu extends AbstractContainerMenu {
         if (kind == Kind.CUTTER && index == 1) {
             ru.adept.core.focus.Focuses.onTaken(player, stack);
         }
+        if (kind == Kind.CARVER && index == 1) {
+            ru.adept.core.rune.Runes.onTaken(player, stack);
+        }
         ItemStack copy = stack.copy();
         if (index < machineSlots) {
             if (!moveItemStackTo(stack, machineSlots, slots.size(), true)) {
                 return ItemStack.EMPTY;
             }
-        } else if (!slots.get(0).mayPlace(stack) || !moveItemStackTo(stack, 0, 1, false)) {
+        } else if (slots.get(0).mayPlace(stack)) {
+            if (!moveItemStackTo(stack, 0, 1, false)) {
+                return ItemStack.EMPTY;
+            }
+        } else if (kind != Kind.CARVER || !slots.get(2).mayPlace(stack) || !moveItemStackTo(stack, 2, 3, false)) {
             return ItemStack.EMPTY;
         }
         if (stack.isEmpty()) {
