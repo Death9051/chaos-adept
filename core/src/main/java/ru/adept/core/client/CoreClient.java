@@ -51,5 +51,6 @@ public final class CoreClient {
         event.registerEntityRenderer(ModEntities.HERO.get(), HeroRenderer::new);
         event.registerEntityRenderer(ModEntities.TRADER.get(), ctx -> new StubEntityRenderer<>(ctx, Blocks.CRYING_OBSIDIAN.defaultBlockState()));
         event.registerEntityRenderer(ModEntities.SOUL.get(), net.minecraft.client.renderer.entity.NoopRenderer::new);
+        event.registerEntityRenderer(ModEntities.HERO_SPELL.get(), net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
     }
 }

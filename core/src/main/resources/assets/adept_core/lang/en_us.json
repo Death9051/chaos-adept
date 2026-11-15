@@ -101,6 +101,7 @@
   "entity.adept_core.resident": "Villager",
   "entity.adept_core.elder": "Elder",
   "entity.adept_core.hero": "Hero",
+  "entity.adept_core.hero_spell": "Elemental Bolt",
   "item.adept_core.hero_emblem": "Hero Emblem",
   "item.adept_core.hero_banner": "Squad Banner",
   "item.adept_core.commander_order": "Commander's Order",

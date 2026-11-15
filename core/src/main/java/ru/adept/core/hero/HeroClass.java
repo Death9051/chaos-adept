@@ -2,9 +2,9 @@ package ru.adept.core.hero;
 
 import java.util.Locale;
 
-/** Классы героев среза 2 (маг и целитель — позже). */
+/** Классы героев. Порядок значим: номер класса уходит на клиент (облик), новые классы — только в конец. */
 public enum HeroClass {
-    TRACKER, WARRIOR, ARCHER, COMMANDER;
+    TRACKER, WARRIOR, ARCHER, COMMANDER, MAGE, HEALER;
 
     public String id() {
         return name().toLowerCase(Locale.ROOT);
