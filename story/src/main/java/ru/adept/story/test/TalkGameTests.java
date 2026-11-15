@@ -67,7 +67,7 @@ public final class TalkGameTests {
             }
             helper.assertTrue(!lang.has(VillageTalk.KEY + group + "." + (count + 1)), "В lang больше строк, чем в коде: " + group);
         });
-        for (String c : List.of("tracker", "warrior", "archer", "commander")) {
+        for (String c : List.of("tracker", "warrior", "archer", "commander", "mage", "healer")) {
             helper.assertTrue(lang.has(HeroTalk.SPEAKER + c), "Нет имени говорящего для класса " + c);
             for (String e : List.of("spotted", "wounded", "missed", "player_lost", "ally_fell", "squad_retreating")) {
                 helper.assertTrue(!HeroTalk.pool(e, c, "veteran").isEmpty(), "Нет реплик: " + c + " " + e);
@@ -106,6 +106,30 @@ public final class TalkGameTests {
         HeroTalk.reset();
         helper.assertTrue(HeroTalk.line(server, a, squad, "squad_retreating", "commander", "veteran", 0.99) != null,
                 "Приказ отступать должен звучать всегда");
+        helper.succeed();
+    }
+
+    /** Мастер: свои строки ранга и класса, без строк учеников; говорит реже ветерана; подъём павшего звучит всегда. */
+    @GameTest(template = "empty")
+    public static void masterAndHealerLines(GameTestHelper helper) {
+        MinecraftServer server = reset(helper);
+        List<String> master = HeroTalk.pool("spotted", "warrior", "master");
+        helper.assertTrue(master.contains(HeroTalk.KEY + "master.spotted.1") && master.contains(HeroTalk.KEY + "warrior_master.spotted.1"),
+                "У мастера-воина нет строк ранга или класса: " + master);
+        helper.assertTrue(master.stream().noneMatch(k -> k.contains(".apprentice.") || k.contains(".veteran.")), "У мастера чужие строки ранга");
+        helper.assertTrue(HeroTalk.pool("spotted", "warrior", "veteran").stream().noneMatch(k -> k.contains("_master.")),
+                "У ветерана строки мастера");
+        for (String c : List.of("tracker", "warrior", "archer", "commander", "mage", "healer")) {
+            helper.assertTrue(HeroTalk.pool("spotted", c, "master").stream().anyMatch(k -> k.contains(".master.")), "Нет строк мастера: " + c);
+        }
+        UUID squad = UUID.randomUUID();
+        helper.assertTrue(HeroTalk.line(server, UUID.randomUUID(), squad, "spotted", "mage", "master", 0.3) == null,
+                "Мастер при броске 0.3 должен промолчать");
+        String revived = HeroTalk.line(server, UUID.randomUUID(), squad, "ally_revived", "healer", "master", 0.99);
+        helper.assertTrue(revived != null && revived.startsWith(HeroTalk.KEY + "healer.ally_revived."), "Подъём павшего: " + revived);
+        HeroTalk.reset();
+        String healed = HeroTalk.line(server, UUID.randomUUID(), squad, "ally_healed", "healer", "apprentice", 0);
+        helper.assertTrue(healed != null && healed.contains("healer"), "Лечение союзника: " + healed);
         helper.succeed();
     }
 

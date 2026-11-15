@@ -230,6 +230,18 @@ public final class JournalGameTests {
         helper.succeed();
     }
 
+    /** Зачаток в инвентаре — запись пролога с пометкой своей ветки, один раз. */
+    @GameTest(template = "empty")
+    public static void seedEntry(GameTestHelper helper) {
+        MinecraftServer server = reset(helper);
+        List<EntryView> added = Journal.fire(server, "item_obtained", Map.of("item", "adept_core:seed"));
+        expectIds(helper, added, "prologue/seed");
+        helper.assertTrue(added.get(0).keys().equals(List.of("adept_story.journal.prologue.seed.public"))
+                && added.get(0).note().equals("adept_story.journal.prologue.seed.note.public"), "Текст зачатка: " + added.get(0));
+        helper.assertTrue(Journal.fire(server, "item_obtained", Map.of("item", "adept_core:seed")).isEmpty(), "Запись о зачатке повторилась");
+        helper.succeed();
+    }
+
     private static void expectIds(GameTestHelper helper, List<EntryView> added, String... ids) {
         List<String> got = added.stream().map(EntryView::id).toList();
         helper.assertTrue(got.equals(List.of(ids)), "Ожидались записи " + List.of(ids) + ", получены " + got);
