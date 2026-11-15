@@ -92,6 +92,8 @@ public final class MageHealerGameTests {
             helper.assertTrue(Math.abs(warrior.getHealth() - warrior.getMaxHealth() * HeroConfig.REVIVE_HEALTH.get()) < 1e-3,
                     "Здоровье поднятого: " + warrior.getHealth());
             helper.assertTrue(!healer.canRevive(), "Подъём не раз за бой");
+            // После первого удара у бойца короткая неуязвимость: второй удар в тот же тик иначе не пройдёт.
+            warrior.invulnerableTime = 0;
             warrior.kill();
             helper.assertTrue(!warrior.isAlive() && revived.get() == 1, "Второй подъём за бой");
             healer.discard();
