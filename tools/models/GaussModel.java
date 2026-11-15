@@ -153,6 +153,8 @@ public class GaussModel {
     /** Имя модели в файле geo; центр кадра предпросмотра. Другие артефакты (BladeModel) задают свои. */
     static String NAME = "gauss_gun";
     static double[] CENTER = {0, 18, -9};
+    /** Масштаб координат в файле geo. Не 1 — у граней свои UV: текстура остаётся в разрешении кубов (броня на игроке). */
+    static double GEO_SCALE = 1;
 
     static String cur;
 
@@ -831,7 +833,22 @@ public class GaussModel {
         return v == Math.rint(v) ? Long.toString((long) v) : String.format(Locale.ROOT, "%.3f", v).replaceAll("0+$", "");
     }
 
+    /** UV граней куба по отдельности — та же раскладка, что у box-UV; низ перевёрнут, как делает его GeckoLib. */
+    static String faceUv(Cube q) {
+        StringBuilder s = new StringBuilder("{");
+        String[] names = {"up", "down", "east", "north", "west", "south"};
+        Face[] faces = {Face.UP, Face.DOWN, Face.EAST, Face.NORTH, Face.WEST, Face.SOUTH};
+        for (int i = 0; i < faces.length; i++) {
+            int[] r = rect(q, faces[i]);
+            boolean flip = faces[i] == Face.DOWN;
+            s.append(i > 0 ? ", " : "").append("\"").append(names[i]).append("\": {\"uv\": [").append(r[0]).append(", ")
+                    .append(flip ? r[1] + r[3] : r[1]).append("], \"uv_size\": [").append(r[2]).append(", ").append(flip ? -r[3] : r[3]).append("]}");
+        }
+        return s.append("}").toString();
+    }
+
     static String geoJson() {
+        double k = GEO_SCALE;
         StringBuilder s = new StringBuilder();
         s.append("{\n  \"format_version\": \"1.12.0\",\n  \"minecraft:geometry\": [\n    {\n");
         s.append("      \"description\": {\n        \"identifier\": \"geometry." + NAME + "\",\n");
@@ -844,23 +861,23 @@ public class GaussModel {
             if (b.parent != null) {
                 s.append(", \"parent\": \"").append(b.parent).append("\"");
             }
-            s.append(", \"pivot\": [").append(num(b.px)).append(", ").append(num(b.py)).append(", ").append(num(b.pz)).append("]");
+            s.append(", \"pivot\": [").append(num(b.px * k)).append(", ").append(num(b.py * k)).append(", ").append(num(b.pz * k)).append("]");
             List<Cube> own = CUBES.stream().filter(q -> q.bone.equals(b.name)).toList();
             if (!own.isEmpty()) {
                 s.append(", \"cubes\": [\n");
                 for (int i = 0; i < own.size(); i++) {
                     Cube q = own.get(i);
-                    s.append("          {\"origin\": [").append(num(q.x)).append(", ").append(num(q.y)).append(", ").append(num(q.z))
-                            .append("], \"size\": [").append(q.w).append(", ").append(q.h).append(", ").append(q.d).append("]");
+                    s.append("          {\"origin\": [").append(num(q.x * k)).append(", ").append(num(q.y * k)).append(", ").append(num(q.z * k))
+                            .append("], \"size\": [").append(num(q.w * k)).append(", ").append(num(q.h * k)).append(", ").append(num(q.d * k)).append("]");
                     if (q.inflate != 0) {
-                        s.append(", \"inflate\": ").append(num(q.inflate));
+                        s.append(", \"inflate\": ").append(num(q.inflate * k));
                     }
                     if (q.axis != 0) {
-                        s.append(", \"pivot\": [").append(num(q.x + q.w / 2.0)).append(", ").append(num(q.y + q.h / 2.0)).append(", ")
-                                .append(num(q.z + q.d / 2.0)).append("], \"rotation\": [")
+                        s.append(", \"pivot\": [").append(num((q.x + q.w / 2.0) * k)).append(", ").append(num((q.y + q.h / 2.0) * k)).append(", ")
+                                .append(num((q.z + q.d / 2.0) * k)).append("], \"rotation\": [")
                                 .append(q.axis == 1 ? num(q.deg) : "0").append(", ").append(q.axis == 2 ? num(q.deg) : "0").append(", ").append(q.axis == 3 ? num(q.deg) : "0").append("]");
                     }
-                    s.append(", \"uv\": [").append(q.u).append(", ").append(q.v).append("]}")
+                    s.append(", \"uv\": ").append(k == 1 ? "[" + q.u + ", " + q.v + "]" : faceUv(q)).append("}")
                             .append(i < own.size() - 1 ? ",\n" : "\n");
                 }
                 s.append("        ]");

@@ -15,16 +15,36 @@ import java.util.List;
  *
  * Запуск (JDK 22+, файлы лежат рядом): {@code java tools/models/ArmorModel.java <assets> [preview]}.
  *
- * Единица модели — 1/16 блока, как у модели игрока; кости {@code armorHead}, {@code armorBody}, {@code armorRightArm},
- * {@code armorLeftArm}, {@code armorRightLeg}, {@code armorLeftLeg} — те, что ждёт рендер брони GeckoLib (правая
- * сторона игрока — отрицательный X). Части сегмента лежат прямо в кости своей части тела; у рук и ног каждая часть
- * есть в двух костях с окончаниями {@code _l} и {@code _r}. Зоны: шлем — голова; нагрудник — грудь и спина выше пояса;
- * рунный узел — пояс; реактор — ранец на спине; руки и ноги — конечности.
+ * Модель строится в двойном разрешении (единица — 1/32 блока, игрок: голова 16, корпус 16×24×8) и пишется в файл
+ * с масштабом 0,5 и UV по граням: так хватает точности на грани. Формы гранёные, не кубические: шлем, рукава,
+ * поножи и реактор — восьмигранники, у корпуса и пояса срезаны углы, плиты груди стоят с наклоном.
+ * Повороты вокруг Y — только у симметричных брусков (восьмигранники, квадратные бруски под 45°).
+ *
+ * Кости {@code armorHead}, {@code armorBody}, {@code armorRightArm}, {@code armorLeftArm}, {@code armorRightLeg},
+ * {@code armorLeftLeg} — те, что ждёт рендер брони GeckoLib (правая сторона игрока — отрицательный X). Части сегмента
+ * лежат прямо в кости своей части тела; у рук и ног каждая часть есть в двух костях с окончаниями {@code _l} и
+ * {@code _r}. Зоны: шлем — голова; нагрудник — грудь и спина выше пояса; рунный узел — пояс; реактор — ранец на
+ * спине; руки и ноги — конечности.
  */
 public class ArmorModel extends GaussModel {
     static void on(String bone, String part) {
         Bone p = BONES.get(bone);
         bone(part, bone, p.px(), p.py(), p.pz());
+    }
+
+    /** Зеркальная копия куба относительно плоскости X = 0 в текущей кости. */
+    static void mirror(Cube q) {
+        Cube m = box(q.mat, -q.x - q.w, q.y, q.z, q.w, q.h, q.d).inflate(q.inflate);
+        m.round = q.round;
+        m.capX = q.capX;
+        m.capY = q.capY;
+        m.axis = q.axis;
+        m.deg = q.axis == 1 ? q.deg : -q.deg;
+    }
+
+    /** Куб и его зеркальная копия. */
+    static void sym(Cube q) {
+        mirror(q);
     }
 
     /** Часть на обеих конечностях: строится для левой (X > 0) и зеркалится на правую. */
@@ -35,18 +55,33 @@ public class ArmorModel extends GaussModel {
         int to = CUBES.size();
         on("armorRight" + limb, part + "_r");
         for (int i = from; i < to; i++) {
-            Cube q = CUBES.get(i);
-            box(q.mat, -q.x - q.w, q.y, q.z, q.w, q.h, q.d).inflate(q.inflate);
+            mirror(CUBES.get(i));
+        }
+    }
+
+    /**
+     * Корпус со срезанными вертикальными углами: два бруса крестом и четыре квадратных бруска под 45° в углах.
+     * X и Z — полуразмеры, срез — 2 единицы.
+     */
+    static void chamfered(Mat m, double y, int h, int X, int Z) {
+        c(m, 2 * X, y, h, -(Z - 2), 2 * (Z - 2));
+        c(m, 2 * (X - 2), y + 0.01, h, -Z, 2 * Z);
+        double off = 0.7071 * 1.5;
+        for (int sx = -1; sx <= 1; sx += 2) {
+            for (int sz = -1; sz <= 1; sz += 2) {
+                double cx = sx * (X - 1 - off), cz = sz * (Z - 1 - off);
+                box(m, cx - 1.5, y + 0.02, cz - 1.5, 3, h, 3).rotY(45);
+            }
         }
     }
 
     static void buildArmor() {
-        bone("armorHead", null, 0, 24, 0);
-        bone("armorBody", null, 0, 24, 0);
-        bone("armorRightArm", null, -5, 22, 0);
-        bone("armorLeftArm", null, 5, 22, 0);
-        bone("armorRightLeg", null, -2, 12, 0);
-        bone("armorLeftLeg", null, 2, 12, 0);
+        bone("armorHead", null, 0, 48, 0);
+        bone("armorBody", null, 0, 48, 0);
+        bone("armorRightArm", null, -10, 44, 0);
+        bone("armorLeftArm", null, 10, 44, 0);
+        bone("armorRightLeg", null, -4, 24, 0);
+        bone("armorLeftLeg", null, 4, 24, 0);
         helmet();
         chest();
         arms();
@@ -58,238 +93,255 @@ public class ArmorModel extends GaussModel {
     static void helmet() {
         // Прототип: отдельные пластины на рунных скобах, голова видна в просветах.
         on("armorHead", "helmet_base0");
-        box(Mat.STEEL, -4.5, 32.2, -4.5, 9, 1, 9);
-        box(Mat.STEEL, -4, 28, -5.2, 8, 3, 1);
-        both(Mat.STEEL, 4.2, 25, -3, 1, 6, 6);
-        box(Mat.STEEL, -3, 25, 4.2, 6, 6, 1);
-        both(Mat.RUNE, 3.6, 31.2, -4.8, 1, 1, 1);
-        both(Mat.RUNE, 3.6, 31.2, 3.8, 1, 1, 1);
-        // Переход I: закрытый шлем, рунная полоса над забралом.
+        octY(Mat.STEEL, 19, 8, 0, 64.4, 0, 2);
+        c(Mat.STEEL, 14, 55, 6, -10, 1).rotX(-8);
+        sym(box(Mat.STEEL, 9, 49, -7, 1, 12, 13));
+        c(Mat.STEEL, 12, 50, 11, 9, 1);
+        sym(box(Mat.RUNE, 7, 61, -9.5, 1, 3, 1));
+        sym(box(Mat.RUNE, 7, 61, 8.5, 1, 3, 1));
+        // Переход I: закрытый гранёный шлем, рунное кольцо над забралом.
         on("armorHead", "helmet_base1");
-        box(Mat.GUNMETAL, -4, 24, -4, 8, 8, 8).inflate(0.7);
-        box(Mat.ARC, -3, 27.5, -5.0, 6, 1, 1);
-        box(Mat.RUNE, -3, 30, -4.9, 6, 1, 1);
-        // Переход II: подбородник и гребень, руны только у висков.
+        octY(Mat.GUNMETAL, 24, 10, 0, 48.5, 0, 16);
+        octY(Mat.RUNE, 25, 10, 0, 59, 0, 1);
+        c(Mat.ARC, 10, 54, 2, -12.6, 1);
+        // Переход II: купол, подбородник, руны только у висков.
         on("armorHead", "helmet_base2");
-        box(Mat.GUNMETAL, -4, 24, -4, 8, 8, 8).inflate(0.7);
-        box(Mat.ARC, -3, 27.5, -5.0, 6, 1, 1);
-        box(Mat.STEEL, -3, 24, -5.4, 6, 2, 1);
-        box(Mat.STEEL, -1, 32.8, -4, 2, 1, 8);
-        both(Mat.RUNE, 4.8, 29, -1, 1, 1, 2);
-        // Финал: цельный шлем с латунным гребнем и ушными блоками.
+        octY(Mat.GUNMETAL, 24, 10, 0, 48.5, 0, 16);
+        octY(Mat.STEEL, 19, 8, 0, 64.5, 0, 2);
+        c(Mat.ARC, 10, 54, 2, -12.6, 1);
+        c(Mat.STEEL, 10, 48.7, 4, -13.6, 2).rotX(15);
+        sym(box(Mat.RUNE, 11.6, 57, -2, 1, 2, 4));
+        // Финал: двухъярусный купол с гребнем, козырёк, подбородник, диски на ушах.
         on("armorHead", "helmet_base3");
-        box(Mat.GUNMETAL, -4, 24, -4, 8, 8, 8).inflate(0.9);
-        box(Mat.ARC, -3, 27.5, -5.2, 6, 1, 1);
-        box(Mat.GUNMETAL, -3.5, 23.6, -5.6, 7, 3, 1);
-        box(Mat.BRASS, -1, 33, -4.5, 2, 1, 9);
-        both(Mat.STEEL, 5, 26, -1.5, 1, 3, 3);
-        // «Очистка»: фильтры по бокам и блок на затылке.
+        octY(Mat.GUNMETAL, 24, 10, 0, 48.5, 0, 16);
+        octY(Mat.GUNMETAL, 19, 8, 0, 64.5, 0, 2);
+        octY(Mat.STEEL, 12, 5, 0, 66.5, 0, 1);
+        c(Mat.ARC, 12, 54, 2, -12.7, 1);
+        c(Mat.STEEL, 14, 56.4, 2, -13.4, 2).rotX(-25);
+        c(Mat.GUNMETAL, 10, 48.7, 4, -13.7, 2).rotX(15);
+        octX(Mat.STEEL, 7, 3, 12, 55, 0, 1);
+        octX(Mat.STEEL, 7, 3, -13, 55, 0, 1);
+        c(Mat.BRASS, 2, 67.5, 1, -6, 12);
+        // «Очистка»: фильтры у подбородка и блок на затылке.
         on("armorHead", "helmet_add1");
-        box(Mat.BRASS, 5.3, 24.4, -4, 1, 2, 2);
+        oct(Mat.BRASS, 3, 1, 8, 50.5, -15.5, 3);
         on("armorHead", "helmet_add2");
-        box(Mat.BRASS, -6.3, 24.4, -4, 1, 2, 2);
+        oct(Mat.BRASS, 3, 1, -8, 50.5, -15.5, 3);
         on("armorHead", "helmet_add3");
-        box(Mat.STEEL, -1, 24.5, 5.3, 2, 2, 1);
-        box(Mat.LAMP, -0.5, 26.5, 5.3, 1, 1, 1);
+        c(Mat.STEEL, 6, 50, 4, 12.2, 2);
+        box(Mat.LAMP, -1, 54.2, 12.6, 2, 1, 1);
         // Вершина «Аварийный режим»: красный маяк на макушке.
         on("armorHead", "helmet_apex");
-        box(Mat.BRASS, -1, 34, 0, 2, 1, 2);
-        box(Mat.LAMP, -0.5, 35, 0.5, 1, 1, 1);
+        octY(Mat.BRASS, 5, 2, 0, 68.6, 0, 1);
+        box(Mat.LAMP, -1, 69.6, -1, 2, 2, 2);
     }
 
     static void chest() {
-        // Прототип: нагрудная и спинная пластины на ремнях, руны по углам.
+        // Прототип: нагрудная пластина с наклонным верхом и спинная пластина на ремнях, руны по углам.
         on("armorBody", "chest_base0");
-        box(Mat.STEEL, -3.5, 16, -3.2, 7, 7, 1);
-        box(Mat.STEEL, -3.5, 16, 2.2, 7, 7, 1);
-        both(Mat.LEATHER, 2, 23.3, -3, 2, 1, 6);
-        both(Mat.RUNE, 2.6, 22.2, -3.5, 1, 1, 1);
-        both(Mat.RUNE, 2.6, 16, -3.5, 1, 1, 1);
-        // Переход I: кираса, рунный шов по центру.
+        c(Mat.STEEL, 12, 32, 9, -6.4, 1);
+        c(Mat.STEEL, 10, 41, 5, -7, 1).rotX(-22);
+        c(Mat.STEEL, 12, 33, 12, 5.4, 1);
+        sym(box(Mat.LEATHER, 3, 47, -6, 4, 1, 12));
+        sym(box(Mat.RUNE, 5, 44, -7.2, 2, 2, 1));
+        sym(box(Mat.RUNE, 5, 32, -6.9, 2, 2, 1));
+        // Переход I: кираса со срезанными углами, рунный шов по центру.
         on("armorBody", "chest_base1");
-        box(Mat.GUNMETAL, -4, 15, -2, 8, 9, 4).inflate(0.6);
-        box(Mat.RUNE, -0.5, 19, -2.9, 1, 4, 1);
-        // Переход II: воротник, гидравлика по бокам, руны у ключиц.
+        chamfered(Mat.GUNMETAL, 30, 17, 9, 6);
+        c(Mat.RUNE, 3, 35, 9, -6.6, 1);
+        // Переход II: наклонная грудная плита, воротник, гидравлика по бокам, руны у ключиц.
         on("armorBody", "chest_base2");
-        box(Mat.GUNMETAL, -4, 15, -2, 8, 9, 4).inflate(0.6);
-        box(Mat.STEEL, -4, 23, -3.4, 8, 2, 1);
-        box(Mat.STEEL, -4, 23, 2.4, 8, 2, 1);
-        both(Mat.STEEL, 4.7, 15.5, -0.5, 1, 6, 1);
-        both(Mat.RUNE, 2.5, 21, -2.9, 1, 1, 1);
-        // Финал: цельная грудь с плитами, руны ушли на сами пластины.
+        chamfered(Mat.GUNMETAL, 30, 17, 9, 6);
+        c(Mat.STEEL, 12, 38.5, 7, -7.8, 2).rotX(-14);
+        c(Mat.STEEL, 12, 46.2, 2, -7.2, 2);
+        sym(box(Mat.STEEL, 9.4, 31, -1, 1, 12, 2));
+        sym(box(Mat.RUNE, 4, 44.2, -8.3, 2, 2, 1));
+        // Финал: широкая грудь, две наклонные плиты, пластины живота, скошенный воротник, хребет.
         on("armorBody", "chest_base3");
-        box(Mat.GUNMETAL, -4, 15, -2, 8, 9, 4).inflate(0.8);
-        both(Mat.GUNMETAL, 0.3, 19, -3.7, 3, 4, 1);
-        box(Mat.STEEL, -2.5, 15.2, -3.4, 5, 3, 1);
-        box(Mat.GUNMETAL, -4, 23.2, -3.6, 8, 2, 1);
-        box(Mat.GUNMETAL, -4, 23.2, 2.6, 8, 2, 1);
+        chamfered(Mat.GUNMETAL, 30, 17, 10, 6);
+        sym(box(Mat.STEEL, 0.6, 38, -8.2, 7, 7, 2).rotX(-16));
+        c(Mat.STEEL, 8, 30.6, 3, -7, 1);
+        c(Mat.STEEL, 8, 34, 3, -7.3, 1);
+        c(Mat.GUNMETAL, 14, 45.6, 3, -8.4, 3).rotX(28);
+        c(Mat.STEEL, 4, 31, 15, 6.1, 1);
         // «Ремонт»: два картриджа у живота и трубка маны к ним.
         on("armorBody", "chest_add1");
-        box(Mat.BRASS, 2.9, 15.5, -3.8, 1, 2, 1);
+        oct(Mat.BRASS, 3, 1, 6, 32.5, -8.6, 2);
         on("armorBody", "chest_add2");
-        box(Mat.BRASS, -3.9, 15.5, -3.8, 1, 2, 1);
+        oct(Mat.BRASS, 3, 1, -6, 32.5, -8.6, 2);
         on("armorBody", "chest_add3");
-        box(Mat.MANA_TUBE, 3.7, 17.6, -3.6, 1, 4, 1);
+        box(Mat.MANA_TUBE, 6.6, 34.2, -7.2, 1, 5, 1);
         // Вершина «Перераспределение»: шина через грудь с разрядниками на концах.
         on("armorBody", "chest_apex");
-        box(Mat.BRASS, -4.5, 23.4, -4.7, 9, 1, 1);
-        both(Mat.ARC, 3.5, 22.4, -4.7, 1, 1, 1);
+        c(Mat.BRASS, 16, 41, 1, -10.4, 1);
+        sym(box(Mat.ARC, 7, 40, -10.4, 1, 3, 1));
     }
 
     static void arms() {
-        // Прототип: наплечная пластина, щитки плеча и предплечья на ремне, руна.
+        // Прототип: наплечный диск, щитки плеча и предплечья на ремне, руна.
         sides("arms_base0", "Arm", () -> {
-            box(Mat.STEEL, 3.8, 23.2, -2.5, 5, 1, 5);
-            box(Mat.STEEL, 8.2, 17, -2, 1, 5, 4);
-            box(Mat.STEEL, 8.2, 12.5, -1.5, 1, 3, 3);
-            box(Mat.RUNE, 8.3, 22.2, -0.5, 1, 1, 1);
-            box(Mat.LEATHER, 4, 16, -2, 4, 1, 4).inflate(0.3);
+            octY(Mat.STEEL, 12, 5, 12, 47.4, 0, 1);
+            box(Mat.STEEL, 16.3, 34, -3, 1, 9, 6);
+            box(Mat.STEEL, 16.3, 25, -2.5, 1, 6, 5);
+            box(Mat.RUNE, 16.5, 44, -1, 1, 2, 2);
+            box(Mat.LEATHER, 8, 32, -4, 8, 1, 8).inflate(0.4);
         });
-        // Переход I: наплечник и перчатка, рунная полоса на плече.
+        // Переход I: гранёные наплечник и перчатка, рунное кольцо на плече.
         sides("arms_base1", "Arm", () -> {
-            box(Mat.GUNMETAL, 4, 21, -2, 5, 3, 4).inflate(0.6);
-            box(Mat.GUNMETAL, 4, 12, -2, 4, 5, 4).inflate(0.5);
-            box(Mat.RUNE, 9.7, 21.5, -1.5, 1, 1, 3);
+            octY(Mat.GUNMETAL, 14, 6, 12, 41.4, 0, 7);
+            octY(Mat.GUNMETAL, 12, 5, 12, 24, 0, 9);
+            octY(Mat.RUNE, 15, 6, 12, 44, 0, 1);
         });
-        // Переход II: обод наплечника и сервопривод локтя.
+        // Переход II: обод наплечника и диск сервопривода на локте.
         sides("arms_base2", "Arm", () -> {
-            box(Mat.GUNMETAL, 4, 21, -2, 5, 3, 4).inflate(0.6);
-            box(Mat.GUNMETAL, 4, 12, -2, 4, 5, 4).inflate(0.5);
-            box(Mat.STEEL, 3.6, 20, -3, 6, 1, 6);
-            box(Mat.STEEL, 8.2, 17.5, -1, 1, 2, 2);
+            octY(Mat.GUNMETAL, 14, 6, 12, 41.4, 0, 7);
+            octY(Mat.GUNMETAL, 12, 5, 12, 24, 0, 9);
+            octY(Mat.STEEL, 17, 7, 12, 40.6, 0, 1);
+            octX(Mat.STEEL, 5, 2, 16.2, 36, 0, 1);
         });
-        // Финал: цельный рукав и большой наплечник с латунной накладкой.
+        // Финал: цельный рукав, большой наплечник с латунным поясом, диск локтя.
         sides("arms_base3", "Arm", () -> {
-            box(Mat.GUNMETAL, 4, 12, -2, 4, 12, 4).inflate(0.6);
-            box(Mat.GUNMETAL, 3.6, 21.4, -3, 6, 3, 6);
-            box(Mat.BRASS, 9.7, 22, -1.5, 1, 1, 3);
+            octY(Mat.GUNMETAL, 12, 5, 12, 24, 0, 18);
+            octY(Mat.GUNMETAL, 17, 7, 12, 41.4, 0, 7);
+            octY(Mat.BRASS, 18, 7, 12, 43.4, 0, 1);
+            octX(Mat.STEEL, 5, 2, 18.1, 34, 0, 1);
         });
         // «Перехват»: щиток на предплечье, второй слой, излучатель.
-        sides("arms_add1", "Arm", () -> box(Mat.BRASS, 9.2, 13, -1.5, 1, 4, 3));
-        sides("arms_add2", "Arm", () -> box(Mat.STEEL, 10.2, 14, -1, 1, 2, 2));
-        sides("arms_add3", "Arm", () -> box(Mat.ARC, 11.2, 14.5, -0.5, 1, 1, 1));
-        // Вершина «Таран»: шип на наплечнике.
+        sides("arms_add1", "Arm", () -> box(Mat.BRASS, 18.2, 25.5, -3, 1, 8, 6));
+        sides("arms_add2", "Arm", () -> octX(Mat.STEEL, 5, 2, 19.2, 29.5, 0, 1));
+        sides("arms_add3", "Arm", () -> box(Mat.ARC, 20.2, 28.5, -1, 1, 2, 2));
+        // Вершина «Таран»: ступенчатый шип на наплечнике.
         sides("arms_apex", "Arm", () -> {
-            box(Mat.STEEL, 6, 24.5, -1, 2, 2, 2);
-            box(Mat.BRASS, 6.5, 26.5, -0.5, 1, 1, 1);
+            octX(Mat.STEEL, 5, 2, 20.6, 46, 0, 2);
+            octX(Mat.BRASS, 3, 1, 22.6, 46, 0, 2);
         });
     }
 
     static void legs() {
-        // Прототип: щитки бедра, колена и голени, руна у пояса.
+        // Прототип: щитки бедра и голени, диск колена, боковая пластина, руна у пояса.
         sides("legs_base0", "Leg", () -> {
-            box(Mat.STEEL, 0.5, 7, -3.1, 3, 4, 1);
-            box(Mat.STEEL, 1, 5, -3.4, 2, 2, 1);
-            box(Mat.STEEL, 0.5, 1, -3.1, 3, 4, 1);
-            box(Mat.STEEL, 4.2, 6, -1.5, 1, 5, 3);
-            box(Mat.RUNE, 1.5, 11, -3.3, 1, 1, 1);
+            box(Mat.STEEL, 1, 14, -6.3, 6, 8, 1);
+            oct(Mat.STEEL, 5, 2, 4, 11, -7, 1);
+            box(Mat.STEEL, 1, 2, -6.3, 6, 7, 1);
+            box(Mat.STEEL, 8.4, 12, -3, 1, 10, 6);
+            box(Mat.RUNE, 3, 22.4, -6.6, 2, 1, 1);
         });
-        // Переход I: набедренник и понож, руна на колене.
+        // Переход I: гранёные набедренник и понож, руна на колене.
         sides("legs_base1", "Leg", () -> {
-            box(Mat.GUNMETAL, 0.2, 0, -2, 4, 6, 4).inflate(0.4);
-            box(Mat.GUNMETAL, 0.2, 7, -2, 4, 5, 4).inflate(0.3);
-            box(Mat.RUNE, 1.7, 6, -2.9, 1, 1, 1);
+            octY(Mat.GUNMETAL, 12, 5, 5, 0, 0, 10);
+            octY(Mat.GUNMETAL, 12, 5, 5, 13, 0, 10);
+            oct(Mat.RUNE, 5, 2, 4.5, 11.5, -5.6, 1);
         });
-        // Переход II: наколенник и поршень икры.
+        // Переход II: диск наколенника и поршень икры.
         sides("legs_base2", "Leg", () -> {
-            box(Mat.GUNMETAL, 0.2, 0, -2, 4, 6, 4).inflate(0.4);
-            box(Mat.GUNMETAL, 0.2, 7, -2, 4, 5, 4).inflate(0.3);
-            box(Mat.STEEL, 1.2, 5.5, -3.3, 2, 2, 1);
-            box(Mat.STEEL, 1.7, 2, 2.5, 1, 5, 1);
+            octY(Mat.GUNMETAL, 12, 5, 5, 0, 0, 10);
+            octY(Mat.GUNMETAL, 12, 5, 5, 13, 0, 10);
+            oct(Mat.STEEL, 7, 3, 4.5, 11.5, -6.6, 2);
+            box(Mat.STEEL, 4, 2.5, 6.1, 2, 9, 1);
         });
-        // Финал: цельная нога, латунный наколенник, носок ботинка.
+        // Финал: цельная нога, латунный наколенник, ребро голени, скошенный носок.
         sides("legs_base3", "Leg", () -> {
-            box(Mat.GUNMETAL, 0.3, 0, -2, 4, 12, 4).inflate(0.5);
-            box(Mat.BRASS, 1.3, 5.5, -3.4, 2, 2, 1);
-            box(Mat.GUNMETAL, 0.3, 0, -3.5, 4, 2, 1);
+            octY(Mat.GUNMETAL, 12, 5, 5, 0, 0, 24);
+            oct(Mat.BRASS, 7, 3, 4.5, 11.5, -7.2, 2);
+            box(Mat.STEEL, 3.5, 1.5, -7.4, 2, 7, 2).rotY(45);
+            box(Mat.GUNMETAL, 1.5, 0, -8.6, 7, 3, 3);
+            box(Mat.GUNMETAL, 1.6, 1.4, -8.4, 7, 3, 3).rotX(45);
         });
         // «Мобильность»: приводы на голени и бедре, лампа готовности.
-        sides("legs_add1", "Leg", () -> box(Mat.STEEL, 4.9, 2, -1, 1, 4, 2));
-        sides("legs_add2", "Leg", () -> box(Mat.BRASS, 4.9, 7, -1, 1, 3, 2));
-        sides("legs_add3", "Leg", () -> box(Mat.LAMP, 5.9, 3.5, -0.5, 1, 1, 1));
-        // Вершина «Реактивный прыжок»: ускорители за икрами.
+        sides("legs_add1", "Leg", () -> box(Mat.STEEL, 11.2, 3, -2, 1, 7, 4));
+        sides("legs_add2", "Leg", () -> octX(Mat.BRASS, 5, 2, 11.2, 17.5, 0, 1));
+        sides("legs_add3", "Leg", () -> box(Mat.LAMP, 12.2, 5.5, -1, 1, 2, 2));
+        // Вершина «Реактивный прыжок»: сопла за икрами.
         sides("legs_apex", "Leg", () -> {
-            box(Mat.STEEL, 0.8, 0.5, 3.7, 3, 3, 1);
-            box(Mat.ARC, 1.8, -0.5, 3.7, 1, 1, 1);
+            octY(Mat.STEEL, 5, 2, 5, 1, 9, 6);
+            octY(Mat.ARC, 3, 1, 5, 0, 9, 1);
         });
     }
 
     static void reactor() {
-        // Прототип: ранец с сырой намоткой и рунной полосой.
+        // Прототип: короб с диском сырой намотки и рунной полосой.
         on("armorBody", "reactor_base0");
-        box(Mat.STEEL, -2.5, 16, 3.3, 5, 6, 2);
-        box(Mat.COIL_RAW, -1.5, 17, 5.3, 3, 4, 1);
-        box(Mat.RUNE, -2.5, 22.2, 3.5, 5, 1, 1);
-        // Переход I: корпус, две ровные катушки.
+        c(Mat.STEEL, 10, 32, 12, 6.2, 4);
+        oct(Mat.COIL_RAW, 7, 3, 0, 38, 10.2, 2);
+        c(Mat.RUNE, 10, 44.6, 3, 7, 3);
+        // Переход I: корпус, две вертикальные катушки в латунных торцах, руны на бортах.
         on("armorBody", "reactor_base1");
-        box(Mat.GUNMETAL, -3, 15.5, 3.2, 6, 7, 3);
-        both(Mat.COIL, 0.7, 16.5, 6.2, 2, 5, 1);
-        box(Mat.RUNE, -3, 22.7, 3.4, 6, 1, 1);
-        // Переход II: шире, решётка охлаждения, трубы по бокам.
+        c(Mat.GUNMETAL, 12, 31, 14, 6.2, 5);
+        for (int sx = -1; sx <= 1; sx += 2) {
+            octY(Mat.COPPER, 5, 2, sx * 3, 33.5, 12.6, 8);
+            octY(Mat.BRASS, 5, 2, sx * 3, 32.5, 12.6, 1);
+            octY(Mat.BRASS, 5, 2, sx * 3, 41.5, 12.6, 1);
+        }
+        sym(box(Mat.RUNE, 6.1, 36, 7.5, 1, 5, 3));
+        // Переход II: восьмигранный барабан с решёткой, трубы по бокам.
         on("armorBody", "reactor_base2");
-        box(Mat.GUNMETAL, -3.5, 15, 3.2, 7, 8, 3);
-        box(Mat.VENT, -2.5, 16, 6.2, 5, 5, 1);
-        both(Mat.STEEL, 3.6, 17, 3.5, 1, 5, 1);
-        // Финал: цельный реактор с красными лампами и выхлопами.
+        oct(Mat.GUNMETAL, 14, 6, 0, 38.5, 6.2, 5);
+        oct(Mat.STEEL, 10, 4, 0, 38.5, 11.2, 1);
+        sym(box(Mat.STEEL, 7.2, 33.5, 7, 1, 10, 2));
+        // Финал: большой барабан, латунное кольцо, красный глаз реактора, выхлопы сверху.
         on("armorBody", "reactor_base3");
-        box(Mat.GUNMETAL, -3.5, 15, 3.2, 7, 8, 4);
-        box(Mat.LAMPS, -2.5, 18, 7.2, 5, 3, 1);
-        both(Mat.STEEL, 1.5, 23, 4, 2, 2, 2);
+        oct(Mat.GUNMETAL, 17, 7, 0, 38.5, 6.2, 6);
+        oct(Mat.BRASS, 12, 5, 0, 38.5, 12.2, 1);
+        oct(Mat.LAMP, 7, 3, 0, 38.5, 12.5, 1);
+        octY(Mat.STEEL, 5, 2, 5.5, 46.6, 9, 3);
+        octY(Mat.STEEL, 5, 2, -5.5, 46.6, 9, 3);
         // «Рекуперация»: шины по бокам ранца и лампы возврата.
         on("armorBody", "reactor_add1");
-        box(Mat.BRASS, 4.7, 19.5, 4.5, 1, 3, 2);
+        box(Mat.BRASS, 8.8, 35, 7.5, 1, 7, 3);
         on("armorBody", "reactor_add2");
-        box(Mat.BRASS, -5.7, 19.5, 4.5, 1, 3, 2);
+        box(Mat.BRASS, -9.8, 35, 7.5, 1, 7, 3);
         on("armorBody", "reactor_add3");
-        both(Mat.LAMP, 4.7, 22.7, 5, 1, 1, 1);
-        // Вершина «Резервные катушки»: две запасные катушки снизу по бокам.
+        sym(box(Mat.LAMP, 8.8, 43, 8.5, 1, 1, 1));
+        // Вершина «Резервные катушки»: две запасные катушки под барабаном.
         on("armorBody", "reactor_apex");
-        both(Mat.COIL, 3.8, 15.2, 5, 2, 3, 2);
-        both(Mat.BRASS, 3.8, 18.2, 5, 2, 1, 2);
+        for (int sx = -1; sx <= 1; sx += 2) {
+            octY(Mat.COPPER, 5, 2, sx * 3.5, 25.6, 10.5, 4);
+            octY(Mat.BRASS, 7, 3, sx * 3.5, 24.6, 10.5, 1);
+        }
     }
 
     static void rune() {
-        // Прототип: кожаный пояс с большой рунной пластиной.
+        // Прототип: кожаный пояс с большой восьмигранной рунной пряжкой.
         on("armorBody", "rune_base0");
-        box(Mat.LEATHER, -4, 12.5, -2, 8, 2, 4).inflate(0.4);
-        box(Mat.RUNE, -2, 12, -3.4, 4, 3, 1);
+        chamfered(Mat.LEATHER, 25, 4, 9, 6);
+        oct(Mat.RUNE, 10, 4, 0, 27, -7.4, 1);
         // Переход I: стальной пояс, узел в латунной оправе, руны по бокам.
         on("armorBody", "rune_base1");
-        box(Mat.STEEL, -4, 12.5, -2, 8, 2, 4).inflate(0.5);
-        box(Mat.BRASS, -1.5, 12.2, -3.5, 3, 3, 1);
-        box(Mat.CRYSTAL, -0.5, 13.2, -3.9, 1, 1, 1);
-        both(Mat.RUNE, 3, 13, -2.9, 1, 1, 1);
+        chamfered(Mat.STEEL, 25, 4, 9, 6);
+        oct(Mat.BRASS, 7, 3, 0, 27, -7.3, 1);
+        box(Mat.CRYSTAL, -1, 26, -7.9, 2, 2, 1);
+        sym(box(Mat.RUNE, 5.5, 26, -6.7, 2, 2, 1));
         // Переход II: тёмная оправа, латунные клеммы.
         on("armorBody", "rune_base2");
-        box(Mat.STEEL, -4, 12.5, -2, 8, 2, 4).inflate(0.5);
-        box(Mat.GUNMETAL, -1.5, 12.2, -3.5, 3, 3, 1);
-        box(Mat.CRYSTAL, -0.5, 13.2, -3.9, 1, 1, 1);
-        both(Mat.BRASS, 1.6, 13.2, -3.3, 1, 1, 1);
-        // Финал: компактный узел, кристалл в центре.
+        chamfered(Mat.STEEL, 25, 4, 9, 6);
+        oct(Mat.GUNMETAL, 7, 3, 0, 27, -7.3, 1);
+        box(Mat.CRYSTAL, -1, 26, -7.9, 2, 2, 1);
+        sym(box(Mat.BRASS, 4.5, 26.5, -6.7, 1, 1, 1));
+        // Финал: широкий пояс, компактный узел, кристалл в центре.
         on("armorBody", "rune_base3");
-        box(Mat.GUNMETAL, -4, 12.5, -2, 8, 2, 4).inflate(0.6);
-        box(Mat.GUNMETAL, -1, 12.6, -3.7, 2, 2, 1);
-        box(Mat.CRYSTAL, -0.5, 13.1, -4.1, 1, 1, 1);
+        chamfered(Mat.GUNMETAL, 24.6, 5, 10, 6);
+        oct(Mat.GUNMETAL, 5, 2, 0, 27, -7.3, 1);
+        box(Mat.CRYSTAL, -1, 26, -7.9, 2, 2, 1);
         // «Насыщение»: трубки маны вдоль пояса.
         on("armorBody", "rune_add1");
-        box(Mat.MANA_TUBE, 2, 13.4, -3.1, 2, 1, 1);
+        box(Mat.MANA_TUBE, 4, 26.6, -6.9, 4, 1, 1);
         on("armorBody", "rune_add2");
-        box(Mat.MANA_TUBE, -4, 13.4, -3.1, 2, 1, 1);
+        box(Mat.MANA_TUBE, -8, 26.6, -6.9, 4, 1, 1);
         on("armorBody", "rune_add3");
-        box(Mat.MANA_TUBE, -2, 13.4, 2.1, 4, 1, 1);
+        box(Mat.MANA_TUBE, -4, 26.8, 6.2, 8, 1, 1);
         // Вершина «Антимагическое поле»: излучатели на бёдрах.
         on("armorBody", "rune_apex");
-        both(Mat.BRASS, 4.9, 11.5, -0.5, 1, 3, 1);
-        both(Mat.CRYSTAL, 4.9, 14.5, -0.5, 1, 1, 1);
+        sym(box(Mat.BRASS, 10.3, 23, -1, 1, 6, 2));
+        sym(box(Mat.CRYSTAL, 10.3, 29, -1, 1, 2, 2));
     }
 
     /** Манекен игрока для предпросмотра; добавляется после записи модели и в файлы не попадает. */
     static void mannequin() {
         bone("dummy", null, 0, 0, 0);
-        box(Mat.DUMMY, -4, 24, -4, 8, 8, 8);
-        box(Mat.DUMMY, -4, 12, -2, 8, 12, 4);
-        both(Mat.DUMMY, 4, 12, -2, 4, 12, 4);
-        both(Mat.DUMMY, 0, 0, -2, 4, 12, 4);
+        box(Mat.DUMMY, -8, 48, -8, 16, 16, 16);
+        box(Mat.DUMMY, -8, 24, -4, 16, 24, 8);
+        both(Mat.DUMMY, 8, 24, -4, 8, 24, 8);
+        both(Mat.DUMMY, 0, 0, -4, 8, 24, 8);
     }
 
     /** Лист: столбцы — состояния, верхний ряд — спереди, нижний — сзади. */
@@ -306,8 +358,8 @@ public class ArmorModel extends GaussModel {
         g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
         for (int i = 0; i < shots.size(); i++) {
             Shot s = shots.get(i);
-            g.drawImage(render(s.look(), 205, 14, 9.6, cw - 2, ch - 2), i * cw, head, null);
-            g.drawImage(render(s.look(), 25, 14, 9.6, cw - 2, ch - 2), i * cw, head + ch, null);
+            g.drawImage(render(s.look(), 205, 14, 4.7, cw - 2, ch - 2), i * cw, head, null);
+            g.drawImage(render(s.look(), 25, 14, 4.7, cw - 2, ch - 2), i * cw, head + ch, null);
             g.setColor(new Color(0xB08D57));
             g.drawRect(i * cw, head, cw - 2, ch - 2);
             g.drawRect(i * cw, head + ch, cw - 2, ch - 2);
@@ -326,7 +378,8 @@ public class ArmorModel extends GaussModel {
         Path preview = args.length > 1 ? Path.of(args[1]) : null;
         NAME = "heavy_armor";
         SEGMENTS = new String[]{"helmet", "chest", "arms", "legs", "reactor", "rune"};
-        CENTER = new double[]{0, 17, 0};
+        CENTER = new double[]{0, 35, 0};
+        GEO_SCALE = 0.5;
         buildArmor();
         pack();
         paintTextures();
