@@ -1,0 +1,6 @@
+build=success servertest=success clienttest=success fullpack=success
+branch=core/slice3-heroes pr=38 sha=ec9c99de23f1f6423182448ed353179b75470ca5 run=115
+fullpack: lock=ok
+fullpack: gametest=success
+fullpack: client=success
+fullpack: shaders=success
