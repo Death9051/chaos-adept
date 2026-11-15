@@ -1,0 +1,17 @@
+{
+  "trigger": {
+    "type": "rune_erased"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.firsts.rune_erased.public"
+    ],
+    "streamer": [
+      "adept_story.journal.firsts.rune_erased.streamer"
+    ]
+  },
+  "note": {
+    "public": "adept_story.journal.firsts.rune_erased.note.public",
+    "streamer": "adept_story.journal.firsts.rune_erased.note.streamer"
+  }
+}

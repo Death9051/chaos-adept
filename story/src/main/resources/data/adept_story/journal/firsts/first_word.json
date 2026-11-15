@@ -1,0 +1,14 @@
+{
+  "trigger": {
+    "type": "rune_engraved",
+    "has_word": "true"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.firsts.first_word.public"
+    ],
+    "streamer": [
+      "adept_story.journal.firsts.first_word.streamer"
+    ]
+  }
+}
