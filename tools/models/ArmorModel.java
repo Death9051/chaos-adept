@@ -90,6 +90,30 @@ public class ArmorModel extends GaussModel {
         rune();
     }
 
+    /**
+     * Корпус с широкими срезами углов: два бруса крестом и четыре плиты под 45°. X и Z — полуразмеры, c — срез.
+     */
+    static void faceted(Mat m, double y, int h, int X, int Z, double c) {
+        c(m, 2 * X, y, h, -(Z - c), (int) Math.round(2 * (Z - c)));
+        c(m, (int) Math.round(2 * (X - c)), y + 0.01, h, -Z, 2 * Z);
+        int len = (int) Math.floor(c * 1.4142);
+        double off = 0.7071 * 1.5;
+        for (int sx = -1; sx <= 1; sx += 2) {
+            for (int sz = -1; sz <= 1; sz += 2) {
+                double cx = sx * (X - c / 2 - off), cz = sz * (Z - c / 2 - off);
+                box(m, cx - len / 2.0, y + 0.02, cz - 1.5, len, h, 3).rotY(45 * sx * sz);
+            }
+        }
+    }
+
+    /** Оболочка шлема: гранёный корпус и скосы по верхним кромкам. */
+    static void shell(Mat m) {
+        faceted(m, 48.4, 16, 11, 10, 4.5);
+        c(m, 13, 62.1, 3, -10.7, 3).rotX(45);
+        c(m, 13, 62.1, 3, 7.7, 3).rotX(45);
+        sym(box(m, 8.7, 62.1, -5.5, 3, 3, 11).rotZ(45));
+    }
+
     static void helmet() {
         // Прототип: отдельные пластины на рунных скобах, голова видна в просветах.
         on("armorHead", "helmet_base0");
@@ -99,43 +123,49 @@ public class ArmorModel extends GaussModel {
         c(Mat.STEEL, 12, 50, 11, 9, 1);
         sym(box(Mat.RUNE, 7, 61, -9.5, 1, 3, 1));
         sym(box(Mat.RUNE, 7, 61, 8.5, 1, 3, 1));
-        // Переход I: закрытый шлем со срезанными углами, рунная полоса над забралом.
+        // Переход I: закрытый гранёный шлем, смотровая щель, рунная полоса на лбу.
         on("armorHead", "helmet_base1");
-        chamfered(Mat.GUNMETAL, 48.4, 16, 10, 9);
-        c(Mat.ARC, 10, 54, 2, -9.6, 1);
-        c(Mat.RUNE, 12, 59, 1, -9.7, 1);
-        sym(box(Mat.RUNE, 9.7, 59, -5, 1, 1, 10));
-        // Переход II: купол, выступающая лицевая часть, руны только у висков.
+        shell(Mat.GUNMETAL);
+        c(Mat.ARC, 10, 55, 2, -10.6, 1);
+        c(Mat.RUNE, 12, 59.4, 1, -10.7, 1);
+        sym(box(Mat.RUNE, 10.7, 59.4, -5, 1, 1, 10));
+        // Переход II: купол, дыхательный узел, руны только у висков.
         on("armorHead", "helmet_base2");
-        chamfered(Mat.GUNMETAL, 48.4, 16, 10, 9);
-        octY(Mat.STEEL, 17, 7, 0, 64.4, 0, 2);
-        c(Mat.ARC, 10, 54.6, 2, -9.6, 1);
-        c(Mat.STEEL, 8, 48.6, 5, -11.2, 3).rotX(12);
-        sym(box(Mat.RUNE, 9.7, 57, -2, 1, 2, 4));
-        // Финал: двухъярусный купол с гребнем, козырёк, лицевая часть со скулами, диски на ушах.
+        shell(Mat.GUNMETAL);
+        octY(Mat.STEEL, 22, 9, 0, 64.5, 0, 2);
+        c(Mat.ARC, 10, 55, 2, -10.6, 1);
+        oct(Mat.STEEL, 7, 3, 0, 51, -12, 2);
+        sym(box(Mat.RUNE, 10.7, 57, -2, 1, 2, 4));
+        // Финал: трёхъярусный купол с гребнем, две линзы в латунных оправах, переносица, дыхательный узел
+        // с решёткой, диски на ушах, затыльник.
         on("armorHead", "helmet_base3");
-        chamfered(Mat.GUNMETAL, 48.4, 16, 10, 9);
-        octY(Mat.GUNMETAL, 17, 7, 0, 64.4, 0, 2);
-        octY(Mat.STEEL, 12, 5, 0, 66.4, 0, 1);
-        c(Mat.ARC, 12, 54.6, 2, -9.7, 1);
-        c(Mat.STEEL, 14, 56.8, 2, -10.8, 2).rotX(-25);
-        c(Mat.GUNMETAL, 8, 48.6, 5, -11.6, 3).rotX(12);
-        sym(box(Mat.STEEL, 4.5, 49, -10.4, 4, 5, 1));
-        octX(Mat.STEEL, 7, 3, 10, 55, 0, 1);
-        octX(Mat.STEEL, 7, 3, -11, 55, 0, 1);
-        c(Mat.BRASS, 2, 67.4, 1, -6, 12);
-        // «Очистка»: фильтры у подбородка и блок на затылке.
+        shell(Mat.GUNMETAL);
+        octY(Mat.GUNMETAL, 22, 9, 0, 64.5, 0, 2);
+        octY(Mat.GUNMETAL, 17, 7, 0, 66.5, 0, 2);
+        octY(Mat.STEEL, 12, 5, 0, 68.5, 0, 1);
+        c(Mat.BRASS, 2, 69.5, 1, -5, 10);
+        for (int sx = -1; sx <= 1; sx += 2) {
+            oct(Mat.BRASS, 7, 3, sx * 4, 56, -10.6, 1);
+            oct(Mat.ARC, 5, 2, sx * 4, 56, -11.2, 1);
+        }
+        c(Mat.STEEL, 2, 53.6, 8, -11, 1);
+        oct(Mat.GUNMETAL, 8, 3, 0, 51, -13, 3);
+        oct(Mat.STEEL, 5, 2, 0, 51, -13.6, 1);
+        octX(Mat.STEEL, 7, 3, 11, 55, 0, 1);
+        octX(Mat.STEEL, 7, 3, -12, 55, 0, 1);
+        c(Mat.GUNMETAL, 14, 46.8, 4, 9.6, 2).rotX(-20);
+        // «Очистка»: фильтры по бокам дыхательного узла и блок на затылке.
         on("armorHead", "helmet_add1");
-        oct(Mat.BRASS, 3, 1, 7, 50.5, -13.6, 3);
+        oct(Mat.BRASS, 3, 1, 6.5, 50.5, -14, 3);
         on("armorHead", "helmet_add2");
-        oct(Mat.BRASS, 3, 1, -7, 50.5, -13.6, 3);
+        oct(Mat.BRASS, 3, 1, -6.5, 50.5, -14, 3);
         on("armorHead", "helmet_add3");
-        c(Mat.STEEL, 6, 50, 4, 9.2, 2);
-        box(Mat.LAMP, -1, 54.2, 9.6, 2, 1, 1);
+        c(Mat.STEEL, 6, 53, 4, 10.2, 2);
+        box(Mat.LAMP, -1, 57.2, 10.6, 2, 1, 1);
         // Вершина «Аварийный режим»: красный маяк на макушке.
         on("armorHead", "helmet_apex");
-        octY(Mat.BRASS, 5, 2, 0, 68.5, 0, 1);
-        box(Mat.LAMP, -1, 69.5, -1, 2, 2, 2);
+        octY(Mat.BRASS, 5, 2, 0, 70.6, 0, 1);
+        box(Mat.LAMP, -1, 71.6, -1, 2, 2, 2);
     }
 
     static void chest() {
@@ -362,6 +392,10 @@ public class ArmorModel extends GaussModel {
 
     /** Лист: столбцы — состояния, верхний ряд — спереди, нижний — сзади. */
     static BufferedImage armorSheet(String title, List<Shot> shots) {
+        return armorSheet(title, shots, 4.7);
+    }
+
+    static BufferedImage armorSheet(String title, List<Shot> shots, double scale) {
         int cw = 250, ch = 400, head = 34;
         BufferedImage out = new BufferedImage(cw * shots.size(), head + ch * 2 + 40, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = out.createGraphics();
@@ -374,8 +408,8 @@ public class ArmorModel extends GaussModel {
         g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
         for (int i = 0; i < shots.size(); i++) {
             Shot s = shots.get(i);
-            g.drawImage(render(s.look(), 205, 14, 4.7, cw - 2, ch - 2), i * cw, head, null);
-            g.drawImage(render(s.look(), 25, 14, 4.7, cw - 2, ch - 2), i * cw, head + ch, null);
+            g.drawImage(render(s.look(), 205, 14, scale, cw - 2, ch - 2), i * cw, head, null);
+            g.drawImage(render(s.look(), 25, 14, scale, cw - 2, ch - 2), i * cw, head + ch, null);
             g.setColor(new Color(0xB08D57));
             g.drawRect(i * cw, head, cw - 2, ch - 2);
             g.drawRect(i * cw, head + ch, cw - 2, ch - 2);
@@ -396,6 +430,7 @@ public class ArmorModel extends GaussModel {
         SEGMENTS = new String[]{"helmet", "chest", "arms", "legs", "reactor", "rune"};
         CENTER = new double[]{0, 35, 0};
         GEO_SCALE = 0.5;
+        FRONT_TONE = 2;
         buildArmor();
         pack();
         paintTextures();
@@ -422,6 +457,13 @@ public class ArmorModel extends GaussModel {
                     new Shot("Прототип с вершинами", Look.of(0, 0, true)),
                     new Shot("Частично: шлем III/I,\nнагрудник I/III, ноги II/II", proto.with(0, 3, 1, true).with(1, 1, 3, false).with(3, 2, 2, false)))),
                     "png", preview.resolve("armor-mix.png").toFile());
+            CENTER = new double[]{0, 58, 0};
+            ImageIO.write(armorSheet("Тяжёлая силовая броня: шлем крупно", List.of(
+                    new Shot("Прототип", proto),
+                    new Shot("Основа I", Look.of(1, 0, false)),
+                    new Shot("Основа II", Look.of(2, 0, false)),
+                    new Shot("Основа III, детали III, вершина", Look.of(3, 3, true))), 8.5),
+                    "png", preview.resolve("armor-helmet.png").toFile());
         }
     }
 }

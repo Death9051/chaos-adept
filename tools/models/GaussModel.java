@@ -155,6 +155,8 @@ public class GaussModel {
     static double[] CENTER = {0, 18, -9};
     /** Масштаб координат в файле geo. Не 1 — у граней свои UV: текстура остаётся в разрешении кубов (броня на игроке). */
     static double GEO_SCALE = 1;
+    /** Тон граней, смотрящих вперёд и назад. У брони перед — главный вид, он светлее. */
+    static int FRONT_TONE = 3;
 
     static String cur;
 
@@ -547,7 +549,8 @@ public class GaussModel {
             return new double[]{x + cx, y * c - z * s + cy, y * s + z * c + cz};
         }
         if (q.axis == 2) {
-            return new double[]{x * c + z * s + cx, y + cy, -x * s + z * c + cz};
+            // GeckoLib при загрузке меняет знак поворотов X и Y и зеркалит X: в координатах файла поворот Y идёт в обратную сторону.
+            return new double[]{x * c - z * s + cx, y + cy, x * s + z * c + cz};
         }
         return new double[]{x * c - y * s + cx, x * s + y * c + cy, z + cz};
     }
@@ -559,7 +562,7 @@ public class GaussModel {
             case UP -> 1;
             case DOWN -> 4;
             case EAST, WEST -> 2;
-            default -> 3;
+            default -> FRONT_TONE;
         };
         // Повёрнутый брусок: тон по тому, куда грань смотрит на самом деле, а не по её имени.
         // Иначе «нижняя» грань бруска восьмигранника оказывается сбоку и даёт чёрные полосы в стыках.
