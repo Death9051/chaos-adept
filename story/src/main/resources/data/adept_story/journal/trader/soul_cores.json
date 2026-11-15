@@ -1,0 +1,15 @@
+{
+  "trigger": {
+    "type": "trader_deal",
+    "currency": "soul_core"
+  },
+  "page": "trader",
+  "text": {
+    "public": [
+      "adept_story.journal.trader.soul_cores.public"
+    ],
+    "streamer": [
+      "adept_story.journal.trader.soul_cores.streamer"
+    ]
+  }
+}

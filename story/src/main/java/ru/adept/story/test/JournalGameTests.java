@@ -112,6 +112,60 @@ public final class JournalGameTests {
         helper.succeed();
     }
 
+    /** Срез 3: котёл собран, первая душа, первое ядро души — по одной записи, повтор пустой. */
+    @GameTest(template = "empty")
+    public static void soulCauldronEntries(GameTestHelper helper) {
+        MinecraftServer server = reset(helper);
+        List<EntryView> cauldron = Journal.fire(server, "artifact_prototype_crafted", Map.of("artifact", "cauldron"));
+        helper.assertTrue(cauldron.stream().anyMatch(e -> e.id().equals("firsts/cauldron")),
+                "Нет записи о котле: " + cauldron.stream().map(EntryView::id).toList());
+        helper.assertTrue(Journal.fire(server, "artifact_prototype_crafted", Map.of("artifact", "gauss")).stream()
+                .noneMatch(e -> e.id().equals("firsts/cauldron")), "Запись о котле сработала на другой прототип");
+
+        expectIds(helper, Journal.fire(server, "soul_burned", Map.of("strength", "normal")), "firsts/first_soul");
+        helper.assertTrue(Journal.fire(server, "soul_burned", Map.of("strength", "strong")).isEmpty(),
+                "Запись о первой душе повторилась");
+        expectIds(helper, Journal.fire(server, "soul_core_obtained", Map.of("strength", "normal")), "firsts/first_soul_core");
+        helper.assertTrue(Journal.fire(server, "soul_core_obtained", Map.of("strength", "guardian")).isEmpty(),
+                "Запись о первом ядре повторилась");
+        helper.succeed();
+    }
+
+    /** Торговец: первая сделка ядрами — реплика и условие на его странице; сгустки и повтор — без них. */
+    @GameTest(template = "empty")
+    public static void traderSoulCores(GameTestHelper helper) {
+        MinecraftServer server = reset(helper);
+        helper.assertTrue(TraderTalk.dealLines(server, "purchase", "node_cluster").isEmpty(),
+                "Сделка сгустками не должна давать реплику");
+        List<String> first = TraderTalk.dealLines(server, "purchase", "soul_core");
+        helper.assertTrue(first.equals(List.of(AdeptStory.MOD_ID + ".trader.soul_core")), "Первая сделка ядрами: " + first);
+        helper.assertTrue(JournalData.get(server).entries.stream().anyMatch(e -> e.id().equals("trader/soul_cores")
+                && e.page().equals(JournalDef.PAGE_TRADER)), "Условие о ядрах не попало на страницу торговца");
+        helper.assertTrue(TraderTalk.dealLines(server, "purchase", "soul_core").isEmpty(), "Реплика о ядрах повторилась");
+        helper.assertTrue(TraderTalk.dealLines(server, "trophy", "soul_core").equals(List.of(AdeptStory.MOD_ID + ".trader.trophy")),
+                "Трофей за ядра: должна остаться только реплика о трофее");
+        helper.succeed();
+    }
+
+    /** Торговец вспоминает котёл в первое появление после первой сожжённой души, один раз. */
+    @GameTest(template = "empty")
+    public static void traderCauldronLine(GameTestHelper helper) {
+        MinecraftServer server = reset(helper);
+        WorldProgress progress = WorldProgress.get(server);
+        int oldTier = progress.nodeTier();
+        try {
+            progress.setNodeTier(server, 1);
+            helper.assertTrue(TraderTalk.arrivalLines(server, false).get(0).contains(".greet."), "До котла — приветствие");
+            Journal.fire(server, "soul_burned", Map.of("strength", "normal"));
+            List<String> lines = TraderTalk.arrivalLines(server, false);
+            helper.assertTrue(lines.equals(List.of(AdeptStory.MOD_ID + ".trader.cauldron")), "Реплика о котле: " + lines);
+            helper.assertTrue(TraderTalk.arrivalLines(server, false).get(0).contains(".greet."), "Реплика о котле повторилась");
+        } finally {
+            progress.setNodeTier(server, oldTier);
+        }
+        helper.succeed();
+    }
+
     private static void expectIds(GameTestHelper helper, List<EntryView> added, String... ids) {
         List<String> got = added.stream().map(EntryView::id).toList();
         helper.assertTrue(got.equals(List.of(ids)), "Ожидались записи " + List.of(ids) + ", получены " + got);

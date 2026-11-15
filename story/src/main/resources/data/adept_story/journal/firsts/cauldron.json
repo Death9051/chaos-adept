@@ -1,0 +1,14 @@
+{
+  "trigger": {
+    "type": "artifact_prototype_crafted",
+    "artifact": "cauldron"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.firsts.cauldron.public"
+    ],
+    "streamer": [
+      "adept_story.journal.firsts.cauldron.streamer"
+    ]
+  }
+}

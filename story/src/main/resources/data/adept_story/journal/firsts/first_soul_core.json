@@ -1,0 +1,13 @@
+{
+  "trigger": {
+    "type": "soul_core_obtained"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.firsts.first_soul_core.public"
+    ],
+    "streamer": [
+      "adept_story.journal.firsts.first_soul_core.streamer"
+    ]
+  }
+}
