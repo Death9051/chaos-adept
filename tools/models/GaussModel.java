@@ -166,6 +166,11 @@ public class GaussModel {
     static double GEO_SCALE = 1;
     /** Тон граней, смотрящих вперёд и назад. У брони перед — главный вид, он светлее. */
     static int FRONT_TONE = 3;
+    /**
+     * Раскраска плит брони: вместо тёмной обводки грани — свет по верхней кромке и тень по нижней,
+     * заклёпки в углах крупных граней и редкая потёртость. Включает генератор брони.
+     */
+    static boolean PLATES = false;
 
     static String cur;
 
@@ -614,11 +619,11 @@ public class GaussModel {
         glow[0] = false;
         switch (q.mat) {
             case GUNMETAL:
-                return tone(GUNMETAL, t);
+                return PLATES ? plate(q, GUNMETAL, base, side, a, b, A, B) : tone(GUNMETAL, t);
             case STEEL:
-                return tone(STEEL, t);
+                return PLATES ? plate(q, STEEL, base, side, a, b, A, B) : tone(STEEL, t);
             case BRASS:
-                return tone(BRASS, t);
+                return PLATES ? plate(q, BRASS, base, side, a, b, A, B) : tone(BRASS, t);
             case COPPER:
                 return tone(COPPER, t);
             case LEATHER:
@@ -724,6 +729,45 @@ public class GaussModel {
             default:
                 return 0xFF00FF;
         }
+    }
+
+    static int mix(int c1, int c2, double k) {
+        int r = (int) Math.round(((c1 >> 16) & 255) * (1 - k) + ((c2 >> 16) & 255) * k);
+        int g = (int) Math.round(((c1 >> 8) & 255) * (1 - k) + ((c2 >> 8) & 255) * k);
+        int b = (int) Math.round((c1 & 255) * (1 - k) + (c2 & 255) * k);
+        return (r << 16) | (g << 8) | b;
+    }
+
+    /** Тексель плиты брони: объём кромками, заклёпки, потёртость. a, b — место на грани, A, B — её размер. */
+    static int plate(Cube q, int[] pal, int base, boolean side, int a, int b, int A, int B) {
+        int color = tone(pal, base);
+        int light = tone(pal, base - 1), dark = tone(pal, base + 1);
+        if (!q.round && q.yaw == 0 && A >= 6 && B >= 6 && (a == 1 || a == A - 2) && (b == 1 || b == B - 2)) {
+            return mix(color, dark, 0.8);
+        }
+        if (Math.min(A, B) >= 3) {
+            if (b == B - 1) {
+                return mix(color, light, side ? 0.7 : 0.4);
+            }
+            if (b == 0) {
+                return mix(color, dark, side ? 0.7 : 0.4);
+            }
+            if (a == 0 || a == A - 1) {
+                return mix(color, dark, 0.3);
+            }
+        }
+        if (side && B >= 4) {
+            // Плавный переход сверху вниз: плита читается выпуклой.
+            color = mix(color, b * 2 >= B ? light : dark, 0.18 * Math.abs(2.0 * b / (B - 1) - 1));
+        }
+        int hash = (a * 73 + b * 151 + (int) Math.round(q.x * 7 + q.y * 13 + q.z * 29) * 31 + A * 17 + B * 5) & 0x7FFFFFFF;
+        if (hash % 29 == 0) {
+            return mix(color, light, 0.35);
+        }
+        if (hash % 37 == 0) {
+            return mix(color, dark, 0.3);
+        }
+        return color;
     }
 
     /** Прямоугольник грани в развёртке box-UV: {u, v, ширина, высота}. */

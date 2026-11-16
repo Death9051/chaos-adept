@@ -587,6 +587,7 @@ public class ArmorModel extends GaussModel {
         CENTER = new double[]{0, 35, 0};
         GEO_SCALE = 0.5;
         FRONT_TONE = 2;
+        PLATES = true;
         buildArmor();
         pack();
         paintTextures();
