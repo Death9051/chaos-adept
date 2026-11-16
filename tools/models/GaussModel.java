@@ -902,8 +902,13 @@ public class GaussModel {
 
     // ================= geo.json =================
 
+    /** Число для файла geo: три знака после точки, без лишних нулей. Почти целые и почти нулевые — целыми (без «-0.»). */
     static String num(double v) {
-        return v == Math.rint(v) ? Long.toString((long) v) : String.format(Locale.ROOT, "%.3f", v).replaceAll("0+$", "");
+        double r = Math.round(v * 1000) / 1000.0;
+        if (r == Math.rint(r)) {
+            return Long.toString((long) r);
+        }
+        return String.format(Locale.ROOT, "%.3f", r).replaceAll("0+$", "");
     }
 
     /** UV граней куба по отдельности — та же раскладка, что у box-UV; низ перевёрнут, как делает его GeckoLib. */
