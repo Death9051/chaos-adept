@@ -1,0 +1,6 @@
+build=success servertest=failure clienttest=failure fullpack=failure
+branch=claude/blade-armor-models pr=43 sha=4a6376e7c1613197a44b6dfdde94f7058c75ebfc run=130
+fullpack: lock=ok
+fullpack: gametest=failure
+fullpack: client=failure
+fullpack: shaders=failure
