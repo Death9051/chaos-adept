@@ -62,7 +62,7 @@ public final class GaussUpgradeGameTests {
 
     @GameTest(template = "empty")
     public static void gaussButtonsCoverAllNodes(GameTestHelper helper) {
-        int count = GaussLook.SEGMENTS.length * GaussUpgrades.NODES_PER_SEGMENT;
+        int count = GaussLook.TREES.length * GaussUpgrades.PER_ARTIFACT;
         for (int id = GaussUpgrades.BTN_FIRST; id < GaussUpgrades.BTN_FIRST + count; id++) {
             helper.assertTrue(GaussUpgrades.isButton(id) && GaussUpgrades.node(id).button() == id, "Кнопка " + id + " не возвращается в себя");
             helper.assertTrue(!GaussUpgrades.cost(GaussUpgrades.node(id)).items().isEmpty(), "У узла " + id + " пустая цена");
@@ -112,6 +112,51 @@ public final class GaussUpgradeGameTests {
         helper.assertTrue(cluster, "В цене вершины нет сгустка узла");
         helper.assertTrue(GaussUpgrades.unlock(player, apex) == TableActions.Result.OK, "Вершина с закрытым путём деталей");
         helper.assertTrue(GaussLook.apex(GaussLook.pack(TableActions.progress(player)), Segment.SCOPE), "Вершина не попала в облик");
+        helper.succeed();
+    }
+
+    @GameTest(template = "empty")
+    public static void bladeAndHeavyLooksFollowProgress(GameTestHelper helper) {
+        ArtifactProgress p = ArtifactProgress.EMPTY
+                .withStep(Segment.BLADE_EMITTER.key(0), 2)
+                .withStep(Segment.BLADE_EMITTER.key(1), 1)
+                .withStep(Segment.HEAVY_ARMS.key(0), 1)
+                .withStep(Segment.HEAVY_ARMS.apexKey(), 1);
+        int blade = GaussLook.pack(GaussLook.BLADE, p);
+        int heavy = GaussLook.pack(GaussLook.HEAVY, p);
+        helper.assertTrue(GaussLook.pack(p) == 0, "Прогресс клинка и брони не должен менять облик гаусса");
+        helper.assertTrue(GaussLook.visible(GaussLook.BLADE, blade, "emitter_base2")
+                && GaussLook.visible(GaussLook.BLADE, blade, "emitter_base2_field")
+                && !GaussLook.visible(GaussLook.BLADE, blade, "emitter_base0_field"), "Поле лезвия видно вместе со своей основой");
+        helper.assertTrue(GaussLook.visible(GaussLook.BLADE, blade, "emitter_add1")
+                && !GaussLook.visible(GaussLook.BLADE, blade, "emitter_add2"), "Детали эмиттера");
+        helper.assertTrue(GaussLook.visible(GaussLook.BLADE, blade, "frame") && GaussLook.visible(GaussLook.BLADE, blade, "drive_base0"),
+                "Рама и нетронутый сегмент клинка");
+        helper.assertTrue(GaussLook.visible(GaussLook.HEAVY, heavy, "arms_base1_l") && GaussLook.visible(GaussLook.HEAVY, heavy, "arms_base1_r")
+                && !GaussLook.visible(GaussLook.HEAVY, heavy, "arms_base0_l"), "Основа рук брони на обеих руках");
+        helper.assertTrue(GaussLook.visible(GaussLook.HEAVY, heavy, "arms_apex_r") && !GaussLook.visible(GaussLook.HEAVY, heavy, "legs_apex_l"),
+                "Вершина рук брони");
+        helper.assertTrue(GaussLook.visible(GaussLook.HEAVY, heavy, "armorHead") && GaussLook.visible(GaussLook.HEAVY, heavy, "helmet_base0"),
+                "Кости частей тела и прототип шлема");
+        helper.assertTrue(Segment.BLADE_EMITTER.key(1).equals(TableActions.BLADE_EDGE), "Ключ «Кромки» разошёлся со старым");
+        helper.assertTrue(Segment.HEAVY_CHEST.key(0).equals(TableActions.HEAVY_BASTION), "Ключ «Бастиона» разошёлся со старым");
+        helper.succeed();
+    }
+
+    @GameTest(template = "empty")
+    public static void bladeStepNeedsBuiltBladeAndPaysComponents(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        Node first = new Node(Segment.BLADE_DRIVE, 0, 1);
+        helper.assertTrue(GaussUpgrades.node(first.button()).equals(first), "Кнопка узла клинка не возвращается в узел");
+        player.setData(ModRegistries.ARTIFACT_PROGRESS, TableActions.progress(player).withStep(TableActions.GAUSS_BUILT, 1));
+        helper.assertTrue(GaussUpgrades.unlock(player, first) == TableActions.Result.NOT_CHOSEN, "Ступень клинка без собранного клинка");
+        player.setData(ModRegistries.ARTIFACT_PROGRESS, TableActions.progress(player).withStep(TableActions.BLADE_BUILT, 1));
+        for (ItemStack stack : GaussUpgrades.cost(first).items()) {
+            player.getInventory().add(stack.copy());
+        }
+        helper.assertTrue(GaussUpgrades.unlock(player, first) == TableActions.Result.OK, "Ступень клинка с компонентами");
+        helper.assertTrue(TableActions.progress(player).step(Segment.BLADE_DRIVE.key(0)) == 1, "Ступень клинка не записана");
+        helper.assertTrue(player.getInventory().isEmpty(), "Компоненты не списаны");
         helper.succeed();
     }
 }

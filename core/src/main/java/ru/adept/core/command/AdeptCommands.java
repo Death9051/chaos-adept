@@ -175,7 +175,7 @@ public final class AdeptCommands {
                                     setProgress(ctx, progress(ctx).withStep(key, value));
                                     return reply(ctx, key + " = " + value);
                                 })))))
-                // gauss <игрок> <основа 0–3> <детали 0–3> <вершины 0–1> — все сегменты гаусс-пушки разом (облик модели).
+                // gauss | blade | heavy <игрок> <основа 0–3> <детали 0–3> <вершины 0–1> — все сегменты артефакта разом (облик модели).
                 .then(Commands.literal("gauss").then(Commands.argument("player", EntityArgument.player())
                         .then(Commands.argument("base", IntegerArgumentType.integer(0, 3))
                                 .then(Commands.argument("add", IntegerArgumentType.integer(0, 3))
@@ -189,6 +189,34 @@ public final class AdeptCommands {
                                             }
                                             setProgress(ctx, p);
                                             return reply(ctx, "Гаусс: основа " + base + ", детали " + add + ", вершины " + apex);
+                                        }))))))
+                .then(Commands.literal("blade").then(Commands.argument("player", EntityArgument.player())
+                        .then(Commands.argument("base", IntegerArgumentType.integer(0, 3))
+                                .then(Commands.argument("add", IntegerArgumentType.integer(0, 3))
+                                        .then(Commands.argument("apex", IntegerArgumentType.integer(0, 1)).executes(ctx -> {
+                                            int base = IntegerArgumentType.getInteger(ctx, "base");
+                                            int add = IntegerArgumentType.getInteger(ctx, "add");
+                                            int apex = IntegerArgumentType.getInteger(ctx, "apex");
+                                            ArtifactProgress p = progress(ctx).withStep(ru.adept.core.table.TableActions.BLADE_BUILT, 1);
+                                            for (ru.adept.core.artifact.GaussLook.Segment s : ru.adept.core.artifact.GaussLook.BLADE) {
+                                                p = p.withStep(s.key(0), base).withStep(s.key(1), add).withStep(s.apexKey(), apex);
+                                            }
+                                            setProgress(ctx, p);
+                                            return reply(ctx, "Клинок: основа " + base + ", детали " + add + ", вершины " + apex);
+                                        }))))))
+                .then(Commands.literal("heavy").then(Commands.argument("player", EntityArgument.player())
+                        .then(Commands.argument("base", IntegerArgumentType.integer(0, 3))
+                                .then(Commands.argument("add", IntegerArgumentType.integer(0, 3))
+                                        .then(Commands.argument("apex", IntegerArgumentType.integer(0, 1)).executes(ctx -> {
+                                            int base = IntegerArgumentType.getInteger(ctx, "base");
+                                            int add = IntegerArgumentType.getInteger(ctx, "add");
+                                            int apex = IntegerArgumentType.getInteger(ctx, "apex");
+                                            ArtifactProgress p = progress(ctx).withStep(ru.adept.core.table.TableActions.HEAVY_BUILT, 1);
+                                            for (ru.adept.core.artifact.GaussLook.Segment s : ru.adept.core.artifact.GaussLook.HEAVY) {
+                                                p = p.withStep(s.key(0), base).withStep(s.key(1), add).withStep(s.apexKey(), apex);
+                                            }
+                                            setProgress(ctx, p);
+                                            return reply(ctx, "Тяжёлая броня: основа " + base + ", детали " + add + ", вершины " + apex);
                                         }))))))
                 .then(Commands.literal("reset").then(Commands.argument("player", EntityArgument.player())
                         .executes(ctx -> {

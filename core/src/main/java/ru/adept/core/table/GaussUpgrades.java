@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Прокачка гаусс-пушки по сегментам на столе артефактов: узлы (ступени двух путей и вершина), их цена
+ * Прокачка по сегментам на столе артефактов (гаусс-пушка, энергоклинок, тяжёлая силовая броня): узлы (ступени двух путей и вершина), их цена
  * в компонентах и открытие. Здесь только прогресс и оплата — действие ступеней добавляет «Ядро» в срезе 4.
  *
  * Правила: ступени пути открываются по порядку; вершина — когда закрыт любой из двух путей сегмента.
@@ -32,6 +32,8 @@ public final class GaussUpgrades {
     public static final int BTN_FIRST = 200;
     public static final int NODES_PER_SEGMENT = 7;
     public static final int APEX = 2;
+    /** Кнопок на артефакт: шесть сегментов по семь узлов. Артефакты идут подряд: гаусс, клинок, тяжёлая броня. */
+    public static final int PER_ARTIFACT = 6 * NODES_PER_SEGMENT;
 
     /** Узел прокачки: путь 0 — основа, 1 — детали, {@link #APEX} — вершина (ступень 1). */
     public record Node(Segment segment, int path, int step) {
@@ -44,7 +46,7 @@ public final class GaussUpgrades {
         }
 
         public int button() {
-            return BTN_FIRST + segment.ordinal() * NODES_PER_SEGMENT + (isApex() ? 6 : path * 3 + step - 1);
+            return BTN_FIRST + segment.tree() * PER_ARTIFACT + segment.ordinal() * NODES_PER_SEGMENT + (isApex() ? 6 : path * 3 + step - 1);
         }
     }
 
@@ -54,12 +56,12 @@ public final class GaussUpgrades {
     }
 
     public static boolean isButton(int id) {
-        return id >= BTN_FIRST && id < BTN_FIRST + GaussLook.SEGMENTS.length * NODES_PER_SEGMENT;
+        return id >= BTN_FIRST && id < BTN_FIRST + GaussLook.TREES.length * PER_ARTIFACT;
     }
 
     public static Node node(int button) {
-        int index = button - BTN_FIRST;
-        Segment segment = GaussLook.SEGMENTS[index / NODES_PER_SEGMENT];
+        int index = (button - BTN_FIRST) % PER_ARTIFACT;
+        Segment segment = GaussLook.TREES[(button - BTN_FIRST) / PER_ARTIFACT][index / NODES_PER_SEGMENT];
         int n = index % NODES_PER_SEGMENT;
         return n == 6 ? new Node(segment, APEX, 1) : new Node(segment, n / 3, n % 3 + 1);
     }
@@ -134,10 +136,11 @@ public final class GaussUpgrades {
     /** Открыть узел: проверка порядка, оплата, запись прогресса, событие для сюжета. */
     public static TableActions.Result unlock(Player player, Node node) {
         ArtifactProgress p = TableActions.progress(player);
-        if (p.step(TableActions.GAUSS_BUILT) == 0) {
+        Segment[] segments = GaussLook.TREES[node.segment().tree()];
+        if (p.step(node.segment().artifact() + "/base") == 0) {
             return TableActions.Result.NOT_CHOSEN;
         }
-        State state = state(GaussLook.pack(p), node);
+        State state = state(GaussLook.pack(segments, p), node);
         if (state == State.DONE) {
             return TableActions.Result.ALREADY_DONE;
         }

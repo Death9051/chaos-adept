@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:builtin/entity",
+  "gui_light": "front",
+  "display": {
+    "gui": {"rotation": [10, 160, 0], "translation": [0, -6.3, 0], "scale": [0.35, 0.35, 0.35]},
+    "ground": {"rotation": [0, 0, 0], "translation": [0, -2, 0], "scale": [0.25, 0.25, 0.25]},
+    "fixed": {"rotation": [0, 180, 0], "translation": [0, -8, 0], "scale": [0.45, 0.45, 0.45]}
+  }
+}
