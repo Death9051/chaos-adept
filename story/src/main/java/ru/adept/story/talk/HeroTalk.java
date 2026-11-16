@@ -20,7 +20,8 @@ import java.util.UUID;
 
 /**
  * Реплики героев по боевым событиям ядра. Набор строк — общие, по классу и по рангу
- * (у учеников свои строки о страхе, у ветеранов — сдержанные). Ученики говорят чаще, ветераны реже;
+ * (у учеников свои строки о страхе, у ветеранов — сдержанные, у мастеров — спокойные, плюс строки мастера
+ * своего класса). Ученики говорят чаще, ветераны реже, мастера реже всех;
  * откат у героя, у события в отряде и общая пауза, чтобы герои не говорили хором.
  * Ключи: {@code adept_story.hero.<группа>.<событие>.<номер>}.
  */
@@ -43,9 +44,16 @@ public final class HeroTalk {
             Map.entry("tracker.spotted", 2), Map.entry("tracker.player_lost", 1), Map.entry("tracker.squad_retreating", 1),
             Map.entry("commander.spotted", 1), Map.entry("commander.wounded", 1), Map.entry("commander.ally_fell", 1),
             Map.entry("commander.player_lost", 1), Map.entry("commander.squad_retreating", 1),
-            // Маг и целитель — заготовка: классов ещё нет в ядре.
-            Map.entry("mage.spotted", 2), Map.entry("mage.wounded", 2),
-            Map.entry("healer.spotted", 2), Map.entry("healer.ally_healed", 1), Map.entry("healer.ally_fell", 1));
+            Map.entry("master.spotted", 2), Map.entry("master.wounded", 1), Map.entry("master.ally_fell", 1),
+            Map.entry("master.player_lost", 1), Map.entry("master.squad_retreating", 1),
+            Map.entry("mage.spotted", 2), Map.entry("mage.wounded", 2), Map.entry("mage.missed", 1),
+            Map.entry("mage.player_lost", 1), Map.entry("mage.ally_fell", 1),
+            Map.entry("healer.spotted", 2), Map.entry("healer.ally_healed", 3), Map.entry("healer.ally_fell", 1),
+            Map.entry("healer.wounded", 1), Map.entry("healer.player_lost", 1), Map.entry("healer.ally_revived", 2),
+            // Мастер у каждого класса: группа «класс_master», добавляется к строкам класса и ранга.
+            Map.entry("warrior_master.spotted", 1), Map.entry("archer_master.spotted", 1), Map.entry("archer_master.missed", 1),
+            Map.entry("tracker_master.player_lost", 1), Map.entry("commander_master.spotted", 1),
+            Map.entry("mage_master.spotted", 1), Map.entry("healer_master.ally_healed", 1));
 
     private static final Map<UUID, Long> HERO_UNTIL = new HashMap<>();
     private static final Map<String, Long> SQUAD_EVENT_UNTIL = new HashMap<>();
@@ -87,6 +95,11 @@ public final class HeroTalk {
     @SubscribeEvent
     public static void onAllyHealed(HeroEvent.AllyHealed event) {
         react(event, "ally_healed");
+    }
+
+    @SubscribeEvent
+    public static void onAllyRevived(HeroEvent.AllyRevived event) {
+        react(event, "ally_revived");
     }
 
     @SubscribeEvent
@@ -139,8 +152,8 @@ public final class HeroTalk {
         if (now < globalUntil || now < HERO_UNTIL.getOrDefault(hero, 0L) || now < SQUAD_EVENT_UNTIL.getOrDefault(squadKey, 0L)) {
             return null;
         }
-        // Приказ отступать звучит всегда, остальное — по шансу ранга.
-        if (!type.equals("squad_retreating") && roll >= chance(rank)) {
+        // Приказ отступать и подъём павшего звучат всегда, остальное — по шансу ранга.
+        if (!type.equals("squad_retreating") && !type.equals("ally_revived") && roll >= chance(rank)) {
             return null;
         }
         globalUntil = now + StoryConfig.HERO_GLOBAL_COOLDOWN.get() * 20L;
@@ -153,6 +166,9 @@ public final class HeroTalk {
     public static List<String> pool(String type, String heroClass, String rank) {
         List<String> keys = new ArrayList<>();
         add(keys, heroClass, type);
+        if ("master".equals(rank)) {
+            add(keys, heroClass + "_master", type);
+        }
         add(keys, rank, type);
         add(keys, "common", type);
         return keys;
@@ -166,6 +182,10 @@ public final class HeroTalk {
     }
 
     private static double chance(String rank) {
-        return "veteran".equals(rank) ? StoryConfig.VETERAN_CHANCE.get() : StoryConfig.APPRENTICE_CHANCE.get();
+        return switch (rank == null ? "" : rank) {
+            case "master" -> StoryConfig.MASTER_CHANCE.get();
+            case "veteran" -> StoryConfig.VETERAN_CHANCE.get();
+            default -> StoryConfig.APPRENTICE_CHANCE.get();
+        };
     }
 }

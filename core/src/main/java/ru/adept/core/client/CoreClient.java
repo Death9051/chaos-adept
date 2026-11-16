@@ -24,7 +24,15 @@ public final class CoreClient {
         event.register(ModMenus.SMELTER.get(), MachineScreen::new);
         event.register(ModMenus.ALLOYER.get(), MachineScreen::new);
         event.register(ModMenus.CASTER.get(), MachineScreen::new);
+        event.register(ModMenus.CUTTER.get(), MachineScreen::new);
+        event.register(ModMenus.CARVER.get(), MachineScreen::new);
         event.register(ModMenus.TRANSITION.get(), TransitionScreen::new);
+    }
+
+    /** Слой знака ранга героя. */
+    @SubscribeEvent
+    public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(HeroRankLayer.LAYER, HeroRankLayer::createLayer);
     }
 
     /** Заглушки до моделей из «Моделей и анимаций»: мобы рисуются цветными блоками своего размера. */
@@ -43,5 +51,6 @@ public final class CoreClient {
         event.registerEntityRenderer(ModEntities.HERO.get(), HeroRenderer::new);
         event.registerEntityRenderer(ModEntities.TRADER.get(), ctx -> new StubEntityRenderer<>(ctx, Blocks.CRYING_OBSIDIAN.defaultBlockState()));
         event.registerEntityRenderer(ModEntities.SOUL.get(), net.minecraft.client.renderer.entity.NoopRenderer::new);
+        event.registerEntityRenderer(ModEntities.HERO_SPELL.get(), net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
     }
 }

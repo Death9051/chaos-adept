@@ -1,0 +1,17 @@
+{
+  "trigger": {
+    "type": "shield_broken"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.firsts.first_shield_broken.public"
+    ],
+    "streamer": [
+      "adept_story.journal.firsts.first_shield_broken.streamer"
+    ]
+  },
+  "note": {
+    "public": "adept_story.journal.firsts.first_shield_broken.note.public",
+    "streamer": "adept_story.journal.firsts.first_shield_broken.note.streamer"
+  }
+}

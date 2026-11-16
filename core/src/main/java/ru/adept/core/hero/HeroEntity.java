@@ -34,6 +34,7 @@ import net.minecraft.world.phys.Vec3;
 import ru.adept.core.api.event.AdeptEvents;
 import ru.adept.core.api.event.HeroEvent;
 import ru.adept.core.config.BalanceConfig;
+import ru.adept.core.config.HeroConfig;
 import ru.adept.core.mob.MobArcs;
 import ru.adept.core.registry.ModBlocks;
 
@@ -42,12 +43,16 @@ import java.util.UUID;
 /**
  * Герой — местный защитник, которого жители направляют на игрока между узлами.
  * Облик — модель игрока со скином (пока заглушка скина). Размер 0,6 × 1,8.
- * Ученик владеет первым приёмом класса, ветеран — двумя:
- * воин — щит спереди / таран щитом (оглушение, без отброса); лучник — держит дистанцию и стреляет / залп из трёх стрел;
- * следопыт — метка (подсветка игрока) / капканы на пути; командир — аура строя / приказ «окружить».
+ * Ученик владеет первым приёмом класса, ветеран — двумя, мастер — тремя и носит лучшее снаряжение:
+ * воин — щит спереди / таран щитом / боевой клич; лучник — держит дистанцию / залп / стрела с цепью;
+ * следопыт — метка / капканы / ручной зверь; командир — аура строя / «окружить» / подкрепление;
+ * маг — снаряд стихии края / барьер на союзника / корни; целитель — лечение / снятие эффектов / подъём павшего.
  */
 public class HeroEntity extends Monster implements RangedAttackMob {
     private static final net.minecraft.network.syncher.EntityDataAccessor<Integer> CLASS =
+            net.minecraft.network.syncher.SynchedEntityData.defineId(HeroEntity.class, net.minecraft.network.syncher.EntityDataSerializers.INT);
+    /** Ранг для клиента: знак ранга на облике героя (HeroRenderer). */
+    private static final net.minecraft.network.syncher.EntityDataAccessor<Integer> RANK =
             net.minecraft.network.syncher.SynchedEntityData.defineId(HeroEntity.class, net.minecraft.network.syncher.EntityDataSerializers.INT);
     private HeroClass heroClass = HeroClass.WARRIOR;
     private HeroRank rank = HeroRank.APPRENTICE;
@@ -58,6 +63,11 @@ public class HeroEntity extends Monster implements RangedAttackMob {
     private boolean lostFired;
     private int lostTicks;
     private int techniqueCooldown;
+    /** Перезарядка третьего приёма (мастер) и первого у целителя и мага (лечение, барьер). */
+    private int thirdCooldown;
+    private int supportCooldown;
+    /** Приём «раз за бой» уже был: зверь следопыта, подкрепление командира, подъём павшего у целителя. */
+    private boolean onceUsed;
     private int auraTimer;
     private boolean retreating;
     private int retreatTicks;
@@ -73,6 +83,7 @@ public class HeroEntity extends Monster implements RangedAttackMob {
     protected void defineSynchedData(net.minecraft.network.syncher.SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(CLASS, HeroClass.WARRIOR.ordinal());
+        builder.define(RANK, HeroRank.APPRENTICE.ordinal());
     }
 
     public static AttributeSupplier.Builder attributes() {
@@ -92,18 +103,23 @@ public class HeroEntity extends Monster implements RangedAttackMob {
         this.rank = rank;
         this.squad = squad;
         entityData.set(CLASS, heroClass.ordinal());
+        entityData.set(RANK, rank.ordinal());
         double health = switch (heroClass) {
             case WARRIOR -> BalanceConfig.HERO_WARRIOR_HEALTH.get();
             case ARCHER -> BalanceConfig.HERO_ARCHER_HEALTH.get();
             case TRACKER -> BalanceConfig.HERO_TRACKER_HEALTH.get();
             case COMMANDER -> BalanceConfig.HERO_COMMANDER_HEALTH.get();
-        } * (rank == HeroRank.VETERAN ? BalanceConfig.HERO_VETERAN_MULTIPLIER.get() : 1.0);
+            case MAGE -> HeroConfig.MAGE_HEALTH.get();
+            case HEALER -> HeroConfig.HEALER_HEALTH.get();
+        } * rankMultiplier(rank);
         double damage = switch (heroClass) {
             case WARRIOR -> BalanceConfig.HERO_WARRIOR_DAMAGE.get();
             case ARCHER -> BalanceConfig.HERO_ARCHER_DAMAGE.get();
             case TRACKER -> BalanceConfig.HERO_TRACKER_DAMAGE.get();
             case COMMANDER -> BalanceConfig.HERO_COMMANDER_DAMAGE.get();
-        } * (rank == HeroRank.VETERAN ? BalanceConfig.HERO_VETERAN_MULTIPLIER.get() : 1.0);
+            case MAGE -> HeroConfig.MAGE_DAMAGE.get();
+            case HEALER -> HeroConfig.HEALER_DAMAGE.get();
+        } * rankMultiplier(rank);
         getAttribute(Attributes.MAX_HEALTH).setBaseValue(health);
         getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(damage);
         setHealth(getMaxHealth());
@@ -111,25 +127,65 @@ public class HeroEntity extends Monster implements RangedAttackMob {
         configureGoals();
     }
 
+    /** Множитель здоровья и урона по рангу. */
+    public static double rankMultiplier(HeroRank rank) {
+        return switch (rank) {
+            case APPRENTICE -> 1.0;
+            case VETERAN -> BalanceConfig.HERO_VETERAN_MULTIPLIER.get();
+            case MASTER -> HeroConfig.MASTER_MULTIPLIER.get();
+        };
+    }
+
+    /** Снаряжение по классу и рангу; мастер носит лучшее (алмаз и железо вместо кольчуги и кожи). */
     private void equip() {
+        boolean master = rank == HeroRank.MASTER;
         switch (heroClass) {
             case WARRIOR -> {
-                setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+                setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(master ? Items.DIAMOND_SWORD : Items.IRON_SWORD));
                 setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.SHIELD));
-                setItemSlot(EquipmentSlot.CHEST, new ItemStack(rank == HeroRank.VETERAN ? Items.IRON_CHESTPLATE : Items.CHAINMAIL_CHESTPLATE));
+                setItemSlot(EquipmentSlot.CHEST, new ItemStack(master ? Items.DIAMOND_CHESTPLATE
+                        : rank == HeroRank.VETERAN ? Items.IRON_CHESTPLATE : Items.CHAINMAIL_CHESTPLATE));
+                if (master) {
+                    setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
+                }
             }
             case ARCHER -> {
                 setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
-                setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.LEATHER_CHESTPLATE));
+                setItemSlot(EquipmentSlot.CHEST, new ItemStack(master ? Items.CHAINMAIL_CHESTPLATE : Items.LEATHER_CHESTPLATE));
+                if (master) {
+                    setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
+                }
             }
             case TRACKER -> {
-                setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
+                setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(master ? Items.DIAMOND_AXE : Items.IRON_AXE));
                 setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
+                if (master) {
+                    setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
+                }
             }
             case COMMANDER -> {
-                setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
-                setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
-                setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
+                setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(master ? Items.DIAMOND_SWORD : Items.IRON_SWORD));
+                setItemSlot(EquipmentSlot.CHEST, new ItemStack(master ? Items.DIAMOND_CHESTPLATE : Items.IRON_CHESTPLATE));
+                setItemSlot(EquipmentSlot.HEAD, new ItemStack(master ? Items.DIAMOND_HELMET : Items.IRON_HELMET));
+            }
+            case MAGE -> {
+                // Посох — стержень ифрита; облик держит скин, брони мало.
+                setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BLAZE_ROD));
+                if (rank != HeroRank.APPRENTICE) {
+                    setItemSlot(EquipmentSlot.HEAD, new ItemStack(master ? Items.GOLDEN_HELMET : Items.LEATHER_HELMET));
+                }
+                if (master) {
+                    setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
+                }
+            }
+            case HEALER -> {
+                setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BREEZE_ROD));
+                if (rank != HeroRank.APPRENTICE) {
+                    setItemSlot(EquipmentSlot.CHEST, new ItemStack(master ? Items.CHAINMAIL_CHESTPLATE : Items.LEATHER_CHESTPLATE));
+                }
+                if (master) {
+                    setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.GOLDEN_HELMET));
+                }
             }
         }
         for (EquipmentSlot slot : EquipmentSlot.values()) {
@@ -144,6 +200,9 @@ public class HeroEntity extends Monster implements RangedAttackMob {
         goalSelector.addGoal(0, new FloatGoal(this));
         if (heroClass == HeroClass.ARCHER) {
             goalSelector.addGoal(2, new RangedBowAttackGoal<>(this, 1.0, 30, 18.0f));
+        } else if (heroClass == HeroClass.MAGE) {
+            int cast = HeroConfig.MAGE_CAST_TICKS.get();
+            goalSelector.addGoal(2, new net.minecraft.world.entity.ai.goal.RangedAttackGoal(this, 1.0, cast, cast, 16.0f));
         } else {
             goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.1, true));
         }
@@ -161,8 +220,13 @@ public class HeroEntity extends Monster implements RangedAttackMob {
         return level().isClientSide ? HeroClass.values()[Math.floorMod(entityData.get(CLASS), HeroClass.values().length)] : heroClass;
     }
 
+    /** Ранг в синхронизированных данных (то, что видит клиент). */
+    public int syncedRank() {
+        return entityData.get(RANK);
+    }
+
     public HeroRank rank() {
-        return rank;
+        return level().isClientSide ? HeroRank.values()[Math.floorMod(entityData.get(RANK), HeroRank.values().length)] : rank;
     }
 
     public UUID squad() {
@@ -234,6 +298,12 @@ public class HeroEntity extends Monster implements RangedAttackMob {
         if (techniqueCooldown > 0) {
             techniqueCooldown--;
         }
+        if (thirdCooldown > 0) {
+            thirdCooldown--;
+        }
+        if (supportCooldown > 0) {
+            supportCooldown--;
+        }
         Player player = targetPlayer();
         if (player == null) {
             return;
@@ -251,6 +321,175 @@ public class HeroEntity extends Monster implements RangedAttackMob {
             case ARCHER -> archerStep(server, player);
             case TRACKER -> trackerStep(server, player);
             case COMMANDER -> commanderStep(server, player);
+            case MAGE -> mageStep(server, player);
+            case HEALER -> healerStep(server, player);
+        }
+        if (has(3) && thirdCooldown <= 0) {
+            masterStep(server, player);
+        }
+    }
+
+    // ---- маг и целитель (срез 3) ----
+
+    /** Маг держит дистанцию; ветеран — барьер (поглощение) на самого раненого союзника рядом. */
+    private void mageStep(ServerLevel server, Player player) {
+        double keep = HeroConfig.MAGE_KEEP_DISTANCE.get();
+        if (distanceToSqr(player) < keep * keep) {
+            Vec3 away = position().subtract(player.position()).normalize().scale(6.0);
+            getNavigation().moveTo(getX() + away.x, getY(), getZ() + away.z, 1.2);
+        }
+        if (has(2) && supportCooldown <= 0) {
+            HeroEntity ally = weakestAlly(server, false);
+            if (ally != null && !ally.hasEffect(MobEffects.ABSORPTION)) {
+                supportCooldown = HeroConfig.BARRIER_COOLDOWN.get();
+                ally.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, HeroConfig.BARRIER_TICKS.get(), HeroConfig.BARRIER_LEVEL.get()), this);
+                server.sendParticles(net.minecraft.core.particles.ParticleTypes.ENCHANT, ally.getX(), ally.getY() + 1, ally.getZ(), 30, 0.4, 0.8, 0.4, 0.5);
+                playSound(SoundEvents.EVOKER_CAST_SPELL, 1.0f, 1.3f);
+            }
+        }
+    }
+
+    /** Целитель лечит самого раненого союзника рядом; ветеран снимает с союзников негативные эффекты. */
+    private void healerStep(ServerLevel server, Player player) {
+        if (supportCooldown <= 0) {
+            HeroEntity ally = weakestAlly(server, true);
+            if (ally != null) {
+                supportCooldown = HeroConfig.HEAL_COOLDOWN.get();
+                heal(server, ally, player);
+            }
+        }
+        if (has(2) && techniqueCooldown <= 0) {
+            double r = HeroConfig.SUPPORT_RADIUS.get();
+            boolean cleansed = false;
+            for (HeroEntity ally : server.getEntitiesOfClass(HeroEntity.class, getBoundingBox().inflate(r), HeroEntity::isAlive)) {
+                for (MobEffectInstance e : java.util.List.copyOf(ally.getActiveEffects())) {
+                    if (e.getEffect().value().getCategory() == net.minecraft.world.effect.MobEffectCategory.HARMFUL) {
+                        ally.removeEffect(e.getEffect());
+                        ally.clearFire();
+                        cleansed = true;
+                    }
+                }
+            }
+            if (cleansed) {
+                techniqueCooldown = HeroConfig.CLEANSE_COOLDOWN.get();
+                server.sendParticles(net.minecraft.core.particles.ParticleTypes.END_ROD, getX(), getY() + 1, getZ(), 20, r / 3, 0.5, r / 3, 0.02);
+            }
+        }
+    }
+
+    /** Лечение союзника: здоровье, частицы и событие «лечение союзника». */
+    public void heal(ServerLevel server, HeroEntity ally, Player player) {
+        ally.heal(HeroConfig.HEAL_AMOUNT.get().floatValue());
+        server.sendParticles(net.minecraft.core.particles.ParticleTypes.HEART, ally.getX(), ally.getY() + 1.8, ally.getZ(), 4, 0.3, 0.3, 0.3, 0.0);
+        playSound(SoundEvents.AMETHYST_BLOCK_CHIME, 1.0f, 1.4f);
+        post(h -> new HeroEvent.AllyHealed(h, heroClass.id(), rank.id(), squad, player, ally));
+    }
+
+    /**
+     * Самый раненый союзник-герой в радиусе поддержки. {@code needHeal} — только те, кто ниже порога лечения;
+     * иначе любой раненый (для барьера мага). Себя целитель не лечит.
+     */
+    private HeroEntity weakestAlly(ServerLevel server, boolean needHeal) {
+        double r = HeroConfig.SUPPORT_RADIUS.get();
+        HeroEntity best = null;
+        float bestRatio = needHeal ? HeroConfig.HEAL_BELOW.get().floatValue() : 1.0f;
+        for (HeroEntity ally : server.getEntitiesOfClass(HeroEntity.class, getBoundingBox().inflate(r), h -> h != this && h.isAlive() && !h.retreating)) {
+            float ratio = ally.getHealth() / ally.getMaxHealth();
+            if (ratio < bestRatio) {
+                bestRatio = ratio;
+                best = ally;
+            }
+        }
+        return best;
+    }
+
+    /**
+     * Третьи приёмы мастера: воин — боевой клич (сила отряду рядом); лучник — стрела с цепью (обездвиживает);
+     * следопыт — ручной зверь края (раз за бой); командир — подкрепление (раз за бой, когда отряд понёс потери
+     * или сам он ранен); маг — корни на игрока. Целитель-мастер поднимает павшего — в {@link HeroEvents}.
+     */
+    private void masterStep(ServerLevel server, Player player) {
+        switch (heroClass) {
+            case WARRIOR -> {
+                if (distanceToSqr(player) < 10 * 10) {
+                    thirdCooldown = HeroConfig.WAR_CRY_COOLDOWN.get();
+                    double r = HeroConfig.WAR_CRY_RADIUS.get();
+                    for (HeroEntity ally : server.getEntitiesOfClass(HeroEntity.class, getBoundingBox().inflate(r), HeroEntity::isAlive)) {
+                        ally.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, HeroConfig.WAR_CRY_TICKS.get(), 0), this);
+                    }
+                    playSound(SoundEvents.RAVAGER_ROAR, 1.0f, 1.4f);
+                }
+            }
+            case ARCHER -> {
+                if (getSensing().hasLineOfSight(player) && distanceToSqr(player) < 24 * 24) {
+                    thirdCooldown = HeroConfig.CHAIN_COOLDOWN.get();
+                    Arrow chain = shootArrow(player, 0.0f);
+                    chain.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, HeroConfig.CHAIN_TICKS.get(), 9));
+                    playSound(SoundEvents.CHAIN_PLACE, 1.0f, 0.8f);
+                }
+            }
+            case TRACKER -> {
+                if (!onceUsed) {
+                    onceUsed = true;
+                    thirdCooldown = 20;
+                    net.minecraft.world.entity.animal.Wolf wolf = EntityType.WOLF.create(server);
+                    if (wolf != null) {
+                        wolf.moveTo(getX(), getY(), getZ(), getYRot(), 0f);
+                        EventHooksBridge.finalize(server, wolf);
+                        server.addFreshEntity(wolf);
+                        wolf.setPersistentAngerTarget(player.getUUID());
+                        wolf.startPersistentAngerTimer();
+                        wolf.setTarget(player);
+                    }
+                }
+            }
+            case COMMANDER -> {
+                if (!onceUsed && squad != null) {
+                    var s = HeroSquads.get(server.getServer()).byId(squad);
+                    if (s.isPresent() && (s.get().fallen > 0 || getHealth() < getMaxHealth() / 2)) {
+                        onceUsed = true;
+                        thirdCooldown = 20;
+                        for (int i = 0; i < HeroConfig.REINFORCEMENTS.get(); i++) {
+                            HeroClass c = i % 2 == 0 ? HeroClass.WARRIOR : HeroClass.ARCHER;
+                            HeroEntity add = HeroSpawner.spawnHero(server, blockPosition().offset(i * 2 - 1, 0, 2), c, HeroRank.APPRENTICE, s.get());
+                            if (add != null) {
+                                add.setVillage(villageId, villageName);
+                                add.setTarget(player);
+                            }
+                        }
+                        playSound(SoundEvents.RAID_HORN.value(), 2.0f, 1.0f);
+                    }
+                }
+            }
+            case MAGE -> {
+                if (getSensing().hasLineOfSight(player) && distanceToSqr(player) < 16 * 16) {
+                    thirdCooldown = HeroConfig.ROOTS_COOLDOWN.get();
+                    int ticks = HeroConfig.ROOTS_TICKS.get();
+                    player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, ticks, 9), this);
+                    server.sendParticles(new net.minecraft.core.particles.BlockParticleOption(net.minecraft.core.particles.ParticleTypes.BLOCK,
+                            net.minecraft.world.level.block.Blocks.ROOTED_DIRT.defaultBlockState()), player.getX(), player.getY() + 0.3, player.getZ(), 40, 0.4, 0.3, 0.4, 0.1);
+                    playSound(SoundEvents.ROOTED_DIRT_PLACE, 1.0f, 0.6f);
+                }
+            }
+            case HEALER -> {
+            }
+        }
+    }
+
+    /** Целитель-мастер ещё может поднять павшего (раз за бой). */
+    public boolean canRevive() {
+        return heroClass == HeroClass.HEALER && has(3) && !onceUsed && isAlive() && !retreating;
+    }
+
+    public void markReviveUsed() {
+        onceUsed = true;
+    }
+
+    /** Мост к финализации появления моба (ванильные варианты волка по биому). */
+    private static final class EventHooksBridge {
+        static void finalize(ServerLevel level, net.minecraft.world.entity.Mob mob) {
+            net.neoforged.neoforge.event.EventHooks.finalizeMobSpawn(mob, level, level.getCurrentDifficultyAt(mob.blockPosition()),
+                    net.minecraft.world.entity.MobSpawnType.EVENT, null);
         }
     }
 
@@ -325,10 +564,26 @@ public class HeroEntity extends Monster implements RangedAttackMob {
 
     @Override
     public void performRangedAttack(LivingEntity target, float velocity) {
+        if (heroClass == HeroClass.MAGE) {
+            castSpell(target);
+            return;
+        }
         shootArrow(target, 0.0f);
     }
 
-    private void shootArrow(LivingEntity target, float yawOffset) {
+    /** Снаряд стихии края, где стоит маг. */
+    public HeroSpellEntity castSpell(LivingEntity target) {
+        HeroSpellEntity spell = new HeroSpellEntity(level(), this, HeroSpellEntity.Element.of(level().getBiome(blockPosition())));
+        double dx = target.getX() - getX();
+        double dy = target.getY(0.5) - spell.getY();
+        double dz = target.getZ() - getZ();
+        spell.shoot(dx, dy, dz, 1.4f, 2.0f);
+        playSound(SoundEvents.BLAZE_SHOOT, 0.8f, 1.4f);
+        level().addFreshEntity(spell);
+        return spell;
+    }
+
+    private Arrow shootArrow(LivingEntity target, float yawOffset) {
         Arrow arrow = new Arrow(level(), this, new ItemStack(Items.ARROW), getMainHandItem());
         arrow.pickup = AbstractArrow.Pickup.DISALLOWED;
         arrow.setBaseDamage(getAttributeValue(Attributes.ATTACK_DAMAGE) / 2.0);
@@ -343,6 +598,7 @@ public class HeroEntity extends Monster implements RangedAttackMob {
         arrow.shoot(rx, dy + dist * 0.2, rz, 1.6f, 8.0f);
         playSound(SoundEvents.SKELETON_SHOOT, 1.0f, 1.0f / (getRandom().nextFloat() * 0.4f + 0.8f));
         level().addFreshEntity(arrow);
+        return arrow;
     }
 
     // ---- награды ----
@@ -354,7 +610,11 @@ public class HeroEntity extends Monster implements RangedAttackMob {
         if (!(source.getEntity() instanceof Player)) {
             return;
         }
-        double emblem = rank == HeroRank.VETERAN ? BalanceConfig.HERO_EMBLEM_CHANCE_VETERAN.get() : BalanceConfig.HERO_EMBLEM_CHANCE.get();
+        double emblem = switch (rank) {
+            case APPRENTICE -> BalanceConfig.HERO_EMBLEM_CHANCE.get();
+            case VETERAN -> BalanceConfig.HERO_EMBLEM_CHANCE_VETERAN.get();
+            case MASTER -> HeroConfig.EMBLEM_CHANCE_MASTER.get();
+        };
         if (random.nextFloat() < emblem) {
             spawnAtLocation(new ItemStack(ru.adept.core.registry.ModItems.HERO_EMBLEM.get()));
         }
@@ -421,6 +681,7 @@ public class HeroEntity extends Monster implements RangedAttackMob {
         tag.putBoolean("adept_spotted", spotted);
         tag.putBoolean("adept_wounded", wounded);
         tag.putBoolean("adept_retreating", retreating);
+        tag.putBoolean("adept_once", onceUsed);
         tag.putLong("adept_village", villageId);
         tag.putString("adept_village_name", villageName);
     }
@@ -431,11 +692,13 @@ public class HeroEntity extends Monster implements RangedAttackMob {
         heroClass = HeroClass.byId(tag.getString("adept_class"));
         entityData.set(CLASS, heroClass.ordinal());
         rank = HeroRank.byId(tag.getString("adept_rank"));
+        entityData.set(RANK, rank.ordinal());
         squad = tag.hasUUID("adept_squad") ? tag.getUUID("adept_squad") : null;
         spotted = tag.getBoolean("adept_spotted");
         wounded = tag.getBoolean("adept_wounded");
         villageId = tag.getLong("adept_village");
         villageName = tag.getString("adept_village_name");
+        onceUsed = tag.getBoolean("adept_once");
         configureGoals();
         if (tag.getBoolean("adept_retreating")) {
             startRetreat();

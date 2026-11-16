@@ -1,0 +1,17 @@
+{
+  "trigger": {
+    "type": "rune_engraved"
+  },
+  "text": {
+    "public": [
+      "adept_story.journal.firsts.first_rune.public"
+    ],
+    "streamer": [
+      "adept_story.journal.firsts.first_rune.streamer"
+    ]
+  },
+  "note": {
+    "public": "adept_story.journal.firsts.first_rune.note.public",
+    "streamer": "adept_story.journal.firsts.first_rune.note.streamer"
+  }
+}

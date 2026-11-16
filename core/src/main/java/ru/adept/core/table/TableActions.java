@@ -45,6 +45,15 @@ public final class TableActions {
     public static final String CAULDRON_BUILT = "cauldron/base";
     public static final String CAULDRON_YIELD = "cauldron/furnace/yield";
 
+    // Срез 3, часть 2: лёгкий экзокостюм (нагрудник — генератор щита)
+    public static final String LIGHT_BUILT = "light/base";
+    public static final String LIGHT_CAPACITY = "light/chest/capacity";
+
+    // Срез 3, часть 3: рельса и высекатель рун
+    public static final String RAIL_BUILT = "rail/base";
+    public static final String RAIL_PIERCE = "rail/barrel/pierce";
+    public static final String CARVER_PRECISION = ru.adept.core.base.CarverBlockEntity.PRECISION;
+
     /** Грубые компоненты, которые делаются на столе вручную. Порядок = порядок кнопок. */
     public static final List<Craft> CRUDE = List.of(
             new Craft("crude_wiring", () -> ModItems.CRUDE_WIRING.get(), BalanceConfig.TABLE_CRUDE_WIRING::get),
@@ -126,6 +135,84 @@ public final class TableActions {
             player.setData(ModRegistries.ARTIFACT_PROGRESS, p.withStep(GAUSS_BUILT, 1));
         }
         post(player, new ArtifactEvent.PrototypeCrafted(player, GAUSS, first));
+        return Result.OK;
+    }
+
+    /** Прототип лёгкого экзокостюма: нагрудник (генератор щита) с полным запасом маны и щитом, фокус ставится отдельно. */
+    public static Result craftLightPrototype(Player player) {
+        ArtifactProgress p = progress(player);
+        if (!p.choice(ARMOR).filter(LIGHT::equals).isPresent()) {
+            return Result.NOT_CHOSEN;
+        }
+        CostList cost = CostList.parse(ru.adept.core.config.FocusConfig.TABLE_LIGHT_PROTOTYPE.get());
+        if (!cost.canPay(player)) {
+            return Result.NOT_ENOUGH;
+        }
+        cost.pay(player);
+        ItemStack chest = new ItemStack(ModItems.LIGHT_CHESTPLATE.get());
+        ru.adept.core.artifact.LightArmorItem.setMana(chest, ru.adept.core.config.FocusConfig.LIGHT_MANA_CAPACITY.get());
+        int cap = ru.adept.core.config.FocusConfig.shieldCapacity(p.step(LIGHT_CAPACITY));
+        ru.adept.core.artifact.LightArmorItem.setShield(chest, cap, cap);
+        give(player, chest);
+        boolean first = p.step(LIGHT_BUILT) == 0;
+        if (first) {
+            player.setData(ModRegistries.ARTIFACT_PROGRESS, p.withStep(LIGHT_BUILT, 1));
+        }
+        post(player, new ArtifactEvent.PrototypeCrafted(player, LIGHT, first));
+        return Result.OK;
+    }
+
+    /** Ступень I «Ёмкости» (нагрудник лёгкого экзокостюма). */
+    public static Result upgradeLightCapacity(Player player) {
+        return upgradeStep(player, LIGHT_BUILT, LIGHT_CAPACITY, ru.adept.core.config.FocusConfig.TABLE_LIGHT_CAPACITY_1.get());
+    }
+
+    /** Прототип рельсы (с полным зарядом), болты отливает литейная. */
+    public static Result craftRailPrototype(Player player) {
+        ArtifactProgress p = progress(player);
+        if (!p.choice(RANGED).filter(RAIL::equals).isPresent()) {
+            return Result.NOT_CHOSEN;
+        }
+        CostList cost = CostList.parse(ru.adept.core.config.RuneConfig.TABLE_RAIL_PROTOTYPE.get());
+        if (!cost.canPay(player)) {
+            return Result.NOT_ENOUGH;
+        }
+        cost.pay(player);
+        ItemStack gun = new ItemStack(ModItems.RAIL_GUN.get());
+        ru.adept.core.artifact.RailGunItem.setCharge(gun, ru.adept.core.artifact.RailGunItem.capacity());
+        give(player, gun);
+        boolean first = p.step(RAIL_BUILT) == 0;
+        if (first) {
+            player.setData(ModRegistries.ARTIFACT_PROGRESS, p.withStep(RAIL_BUILT, 1));
+        }
+        post(player, new ArtifactEvent.PrototypeCrafted(player, RAIL, first));
+        return Result.OK;
+    }
+
+    /** Ступень I «Пробоя» (ствол рельсы). */
+    public static Result upgradeRailPierce(Player player) {
+        return upgradeStep(player, RAIL_BUILT, RAIL_PIERCE, ru.adept.core.config.RuneConfig.TABLE_RAIL_PIERCE_1.get());
+    }
+
+    /**
+     * Ступень I «Точности» высекателя рун: вторая руна на литом изделии. Ступени машин общие на базу
+     * (данные базы), событие — как у ступени артефакта, ключ {@code carver/precision}.
+     */
+    public static Result upgradeCarverPrecision(Player player) {
+        if (player.getServer() == null) {
+            return Result.NOT_AVAILABLE;
+        }
+        ru.adept.core.base.BaseData base = ru.adept.core.base.BaseData.get(player.getServer());
+        if (base.machineStep(CARVER_PRECISION) >= 1) {
+            return Result.ALREADY_DONE;
+        }
+        CostList cost = CostList.parse(ru.adept.core.config.RuneConfig.TABLE_CARVER_PRECISION_1.get());
+        if (!cost.canPay(player)) {
+            return Result.NOT_ENOUGH;
+        }
+        cost.pay(player);
+        base.setMachineStep(CARVER_PRECISION, 1);
+        post(player, new ArtifactEvent.StepUnlocked(player, CARVER_PRECISION, 1));
         return Result.OK;
     }
 

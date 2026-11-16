@@ -10,7 +10,7 @@
 
 ## Текущая работа
 
-Срез 3 «мана и руны»: [docs/slice-3.md](docs/slice-3.md). Срезы 1 и 2 закрыты: [docs/slice-1.md](docs/slice-1.md), [docs/slice-2.md](docs/slice-2.md). Следующий — срез 4 (гаусс и клинок целиком), его компоненты уже готовы.
+Срез 4 «два артефакта целиком» (гаусс и энергоклинок): состав — PR #26, на согласовании у пользователя; компоненты (PR #27) готовы, модель и экран прокачки гаусса — черновик PR #35. Срезы 1–3 закрыты: [docs/slice-1.md](docs/slice-1.md), [docs/slice-2.md](docs/slice-2.md), [docs/slice-3.md](docs/slice-3.md).
 
 ## Документы
 
@@ -29,7 +29,7 @@
 | Сюжет: ветки, голос и тексты | [docs/story-voice.md](docs/story-voice.md) |
 | Сюжетный мод — устройство | [docs/story-mod.md](docs/story-mod.md) |
 | Репозиторий и CI | [docs/repo-ci.md](docs/repo-ci.md) |
-| Срез 1, Срез 2, Срез 3 | [docs/slice-1.md](docs/slice-1.md), [docs/slice-2.md](docs/slice-2.md), [docs/slice-3.md](docs/slice-3.md) |
+| Срез 1, Срез 2, Срез 3, Срез 4 | [docs/slice-1.md](docs/slice-1.md), [docs/slice-2.md](docs/slice-2.md), [docs/slice-3.md](docs/slice-3.md), [docs/slice-4.md](docs/slice-4.md) |
 | Вопросы между чатами | [docs/questions.md](docs/questions.md) |
 | Контекст проекта — по направлениям | [docs/context/](docs/context/) |
 

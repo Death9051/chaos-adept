@@ -54,6 +54,9 @@ public final class ModItems {
             .map(m -> ITEMS.registerSimpleItem(m + "_needle")).toList();
     public static final List<DeferredItem<Item>> PLATES = MOLTEN_IDS.stream()
             .map(m -> ITEMS.registerSimpleItem(m + "_plate", new Item.Properties().stacksTo(16))).toList();
+    /** Цельные болты рельсы (срез 3), по материалу. */
+    public static final List<DeferredItem<Item>> BOLTS = MOLTEN_IDS.stream()
+            .map(m -> ITEMS.registerSimpleItem(m + "_bolt", new Item.Properties().stacksTo(16))).toList();
 
     // Тяжёлая силовая броня (прототип) и гаусс-пушка (прототип)
     public static final DeferredItem<ru.adept.core.artifact.HeavyArmorItem> HEAVY_HELMET = ITEMS.register("heavy_helmet",
@@ -85,6 +88,20 @@ public final class ModItems {
             () -> new ru.adept.core.mana.SoulVesselItem("quartz", () -> ru.adept.core.config.ManaConfig.VESSEL_QUARTZ.get(), new Item.Properties().stacksTo(1)));
     /** Ядро души — побочный продукт горнила, валюта торговца наравне со сгустками. */
     public static final DeferredItem<Item> SOUL_CORE = ITEMS.registerSimpleItem("soul_core");
+
+    // Срез 3, часть 2: фокусы и лёгкий экзокостюм (прототип — нагрудник, генератор щита)
+    public static final DeferredItem<ru.adept.core.focus.FocusItem> FOCUS = ITEMS.register("focus",
+            () -> new ru.adept.core.focus.FocusItem(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<ru.adept.core.artifact.LightArmorItem> LIGHT_CHESTPLATE = ITEMS.register("light_chestplate",
+            () -> new ru.adept.core.artifact.LightArmorItem(ModRegistries.LIGHT_ARMOR, net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1)));
+
+    // Срез 3, часть 3: рельса (прототип)
+    public static final DeferredItem<ru.adept.core.artifact.RailGunItem> RAIL_GUN = ITEMS.register("rail_gun",
+            () -> new ru.adept.core.artifact.RailGunItem(new Item.Properties().stacksTo(1)));
+
+    // Старт: «Зачаток» — единственный предмет на старте, из него собирается стол артефактов
+    public static final DeferredItem<ru.adept.core.seed.SeedItem> SEED = ITEMS.register("seed",
+            () -> new ru.adept.core.seed.SeedItem(new Item.Properties()));
 
     private ModItems() {
     }

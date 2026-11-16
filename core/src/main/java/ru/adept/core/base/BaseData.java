@@ -16,6 +16,8 @@ public final class BaseData extends SavedData {
     private int electricity;
     private int mana;
     private boolean built;
+    /** Ступени машин базы: ключ {@code машина/путь} → ступень (например, {@code carver/precision}). */
+    private CompoundTag machineSteps = new CompoundTag();
 
     private BaseData() {
     }
@@ -78,6 +80,15 @@ public final class BaseData extends SavedData {
         return built;
     }
 
+    public int machineStep(String key) {
+        return machineSteps.getInt(key);
+    }
+
+    public void setMachineStep(String key, int value) {
+        machineSteps.putInt(key, value);
+        setDirty();
+    }
+
     void markBuilt() {
         built = true;
         setDirty();
@@ -88,6 +99,7 @@ public final class BaseData extends SavedData {
         data.electricity = tag.getInt("electricity");
         data.mana = tag.getInt("mana");
         data.built = tag.getBoolean("built");
+        data.machineSteps = tag.getCompound("machine_steps");
         return data;
     }
 
@@ -96,6 +108,7 @@ public final class BaseData extends SavedData {
         tag.putInt("electricity", electricity);
         tag.putInt("mana", mana);
         tag.putBoolean("built", built);
+        tag.put("machine_steps", machineSteps.copy());
         return tag;
     }
 }

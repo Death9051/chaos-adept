@@ -71,7 +71,13 @@ public final class AdeptCommands {
                 .then(component())
                 .then(accumulator())
                 .then(soul())
-                .then(cauldron()));
+                .then(cauldron())
+                .then(FocusCommands.focus())
+                .then(FocusCommands.shield())
+                .then(RuneCommands.rune())
+                .then(RuneCommands.rail())
+                .then(RuneCommands.carver())
+                .then(seed()));
     }
 
     // /adept flag get|set|remove <key> [value]
@@ -313,13 +319,14 @@ public final class AdeptCommands {
                 }));
     }
 
-    // /adept hero <tracker|warrior|archer|commander> [veteran] — одиночный герой рядом (без отряда)
+    // /adept hero <tracker|warrior|archer|commander|mage|healer> [veteran|master] — одиночный герой рядом (без отряда)
     private static LiteralArgumentBuilder<CommandSourceStack> hero() {
         LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("hero");
         for (ru.adept.core.hero.HeroClass c : ru.adept.core.hero.HeroClass.values()) {
             root.then(Commands.literal(c.id())
                     .executes(ctx -> spawnHero(ctx, c, ru.adept.core.hero.HeroRank.APPRENTICE))
-                    .then(Commands.literal("veteran").executes(ctx -> spawnHero(ctx, c, ru.adept.core.hero.HeroRank.VETERAN))));
+                    .then(Commands.literal("veteran").executes(ctx -> spawnHero(ctx, c, ru.adept.core.hero.HeroRank.VETERAN)))
+                    .then(Commands.literal("master").executes(ctx -> spawnHero(ctx, c, ru.adept.core.hero.HeroRank.MASTER))));
         }
         return root;
     }
@@ -579,6 +586,22 @@ public final class AdeptCommands {
                             + ", мана в котле: " + ru.adept.core.mana.SoulCauldronItem.buffer(c));
                 })
                 .then(fill);
+    }
+
+    // /adept seed [игрок] — вернуть потерянный зачаток (если его нет в инвентаре)
+    private static LiteralArgumentBuilder<CommandSourceStack> seed() {
+        return Commands.literal("seed")
+                .executes(ctx -> giveSeed(ctx, ctx.getSource().getPlayerOrException()))
+                .then(Commands.argument("player", EntityArgument.player())
+                        .executes(ctx -> giveSeed(ctx, EntityArgument.getPlayer(ctx, "player"))));
+    }
+
+    private static int giveSeed(CommandContext<CommandSourceStack> ctx, ServerPlayer player) {
+        if (ru.adept.core.seed.Seeds.has(player)) {
+            return reply(ctx, "Зачаток уже в инвентаре у " + player.getName().getString());
+        }
+        ru.adept.core.seed.Seeds.give(player, ru.adept.core.api.event.SeedEvent.COMMAND);
+        return reply(ctx, "Зачаток возвращён: " + player.getName().getString());
     }
 
     /** В инвентарь, а что не влезло — на землю у игрока. */

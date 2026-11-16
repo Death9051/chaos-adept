@@ -1,0 +1,30 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "adept_core:block/stub",
+    "stub": "adept_core:block/stub"
+  },
+  "elements": [
+    {
+      "from": [0, 0, 0], "to": [16, 9, 16],
+      "faces": {
+        "north": {"uv": [0, 7, 16, 16], "texture": "#stub"},
+        "south": {"uv": [0, 7, 16, 16], "texture": "#stub"},
+        "east": {"uv": [0, 7, 16, 16], "texture": "#stub"},
+        "west": {"uv": [0, 7, 16, 16], "texture": "#stub"},
+        "up": {"uv": [0, 0, 16, 16], "texture": "#stub"},
+        "down": {"uv": [0, 0, 16, 16], "texture": "#stub", "cullface": "down"}
+      }
+    },
+    {
+      "from": [3, 9, 7], "to": [13, 16, 9],
+      "faces": {
+        "north": {"uv": [3, 0, 13, 7], "texture": "#stub"},
+        "south": {"uv": [3, 0, 13, 7], "texture": "#stub"},
+        "east": {"uv": [7, 0, 9, 7], "texture": "#stub"},
+        "west": {"uv": [7, 0, 9, 7], "texture": "#stub"},
+        "up": {"uv": [3, 7, 13, 9], "texture": "#stub"}
+      }
+    }
+  ]
+}

@@ -12,6 +12,7 @@ public final class StoryConfig {
     public static final ModConfigSpec.IntValue HERO_RADIUS;
     public static final ModConfigSpec.DoubleValue APPRENTICE_CHANCE;
     public static final ModConfigSpec.DoubleValue VETERAN_CHANCE;
+    public static final ModConfigSpec.DoubleValue MASTER_CHANCE;
     public static final ModConfigSpec.IntValue HERO_COOLDOWN;
     public static final ModConfigSpec.IntValue SQUAD_EVENT_COOLDOWN;
     public static final ModConfigSpec.IntValue HERO_GLOBAL_COOLDOWN;
@@ -35,6 +36,8 @@ public final class StoryConfig {
                 .defineInRange("apprenticeChance", 0.7, 0.0, 1.0);
         VETERAN_CHANCE = builder.comment("Шанс, что ветеран скажет реплику на событие боя (ветераны молчаливее)")
                 .defineInRange("veteranChance", 0.35, 0.0, 1.0);
+        MASTER_CHANCE = builder.comment("Шанс, что мастер скажет реплику на событие боя (мастера говорят реже всех)")
+                .defineInRange("masterChance", 0.25, 0.0, 1.0);
         HERO_COOLDOWN = builder.comment("Откат реплик одного героя, секунд")
                 .defineInRange("heroCooldownSeconds", 12, 0, 600);
         SQUAD_EVENT_COOLDOWN = builder.comment("Откат одного и того же события внутри отряда, секунд (на «союзник пал» отвечает один боец)")

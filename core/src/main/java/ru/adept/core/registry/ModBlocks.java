@@ -86,8 +86,20 @@ public final class ModBlocks {
             () -> new MachineBlock.Caster(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.METAL).strength(3.0f).sound(SoundType.METAL)));
 
+    /** Ограночная машина (нулевой уровень): огранка фокусов и их починка. Заглушка 1×1×1: станина и диск. */
+    public static final DeferredBlock<MachineBlock.Cutter> CUTTER = BLOCKS.register("cutter",
+            () -> new MachineBlock.Cutter(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.METAL).strength(3.0f).sound(SoundType.METAL).noOcclusion()));
+
+    /** Высекатель рун (нулевой уровень): гравировка литых изделий. Заглушка 1×1×1: станина, стойка и излучатель. */
+    public static final DeferredBlock<MachineBlock.Carver> CARVER = BLOCKS.register("rune_carver",
+            () -> new MachineBlock.Carver(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.METAL).strength(3.0f).sound(SoundType.METAL).noOcclusion().lightLevel(s -> 3)));
+
     static {
         ITEMS.registerSimpleBlockItem(NODE_CRYSTAL);
+        ITEMS.registerSimpleBlockItem(CARVER);
+        ITEMS.registerSimpleBlockItem(CUTTER);
         ITEMS.registerSimpleBlockItem(ASH);
         ITEMS.registerSimpleBlockItem(GENERATOR);
         ITEMS.registerSimpleBlockItem(CRUSHER);
@@ -95,7 +107,7 @@ public final class ModBlocks {
         ITEMS.registerSimpleBlockItem(RESERVOIR);
         ITEMS.registerSimpleBlockItem(ALLOYER);
         ITEMS.registerSimpleBlockItem(CASTER);
-        ITEMS.registerSimpleBlockItem(ARTIFACT_TABLE);
+        ITEMS.register("artifact_table", () -> new ru.adept.core.seed.TableItem(ARTIFACT_TABLE.get(), new net.minecraft.world.item.Item.Properties()));
     }
 
     private ModBlocks() {
