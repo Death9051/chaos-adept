@@ -174,11 +174,15 @@ public class ArtifactTableScreen extends AbstractContainerScreen<ArtifactTableMe
                             .append(costText(CostList.parse(info.stepCost()))))).build();
             step.active = built() > 0 && stepDone() == 0;
             addRenderableWidget(step);
-            if (tab == 2) {
-                // Гаусс-пушка прокачивается по сегментам на отдельном экране с 3D-превью.
+            // Гаусс-пушка, энергоклинок и тяжёлая броня прокачиваются по сегментам в мастерской с 3D-проекцией.
+            boolean workshop = tab == 2 || (tab == 0 && "blade".equals(info.first())) || tab == 1;
+            if (workshop) {
                 step.visible = false;
+                GaussUpgradeScreen.Subject subject = tab == 2 ? GaussUpgradeScreen.Subject.GAUSS
+                        : tab == 0 ? GaussUpgradeScreen.Subject.BLADE : GaussUpgradeScreen.Subject.HEAVY;
+                java.util.function.IntSupplier look = tab == 2 ? menu::gaussLook : tab == 0 ? menu::bladeLook : menu::heavyLook;
                 Button upgrades = Button.builder(Component.translatable("adept_core.gauss_table.open"),
-                                b -> minecraft.setScreen(new GaussUpgradeScreen(this, menu::gaussLook, this::press)))
+                                b -> minecraft.setScreen(new GaussUpgradeScreen(subject, this, look, this::press)))
                         .bounds(x, y + 120, 220, 20)
                         .tooltip(Tooltip.create(Component.translatable("adept_core.gauss_table.open.desc"))).build();
                 upgrades.active = built() > 0;

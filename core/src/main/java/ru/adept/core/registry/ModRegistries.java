@@ -71,7 +71,9 @@ public final class ModRegistries {
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.adept_core"))
                     .icon(() -> new ItemStack(Items.AMETHYST_SHARD))
-                    .displayItems((params, output) -> ITEMS.getEntries().forEach(item -> output.accept(item.get())))
+                    .displayItems((params, output) -> ITEMS.getEntries().stream()
+                            .filter(item -> !(item.get() instanceof ru.adept.core.artifact.ArtifactDisplayItem))
+                            .forEach(item -> output.accept(item.get())))
                     .build());
 
     private ModRegistries() {

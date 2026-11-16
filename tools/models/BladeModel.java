@@ -43,7 +43,7 @@ public class BladeModel extends GaussModel {
         bone("frame", "blade", 0, 12, 0);
         octY(Mat.LEATHER, 3, 1, 6, 10);
         cz(Mat.GUNMETAL, 4, 19, 4, 3);
-        cz(Mat.STEEL, 2, 23, 9, 2);
+        cz(Mat.STEEL, 2, 22.9, 9, 2);
 
         emitter();
         drive();
@@ -74,7 +74,7 @@ public class BladeModel extends GaussModel {
         // Переход II: шире эмиттер, латунная губа, лезвие длиннее.
         part("emitter", "base2");
         cz(Mat.GUNMETAL, 6, 29, 3, 3);
-        cz(Mat.BRASS, 4, 31.6, 1, 2);
+        cz(Mat.BRASS, 4, 31.6, 1, 2).inflate(0.1);
         field(2);
         c(Mat.FIELD, 3, 32.6, 33, -0.5, 1);
         c(Mat.FIELD, 1, 65.6, 3, -0.5, 1);
@@ -190,11 +190,11 @@ public class BladeModel extends GaussModel {
             }
             case 2 -> {
                 box(Mat.CRYSTAL, 1.1, 25, -1, 1, 3, 2);
-                box(Mat.BRASS, 1.4, 24, -1.5, 1, 1, 3);
+                box(Mat.BRASS, 1.4, 24.05, -1.5, 1, 1, 3);
             }
             default -> {
                 box(Mat.CRYSTAL, -2.1, 25, -1, 1, 3, 2);
-                box(Mat.BRASS, -2.4, 24, -1.5, 1, 1, 3);
+                box(Mat.BRASS, -2.4, 24.05, -1.5, 1, 1, 3);
             }
         }
     }
@@ -234,15 +234,15 @@ public class BladeModel extends GaussModel {
         // Прототип: осколок кристалла, привязанный к рукояти.
         part("contour", "base0");
         box(Mat.CRYSTAL, -0.5, 9, 1.6, 1, 4, 1);
-        box(Mat.LEATHER, -1, 10.5, 1.4, 2, 1, 1).inflate(0.2);
+        box(Mat.LEATHER, -1, 10.5, 1.3, 2, 1, 1).inflate(0.2);
         // Переход I: трубка маны на латунных хомутах.
         part("contour", "base1");
-        box(Mat.MANA_TUBE, -0.5, 7, 2, 1, 8, 1);
+        box(Mat.MANA_TUBE, -0.5, 6.9, 2, 1, 8, 1);
         box(Mat.BRASS, -1, 7, 1.5, 2, 1, 2);
         box(Mat.BRASS, -1, 14, 1.5, 2, 1, 2);
         // Переход II: трубка длиннее, три стальных хомута.
         part("contour", "base2");
-        box(Mat.MANA_TUBE, -0.5, 6.5, 2, 1, 9, 1);
+        box(Mat.MANA_TUBE, -0.5, 6.6, 2, 1, 9, 1);
         for (double y : new double[]{6.5, 10.5, 14.5}) {
             box(Mat.STEEL, -1, y, 1.5, 2, 1, 2);
         }

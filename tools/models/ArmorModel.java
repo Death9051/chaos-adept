@@ -340,7 +340,7 @@ public class ArmorModel extends GaussModel {
         // Вершина «Перераспределение»: шина через грудь с разрядниками на концах.
         on("armorBody", "chest_apex");
         c(Mat.BRASS, 18, 42, 1, -12.2, 1);
-        sym(box(Mat.ARC, 8, 41, -12.2, 1, 3, 1));
+        sym(box(Mat.ARC, 8.1, 41, -12.3, 1, 3, 1));
     }
 
     static void arms() {
@@ -354,7 +354,7 @@ public class ArmorModel extends GaussModel {
         });
         // Переход I: рукав, наклонный наплечник, по две полосы на плече и предплечье, рунное кольцо.
         sides("arms_base1", "Arm", () -> {
-            box(Mat.GUNMETAL, 8, 24, -4, 8, 24, 8).inflate(0.3);
+            box(Mat.GUNMETAL, 8, 24, -4, 8, 24, 8).inflate(0.26);
             box(Mat.STEEL, 9, 42.4, -5, 8, 4, 10).rotZ(20);
             octY(Mat.GUNMETAL, 12, 5, 12, 36, 0, 5);
             octY(Mat.GUNMETAL, 12, 5, 12, 26.4, 0, 5);
@@ -362,7 +362,7 @@ public class ArmorModel extends GaussModel {
         });
         // Переход II: наклонный наплечник с боковой плитой, наплечье и наруч цельные, локоть и запястье открыты, диск локтя.
         sides("arms_base2", "Arm", () -> {
-            box(Mat.GUNMETAL, 8, 24, -4, 8, 24, 8).inflate(0.3);
+            box(Mat.GUNMETAL, 8, 24, -4, 8, 24, 8).inflate(0.26);
             box(Mat.STEEL, 9, 42.4, -5.5, 8, 4, 11).rotZ(20);
             box(Mat.GUNMETAL, 16.4, 37.4, -4.5, 2, 6, 9).rotZ(-12);
             octY(Mat.GUNMETAL, 12, 5, 12, 35.6, 0, 6);
@@ -372,7 +372,7 @@ public class ArmorModel extends GaussModel {
         // Финал: толстый наклонный наплечник в два слоя, боковая плита с латунной кромкой, наплечье, наруч с раструбом к локтю,
         // диск локтя, щиток кисти.
         sides("arms_base3", "Arm", () -> {
-            box(Mat.GUNMETAL, 8, 24, -4, 8, 24, 8).inflate(0.3);
+            box(Mat.GUNMETAL, 8, 24, -4, 8, 24, 8).inflate(0.26);
             box(Mat.STEEL, 8.6, 42.2, -6, 9, 5, 12).rotZ(20);
             box(Mat.GUNMETAL, 10, 46.8, -4, 6, 2, 8).rotZ(20);
             box(Mat.STEEL, 16.8, 37, -5, 2, 7, 10).rotZ(-12);

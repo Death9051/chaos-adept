@@ -52,6 +52,10 @@ public class ArtifactTableMenu extends AbstractContainerMenu {
     /** Облик гаусс-пушки по прогрессу ({@link ru.adept.core.artifact.GaussLook}) двумя половинами: слот передаёт 16 бит. */
     public final DataSlot gaussLookLow = DataSlot.standalone();
     public final DataSlot gaussLookHigh = DataSlot.standalone();
+    public final DataSlot bladeLookLow = DataSlot.standalone();
+    public final DataSlot bladeLookHigh = DataSlot.standalone();
+    public final DataSlot heavyLookLow = DataSlot.standalone();
+    public final DataSlot heavyLookHigh = DataSlot.standalone();
     public final DataSlot accumulatorBuilt = DataSlot.standalone();
     public final DataSlot accumulatorCapacity = DataSlot.standalone();
     public final DataSlot cauldronBuilt = DataSlot.standalone();
@@ -82,6 +86,10 @@ public class ArtifactTableMenu extends AbstractContainerMenu {
         addDataSlot(gaussTempo);
         addDataSlot(gaussLookLow);
         addDataSlot(gaussLookHigh);
+        addDataSlot(bladeLookLow);
+        addDataSlot(bladeLookHigh);
+        addDataSlot(heavyLookLow);
+        addDataSlot(heavyLookHigh);
         addDataSlot(accumulatorBuilt);
         addDataSlot(accumulatorCapacity);
         addDataSlot(cauldronBuilt);
@@ -109,6 +117,12 @@ public class ArtifactTableMenu extends AbstractContainerMenu {
         int look = ru.adept.core.artifact.GaussLook.pack(p);
         gaussLookLow.set(look & 0x7FFF);
         gaussLookHigh.set(look >> 15);
+        int bladeLook = ru.adept.core.artifact.GaussLook.pack(ru.adept.core.artifact.GaussLook.BLADE, p);
+        bladeLookLow.set(bladeLook & 0x7FFF);
+        bladeLookHigh.set(bladeLook >> 15);
+        int heavyLook = ru.adept.core.artifact.GaussLook.pack(ru.adept.core.artifact.GaussLook.HEAVY, p);
+        heavyLookLow.set(heavyLook & 0x7FFF);
+        heavyLookHigh.set(heavyLook >> 15);
         accumulatorBuilt.set(p.step(TableActions.ACCUMULATOR_BUILT));
         accumulatorCapacity.set(p.step(TableActions.ACCUMULATOR_CAPACITY));
         cauldronBuilt.set(p.step(TableActions.CAULDRON_BUILT));
@@ -180,6 +194,16 @@ public class ArtifactTableMenu extends AbstractContainerMenu {
     /** Облик гаусс-пушки по прогрессу игрока, как его видит клиент. */
     public int gaussLook() {
         return gaussLookLow.get() | (gaussLookHigh.get() << 15);
+    }
+
+    /** Облик энергоклинка по прогрессу игрока. */
+    public int bladeLook() {
+        return bladeLookLow.get() | (bladeLookHigh.get() << 15);
+    }
+
+    /** Облик тяжёлой силовой брони по прогрессу игрока. */
+    public int heavyLook() {
+        return heavyLookLow.get() | (heavyLookHigh.get() << 15);
     }
 
     @Override

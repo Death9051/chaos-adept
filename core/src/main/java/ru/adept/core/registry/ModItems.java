@@ -64,6 +64,9 @@ public final class ModItems {
             () -> new ru.adept.core.artifact.HeavyArmorItem(ModRegistries.HEAVY_ARMOR, net.minecraft.world.item.ArmorItem.Type.LEGGINGS, new Item.Properties().stacksTo(1)));
     public static final DeferredItem<ru.adept.core.artifact.GaussGunItem> GAUSS_GUN = ITEMS.register("gauss_gun",
             () -> new ru.adept.core.artifact.GaussGunItem(new Item.Properties().stacksTo(1)));
+    /** Показ тяжёлой брони целиком: для окна мастерской и сцен автотеста, игроку не выдаётся. */
+    public static final DeferredItem<ru.adept.core.artifact.ArtifactDisplayItem> HEAVY_ARMOR_DISPLAY = ITEMS.register("heavy_armor_display",
+            () -> new ru.adept.core.artifact.ArtifactDisplayItem(new Item.Properties().stacksTo(1)));
 
     // Трофеи героев для Альянса и приказ командира
     public static final DeferredItem<Item> HERO_EMBLEM = ITEMS.registerSimpleItem("hero_emblem");
