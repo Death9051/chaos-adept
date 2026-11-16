@@ -77,7 +77,7 @@ public class GaussUpgradeScreen extends Screen {
      */
     public record Subject(String artifact, Segment[] segments, java.util.function.Supplier<ItemStack> item,
                           float[][] focus, float[] whole, float roll, float spanX, float spanY) {
-        public static final Subject GAUSS = new Subject("gauss", segments, () -> new ItemStack(ModItems.GAUSS_GUN.get()),
+        public static final Subject GAUSS = new Subject("gauss", GaussLook.SEGMENTS, () -> new ItemStack(ModItems.GAUSS_GUN.get()),
                 new float[][]{{0, 19, -30, 1.55f, 118}, {0, 19, -14, 1.9f, 118}, {0, 12, -14, 1.9f, 118},
                         {0, 15, 19, 1.8f, 118}, {0, 10, -1.5f, 1.9f, 118}, {0, 26, 3, 1.8f, 118}},
                 new float[]{0, 18, -9, 1.0f, 118}, 0f, 5.4f, 2.6f);
